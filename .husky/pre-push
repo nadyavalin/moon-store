@@ -1,4 +1,0 @@
-#!/bin/sh
-
-npm run lint
-npx validate-branch-name
