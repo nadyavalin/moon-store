@@ -6,12 +6,16 @@
   "scripts": {
     "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
     "build": "webpack --config ./webpack.config.js --env mode=prod",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write .",
     "ci:format": "prettier --check .",
     "lint": "eslint --ext .ts,.js",
     "lint:fix": "eslint --fix --ext .ts,.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "jest --silent",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --silent",
+    "test:watch": "jest --watch",
+    "test:e2e": "npx playwright test",
+    "coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
