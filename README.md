@@ -11,6 +11,7 @@
 ### Technology Stack:
 
 - SPA
+- REST API
 - TypeScript
 - ESLint
 - Prettier
