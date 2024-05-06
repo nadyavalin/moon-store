@@ -1,3 +1,14 @@
+:root {
+  --main-black: #000000;
+  --main-light: #ffffff;
+  --dark-grey: #1c1c1c;
+  --light-grey: #f6f6f6;
+  --text-dark: #292929;
+  --text-light: #ffffff;
+  --accent-blue: #0d3e91;
+  --accent-red: #f64137;
+}
+
 body {
   color: #282828;
   font-family: Arial, Helvetica, sans-serif;
