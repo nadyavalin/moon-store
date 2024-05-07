@@ -1,5 +1,5 @@
 import "./index.css";
 import "./pages/mainPage/mainPage.css";
-import { header } from "./pages/mainPage/mainPage";
+import { header, main, footer } from "./pages/mainPage/mainPage";
 
-document.body.append(header);
+document.body.append(header, main, footer);

@@ -1,6 +1,9 @@
 import { createDiv, createElement, createMenuItem } from "../../components/elements";
 
-export const header = createDiv(["header"]);
+export const header = createElement("header", ["header"]);
+export const main = createElement("main", ["main"]);
+export const footer = createElement("footer", ["footer"]);
+
 const h1 = createElement("h1", ["h1"], "Welcome to our Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
 const menu = createDiv(["menu"]);
@@ -19,5 +22,5 @@ const menuItemAboutUs = createMenuItem("#", "About Us");
 userMenu.append(menuItemSingUp, menuItemLogIn);
 menu.append(menuItemHome, menuItemCatalog, menuItemBasket, menuItemAboutUs);
 header.append(userMenu, h1, menu);
-
-export default header;
+main.append();
+footer.append();
