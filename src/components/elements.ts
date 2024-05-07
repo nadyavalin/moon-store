@@ -44,7 +44,7 @@ export function createLink(link: string, className: string[], text?: string) {
   return linkA;
 }
 
-export function createMenuItem(link: string, text: string) {
+export function createLinkMenuItem(link: string, text: string) {
   const menuItem = createLink(link, ["menu-item"]);
   menuItem.textContent = text;
   return menuItem;
@@ -66,9 +66,11 @@ export function createSpan(className: string[], text: string) {
   return span;
 }
 
-export function createElement(elem: string, className: string[], text?: string) {
+export function createElement(elem: string, className?: string[], text?: string) {
   const element = document.createElement(elem);
-  element.classList.add(...className);
+  if (className) {
+    element.classList.add(...className);
+  }
   if (text) {
     element.textContent = text;
   }

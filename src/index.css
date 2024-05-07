@@ -20,11 +20,30 @@ body {
 }
 
 a {
-  color: var(--accent-blue);
+  position: relative;
   text-decoration: none;
   cursor: pointer;
   color: inherit;
   transition: color 0.5s ease;
+}
+
+a::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: -3px;
+  display: block;
+  width: 100%;
+  height: 0.5px;
+  background: var(--blue-hover);
+  transition: color 0.5s ease;
+}
+
+a::after {
+  width: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 0.3s;
 }
 
 button {
@@ -55,6 +74,10 @@ button.disabled {
 @media (hover: hover) {
   a:hover {
     color: var(--blue-hover);
+  }
+
+  a:hover::after {
+    width: 100%;
   }
 
   button:hover {

@@ -1,26 +1,37 @@
-import { createDiv, createElement, createMenuItem } from "../../components/elements";
+import { createDiv, createElement, createLinkMenuItem } from "../../components/elements";
 
 export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
 export const footer = createElement("footer", ["footer"]);
 
-const h1 = createElement("h1", ["h1"], "Welcome to our Online Moon Store");
+const h1 = createElement("h1", ["h1"], "Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
-const menu = createDiv(["menu"]);
+const navMenu = createElement("nav", ["nav"]);
+const ulItem = createElement("ul", ["nav__ul"]);
 
-const menuItemSingUp = createMenuItem("#", "Sing up");
-const menuItemLogIn = createMenuItem("#", "Log in");
+const menuItemLogIn = createLinkMenuItem("#", "Вход");
+const menuItemSingUp = createLinkMenuItem("#", "Регистрация");
 
-// const menuItemUserProfile = createMenuItem("#", "Profile");
-// const menuItemLogOut = createMenuItem("#", "Log out");
+// const menuItemUserProfile = createMenuItem("#", "Профиль");
+// const menuItemLogOut = createMenuItem("#", "Выход");
 
-const menuItemHome = createMenuItem("#", "Home");
-const menuItemCatalog = createMenuItem("#", "Catalog");
-const menuItemBasket = createMenuItem("#", "Basket");
-const menuItemAboutUs = createMenuItem("#", "About Us");
+const liItemHome = createElement("li");
+const liItemCatalog = createElement("li");
+const litItemBasket = createElement("li");
+const liItemAboutUs = createElement("li");
+const menuItemHome = createLinkMenuItem("#", "Главная");
+const menuItemCatalog = createLinkMenuItem("#", "Каталог");
+const menuItemBasket = createLinkMenuItem("#", "Корзина");
+const menuItemAboutUs = createLinkMenuItem("#", "О нас");
 
+navMenu.append(ulItem);
+ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
+liItemHome.append(menuItemHome);
+liItemCatalog.append(menuItemCatalog);
+litItemBasket.append(menuItemBasket);
+liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
-menu.append(menuItemHome, menuItemCatalog, menuItemBasket, menuItemAboutUs);
-header.append(userMenu, h1, menu);
+
+header.append(userMenu, h1, navMenu);
 main.append();
 footer.append();
