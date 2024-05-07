@@ -1,10 +1,11 @@
-export function createInput(id: string, type: string, className: string[], placeholder: string) {
+export function createInput(id: string, type: string, className: string[], placeholder?: string, pattern?: string) {
   const input = document.createElement("input");
   input.type = type;
   input.id = id;
   input.name = id;
   input.classList.add(...className);
-  input.placeholder = placeholder;
+  if (placeholder) input.placeholder = placeholder;
+  if (pattern) input.pattern = pattern;
   input.setAttribute("required", "true");
   return input;
 }
