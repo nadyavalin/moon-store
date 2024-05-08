@@ -4,7 +4,7 @@
 }
 
 h1 {
-  color: var(--text-light);
+  color: var(--main-light);
   font-size: 1.5em;
   text-align: center;
   padding-bottom: 20px;
@@ -24,19 +24,22 @@ input {
   border: none;
   margin-top: 20px;
   padding: 10px 5%;
+  background-color: var(--light-grey);
+
 }
 select,
 select option {
   margin-top: 20px;
   width: 100%;
   padding: 10px 5%;
+  background-color: var(--light-grey);
 }
 input[type="submit"] {
   width: 200px;
   padding: 15px;
   margin: 20px auto;
   background-color: var(--accent-blue);
-  color: var(--text-light);
+  color: var(--main-light);
   cursor: pointer;
 }
 input:valid,
@@ -53,11 +56,11 @@ input[type="checkbox"] {
 .label {
   font-size: 1em;
   margin-top: 20px;
-  color: var(--text-light);
+  color: var(--main-light);
 }
 
 .registration-form a {
-  color: var(--text-light);
+  color: var(--main-light);
   text-align: center;
 }
 
@@ -75,5 +78,5 @@ input[type="checkbox"] {
 .error-message {
   margin-top: 5px;
   font-size: 0.8em;
-  color: var(--text-light);
+  color: var(--main-light);
 }

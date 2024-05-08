@@ -36,7 +36,6 @@ function createAccountWrapper(): HTMLElement {
   listenToValid(surname, surnameTitle, labelBirthday, accountWrapper, surnamePattern);
   listenToValid(birthday, birthdayTitle, birthday, surname, birthdayPattern);
   accountWrapper.append(email, password, name, surname, labelBirthday, birthday);
-
   return accountWrapper;
 }
 
@@ -59,7 +58,7 @@ function createAddressWrapper(): HTMLElement {
   return addressWrapper;
 }
 
-export function createFormRegistration() {
+export function createFormRegistration(): HTMLElement {
   const formWrapper = createElement("form", ["registration-form-wrapper"]);
   const form = createElement("form", ["registration-form"]);
   const h1 = createElement("h1", ["title-registration"], "Заполните форму регистрации");
@@ -72,7 +71,6 @@ export function createFormRegistration() {
   btnSubmit.onclick = () => formRegistrationHandler();
   form.append(h1, accountWrapper, addressesWrapper, btnSubmit, linkToLogin);
   formWrapper.append(form);
-
   return formWrapper;
 }
 
