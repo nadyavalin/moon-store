@@ -1,27 +1,49 @@
 :root {
   --main-black: #000000;
-  --main-light: #ffffff;
+  --main-light: #f6f4d5;
   --dark-grey: #1c1c1c;
   --light-grey: #f6f6f6;
   --text-dark: #292929;
   --text-light: #ffffff;
   --accent-blue: #0d3e91;
+  --blue-hover: #1a6eff;
+  --blue-disabled: #6079a5;
   --accent-red: #f64137;
 }
 
 body {
-  color: #282828;
+  background-color: var(--main-black);
+  color: var(--main-light);
   font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
-  margin: 10px;
+  margin: 15px;
 }
 
 a {
-  color: #0083d5;
+  position: relative;
   text-decoration: none;
   cursor: pointer;
   color: inherit;
   transition: color 0.5s ease;
+}
+
+a::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: -3px;
+  display: block;
+  width: 100%;
+  height: 0.5px;
+  background: var(--blue-hover);
+  transition: color 0.5s ease;
+}
+
+a::after {
+  width: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 0.3s;
 }
 
 button {
@@ -30,31 +52,35 @@ button {
   width: 100%;
   height: 35px;
   border: none;
-  background-color: #003083;
+  background-color: var(--accent-blue);
   text-transform: uppercase;
   cursor: pointer;
   transition: background-color 0.5s ease-in-out;
 }
 
 button.disabled {
-  background-color: #6079a5;
+  background-color: var(--blue-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .snackbar {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--main-black);
+  color: var(--main-light);
   padding: 10px;
   border-radius: 5px;
 }
 
 @media (hover: hover) {
   a:hover {
-    color: #0062ff;
+    color: var(--blue-hover);
+  }
+
+  a:hover::after {
+    width: 100%;
   }
 
   button:hover {
-    background-color: #1a6eff;
+    background-color: var(--blue-hover);
   }
 }
