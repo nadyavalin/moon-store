@@ -49,10 +49,10 @@ input:valid {
   border: none;
   box-shadow: inset 0px 0px 10px var(--accent-blue);
 }
-input:invalid{
+input:invalid {
   box-shadow: inset 0px 0px 10px var(--accent-red);
 }
-input[type="checkbox"]{
+input[type="checkbox"] {
   box-shadow: none;
 }
 .label {
