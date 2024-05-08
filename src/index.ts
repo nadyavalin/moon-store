@@ -1,4 +1,4 @@
-import { createFormRegistration } from "./pages/registration/registration-view";
+// import { createFormRegistration } from "./pages/registration/registrationView";
 
-const formRegistration = createFormRegistration();
-document.body.append(formRegistration);
+// const formRegistration = createFormRegistration();
+// document.body.append(formRegistration);
