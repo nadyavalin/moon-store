@@ -39,7 +39,8 @@ input[type="submit"] {
   color: var(--text-light);
   cursor: pointer;
 }
-input:valid, select:valid {
+input:valid,
+select:valid {
   border: none;
   box-shadow: inset 0px 0px 10px var(--accent-blue);
 }
@@ -71,8 +72,8 @@ input[type="checkbox"] {
   flex-direction: row;
   gap: 30px;
 }
-.error-message{
-  margin-top:5px;
+.error-message {
+  margin-top: 5px;
   font-size: 0.8em;
-  color:var(--text-light);
+  color: var(--text-light);
 }

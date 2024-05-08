@@ -1,8 +1,8 @@
 import { createElement, createInput, createLink, createText } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
-import {formRegistrationHandler} from "./registrationHandler";
-import {listenToValid} from "./checkValidityForm";
+import { formRegistrationHandler } from "./registrationHandler";
+import { listenToValid } from "./checkValidityForm";
 
 const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
 const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
@@ -20,8 +20,6 @@ const birthdayTitle = "Возраст должен быть не младше 13
 const cityTitle = "Название города должно содержать не менее 1 буквы";
 const streetTitle = "Название улицы должно содержать не менее 1 символа";
 const indexTitle = "Индекс должен содержать 6 цифр";
-
-
 
 function createAccountWrapper(): HTMLElement {
   const accountWrapper = createElement("div", ["account-wrapper"]);
