@@ -25,22 +25,29 @@ export function createSubmitButton(text: string) {
   return button;
 }
 
-export function createText(className: string[], text: string) {
-  const textP = document.createElement("div");
-  textP.classList.add(...className);
-  textP.textContent = text;
-  return textP;
+export function createText(className: string[], text?: string) {
+  const textItem = document.createElement("div");
+  textItem.classList.add(...className);
+  if (text) {
+    textItem.textContent = text;
+  }
+  return textItem;
 }
 
 export function createLink(link: string, className: string[], text?: string) {
   const linkA = document.createElement("a");
   linkA.href = link;
-  linkA.target = "_blank";
   linkA.classList.add(...className);
   if (text) {
     linkA.textContent = text;
   }
   return linkA;
+}
+
+export function createLinkMenuItem(link: string, text: string) {
+  const menuItem = createLink(link, ["menu-item"]);
+  menuItem.textContent = text;
+  return menuItem;
 }
 
 export function createDiv(className: string[], data?: { key: string; value: string }) {
@@ -59,9 +66,11 @@ export function createSpan(className: string[], text: string) {
   return span;
 }
 
-export function createElement(elem: string, className: string[], text?: string) {
+export function createElement(elem: string, className?: string[], text?: string) {
   const element = document.createElement(elem);
-  element.classList.add(...className);
+  if (className) {
+    element.classList.add(...className);
+  }
   if (text) {
     element.textContent = text;
   }
