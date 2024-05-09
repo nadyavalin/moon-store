@@ -1,11 +1,11 @@
 import "./index.css";
-import "./pages/mainPage/mainPageHeader.css";
+import "./pages/main/header.css";
 import "./api/api";
-import { header, main, footer } from "./pages/mainPage/mainPageHeader";
-import { renderMainPageContent } from "./pages/mainPage/mainPageContent";
+import { header, main, footer } from "./pages/main/header";
+import { renderMainPageContent } from "./pages/main/main";
 import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
-import { renderAboutUsContent } from "./pages/aboutUs/aboutUs";
+import { renderAboutUsContent } from "./pages/about/about";
 import { renderLoginFormContent } from "./pages/loginForm/loginForm";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 
@@ -36,12 +36,10 @@ function getContent(fragmentId: string, callback: (data: string) => void): void 
 }
 
 function setActiveLink(fragmentId: string) {
-  const navbarDiv = document.querySelector(".navbar");
-  if (navbarDiv) {
-    const links = navbarDiv.children;
+  const links = document.querySelectorAll("a");
+  if (links) {
     let link;
     let pageName;
-
     for (let i = 0; i < links.length; i += 1) {
       link = links[i];
       const href = link.getAttribute("href");
@@ -64,7 +62,7 @@ function navigate() {
   getContent(fragmentId, () => {
     if (contentDiv) {
       switch (fragmentId) {
-        case "home":
+        case "main":
           contentDiv.innerHTML = renderMainPageContent();
           break;
         case "catalog":

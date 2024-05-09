@@ -10,11 +10,6 @@
   align-items: center;
 }
 
-.h1 {
-  color: var(--main-light);
-  text-align: center;
-}
-
 .user-menu {
   display: flex;
   justify-content: space-evenly;
@@ -27,7 +22,12 @@
   height: 20px;
 }
 
-ul {
+.hr-nav-line {
+  width: 100%;
+  border-bottom: 1px solid var(--main-light);
+}
+
+.navbar {
   display: flex;
   justify-content: space-evenly;
 }
