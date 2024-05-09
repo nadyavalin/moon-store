@@ -9,7 +9,13 @@ function checkValidityAllFields() {
   return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern.replace('"', "/"))));
 }
 
-export function addValidationListenersToInput(inputTag: HTMLInputElement, text: string, nextElem: HTMLElement, parent: HTMLElement, pattern?: string) {
+export function addValidationListenersToInput(
+  inputTag: HTMLInputElement,
+  text: string,
+  nextElem: HTMLElement,
+  parent: HTMLElement,
+  pattern?: string,
+) {
   if (!pattern) return;
   const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {

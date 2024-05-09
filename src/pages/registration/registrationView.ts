@@ -2,7 +2,7 @@ import { createElement, createInput, createLink, createText } from "src/componen
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
-import {addValidationListenersToInput} from "./checkValidityForm";
+import { addValidationListenersToInput } from "./checkValidityForm";
 
 export enum Patterns {
   email = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)",
