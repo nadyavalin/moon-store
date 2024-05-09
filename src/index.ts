@@ -7,10 +7,8 @@ import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/aboutUs/aboutUs";
 import { renderLoginFormContent } from "./pages/loginForm/loginForm";
-// import { createFormRegistration } from "./pages/registration/registrationView";
+import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 
-// const formRegistration = createFormRegistration();
-// document.body.append(formRegistration);
 document.body.append(header, main, footer);
 
 const partialsCache: Record<string, string> = {};
@@ -63,7 +61,7 @@ function navigate() {
   const contentDiv = document.querySelector(".main");
   const fragmentId = window.location.hash.substring(1);
 
-  getContent(fragmentId, (content) => {
+  getContent(fragmentId, () => {
     if (contentDiv) {
       switch (fragmentId) {
         case "home":
@@ -81,11 +79,11 @@ function navigate() {
         case "login":
           contentDiv.innerHTML = renderLoginFormContent();
           break;
-        // case "registration":
-        //   contentDiv.innerHTML = createFormRegistration();
-        //   break;
+        case "registration":
+          contentDiv.innerHTML = renderRegistrationFormContent().outerHTML;
+          break;
         default:
-          contentDiv.innerHTML = content;
+          contentDiv.innerHTML = renderMainPageContent();
           break;
       }
     }

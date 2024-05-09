@@ -63,7 +63,7 @@ function createAddressWrapper(): HTMLElement {
   return addressWrapper;
 }
 
-export function createFormRegistration(): HTMLElement {
+export function renderRegistrationFormContent(): HTMLElement {
   const formWrapper = createElement("form", ["registration-form-wrapper"]);
   const form = createElement("form", ["registration-form"]);
   const h1 = createElement("h1", ["title-registration"], "Заполните форму регистрации");
@@ -79,4 +79,4 @@ export function createFormRegistration(): HTMLElement {
   return formWrapper;
 }
 
-export default createFormRegistration;
+export default renderRegistrationFormContent;
