@@ -46,7 +46,7 @@ select option {
   cursor: pointer;
 }
 
-.submit-registration:hover{
+.submit-registration:hover {
   background-color: var(--blue-hover);
   transition: 1s;
 }
@@ -61,8 +61,8 @@ input:invalid {
   box-shadow: inset 0px 0px 10px var(--accent-red);
 }
 
-input[type= "submit"]{
-  box-shadow:none;
+input[type="submit"] {
+  box-shadow: none;
 }
 
 input[type="checkbox"] {
@@ -102,5 +102,4 @@ input[type="checkbox"] {
   background-color: var(--blue-disabled);
   cursor: not-allowed;
   pointer-events: none;
-
 }

@@ -6,15 +6,15 @@ function isValidInput(inputValue: string, pattern: RegExp): boolean {
 
 function checkValidityAllFields() {
   const arrInputs = Array.from(document.querySelectorAll("input"));
-  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern.replace('"', "/"))))
-  }
+  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern.replace('"', "/"))));
+}
 
-export function listenToValid(inputTag: HTMLInputElement, text: string, nextElem: HTMLElement, parent: HTMLElement, pattern?: string) {
+export function addValidationListenersToInput(inputTag: HTMLInputElement, text: string, nextElem: HTMLElement, parent: HTMLElement, pattern?: string) {
   if (!pattern) return;
   const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {
     document.querySelector(`.error-${inputTag.name}`)?.remove();
-     if (checkValidityAllFields()) document.querySelector(".submit-registration")?.classList.remove("disabled");
+    if (checkValidityAllFields()) document.querySelector(".submit-registration")?.classList.remove("disabled");
     if (!isValidInput(inputTag.value, regExp)) {
       const errorMessage = createText([`error-${inputTag.name}`, "error-message"], text);
       parent.insertBefore(errorMessage, nextElem);
@@ -27,4 +27,4 @@ export function listenToValid(inputTag: HTMLInputElement, text: string, nextElem
   });
 }
 
-export default listenToValid;
+export default addValidationListenersToInput;

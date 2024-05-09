@@ -2,7 +2,7 @@ import { createElement, createInput, createLink, createText } from "src/componen
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
-import { listenToValid } from "./checkValidityForm";
+import {addValidationListenersToInput} from "./checkValidityForm";
 
 export enum Patterns {
   email = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)",
@@ -35,10 +35,10 @@ function createAccountWrapper(): HTMLElement {
   const labelBirthday = createText(["label"], "Дата рождения:");
   const birthday = createInput("birthday", "date", ["birthday"], "", Patterns.birthday, Titles.birthday);
   birthday.max = "2011-01-01";
-  listenToValid(email, Titles.email, password, accountWrapper, Patterns.email);
-  listenToValid(password, Titles.password, name, accountWrapper, Patterns.password);
-  listenToValid(name, Titles.name, surname, accountWrapper, Patterns.name);
-  listenToValid(surname, Titles.surname, labelBirthday, accountWrapper, Patterns.surname);
+  addValidationListenersToInput(email, Titles.email, password, accountWrapper, Patterns.email);
+  addValidationListenersToInput(password, Titles.password, name, accountWrapper, Patterns.password);
+  addValidationListenersToInput(name, Titles.name, surname, accountWrapper, Patterns.name);
+  addValidationListenersToInput(surname, Titles.surname, labelBirthday, accountWrapper, Patterns.surname);
   accountWrapper.append(email, password, name, surname, labelBirthday, birthday);
   return accountWrapper;
 }
@@ -53,12 +53,12 @@ function createAddressWrapper(): HTMLElement {
   const city = createInput("city", "text", ["city"], "Город", Patterns.city, Titles.city);
   const street = createInput("street", "text", ["street"], "Улица", Patterns.street, Titles.street);
   const index = createInput("index", "text", ["index"], "Индекс", Patterns.index, Titles.index);
-  const defaultAddress = createInput('default-address', "checkbox", ["default-address"]);
+  const defaultAddress = createInput("default-address", "checkbox", ["default-address"]);
   defaultAddress.removeAttribute("required");
-  listenToValid(city, Titles.street, street, addressWrapper, Patterns.city);
-  listenToValid(street, Titles.street, index, addressWrapper, Patterns.street);
-  listenToValid(index, Titles.index, defaultAddress, addressWrapper, Patterns.index);
-  listenToValid(defaultAddress, "", defaultAddress, addressWrapper);
+  addValidationListenersToInput(city, Titles.street, street, addressWrapper, Patterns.city);
+  addValidationListenersToInput(street, Titles.street, index, addressWrapper, Patterns.street);
+  addValidationListenersToInput(index, Titles.index, defaultAddress, addressWrapper, Patterns.index);
+  addValidationListenersToInput(defaultAddress, "", defaultAddress, addressWrapper);
   addressWrapper.append(labelAddress, country, city, street, index, defaultAddress);
   return addressWrapper;
 }
