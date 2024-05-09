@@ -4,15 +4,20 @@ function isValidInput(inputValue: string, pattern: RegExp): boolean {
   return pattern.test(inputValue);
 }
 
+function checkValidityAllFields() {
+  const arrInputs = Array.from(document.querySelectorAll("input"));
+  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern.replace('"', "/"))))
+  }
+
 export function listenToValid(inputTag: HTMLInputElement, text: string, nextElem: HTMLElement, parent: HTMLElement, pattern?: string) {
+  if (!pattern) return;
+  const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {
     document.querySelector(`.error-${inputTag.name}`)?.remove();
-    if (!pattern) return;
-    const regExp = new RegExp(pattern.replace('"', "/"));
-    const value = inputTag.value.trim();
-    if (!isValidInput(value, regExp)) {
-      const errorEmail = createText([`error-${inputTag.name}`, "error-message"], text);
-      parent.insertBefore(errorEmail, nextElem);
+     if (checkValidityAllFields()) document.querySelector(".submit-registration")?.classList.remove("disabled");
+    if (!isValidInput(inputTag.value, regExp)) {
+      const errorMessage = createText([`error-${inputTag.name}`, "error-message"], text);
+      parent.insertBefore(errorMessage, nextElem);
     } else {
       document.querySelector(`.error-${inputTag.name}`)?.remove();
     }
@@ -21,4 +26,5 @@ export function listenToValid(inputTag: HTMLInputElement, text: string, nextElem
     e.preventDefault();
   });
 }
+
 export default listenToValid;

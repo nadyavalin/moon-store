@@ -4,37 +4,41 @@ import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { listenToValid } from "./checkValidityForm";
 
-const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
-const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern = "[A-Za-zА-Яа-яё]{1,15}";
-const surnamePattern = "[A-Za-zА-Яа-яё]{1,15}";
-const birthdayPattern = "";
-const cityPattern = "[A-Za-zА-Яа-яё]{1,15}";
-const streetPattern = "[^s]{1,20}";
-const indexPattern = "[0-9]{6,6}";
-const emailTitle = "Email должен быть в формате example@gmail.com";
-const passwordTitle = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы";
-const nameTitle = "Имя должно содержать не менее одной буквы";
-const surnameTitle = "Фамилия должна содержать только буквы";
-const birthdayTitle = "Возраст должен быть не младше 13 лет";
-const cityTitle = "Название города должно содержать не менее 1 буквы";
-const streetTitle = "Название улицы должно содержать не менее 1 символа";
-const indexTitle = "Индекс должен содержать 6 цифр";
+export enum Patterns {
+  email = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)",
+  password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}",
+  name = "^[A-Za-zА-Яа-яё]{1,}$",
+  surname = "^[A-Za-zА-Яа-яё]{1,20}$",
+  birthday = "",
+  city = "^[A-Za-zА-Яа-яё]{1,15}$",
+  street = "[^s]{1,20}",
+  index = "[0-9]{6,6}",
+}
+
+enum Titles {
+  email = "Email должен быть в формате example@gmail.com",
+  password = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы",
+  name = "Имя должно содержать не менее одной буквы",
+  surname = "Фамилия должна содержать только буквы",
+  birthday = "Возраст должен быть не младше 13 лет",
+  city = "Название города должно содержать не менее 1 буквы",
+  street = "Название улицы должно содержать не менее 1 символа",
+  index = "Индекс должен содержать 6 цифр",
+}
 
 function createAccountWrapper(): HTMLElement {
   const accountWrapper = createElement("div", ["account-wrapper"]);
-  const email = createInput("email", "email", ["email"], "Email", emailPattern, emailTitle);
-  const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
-  const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
-  const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
+  const email = createInput("email", "email", ["email"], "Email", Patterns.email, Titles.email);
+  const password = createInput("password", "password", ["password"], "Пароль", Patterns.password, Titles.password);
+  const name = createInput("name", "text", ["name"], "Имя", Patterns.name, Titles.name);
+  const surname = createInput("surname", "text", ["surname"], "Фамилия", Patterns.surname, Titles.surname);
   const labelBirthday = createText(["label"], "Дата рождения:");
-  const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
+  const birthday = createInput("birthday", "date", ["birthday"], "", Patterns.birthday, Titles.birthday);
   birthday.max = "2011-01-01";
-  listenToValid(email, emailTitle, password, accountWrapper, emailPattern);
-  listenToValid(password, passwordTitle, name, accountWrapper, passwordPattern);
-  listenToValid(name, nameTitle, surname, accountWrapper, namePattern);
-  listenToValid(surname, surnameTitle, labelBirthday, accountWrapper, surnamePattern);
-  listenToValid(birthday, birthdayTitle, birthday, surname, birthdayPattern);
+  listenToValid(email, Titles.email, password, accountWrapper, Patterns.email);
+  listenToValid(password, Titles.password, name, accountWrapper, Patterns.password);
+  listenToValid(name, Titles.name, surname, accountWrapper, Patterns.name);
+  listenToValid(surname, Titles.surname, labelBirthday, accountWrapper, Patterns.surname);
   accountWrapper.append(email, password, name, surname, labelBirthday, birthday);
   return accountWrapper;
 }
@@ -46,13 +50,14 @@ function createAddressWrapper(): HTMLElement {
   const optionBelarus = createElement("option", ["option-country"], "Беларусь");
   const optionRussia = createElement("option", ["option-country"], "Россия");
   country.append(optionBelarus, optionRussia);
-  const city = createInput("city", "text", ["city"], "Город", cityPattern, cityTitle);
-  const street = createInput("street", "text", ["street"], "Улица", streetPattern, streetTitle);
-  const index = createInput("index", "text", ["index"], "Индекс", indexPattern, indexTitle);
-  const defaultAddress = createInput(`default`, "checkbox", ["default"]);
-  listenToValid(city, cityTitle, street, addressWrapper, cityPattern);
-  listenToValid(street, streetTitle, index, addressWrapper, streetPattern);
-  listenToValid(index, indexTitle, defaultAddress, addressWrapper, indexPattern);
+  const city = createInput("city", "text", ["city"], "Город", Patterns.city, Titles.city);
+  const street = createInput("street", "text", ["street"], "Улица", Patterns.street, Titles.street);
+  const index = createInput("index", "text", ["index"], "Индекс", Patterns.index, Titles.index);
+  const defaultAddress = createInput('default-address', "checkbox", ["default-address"]);
+  defaultAddress.removeAttribute("required");
+  listenToValid(city, Titles.street, street, addressWrapper, Patterns.city);
+  listenToValid(street, Titles.street, index, addressWrapper, Patterns.street);
+  listenToValid(index, Titles.index, defaultAddress, addressWrapper, Patterns.index);
   listenToValid(defaultAddress, "", defaultAddress, addressWrapper);
   addressWrapper.append(labelAddress, country, city, street, index, defaultAddress);
   return addressWrapper;
@@ -67,7 +72,7 @@ export function createFormRegistration(): HTMLElement {
   const address = createAddressWrapper();
   addressesWrapper.append(address);
   const linkToLogin = createLink("#", ["link-login"], "У вас уже есть аккаунт? Войти...");
-  const btnSubmit = createInput("submit", "submit", ["submit"], "Регистрация");
+  const btnSubmit = createInput("submit", "submit", ["submit-registration", "disabled"], "Регистрация");
   btnSubmit.onclick = () => formRegistrationHandler();
   form.append(h1, accountWrapper, addressesWrapper, btnSubmit, linkToLogin);
   formWrapper.append(form);
