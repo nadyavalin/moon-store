@@ -36,7 +36,7 @@ function getContent(fragmentId: string, callback: (data: string) => void): void 
 }
 
 function setActiveLink(fragmentId: string) {
-  const links = document.querySelectorAll("a");
+  const links = document.querySelectorAll("header a");
   if (links) {
     let link;
     let pageName;
