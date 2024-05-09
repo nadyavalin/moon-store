@@ -19,6 +19,12 @@ body {
   margin: 15px;
 }
 
+.main {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
 a {
   position: relative;
   text-decoration: none;
