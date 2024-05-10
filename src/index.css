@@ -19,6 +19,11 @@ body {
   margin: 15px;
 }
 
+.main {
+  display: flex;
+  justify-content: center;
+}
+
 a {
   position: relative;
   text-decoration: none;
@@ -44,6 +49,15 @@ a::after {
   left: 50%;
   transform: translateX(-50%);
   transition: 0.3s;
+}
+
+.active {
+  color: var(--blue-hover);
+}
+
+h1 {
+  color: var(--main-light);
+  text-align: center;
 }
 
 button {
