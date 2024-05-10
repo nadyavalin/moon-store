@@ -8,7 +8,7 @@ import { renderMainPageContent } from "./pages/main/main";
 import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
-import { renderLoginFormContent } from "./pages/loginForm/loginForm";
+import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
 
@@ -36,6 +36,7 @@ function navigate() {
   const contentDiv = document.querySelector(".main");
   const fragmentId = window.location.hash.substring(1);
   if (contentDiv) {
+    contentDiv.innerHTML = "";
     switch (fragmentId) {
       case "":
       case "main":
@@ -51,7 +52,7 @@ function navigate() {
         contentDiv.innerHTML = renderAboutUsContent();
         break;
       case "login":
-        contentDiv.innerHTML = renderLoginFormContent();
+        contentDiv.append(renderLoginFormContent());
         break;
       case "registration":
         contentDiv.innerHTML = renderRegistrationFormContent().outerHTML;
