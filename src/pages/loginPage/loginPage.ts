@@ -1,6 +1,7 @@
 import "./loginPage.css";
 
 import { createElement, createInput } from "src/components/elements";
+import validateListener from "../registration/checkValidityForm";
 
 const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
 const emailTitle = "Email должен быть в формате example@gmail.com";
@@ -26,12 +27,16 @@ function renderLoginFormContent(): HTMLElement {
   const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
   const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
   const submit = <HTMLInputElement>createInput("submit", "submit", ["form-submit", "disabled"]);
+  submit.removeAttribute("required");
+  submit.disabled = true;
   const showPassword = <HTMLDivElement>createElement("div", ["showPassword"]);
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["togglePassword"]);
   togglePassword.removeAttribute("required");
   showPassword.append(togglePassword, `Показать пароль`);
 
   showHidePasswordHandler(togglePassword, passwordInput);
+  validateListener(emailInput, emailTitle, passwordInput, form, emailPattern);
+  validateListener(passwordInput, passwordTitle, showPassword, form, passwordPattern);
 
   form.append(emailInput, passwordInput, showPassword, submit);
   formInner.append(h1, form);
