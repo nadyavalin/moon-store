@@ -1,8 +1,8 @@
 export function renderAboutUsContent() {
-  const basketText = "This is the About Us page!";
+  const aboutUsTemporaryContent = "This is the About Us page!";
   return `
       <div class="about-us-page">
-          ${basketText}
+          ${aboutUsTemporaryContent}
       </div>
   `;
 }

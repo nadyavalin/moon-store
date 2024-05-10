@@ -1,8 +1,8 @@
 export function renderLoginFormContent() {
-  const loginFormText = "This is the Login Form page!";
+  const loginFormTemporaryContent = "This is the Login Form page!";
   return `
       <div class="login-form-page">
-          ${loginFormText}
+          ${loginFormTemporaryContent}
       </div>
   `;
 }

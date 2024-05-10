@@ -1,8 +1,8 @@
 import "./index.css";
-import "./pages/main/header.css";
+import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
 import "./api/api";
-import { header, main, footer } from "./pages/main/header";
+import { header, main, footer } from "./pages/basePage/basePage";
 import { renderMainPageContent } from "./pages/main/main";
 import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
@@ -34,24 +34,9 @@ function setActiveLink(fragmentId: string) {
 function navigate() {
   const contentDiv = document.querySelector(".main");
   const fragmentId = window.location.hash.substring(1);
-  let isValidRoute = false;
-
-  switch (fragmentId) {
-    case "main":
-    case "catalog":
-    case "basket":
-    case "about":
-    case "login":
-    case "registration":
-      isValidRoute = true;
-      break;
-    default:
-      isValidRoute = false;
-      break;
-  }
-
-  if (contentDiv && isValidRoute) {
+  if (contentDiv) {
     switch (fragmentId) {
+      case "":
       case "main":
         contentDiv.innerHTML = renderMainPageContent();
         break;
@@ -71,11 +56,9 @@ function navigate() {
         contentDiv.innerHTML = renderRegistrationFormContent().outerHTML;
         break;
       default:
-        contentDiv.innerHTML = renderMainPageContent();
+        contentDiv.innerHTML = render404PageContent();
         break;
     }
-  } else {
-    contentDiv!.innerHTML = render404PageContent();
   }
   setActiveLink(fragmentId);
 }

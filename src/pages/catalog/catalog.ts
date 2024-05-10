@@ -1,8 +1,8 @@
 export function renderCatalogContent() {
-  const loginFormText = "This is the Catalog page!";
+  const catalogTemporaryContent = "This is the Catalog page!";
   return `
       <div class="catalog-page">
-          ${loginFormText}
+          ${catalogTemporaryContent}
       </div>
   `;
 }
