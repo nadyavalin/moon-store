@@ -1,6 +1,6 @@
 import "./loginPage.css";
 
-import { createElement, createInput } from "src/components/elements";
+import { createElement, createInput, createLink } from "src/components/elements";
 import validateListener from "../registration/checkValidityForm";
 
 const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
@@ -33,13 +33,14 @@ function renderLoginFormContent(): HTMLElement {
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["togglePassword"]);
   togglePassword.removeAttribute("required");
   showPassword.append(togglePassword, `Показать пароль`);
+  const linkToRegistration = <HTMLAnchorElement>createLink("#registration", ["registration-link"], "Еще не зарегистрированы? Регистрация...");
 
   showHidePasswordHandler(togglePassword, passwordInput);
   validateListener(emailInput, emailTitle, passwordInput, form, emailPattern);
   validateListener(passwordInput, passwordTitle, showPassword, form, passwordPattern);
 
   form.append(emailInput, passwordInput, showPassword, submit);
-  formInner.append(h1, form);
+  formInner.append(h1, form, linkToRegistration);
 
   return formInner;
 }
