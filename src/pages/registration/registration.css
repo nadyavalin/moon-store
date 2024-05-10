@@ -1,0 +1,106 @@
+.registration-form-wrapper {
+  width: 50%;
+  padding: 40px 10px 20px 10px;
+  background-color: var(--main-black);
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-form {
+  max-width: 380px;
+  padding: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-registration {
+  font-size: 1.5em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--main-light);
+}
+
+input {
+  width: 90%;
+  border: none;
+  margin-top: 20px;
+  padding: 10px 5%;
+  background-color: var(--light-grey);
+}
+
+select,
+select option {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px 5%;
+  background-color: var(--light-grey);
+}
+
+.submit-registration {
+  width: 200px;
+  padding: 15px;
+  margin: 20px auto;
+  background-color: var(--accent-blue);
+  color: var(--main-light);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.submit-registration:hover {
+  background-color: var(--blue-hover);
+  transition: 1s;
+}
+
+input:valid,
+select:valid {
+  border: none;
+  box-shadow: inset 0px 0px 10px var(--accent-blue);
+}
+
+input:invalid {
+  box-shadow: inset 0px 0px 10px var(--accent-red);
+}
+
+input[type="submit"] {
+  box-shadow: none;
+}
+
+input[type="checkbox"] {
+  box-shadow: none;
+}
+
+.label {
+  font-size: 1em;
+  margin-top: 20px;
+  color: var(--main-light);
+}
+
+.registration-form a {
+  color: var(--main-light);
+  text-align: center;
+}
+
+.registration-form a:hover {
+  color: var(--accent-blue);
+}
+
+.addresses-wrapper {
+  margin-top: 20px;
+  border-top: 1px solid var(--main-light);
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.error-message {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: var(--main-light);
+}
+
+.disabled {
+  background-color: var(--blue-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
