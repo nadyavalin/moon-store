@@ -21,7 +21,7 @@ export function createButton(id: string, className: string[], text = "") {
 }
 
 export function createSubmitButton(text: string) {
-  const button = createButton("submit", ["submit", "disabled"], text);
+  const button = createButton("submit", ["submit-button", "disabled"], text);
   button.type = "submit";
   button.disabled = true;
   return button;
@@ -30,19 +30,15 @@ export function createSubmitButton(text: string) {
 export function createText(className: string[], text?: string) {
   const textItem = document.createElement("div");
   textItem.classList.add(...className);
-  if (text) {
-    textItem.textContent = text;
-  }
+  if (text) textItem.textContent = text;
   return textItem;
 }
 
-export function createLink(link: string, className: string[], text?: string) {
+export function createLink(link: string, className?: string[], text?: string) {
   const linkA = document.createElement("a");
   linkA.href = link;
-  linkA.classList.add(...className);
-  if (text) {
-    linkA.textContent = text;
-  }
+  if (className) linkA.classList.add(...className);
+  if (text) linkA.textContent = text;
   return linkA;
 }
 
@@ -70,21 +66,17 @@ export function createSpan(className: string[], text: string) {
 
 export function createElement(elem: string, className?: string[], text?: string) {
   const element = document.createElement(elem);
-  if (className) {
-    element.classList.add(...className);
-  }
-  if (text) {
-    element.textContent = text;
-  }
+  if (className) element.classList.add(...className);
+  if (text) element.textContent = text;
   return element;
 }
 
-export function createImage(className: string[], src: string, alt: string) {
+export function createImage(src: string, alt: string, className?: string[]) {
   const image = document.createElement("img");
-  image.classList.add(...className);
   image.src = src;
   image.alt = alt;
   image.title = alt;
+  if (className) image.classList.add(...className);
   return image;
 }
 
