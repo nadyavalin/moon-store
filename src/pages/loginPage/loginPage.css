@@ -13,7 +13,6 @@
   max-width: 380px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -21,6 +20,8 @@
   display: flex;
   justify-content: end;
   align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .disabled {

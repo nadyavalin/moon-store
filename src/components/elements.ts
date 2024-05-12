@@ -11,17 +11,15 @@ export function createInput(id: string, type: string, className: string[], place
   return input;
 }
 
-export function createButton(id: string, className: string[], text = "") {
+export function createButton(className: string[], text = "") {
   const button = document.createElement("button");
-  button.id = id;
-  button.name = id;
   button.classList.add(...className);
   button.textContent = text;
   return button;
 }
 
 export function createSubmitButton(text: string) {
-  const button = createButton("submit", ["submit-button", "disabled"], text);
+  const button = createButton(["submit-button", "disabled"], text);
   button.type = "submit";
   button.disabled = true;
   return button;

@@ -1,17 +1,18 @@
 .header {
   width: 100%;
-  height: 30%;
+  height: 150px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  height: 150px;
-}
-
-.menu-wrapper {
-  width: 80%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 180px;
+  z-index: -1;
 }
 
 .user-menu {
@@ -27,26 +28,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: -20px;
+}
+
+.navbar {
+  display: flex;
+  gap: 70px;
 }
 
 .hr-nav-line {
   width: 100%;
   border-bottom: 1px solid var(--main-light);
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  margin-bottom: 10px;
 }
 
 li {
   list-style: none;
-}
-
-@media (max-width: 800px) {
-  .logo-wrapper2 {
-    display: none;
-  }
 }

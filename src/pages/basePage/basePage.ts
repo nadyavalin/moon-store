@@ -4,15 +4,8 @@ export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
 export const footer = createElement("footer", ["footer"]);
 
-const logoWrapper1 = createDiv(["logo-wrapper1"]);
-const logoLink1 = createLink("#main", ["logo-link"]);
-const logo1 = createImage("../../public/img/logo-1.png", "Logo", ["logo"]);
-
-const logoWrapper2 = createDiv(["logo-wrapper2"]);
-const logoLink2 = createLink("#main", ["logo-link"]);
-const logo2 = createImage("../../public/img/logo-2.png", "Logo", ["logo"]);
-
-const menuWrapper = createDiv(["menu-wrapper"]);
+const logoLink = createLink("#main", ["logo-link"]);
+const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
 const logoLinkH1 = createLink("#main", ["logo-link"]);
 const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
@@ -42,16 +35,8 @@ liItemCatalog.append(menuItemCatalog);
 litItemBasket.append(menuItemBasket);
 liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
-
-logoLink1.append(logo1);
-logoWrapper1.append(logoLink1);
-
+logoLink.append(logo);
 logoLinkH1.append(h1);
-menuWrapper.append(userMenu, logoLinkH1, navMenu, hrLine);
-
-logoLink2.append(logo2);
-logoWrapper2.append(logoLink2);
-
-header.append(logoWrapper1, menuWrapper, logoWrapper2);
+header.append(logoLink, userMenu, logoLinkH1, navMenu, hrLine);
 main.append();
 footer.append();
