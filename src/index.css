@@ -1,3 +1,8 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 :root {
   --main-black: #000000;
   --main-light: #f6f4d5;
@@ -25,6 +30,12 @@ body {
 }
 
 a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.5s ease;
+}
+
+.menu-item {
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -32,7 +43,7 @@ a {
   transition: color 0.5s ease;
 }
 
-a::after {
+.menu-item::after {
   position: absolute;
   content: "";
   left: 0;
@@ -44,7 +55,7 @@ a::after {
   transition: color 0.5s ease;
 }
 
-a::after {
+.menu-item::after {
   width: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -63,7 +74,6 @@ h1 {
 button {
   font-size: 14px;
   padding: 10px;
-  width: 100%;
   height: 35px;
   border: none;
   background-color: var(--accent-blue);
@@ -72,25 +82,30 @@ button {
   transition: background-color 0.5s ease-in-out;
 }
 
-button.disabled {
+.submit-button {
+  width: 50%;
+  margin: auto;
+}
+
+.disabled {
   background-color: var(--blue-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .snackbar {
-  background-color: var(--main-black);
-  color: var(--main-light);
-  padding: 10px;
+  background-color: var(--main-light);
+  color: var(--main-black);
+  padding: 5px;
   border-radius: 5px;
 }
 
 @media (hover: hover) {
-  a:hover {
+  .menu-item:hover {
     color: var(--blue-hover);
   }
 
-  a:hover::after {
+  .menu-item:hover::after {
     width: 100%;
   }
 

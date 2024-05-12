@@ -1,4 +1,4 @@
-import { createElement, createInput, createLink, createText } from "src/components/elements";
+import { createElement, createInput, createLink, createSubmitButton, createText } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
@@ -71,10 +71,10 @@ export function renderRegistrationFormContent(): HTMLElement {
   const addressesWrapper = createElement("div", ["addresses-wrapper"]);
   const address = createAddressWrapper();
   addressesWrapper.append(address);
-  const linkToLogin = createLink("#", ["link-login"], "У вас уже есть аккаунт? Войти...");
-  const btnSubmit = createInput("submit", "submit", ["submit-registration", "disabled"], "Регистрация");
-  btnSubmit.onclick = () => formRegistrationHandler();
-  form.append(h1, accountWrapper, addressesWrapper, btnSubmit, linkToLogin);
+  const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
+  const regFormSubmitButton = createSubmitButton("Регистрация");
+  regFormSubmitButton.onclick = () => formRegistrationHandler();
+  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, linkToLogin);
   formWrapper.append(form);
   return formWrapper;
 }
