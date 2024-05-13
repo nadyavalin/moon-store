@@ -2,6 +2,7 @@ import "./loginPage.css";
 
 import { createElement, createInput, createLink, createSubmitButton } from "src/components/elements";
 import validateListener from "../registration/checkValidityForm";
+import loginFormHandler from "./loginHandler";
 
 const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
 const emailTitle = "Email должен быть в формате example@example.ru";
@@ -39,6 +40,11 @@ function renderLoginFormContent(): HTMLElement {
 
   loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButton);
   loginFormInner.append(loginFormHeading, loginForm, linkToRegistration);
+
+  loginFormSubmitButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    loginFormHandler(emailInput.value, passwordInput.value);
+  });
 
   return loginFormInner;
 }

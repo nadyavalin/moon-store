@@ -1,4 +1,3 @@
-
 .registration-form {
   max-width: 400px;
   padding: 20px;
@@ -69,4 +68,3 @@ input[type="checkbox"] {
   font-size: 0.8em;
   color: var(--main-light);
 }
-
