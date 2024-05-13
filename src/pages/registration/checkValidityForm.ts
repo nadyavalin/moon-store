@@ -20,7 +20,7 @@ export function addValidationListenersToInput(
   const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {
     document.querySelector(`.error-${inputTag.name}`)?.remove();
-    if (checkValidityAllFields()) document.querySelector(".submit-registration")?.classList.remove("disabled");
+    if (checkValidityAllFields()) document.querySelector(".submit-button")?.classList.remove("disabled");
     if (!isValidInput(inputTag.value, regExp)) {
       const errorMessage = createText([`error-${inputTag.name}`, "error-message"], text);
       parent.insertBefore(errorMessage, nextElem);

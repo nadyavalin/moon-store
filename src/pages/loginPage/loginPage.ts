@@ -2,6 +2,7 @@ import "./loginPage.css";
 
 import { createElement, createInput, createLink, createSubmitButton } from "src/components/elements";
 import validateListener from "../registration/checkValidityForm";
+import loginFormHandler from "./loginHandler";
 
 const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
 const emailTitle = "Email должен быть в формате example@example.ru";
@@ -26,7 +27,11 @@ function renderLoginFormContent(): HTMLElement {
   const loginForm = <HTMLFormElement>createElement("form", ["login-form"]);
   const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
   const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
-  const loginFormSubmitButoon = <HTMLButtonElement>createSubmitButton("Отправить");
+  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Отправить");
+
+  loginFormSubmitButton.disabled = false;
+  loginFormSubmitButton.classList.remove("disabled");
+
   const showPasswordArea = <HTMLDivElement>createElement("div", ["login-form__show-password"]);
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["login-form__password-toggle"]);
   togglePassword.removeAttribute("required");
@@ -37,8 +42,13 @@ function renderLoginFormContent(): HTMLElement {
   validateListener(emailInput, emailTitle, passwordInput, loginForm, emailPattern);
   validateListener(passwordInput, passwordTitle, showPasswordArea, loginForm, passwordPattern);
 
-  loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButoon);
+  loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButton);
   loginFormInner.append(loginFormHeading, loginForm, linkToRegistration);
+
+  loginFormSubmitButton.onclick = (event) => {
+    event.preventDefault();
+    loginFormHandler(emailInput.value, passwordInput.value);
+  };
 
   return loginFormInner;
 }
