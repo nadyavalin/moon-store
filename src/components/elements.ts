@@ -8,6 +8,7 @@ export function createInput(id: string, type: string, className: string[], place
   if (pattern) input.pattern = `${pattern}`;
   if (title) input.title = title;
   input.setAttribute("required", "true");
+  input.setAttribute("autocomplete", "true");
   return input;
 }
 
@@ -21,7 +22,6 @@ export function createButton(className: string[], text = "") {
 export function createSubmitButton(text: string) {
   const button = createButton(["submit-button", "disabled"], text);
   button.type = "submit";
-  button.disabled = true;
   return button;
 }
 
@@ -81,18 +81,21 @@ export function createImage(src: string, alt: string, className?: string[]) {
 export function createSnackbar(text: string) {
   let opacity = 1;
   const snackbar = document.createElement("div");
+  document.body.appendChild(snackbar)
   const vertical = "top";
   const horizontal = "right";
   const open = true;
-
-  const fadeOutInterval = setInterval(() => {
+  setTimeout(() => {
+    const fadeOutInterval = setInterval(() => {
     opacity -= 0.1;
     snackbar.style.opacity = opacity.toString();
     if (opacity <= 0) {
       clearInterval(fadeOutInterval);
       document.body.removeChild(snackbar);
     }
-  }, 300);
+  }, 300)
+}, 3000)
+  
 
   if (open) {
     snackbar.style.position = "fixed";

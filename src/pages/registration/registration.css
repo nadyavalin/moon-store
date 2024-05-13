@@ -1,13 +1,6 @@
-.registration-form-wrapper {
-  width: 380px;
-  padding: 20px 10px 20px 10px;
-  background-color: var(--main-black);
-  display: flex;
-  flex-direction: column;
-}
 
 .registration-form {
-  max-width: 380px;
+  max-width: 400px;
   padding: 20px;
   margin: 0 auto;
   display: flex;
@@ -62,15 +55,6 @@ input[type="checkbox"] {
   color: var(--main-light);
 }
 
-.registration-form a {
-  color: var(--main-light);
-  text-align: center;
-}
-
-.registration-form a:hover {
-  color: var(--accent-blue);
-}
-
 .addresses-wrapper {
   margin-top: 20px;
   border-top: 1px solid var(--main-light);
@@ -86,12 +70,3 @@ input[type="checkbox"] {
   color: var(--main-light);
 }
 
-.disabled {
-  background-color: var(--blue-disabled);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.login-link {
-  margin-top: 20px;
-}
