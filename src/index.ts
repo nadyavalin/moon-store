@@ -15,7 +15,7 @@ import { render404PageContent } from "./pages/404/404";
 document.body.append(header, main, footer);
 
 function setActiveLink(fragmentId: string) {
-  const links = document.querySelectorAll("header a");
+  const links = document.querySelectorAll(".menu-item");
   if (links) {
     for (let i = 0; i < links.length; i += 1) {
       const link = links[i];
@@ -23,9 +23,9 @@ function setActiveLink(fragmentId: string) {
       if (href) {
         const pageName = href.substring(1);
         if (pageName === fragmentId) {
-          link.setAttribute("class", "active");
+          link.classList.add("active");
         } else {
-          link.removeAttribute("class");
+          link.classList.remove("active");
         }
       }
     }

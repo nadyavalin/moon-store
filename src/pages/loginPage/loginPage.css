@@ -1,5 +1,5 @@
 .login-form__inner {
-  padding: 40px 10px 20px 10px;
+  padding: 20px 10px 20px 10px;
   width: 380px;
 }
 
@@ -13,7 +13,6 @@
   max-width: 380px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -21,14 +20,8 @@
   display: flex;
   justify-content: end;
   align-items: center;
-}
-
-.submit {
-  cursor: pointer;
-  width: 40%;
-  margin: auto;
-  background-color: var(--accent-blue);
-  color: var(--main-light);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .disabled {

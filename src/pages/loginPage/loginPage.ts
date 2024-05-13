@@ -28,10 +28,6 @@ function renderLoginFormContent(): HTMLElement {
   const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
   const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
   const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Отправить");
-
-  loginFormSubmitButton.disabled = false;
-  loginFormSubmitButton.classList.remove("disabled");
-
   const showPasswordArea = <HTMLDivElement>createElement("div", ["login-form__show-password"]);
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["login-form__password-toggle"]);
   togglePassword.removeAttribute("required");
