@@ -7,18 +7,6 @@ import {
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "src/components/elements";
 
-const showErrorMessage = (error: string) => {
-  let errorMessage = error;
-  errorMessage = "Такого пользователя не существует!";
-  const snackBar = createSnackbar(errorMessage);
-  document.body.append(snackBar);
-};
-
-const showAuthorizationMessage = () => {
-  const snackBar = createSnackbar("Вы авторизованы!");
-  document.body.append(snackBar);
-};
-
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
 
@@ -66,12 +54,12 @@ const authorizeUserWithToken = (email: string, password: string) => {
     .execute()
     .then((response) => {
       if (response.statusCode === 200) {
-        showAuthorizationMessage();
+        createSnackbar("Вы авторизованы!");
         window.location.hash = "#main";
       }
     })
-    .catch((error) => {
-      showErrorMessage(error);
+    .catch(() => {
+      createSnackbar("Такого пользователя не существует!");
     });
 };
 

@@ -41,10 +41,10 @@ function renderLoginFormContent(): HTMLElement {
   loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButton);
   loginFormInner.append(loginFormHeading, loginForm, linkToRegistration);
 
-  loginFormSubmitButton.onclick = (event) => {
+  loginFormSubmitButton.addEventListener("click", (event) => {
     event.preventDefault();
     loginFormHandler(emailInput.value, passwordInput.value);
-  };
+  });
 
   return loginFormInner;
 }
