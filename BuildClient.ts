@@ -8,9 +8,7 @@ import {
 } from "@commercetools/sdk-client-v2";
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
-const scopes = [
-  "manage_my_shopping_lists:steps-moon-store manage_my_orders:steps-moon-store manage_customers:steps-moon-store:steps-moon-store view_discount_codes:steps-moon-store manage_my_shopping_lists:steps-moon-store:steps-moon-store view_shipping_methods:steps-moon-store manage_my_payments:steps-moon-store manage_shopping_lists:steps-moon-store:steps-moon-store view_published_products:steps-moon-store manage_orders:steps-moon-store:steps-moon-store manage_my_profile:steps-moon-store:steps-moon-store view_cart_discounts:steps-moon-store manage_my_business_units:steps-moon-store manage_my_quote_requests:steps-moon-store manage_cart_discounts:steps-moon-store:steps-moon-store manage_my_orders:steps-moon-store:steps-moon-store view_categories:steps-moon-store manage_my_quotes:steps-moon-store manage_my_profile:steps-moon-store create_anonymous_token:steps-moon-store",
-];
+const scopes = [process.env.CTP_SCOPES as string];
 
 // Configure authMiddlewareOptions
 const authMiddlewareOptions: AuthMiddlewareOptions = {

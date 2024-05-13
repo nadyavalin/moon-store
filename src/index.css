@@ -96,8 +96,8 @@ button {
 .snackbar {
   background-color: var(--main-light);
   color: var(--main-black);
-  padding: 5px;
-  border-radius: 5px;
+  padding: 10px;
+
 }
 
 @media (hover: hover) {

@@ -55,7 +55,7 @@ function navigate() {
         contentDiv.append(renderLoginFormContent());
         break;
       case "registration":
-        contentDiv.innerHTML = renderRegistrationFormContent().outerHTML;
+        contentDiv.append(renderRegistrationFormContent());
         break;
       default:
         contentDiv.innerHTML = render404PageContent();
