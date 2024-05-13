@@ -3,31 +3,12 @@
   width: 380px;
 }
 
-.login-form__heading {
-  text-align: center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--main-light);
-}
-
-.login-form {
-  max-width: 380px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
 .login-form__show-password {
   display: flex;
   justify-content: end;
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.disabled {
-  background-color: var(--blue-disabled);
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 .login-form__password-toggle {

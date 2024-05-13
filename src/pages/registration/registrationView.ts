@@ -65,7 +65,7 @@ function createAddressWrapper(): HTMLElement {
 
 export function renderRegistrationFormContent(): HTMLElement {
   const form = createElement("form", ["registration-form"]);
-  const h1 = createElement("h1", ["title-registration"], "Заполните форму регистрации");
+  const h1 = createElement("h2", ["registration-form__heading"], "Заполните форму регистрации");
   const accountWrapper = createAccountWrapper();
   const addressesWrapper = createElement("div", ["addresses-wrapper"]);
   const address = createAddressWrapper();
@@ -73,7 +73,9 @@ export function renderRegistrationFormContent(): HTMLElement {
   const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
   const regFormSubmitButton = createSubmitButton("Регистрация");
   regFormSubmitButton.onclick = () => formRegistrationHandler();
-  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, linkToLogin);
+  const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
+  loginLinkWrapper.append(linkToLogin);
+  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
   return form;
 }
 

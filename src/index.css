@@ -39,7 +39,9 @@ a {
   transition: color 0.5s ease;
 }
 
-.menu-item {
+.menu-item,
+.login-link,
+.registration-link {
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -47,7 +49,9 @@ a {
   transition: color 0.5s ease;
 }
 
-.menu-item::after {
+.menu-item::after,
+.login-link::after,
+.registration-link::after {
   position: absolute;
   content: "";
   left: 0;
@@ -59,7 +63,9 @@ a {
   transition: color 0.5s ease;
 }
 
-.menu-item::after {
+.menu-item::after,
+.login-link::after,
+.registration-link::after {
   width: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -75,6 +81,55 @@ h1 {
   color: var(--main-light);
   text-align: center;
   z-index: 1;
+}
+
+.registration-form__heading,
+.login-form__heading {
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--main-light);
+}
+
+.registration-form,
+.login-form {
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  border: none;
+  margin-top: 20px;
+  padding: 10px 5%;
+  background-color: var(--light-grey);
+}
+
+select,
+select option {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px 5%;
+  background-color: var(--light-grey);
+}
+
+input:valid,
+select:valid {
+  border: none;
+  box-shadow: inset 0px 0px 10px var(--accent-blue);
+}
+
+input:invalid {
+  box-shadow: inset 0px 0px 10px var(--accent-red);
+}
+
+input[type="submit"] {
+  box-shadow: none;
+}
+
+input[type="checkbox"] {
+  box-shadow: none;
 }
 
 button {
@@ -99,6 +154,12 @@ button {
   pointer-events: none;
 }
 
+.error-message {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: var(--main-light);
+}
+
 .snackbar {
   background-color: var(--main-light);
   color: var(--main-black);
@@ -111,11 +172,15 @@ main {
 }
 
 @media (hover: hover) {
-  .menu-item:hover {
+  .menu-item:hover,
+  .login-link:hover,
+  .registration-link:hover {
     color: var(--blue-hover);
   }
 
-  .menu-item:hover::after {
+  .menu-item:hover::after,
+  .login-link:hover::after,
+  .registration-link:hover::after {
     width: 100%;
   }
 
