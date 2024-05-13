@@ -38,5 +38,4 @@ userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
 logoLinkH1.append(h1);
 header.append(logoLink, userMenu, logoLinkH1, navMenu, hrLine);
-main.append();
 footer.append();

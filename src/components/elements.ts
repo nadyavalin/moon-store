@@ -104,3 +104,10 @@ export function createSnackbar(text: string) {
   snackbar.textContent = text;
   return snackbar;
 }
+
+export function createSvgElement(svgString: string, className?: string) {
+  const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svgElement.innerHTML = svgString;
+  if (className) svgElement.classList.add(className);
+  return svgElement;
+}

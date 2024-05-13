@@ -1,5 +1,6 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
+import "./pages/main/main.css";
 import "./pages/404/404.css";
 import "./api/api";
 
@@ -40,7 +41,7 @@ function navigate() {
     switch (fragmentId) {
       case "":
       case "main":
-        contentDiv.innerHTML = renderMainPageContent();
+        contentDiv.append(renderMainPageContent());
         break;
       case "catalog":
         contentDiv.innerHTML = renderCatalogContent();
