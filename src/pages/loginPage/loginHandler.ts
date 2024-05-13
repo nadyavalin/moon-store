@@ -9,7 +9,7 @@ import { createSnackbar } from "src/components/elements";
 
 const showErrorMessage = (error: string) => {
   let errorMessage = error;
-  errorMessage = "Ошибка авторизации пользователя!";
+  errorMessage = "Такого пользователя не существует!";
   const snackBar = createSnackbar(errorMessage);
   document.body.append(snackBar);
 };
