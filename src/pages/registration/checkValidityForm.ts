@@ -19,12 +19,12 @@ export function addValidationListenersToInput(
   if (!pattern) return;
   const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {
-    const btnSubmit = <HTMLButtonElement>document.querySelector(".submit-button");
+    const btnSubmit = document.querySelector(".submit-button");
     document.querySelector(`.error-${inputTag.name}`)?.remove();
     if (checkValidityAllFields()) {
-      btnSubmit.classList.remove("disabled");
+      btnSubmit?.classList.remove("disabled");
     } else {
-      btnSubmit.classList.add("disabled");
+      btnSubmit?.classList.add("disabled");
     }
     if (!isValidInput(inputTag.value, regExp)) {
       const errorMessage = createText([`error-${inputTag.name}`, "error-message"], text);

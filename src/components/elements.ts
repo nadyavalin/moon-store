@@ -8,6 +8,7 @@ export function createInput(id: string, type: string, className: string[], place
   if (pattern) input.pattern = `${pattern}`;
   if (title) input.title = title;
   input.setAttribute("required", "true");
+  input.setAttribute("autocomplete", "true");
   return input;
 }
 
@@ -80,10 +81,10 @@ export function createImage(src: string, alt: string, className?: string[]) {
 export function createSnackbar(text: string) {
   let opacity = 1;
   const snackbar = document.createElement("div");
+  document.body.appendChild(snackbar);
   const vertical = "top";
   const horizontal = "right";
   const open = true;
-
   setTimeout(() => {
     const fadeOutInterval = setInterval(() => {
       opacity -= 0.1;
