@@ -1,4 +1,4 @@
-import { createDiv, createElement, createImage, createLink, createLinkMenuItem } from "../../components/elements";
+import { createDiv, createElement, createImage, createLink, createLinkMenuItem, createOuterLink, createEmptyDiv } from "../../components/elements";
 
 export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
@@ -11,7 +11,8 @@ const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
 const navMenu = createElement("nav", ["nav"]);
 const ulItem = createElement("ul", ["navbar"]);
-const hrLine = createElement("hr", ["hr-nav-line"]);
+const hrHeaderLine = createElement("hr", ["hr-line__header"]);
+const hrFooterLine = createElement("hr", ["hr-line__footer"]);
 
 const menuItemLogIn = createLinkMenuItem("#login", "Вход");
 const menuItemSingUp = createLinkMenuItem("#registration", "Регистрация");
@@ -53,5 +54,17 @@ liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
 logoLinkH1.append(h1);
-header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrLine);
-footer.append();
+header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
+
+const developersWrapper = createEmptyDiv(["developers__wrapper"]);
+const developerLinkFirst = createOuterLink("https://github.com/nadyavalin", "nadyavalin");
+const developerLinkSecond = createOuterLink("https://github.com/raenlin", "raenlin");
+const developerLinkThird = createOuterLink("https://github.com/ifbfirst", "ifbfirst");
+const rsschoolLogo = createImage("../../public/img/rsschool-logo.png", "RSSchool Logo", ["rsschool-logo"]);
+const rsschoolLogoLink = createOuterLink("https://rs.school/courses");
+const footerContentWrapper = createElement("div", ["footer-content__wrapper"]);
+const yearOfApp = createEmptyDiv(["year-app"], "2024");
+developersWrapper.append(developerLinkFirst, developerLinkSecond, developerLinkThird);
+rsschoolLogoLink.append(rsschoolLogo);
+footerContentWrapper.append(developersWrapper, rsschoolLogoLink, yearOfApp);
+footer.append(hrFooterLine, footerContentWrapper);

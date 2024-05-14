@@ -1,4 +1,4 @@
-import { createElement, createInput, createLink, createSubmitButton, createText } from "src/components/elements";
+import { createElement, createInput, createLink, createSubmitButton, createEmptyDiv } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
@@ -28,7 +28,7 @@ function createAccountWrapper(): HTMLElement {
   const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
   const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
   const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
-  const labelBirthday = createText(["label"], "Дата рождения:");
+  const labelBirthday = createEmptyDiv(["label"], "Дата рождения:");
   const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
   birthday.max = "2011-01-01";
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
@@ -42,7 +42,7 @@ function createAccountWrapper(): HTMLElement {
 
 function createAddressWrapper(): HTMLElement {
   const addressWrapper = createElement("div", ["address-wrapper"]);
-  const labelAddress = createText(["label"], "Адрес доставки:");
+  const labelAddress = createEmptyDiv(["label"], "Адрес доставки:");
   const country = createElement("select", ["countries"], "Страна");
   const optionBelarus = <HTMLOptionElement>createElement("option", ["option-country"], "Беларусь");
   optionBelarus.value = "BY";

@@ -35,12 +35,17 @@
   gap: 70px;
 }
 
-.hr-nav-line {
+.hr-line__header,
+.hr-line__footer {
   position: relative;
   width: 100%;
   border-bottom: 1px solid var(--main-light);
-  margin-bottom: 10px;
   z-index: 1;
+  margin-bottom: 10px;
+}
+
+.hr-line__footer {
+  margin-top: 10px;
 }
 
 li {
@@ -100,6 +105,47 @@ li {
 .burger-menu.active::after {
   bottom: 50%;
   transform: rotate(45deg) translate(0, 50%);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-content__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.developers__wrapper {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.rsschool-logo {
+  width: 80px;
+  background-color: var(--main-light);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.year-app {
+  font-size: 18px;
+}
+
+@media (hover: hover) {
+  .developers__wrapper a:hover {
+    color: var(--blue-hover);
+  }
+
+  .developers__wrapper a:hover::afterr {
+    width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
