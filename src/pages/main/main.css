@@ -1,18 +1,33 @@
-.slider-wrapper {
+.slider__wrapper {
   position: relative;
   max-width: 1100px;
   width: 100%;
+  scroll-behavior: smooth;
 }
 
-.slider-wrapper__carousel {
+.slider__carousel {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: calc((100% / 3 - 12px));
   gap: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: 0;
 }
 
-.card-wrapper {
+.slider__carousel.dragging .card__wrapper {
+  cursor: grab;
+  user-select: none;
+  scroll-behavior: smooth;
+}
+
+.slider__carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.card__wrapper {
+  scroll-snap-align: start;
   border-radius: 8px;
   background-color: #333333;
   display: flex;
@@ -83,7 +98,7 @@
     height: 75%;
   }
 
-  .slider-wrapper__carousel {
+  .slider__carousel {
     grid-auto-columns: calc((100% / 2 - 9px));
   }
 }
@@ -93,7 +108,7 @@
     height: 80%;
   }
 
-  .slider-wrapper__carousel {
+  .slider__carousel {
     grid-auto-columns: 100%;
   }
 }
