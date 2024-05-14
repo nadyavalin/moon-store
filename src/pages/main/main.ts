@@ -16,27 +16,46 @@ const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
 arrowLeftElement.id = "left";
 arrowRightElement.id = "right";
 
-// TODO
-// функция двигает слайдер, все больше ничего
-// когда ты нажимаешь на левую стрелку, ты запускаешь эту функцию с параметром left
-// когда правую - с right
-// когда по таймеру - тоже с right
+function moveSlider(direction = "right") {
+  const cardImg = carousel.querySelector(".card__img") as HTMLElement;
+  if (cardImg) {
+    const firstCardWidth = cardImg.offsetWidth;
+    if (direction === "left") {
+      carousel.scrollLeft += -firstCardWidth;
+    } else {
+      carousel.scrollLeft += firstCardWidth;
+    }
+  }
+}
 
-// function moveSlider(event: Event) {
+let autoPlayInterval: NodeJS.Timeout;
 
-// }
+const autoPlay = () => {
+  if (window.innerWidth < 800) return;
+
+  autoPlayInterval = setInterval(() => {
+    moveSlider();
+  }, 3000);
+};
+
+const stopAutoPlay = () => {
+  clearInterval(autoPlayInterval);
+};
 
 container.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
-    const cardImg = carousel.querySelector(".card__img") as HTMLElement;
-    if (cardImg) {
-      const firstCardWidth = cardImg.offsetWidth;
-      const scrollAmount = target.id === "left" ? -firstCardWidth : firstCardWidth;
-      carousel.scrollLeft += scrollAmount;
-    }
+    const direction = target.id;
+    moveSlider(direction);
+    stopAutoPlay();
+    setTimeout(() => {
+      stopAutoPlay();
+      autoPlay();
+    }, 7000);
   }
 });
+
+autoPlay();
 
 function cycleSlider() {
   const firstCardWidth = parseInt(carousel.dataset.firstCardWidth || "0", 10);
@@ -95,14 +114,6 @@ function dragSlider() {
   document.addEventListener("mouseup", dragStop);
   carousel.addEventListener("scroll", infiniteScroll);
 }
-
-// const autoPlay = () => {
-//   if (window.innerWidth < 800) return;
-//   setTimeout(() => moveSlider, 300);
-// };
-
-// autoPlay();
-// if (!container.matches(":hover")) autoPlay();
 
 function createCard(photo: string, title: string, price: string, discount: string) {
   const cardWrapper = createElement("li", ["card__wrapper"]);

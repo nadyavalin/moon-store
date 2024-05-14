@@ -87,7 +87,7 @@
 }
 
 .card__discount {
-  color: #ff0000;
+  color: var(--accent-red);
 }
 
 .card__bottom-wrapper {
@@ -98,8 +98,12 @@
 }
 
 .card__button {
-  background-color: var(--accent-red);
+  background-color: var(--blue-hover);
   border-radius: 10px;
+}
+
+.card__button:hover {
+  background-color: var(--accent-red);
 }
 
 @media (hover: hover) {
