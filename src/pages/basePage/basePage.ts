@@ -28,6 +28,22 @@ const menuItemCatalog = createLinkMenuItem("#catalog", "Каталог");
 const menuItemBasket = createLinkMenuItem("#basket", "Корзина");
 const menuItemAboutUs = createLinkMenuItem("#about", "О нас");
 
+// burger
+const burgerMenuWrapper = createElement("div", ["burger-menu__wrapper"]);
+const burgerMenu = createElement("div", ["burger-menu"]);
+const burgerLine = createElement("span");
+burgerMenu.append(burgerLine);
+burgerMenuWrapper.append(burgerMenu);
+
+burgerMenu.addEventListener("click", () => {
+  burgerMenu.classList.toggle("active");
+  navMenu.classList.toggle("open");
+});
+
+ulItem.addEventListener("click", () => {
+  navMenu.classList.remove("open");
+});
+
 navMenu.append(ulItem);
 ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
@@ -37,5 +53,5 @@ liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
 logoLinkH1.append(h1);
-header.append(logoLink, userMenu, logoLinkH1, navMenu, hrLine);
+header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrLine);
 footer.append();

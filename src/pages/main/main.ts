@@ -35,7 +35,7 @@ const autoPlay = () => {
 
   autoPlayInterval = setInterval(() => {
     moveSlider();
-  }, 3000);
+  }, 4000);
 };
 
 const stopAutoPlay = () => {
@@ -51,7 +51,7 @@ container.addEventListener("click", (event) => {
     setTimeout(() => {
       stopAutoPlay();
       autoPlay();
-    }, 7000);
+    }, 8000);
   }
 });
 
@@ -134,7 +134,7 @@ function createCard(photo: string, title: string, price: string, discount: strin
 }
 
 export function renderMainPageContent() {
-  createCard(discountPhotos[0], "Космический хаос", "2500 р.", "1000 р.");
+  createCard(discountPhotos[0], "Космо-хаос", "2500 р.", "1000 р.");
   createCard(discountPhotos[1], "Чужой", "1000 р.", "500 р.");
   createCard(discountPhotos[2], "Космонафт", "2000 р.", "1000 р.");
   createCard(discountPhotos[3], "Венера", "1800 р.", "800 р.");
