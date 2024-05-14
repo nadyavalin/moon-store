@@ -1,5 +1,5 @@
 import { arrowLeft, arrowRight } from "src/components/svg";
-import { createElement, createImage, createSvgElement } from "../../components/elements";
+import { createButton, createElement, createImage, createSvgElement } from "../../components/elements";
 import { main } from "../basePage/basePage";
 
 const discountPhotos = [
@@ -9,36 +9,36 @@ const discountPhotos = [
   "../../public/img/discount-4.png",
   "../../public/img/discount-5.png",
 ];
+const container = createElement("div", ["slider__wrapper"]);
+const carousel = createElement("ul", ["slider__carousel"]);
 const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow");
 const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
 arrowLeftElement.id = "left";
 arrowRightElement.id = "right";
 
-function useArrowButtons(container: HTMLElement, carousel: HTMLElement) {
-  const carouselElement = carousel;
+// TODO
+// функция двигает слайдер, все больше ничего
+// когда ты нажимаешь на левую стрелку, ты запускаешь эту функцию с параметром left
+// когда правую - с right
+// когда по таймеру - тоже с right
 
-  container.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains("card__arrow")) {
-      const firstCardWidth = parseInt(carousel.dataset.firstCardWidth || "0", 10);
+// function moveSlider(event: Event) {
+
+// }
+
+container.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
+    const cardImg = carousel.querySelector(".card__img") as HTMLElement;
+    if (cardImg) {
+      const firstCardWidth = cardImg.offsetWidth;
       const scrollAmount = target.id === "left" ? -firstCardWidth : firstCardWidth;
-      carouselElement.scrollLeft += scrollAmount;
+      carousel.scrollLeft += scrollAmount;
     }
-  });
+  }
+});
 
-  // TODO
-  // сейчас баг - стелки работают тоолько после первого клика по карточке
-  // этот листенер не нужен
-  // при клике на стрелку нужно искать элемент карусели и смотреть на его ширину, так сегда будет актуальная ширина
-  carouselElement.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains("card__img")) {
-      console.log(carouselElement.dataset.firstCardWidth);
-      carouselElement.dataset.firstCardWidth = String(target.offsetWidth);
-    }
-  });
-
-  // cycle slider
+function cycleSlider() {
   const firstCardWidth = parseInt(carousel.dataset.firstCardWidth || "0", 10);
   const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
   const carouselChildren = Array.from(carousel.children);
@@ -55,7 +55,7 @@ function useArrowButtons(container: HTMLElement, carousel: HTMLElement) {
   });
 }
 
-function dragSlider(carousel: HTMLElement) {
+function dragSlider() {
   let isDragging = false;
   let startX: number;
   let startScrollLeft: number;
@@ -69,8 +69,7 @@ function dragSlider(carousel: HTMLElement) {
 
   const dragging = (e: MouseEvent) => {
     if (!isDragging) return;
-    const carouselElement = carousel as HTMLElement;
-    carouselElement.scrollLeft = startScrollLeft - (e.pageX - startX);
+    carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
   };
 
   const dragStop = () => {
@@ -79,8 +78,15 @@ function dragSlider(carousel: HTMLElement) {
   };
 
   const infiniteScroll = () => {
+    const carouselElemnt = carousel;
     if (carousel.scrollLeft === 0) {
-      console.log("You've reached to the end");
+      carousel.classList.add("no-transition");
+      carouselElemnt.scrollLeft = carousel.scrollWidth - 2 * carousel.offsetWidth;
+      carousel.classList.remove("no-transition");
+    } else if (Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
+      carousel.classList.add("no-transition");
+      carouselElemnt.scrollLeft = carousel.offsetWidth;
+      carousel.classList.remove("no-transition");
     }
   };
 
@@ -90,26 +96,40 @@ function dragSlider(carousel: HTMLElement) {
   carousel.addEventListener("scroll", infiniteScroll);
 }
 
-export function renderMainPageContent() {
-  const container = createElement("div", ["slider__wrapper"]);
-  const carousel = createElement("ul", ["slider__carousel"]);
-  discountPhotos.forEach((photo) => {
-    const cardWrapper = createElement("li", ["card__wrapper"]);
-    const card = createElement("div", ["card"]);
-    const cardImage = createImage(photo, "Photo", ["card__img"]);
-    cardImage.setAttribute("draggable", "false");
-    const cardTextWrapper = createElement("div", ["card__text-wrapper"]);
-    const cardTitle = createElement("h2", ["card__title"], "Название");
-    const cardPrice = createElement("p", ["card__price"], "Цена");
-    const cardDiscount = createElement("p", ["card__discount"], "Скидка");
-    cardTextWrapper.append(cardTitle, cardPrice, cardDiscount);
-    card.append(cardImage, cardTextWrapper);
-    cardWrapper.append(card);
-    carousel.append(cardWrapper);
-  });
+// const autoPlay = () => {
+//   if (window.innerWidth < 800) return;
+//   setTimeout(() => moveSlider, 300);
+// };
 
-  useArrowButtons(container, carousel);
-  dragSlider(carousel);
+// autoPlay();
+// if (!container.matches(":hover")) autoPlay();
+
+function createCard(photo: string, title: string, price: string, discount: string) {
+  const cardWrapper = createElement("li", ["card__wrapper"]);
+  const card = createElement("div", ["card"]);
+  const cardImage = createImage(photo, "Photo", ["card__img"]);
+  cardImage.setAttribute("draggable", "false");
+  const cardBottom = createElement("div", ["card__bottom-wrapper"]);
+  const cardTextWrapper = createElement("div", ["card__text-wrapper"]);
+  const cardTitle = createElement("h3", ["card__title"], title);
+  const cardPrice = createElement("p", ["card__price"], price);
+  const cardDiscount = createElement("p", ["card__discount"], discount);
+  const buyButton = createButton(["card__button"], "Купить");
+  cardTextWrapper.append(cardTitle, cardPrice, cardDiscount);
+  cardBottom.append(cardTextWrapper, buyButton);
+  card.append(cardImage, cardBottom);
+  cardWrapper.append(card);
+  carousel.append(cardWrapper);
+}
+
+export function renderMainPageContent() {
+  createCard(discountPhotos[0], "Космический хаос", "2500 р.", "1000 р.");
+  createCard(discountPhotos[1], "Чужой", "1000 р.", "500 р.");
+  createCard(discountPhotos[2], "Космонафт", "2000 р.", "1000 р.");
+  createCard(discountPhotos[3], "Венера", "1800 р.", "800 р.");
+  createCard(discountPhotos[4], "Пришельцы", "2500 р.", "1000 р.");
+  cycleSlider();
+  dragSlider();
 
   container.append(arrowLeftElement, carousel, arrowRightElement);
   main.append(container);
