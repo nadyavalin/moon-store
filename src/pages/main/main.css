@@ -33,7 +33,7 @@
 .card__wrapper {
   scroll-snap-align: start;
   border-radius: 8px;
-  background-color: #333333;
+  background-color: var(--card-grey);
   display: flex;
   flex-direction: column;
   cursor: pointer;

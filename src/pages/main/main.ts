@@ -1,4 +1,6 @@
 import { arrowLeft, arrowRight } from "src/components/svg";
+import { CardData } from "src/types/types";
+import priceFormatter from "src/utils/utils";
 import { createButton, createElement, createImage, createSvgElement } from "../../components/elements";
 import { main } from "../basePage/basePage";
 
@@ -60,20 +62,23 @@ container.addEventListener("click", (event) => {
 autoPlay();
 
 function cycleSlider() {
-  const firstCardWidth = parseInt(carousel.dataset.firstCardWidth || "0", 10);
-  const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
-  const carouselChildren = Array.from(carousel.children);
+  const cardImg = carousel.querySelector(".card__img") as HTMLElement;
+  if (cardImg) {
+    const firstCardWidth = cardImg.offsetWidth;
+    const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
+    const carouselChildren = Array.from(carousel.children);
 
-  carouselChildren
-    .slice(-cardPerView)
-    .reverse()
-    .forEach((card) => {
-      carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
+    carouselChildren
+      .slice(-cardPerView)
+      .reverse()
+      .forEach((card) => {
+        carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
+      });
+
+    carouselChildren.slice(0, cardPerView).forEach((card) => {
+      carousel.insertAdjacentHTML("beforeend", card.outerHTML);
     });
-
-  carouselChildren.slice(0, cardPerView).forEach((card) => {
-    carousel.insertAdjacentHTML("beforeend", card.outerHTML);
-  });
+  }
 }
 
 function dragSlider() {
@@ -117,7 +122,8 @@ function dragSlider() {
   carousel.addEventListener("scroll", infiniteScroll);
 }
 
-function createCard(photo: string, title: string, price: string, discount: string) {
+function createCard(cardData: CardData) {
+  const { photo, title, price, discount } = cardData;
   const cardWrapper = createElement("li", ["card__wrapper"]);
   const card = createElement("div", ["card"]);
   const cardImage = createImage(photo, "Photo", ["card__img"]);
@@ -125,8 +131,8 @@ function createCard(photo: string, title: string, price: string, discount: strin
   const cardBottom = createElement("div", ["card__bottom-wrapper"]);
   const cardTextWrapper = createElement("div", ["card__text-wrapper"]);
   const cardTitle = createElement("h3", ["card__title"], title);
-  const cardPrice = createElement("p", ["card__price"], price);
-  const cardDiscount = createElement("p", ["card__discount"], discount);
+  const cardPrice = createElement("p", ["card__price"], priceFormatter.format(price));
+  const cardDiscount = createElement("p", ["card__discount"], priceFormatter.format(discount));
   const buyButton = createButton(["card__button"], "Купить");
   cardTextWrapper.append(cardTitle, cardPrice, cardDiscount);
   cardBottom.append(cardTextWrapper, buyButton);
@@ -136,11 +142,18 @@ function createCard(photo: string, title: string, price: string, discount: strin
 }
 
 export function renderMainPageContent() {
-  createCard(discountPhotos[0], "Космо-хаос", "2500 р.", "1000 р.");
-  createCard(discountPhotos[1], "Чужой", "1000 р.", "500 р.");
-  createCard(discountPhotos[2], "Космонафт", "2000 р.", "1000 р.");
-  createCard(discountPhotos[3], "Венера", "1800 р.", "800 р.");
-  createCard(discountPhotos[4], "Пришельцы", "2500 р.", "1000 р.");
+  const cardsData: CardData[] = [
+    { photo: discountPhotos[0], title: "Космо-хаос", price: 2500, discount: 1000 },
+    { photo: discountPhotos[1], title: "Чужой", price: 1000, discount: 500 },
+    { photo: discountPhotos[2], title: "Космонафт", price: 2000, discount: 1000 },
+    { photo: discountPhotos[3], title: "Венера", price: 1800, discount: 800 },
+    { photo: discountPhotos[4], title: "Пришельцы", price: 2500, discount: 1000 },
+  ];
+
+  cardsData.forEach((cardData) => {
+    createCard(cardData);
+  });
+
   cycleSlider();
   dragSlider();
 
