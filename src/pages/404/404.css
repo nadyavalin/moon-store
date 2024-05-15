@@ -23,6 +23,15 @@
 .error-404 p {
   font-size: 200px;
 }
+.link-from-404 {
+  color: var(--main-light);
+}
+
+@media (hover: hover) {
+  .link-from-404:hover {
+    color: var(--blue-hover);
+  }
+}
 
 @media (max-width: 768px) {
   .error-404 p {

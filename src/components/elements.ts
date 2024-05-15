@@ -25,18 +25,19 @@ export function createSubmitButton(text: string) {
   return button;
 }
 
-export function createText(className: string[], text?: string) {
-  const textItem = document.createElement("div");
-  textItem.classList.add(...className);
-  if (text) textItem.textContent = text;
-  return textItem;
-}
-
 export function createLink(link: string, className?: string[], text?: string) {
   const linkA = document.createElement("a");
   linkA.href = link;
   if (className) linkA.classList.add(...className);
   if (text) linkA.textContent = text;
+  return linkA;
+}
+
+export function createOuterLink(link: string, text?: string) {
+  const linkA = document.createElement("a");
+  linkA.href = link;
+  if (text) linkA.textContent = text;
+  linkA.target = "_blank";
   return linkA;
 }
 
@@ -53,6 +54,13 @@ export function createDiv(className: string[], data?: { key: string; value: stri
     div.setAttribute(`data-${data.key}`, data.value);
   }
   return div;
+}
+
+export function createEmptyDiv(className?: string[], text?: string) {
+  const textItem = document.createElement("div");
+  if (className) textItem.classList.add(...className);
+  if (text) textItem.textContent = text;
+  return textItem;
 }
 
 export function createSpan(className: string[], text: string) {
@@ -105,4 +113,11 @@ export function createSnackbar(text: string) {
   snackbar.classList.add("snackbar");
   snackbar.textContent = text;
   return snackbar;
+}
+
+export function createSvgElement(svgString: string, className?: string) {
+  const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svgElement.innerHTML = svgString;
+  if (className) svgElement.classList.add(className);
+  return svgElement;
 }
