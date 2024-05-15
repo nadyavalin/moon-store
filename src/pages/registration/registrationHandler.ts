@@ -1,9 +1,10 @@
 import createCustomer from "src/api/api";
 import { createSnackbar } from "src/components/elements";
+import { authorizeUserWithToken } from "../loginPage/loginHandler";
 
 export function formRegistrationHandler() {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
-  form.onsubmit = (event) => {
+  form.addEventListener("click", (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const email = <string>formData.get("email");
@@ -29,7 +30,7 @@ export function formRegistrationHandler() {
     createCustomer(requestBody)
       .then(({ body }) => {
         createSnackbar(`Пользователь ${body.customer.firstName} создан`);
-        // userAuthorization(login, password);
+        authorizeUserWithToken(email.trim(), password.trim());
         window.location.href = "#main";
       })
       .catch(({ statusCode }) => {
@@ -40,6 +41,6 @@ export function formRegistrationHandler() {
           createSnackbar(`Что-то пошло не так... Попробуйте зарегистрироваться позже`);
         }
       });
-  };
+  });
 }
 export default formRegistrationHandler;

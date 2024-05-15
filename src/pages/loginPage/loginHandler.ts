@@ -28,7 +28,7 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-const authorizeUserWithToken = (email: string, password: string) => {
+export const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",

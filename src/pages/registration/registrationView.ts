@@ -72,7 +72,7 @@ export function renderRegistrationFormContent(): HTMLElement {
   addressesWrapper.append(address);
   const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
   const regFormSubmitButton = createSubmitButton("Регистрация");
-  regFormSubmitButton.onclick = () => formRegistrationHandler();
+  regFormSubmitButton.addEventListener("click", formRegistrationHandler);
   const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
   loginLinkWrapper.append(linkToLogin);
   form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
