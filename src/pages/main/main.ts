@@ -41,17 +41,13 @@ const autoPlay = () => {
   }, 3000);
 };
 
-const stopAutoPlay = () => {
-  clearInterval(autoPlayInterval);
-};
-
 container.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
     const direction = target.id;
     moveSlider(direction);
 
-    stopAutoPlay();
+    clearInterval(autoPlayInterval);
     clearTimeout(waitTimeout);
     waitTimeout = setTimeout(() => {
       autoPlay();
@@ -104,14 +100,14 @@ function dragSlider() {
   };
 
   const infiniteScroll = () => {
-    const carouselElemnt = carousel;
+    const carouselElement = carousel;
     if (carousel.scrollLeft === 0) {
       carousel.classList.add("no-transition");
-      carouselElemnt.scrollLeft = carousel.scrollWidth - 2 * carousel.offsetWidth;
+      carouselElement.scrollLeft = carousel.scrollWidth - 2 * carousel.offsetWidth;
       carousel.classList.remove("no-transition");
     } else if (Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
       carousel.classList.add("no-transition");
-      carouselElemnt.scrollLeft = carousel.offsetWidth;
+      carouselElement.scrollLeft = carousel.offsetWidth;
       carousel.classList.remove("no-transition");
     }
   };
