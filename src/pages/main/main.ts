@@ -29,13 +29,14 @@ function moveSlider(direction = "right") {
 }
 
 let autoPlayInterval: NodeJS.Timeout;
+let waitTimeout: NodeJS.Timeout;
 
 const autoPlay = () => {
   if (window.innerWidth < 800) return;
 
   autoPlayInterval = setInterval(() => {
     moveSlider();
-  }, 4000);
+  }, 3000);
 };
 
 const stopAutoPlay = () => {
@@ -47,11 +48,12 @@ container.addEventListener("click", (event) => {
   if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
     const direction = target.id;
     moveSlider(direction);
+
     stopAutoPlay();
-    setTimeout(() => {
-      stopAutoPlay();
+    clearTimeout(waitTimeout);
+    waitTimeout = setTimeout(() => {
       autoPlay();
-    }, 8000);
+    }, 5000);
   }
 });
 
