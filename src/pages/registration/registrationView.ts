@@ -1,4 +1,4 @@
-import { createElement, createInput, createLink, createSubmitButton, createText } from "src/components/elements";
+import { createElement, createInput, createLink, createSubmitButton, createEmptyDiv } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
@@ -28,7 +28,7 @@ function createAccountWrapper(): HTMLElement {
   const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
   const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
   const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
-  const labelBirthday = createText(["label"], "Дата рождения:");
+  const labelBirthday = createEmptyDiv(["label"], "Дата рождения:");
   const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
   birthday.max = "2011-01-01";
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
@@ -42,7 +42,7 @@ function createAccountWrapper(): HTMLElement {
 
 function createAddressWrapper(): HTMLElement {
   const addressWrapper = createElement("div", ["address-wrapper"]);
-  const labelAddress = createText(["label"], "Адрес доставки:");
+  const labelAddress = createEmptyDiv(["label"], "Адрес доставки:");
   const country = createElement("select", ["countries"], "Страна");
   const optionBelarus = <HTMLOptionElement>createElement("option", ["option-country"], "Беларусь");
   optionBelarus.value = "BY";
@@ -65,7 +65,7 @@ function createAddressWrapper(): HTMLElement {
 
 export function renderRegistrationFormContent(): HTMLElement {
   const form = createElement("form", ["registration-form"]);
-  const h1 = createElement("h1", ["title-registration"], "Заполните форму регистрации");
+  const h1 = createElement("h2", ["registration-form__heading"], "Заполните форму регистрации");
   const accountWrapper = createAccountWrapper();
   const addressesWrapper = createElement("div", ["addresses-wrapper"]);
   const address = createAddressWrapper();
@@ -73,7 +73,9 @@ export function renderRegistrationFormContent(): HTMLElement {
   const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
   const regFormSubmitButton = createSubmitButton("Регистрация");
   regFormSubmitButton.onclick = () => formRegistrationHandler();
-  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, linkToLogin);
+  const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
+  loginLinkWrapper.append(linkToLogin);
+  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
   return form;
 }
 

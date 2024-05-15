@@ -1,4 +1,4 @@
-import { createText } from "src/components/elements";
+import { createEmptyDiv } from "src/components/elements";
 
 function isValidInput(inputValue: string, pattern: RegExp): boolean {
   return pattern.test(inputValue);
@@ -27,7 +27,7 @@ export function addValidationListenersToInput(
       btnSubmit?.classList.add("disabled");
     }
     if (!isValidInput(inputTag.value, regExp)) {
-      const errorMessage = createText([`error-${inputTag.name}`, "error-message"], text);
+      const errorMessage = createEmptyDiv([`error-${inputTag.name}`, "error-message"], text);
       parent.insertBefore(errorMessage, nextElem);
     } else {
       document.querySelector(`.error-${inputTag.name}`)?.remove();

@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  height: 150px;
+  height: 170px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,12 +35,161 @@
   gap: 70px;
 }
 
-.hr-nav-line {
+.hr-line__header,
+.hr-line__footer {
+  position: relative;
   width: 100%;
   border-bottom: 1px solid var(--main-light);
+  z-index: 1;
   margin-bottom: 10px;
+}
+
+.hr-line__footer {
+  margin-top: 10px;
 }
 
 li {
   list-style: none;
+}
+
+.burger-menu__wrapper {
+  position: relative;
+  right: -47%;
+}
+
+.burger-menu {
+  display: none;
+  position: relative;
+  z-index: 50;
+  align-items: center;
+  justify-content: flex-end;
+  width: 30px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.burger-menu span {
+  height: 2px;
+  width: 80%;
+  transform: scale(1);
+  background-color: var(--main-light);
+}
+
+.burger-menu::before,
+.burger-menu::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: var(--main-light);
+  transition: all 0.3s ease 0s;
+}
+
+.burger-menu::before {
+  top: 0;
+}
+
+.burger-menu::after {
+  bottom: 0;
+}
+
+.burger-menu.active span {
+  transform: scale(0);
+}
+
+.burger-menu.active::before {
+  top: 50%;
+  transform: rotate(-45deg) translate(0, -50%);
+}
+
+.burger-menu.active::after {
+  bottom: 50%;
+  transform: rotate(45deg) translate(0, 50%);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-content__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.developers__wrapper {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.rsschool-logo {
+  width: 80px;
+  background-color: var(--main-light);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.year-app {
+  font-size: 18px;
+}
+
+@media (hover: hover) {
+  .developers__wrapper a:hover {
+    color: var(--blue-hover);
+  }
+
+  .developers__wrapper a:hover::afterr {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .burger-menu {
+    display: flex;
+  }
+
+  .nav {
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow-y: auto;
+    padding: 50px 40px;
+    background-color: var(--main-black);
+    animation: burgerAnimation 0.4s;
+  }
+
+  .nav.open {
+    display: flex;
+  }
+
+  .navbar {
+    flex-direction: column;
+    row-gap: 30px;
+  }
+}
+
+@keyframes burgerAnimation {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1;
+  }
 }
