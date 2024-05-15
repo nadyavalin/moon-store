@@ -8,10 +8,12 @@ export interface CardData {
 }
 
 export enum Pages {
-  MAIN = "main",
-  CATALOG = "catalog",
-  BASKET = "basket",
-  ABOUT = "about",
-  LOGIN = "login",
-  REGISTRATION = "registration",
+  ROOT = "",
+  MAIN = "#main",
+  PROFILE = "#profile",
+  CATALOG = "#catalog",
+  BASKET = "#basket",
+  ABOUT = "#about",
+  LOGIN = "#login",
+  REGISTRATION = "#registration",
 }

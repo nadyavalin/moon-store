@@ -1,12 +1,13 @@
+import { Pages } from "src/types/types";
 import { createDiv, createElement, createImage, createLink, createLinkMenuItem, createOuterLink, createEmptyDiv } from "../../components/elements";
 
 export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
 export const footer = createElement("footer", ["footer"]);
 
-const logoLink = createLink("#main", ["logo-link"]);
+const logoLink = createLink(`${Pages.ROOT}`, ["logo-link"]);
 const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
-const logoLinkH1 = createLink("#main", ["logo-link"]);
+const logoLinkH1 = createLink(`${Pages.ROOT}`, ["logo-link"]);
 const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
 const navMenu = createElement("nav", ["nav"]);
@@ -14,20 +15,20 @@ const ulItem = createElement("ul", ["navbar"]);
 const hrHeaderLine = createElement("hr", ["hr-line__header"]);
 const hrFooterLine = createElement("hr", ["hr-line__footer"]);
 
-const menuItemLogIn = createLinkMenuItem("#login", "Вход");
-const menuItemSingUp = createLinkMenuItem("#registration", "Регистрация");
+const menuItemSingUp = createLinkMenuItem(`${Pages.REGISTRATION}`, "Регистрация");
+const menuItemLogIn = createLinkMenuItem(`${Pages.LOGIN}`, "Вход");
 
-// const menuItemUserProfile = createMenuItem("#", "Профиль");
-// const menuItemLogOut = createMenuItem("#", "Выход");
+const menuItemUserProfile = createLinkMenuItem(`${Pages.PROFILE}`, "Профиль");
+const menuItemLogOut = createLinkMenuItem(`${Pages.ROOT}`, "Выход");
 
 const liItemHome = createElement("li");
 const liItemCatalog = createElement("li");
 const litItemBasket = createElement("li");
 const liItemAboutUs = createElement("li");
-const menuItemMain = createLinkMenuItem("#main", "Главная");
-const menuItemCatalog = createLinkMenuItem("#catalog", "Каталог");
-const menuItemBasket = createLinkMenuItem("#basket", "Корзина");
-const menuItemAboutUs = createLinkMenuItem("#about", "О нас");
+const menuItemMain = createLinkMenuItem(`${Pages.ROOT}`, "Главная");
+const menuItemCatalog = createLinkMenuItem(`${Pages.CATALOG}`, "Каталог");
+const menuItemBasket = createLinkMenuItem(`${Pages.BASKET}`, "Корзина");
+const menuItemAboutUs = createLinkMenuItem(`${Pages.ABOUT}`, "О нас");
 
 // burger
 const burgerMenuWrapper = createElement("div", ["burger-menu__wrapper"]);
@@ -43,15 +44,16 @@ burgerMenu.addEventListener("click", () => {
 
 ulItem.addEventListener("click", () => {
   navMenu.classList.remove("open");
+  burgerMenu.classList.remove("active");
 });
 
 navMenu.append(ulItem);
-ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
+ulItem.append(liItemHome, menuItemUserProfile, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
 litItemBasket.append(menuItemBasket);
 liItemAboutUs.append(menuItemAboutUs);
-userMenu.append(menuItemSingUp, menuItemLogIn);
+userMenu.append(menuItemSingUp, menuItemLogIn, menuItemLogOut);
 logoLink.append(logo);
 logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);

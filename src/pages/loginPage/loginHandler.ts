@@ -6,6 +6,7 @@ import {
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "src/components/elements";
+import { Pages } from "src/types/types";
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
@@ -54,12 +55,12 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .execute()
     .then((response) => {
       if (response.statusCode === 200) {
-        createSnackbar("Вы авторизованы!");
-        window.location.hash = "#main";
+        createSnackbar("Вы авторизованы");
+        window.location.hash = `${Pages.ROOT}`;
       }
     })
     .catch(() => {
-      createSnackbar("Такого пользователя не существует!");
+      createSnackbar("Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
 
