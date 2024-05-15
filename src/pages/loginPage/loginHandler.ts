@@ -10,7 +10,7 @@ import { createSnackbar } from "src/components/elements";
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
 
-const authorizeUserWithToken = (email: string, password: string) => {
+export const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",
