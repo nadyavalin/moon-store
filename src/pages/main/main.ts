@@ -1,6 +1,6 @@
 import { arrowLeft, arrowRight } from "src/components/svg";
 import { CardData } from "src/types/types";
-import priceFormatter from "src/utils/utils";
+import { priceFormatter } from "src/utils/utils";
 import { createButton, createElement, createImage, createSvgElement } from "../../components/elements";
 import { main } from "../basePage/basePage";
 
