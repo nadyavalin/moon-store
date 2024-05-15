@@ -22,7 +22,7 @@ body {
   background-color: var(--main-black);
   color: var(--main-light);
   font-family: Arial, Helvetica, sans-serif;
-  height: calc(100vh - 30px);
+  min-height: 100vh;
   margin: 15px;
   display: flex;
   flex-direction: column;
