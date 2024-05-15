@@ -12,6 +12,7 @@ import { renderAboutUsContent } from "./pages/about/about";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
+import { Pages } from "./types/types";
 
 document.body.append(header, main, footer);
 
@@ -40,22 +41,22 @@ function navigate() {
     contentDiv.innerHTML = "";
     switch (fragmentId) {
       case "":
-      case "main":
+      case Pages.MAIN:
         contentDiv.append(renderMainPageContent());
         break;
-      case "catalog":
+      case Pages.CATALOG:
         contentDiv.innerHTML = renderCatalogContent();
         break;
-      case "basket":
+      case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
         break;
-      case "about":
+      case Pages.ABOUT:
         contentDiv.innerHTML = renderAboutUsContent();
         break;
-      case "login":
+      case Pages.LOGIN:
         contentDiv.append(renderLoginFormContent());
         break;
-      case "registration":
+      case Pages.REGISTRATION:
         contentDiv.append(renderRegistrationFormContent());
         break;
       default:
