@@ -33,8 +33,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 0 35px;
+  flex-grow: 1;
 }
 
 a {
@@ -160,11 +161,6 @@ button {
   background-color: var(--main-light);
   color: var(--main-black);
   padding: 10px;
-}
-
-main {
-  position: relative;
-  z-index: 1;
 }
 
 @media (hover: hover) {
