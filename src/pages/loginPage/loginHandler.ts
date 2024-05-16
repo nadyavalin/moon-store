@@ -80,7 +80,7 @@ const authorizeUserWithToken = (email: string, password: string) => {
       localStorage.setItem("refreshToken", tokenCache.myCache.refreshToken!);
       if (response.statusCode === 200) {
         createSnackbar("Вы авторизованы");
-        window.location.hash = Pages.ROOT;
+        window.location.hash = Pages.MAIN;
         state.name = response.body.customer.firstName;
         addUserGreetingToHeader();
       }
