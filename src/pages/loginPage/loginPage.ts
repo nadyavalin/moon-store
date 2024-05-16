@@ -3,10 +3,9 @@ import "./loginPage.css";
 import { createElement, createInput, createLink, createSubmitButton } from "src/components/elements";
 import validateListener from "../registration/checkValidityForm";
 import authorizeUserWithToken from "./loginHandler";
+import { emailPattern, passwordPattern } from "../registration/registrationView";
 
-const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
 const emailTitle = "Email должен быть в формате example@example.ru";
-const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
 const passwordTitle = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы";
 
 const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
@@ -27,7 +26,7 @@ function renderLoginFormContent(): HTMLElement {
   const loginForm = <HTMLFormElement>createElement("form", ["login-form"]);
   const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
   const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
-  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Отправить");
+  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Войти");
   const showPasswordArea = <HTMLDivElement>createElement("div", ["login-form__show-password"]);
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["login-form__password-toggle"]);
   togglePassword.removeAttribute("required");
@@ -41,7 +40,7 @@ function renderLoginFormContent(): HTMLElement {
   loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButton);
   loginFormInner.append(loginFormHeading, loginForm, linkToRegistration);
 
-  loginFormSubmitButton.addEventListener("click", (event) => {
+  loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
     authorizeUserWithToken(emailInput.value, passwordInput.value);
   });

@@ -141,7 +141,7 @@ export function renderMainPageContent() {
   const cardsData: CardData[] = [
     { photo: discountPhotos[0], title: "Космо-хаос", price: 2500, discount: 1000 },
     { photo: discountPhotos[1], title: "Чужой", price: 1000, discount: 500 },
-    { photo: discountPhotos[2], title: "Космонафт", price: 2000, discount: 1000 },
+    { photo: discountPhotos[2], title: "Космонавт", price: 2000, discount: 1000 },
     { photo: discountPhotos[3], title: "Венера", price: 1800, discount: 800 },
     { photo: discountPhotos[4], title: "Пришельцы", price: 2500, discount: 1000 },
   ];

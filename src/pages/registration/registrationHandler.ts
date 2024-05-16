@@ -1,5 +1,6 @@
 import createCustomer from "src/api/api";
 import { createSnackbar } from "src/components/elements";
+import { Pages } from "src/types/types";
 import authorizeUserWithToken from "../loginPage/loginHandler";
 
 export function formRegistrationHandler() {
@@ -31,7 +32,7 @@ export function formRegistrationHandler() {
       .then(({ body }) => {
         createSnackbar(`Пользователь ${body.customer.firstName} создан`);
         authorizeUserWithToken(email.trim(), password.trim());
-        window.location.href = "#main";
+        window.location.href = Pages.ROOT;
       })
       .catch(({ statusCode }) => {
         if (statusCode === 400) {
