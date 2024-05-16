@@ -15,6 +15,12 @@
   z-index: 0;
 }
 
+.user-greeting {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+}
+
 .user-menu {
   display: flex;
   justify-content: center;

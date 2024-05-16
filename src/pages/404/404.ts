@@ -1,3 +1,5 @@
+import { Pages } from "src/types/types";
+
 export function render404PageContent() {
   return `
   <div class="error-404-wrapper">
@@ -7,7 +9,7 @@ export function render404PageContent() {
       <img src="../public/animation/404.gif" alt="404 error">
       <p>4</p>
     </div>
-    <a href="#main" class="link-from-404">Вернуться на главную страницу ===>>></a>
+    <a href="${Pages.ROOT}" class="link-from-404">Вернуться на главную страницу ===>>></a>
   </div>`;
 }
 
