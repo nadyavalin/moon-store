@@ -74,7 +74,6 @@ const authorizeUserWithToken = (email: string, password: string) => {
     })
     .execute()
     .then((response) => {
-      console.log(tokenCache.myCache);
       localStorage.setItem("refreshToken", tokenCache.myCache.refreshToken!);
       if (response.statusCode === 200) {
         createSnackbar("Вы авторизованы!");
