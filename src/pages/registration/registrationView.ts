@@ -4,7 +4,7 @@ import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
 
-const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
+const emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+";
 const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
 const namePattern = "^[A-Za-zА-Яа-яё]{1,}$";
 const surnamePattern = "^[A-Za-zА-Яа-яё]{1,20}$";

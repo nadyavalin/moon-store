@@ -4,7 +4,7 @@ import { createElement, createInput, createLink, createSubmitButton } from "src/
 import validateListener from "../registration/checkValidityForm";
 import loginFormHandler from "./loginHandler";
 
-const emailPattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)";
+const emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+";
 const emailTitle = "Email должен быть в формате example@example.ru";
 const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
 const passwordTitle = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы";
@@ -27,7 +27,7 @@ function renderLoginFormContent(): HTMLElement {
   const loginForm = <HTMLFormElement>createElement("form", ["login-form"]);
   const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
   const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
-  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Вход");
+  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Войти");
   const showPasswordArea = <HTMLDivElement>createElement("div", ["login-form__show-password"]);
   const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["login-form__password-toggle"]);
   togglePassword.removeAttribute("required");

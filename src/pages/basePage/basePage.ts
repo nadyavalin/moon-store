@@ -6,9 +6,9 @@ export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
 export const footer = createElement("footer", ["footer"]);
 
-const logoLink = createLink(`${Pages.ROOT}`, ["logo-link"]);
+const logoLink = createLink(Pages.ROOT, ["logo-link"]);
 const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
-const logoLinkH1 = createLink(`${Pages.ROOT}`, ["logo-link"]);
+const logoLinkH1 = createLink(Pages.ROOT, ["logo-link"]);
 const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
 const userMenu = createDiv(["user-menu"]);
 const navMenu = createElement("nav", ["nav"]);
@@ -19,7 +19,7 @@ const hrFooterLine = createElement("hr", ["hr-line__footer"]);
 const menuItemSingUp = createLinkMenuItem(Pages.REGISTRATION, "Регистрация");
 const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
 
-const menuItemUserProfile = createLinkMenuItem(`${Pages.PROFILE}`, "Профиль");
+const menuItemUserProfile = createLinkMenuItem(Pages.PROFILE, "Профиль");
 const menuItemLogOut = createLinkMenuItem(Pages.ROOT, "Выход");
 
 const liItemHome = createElement("li");
