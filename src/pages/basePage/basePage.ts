@@ -49,7 +49,7 @@ ulItem.addEventListener("click", () => {
 });
 
 export function getUserName() {
-  const greeting = createEmptyDiv(["user-greeting"], `${state.name}, добрый день!`);
+  const greeting = createEmptyDiv(["user-greeting"], `${state.name}, здравствуйте!`);
   header.append(greeting);
 }
 
