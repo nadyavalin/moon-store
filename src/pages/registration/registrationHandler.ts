@@ -1,10 +1,10 @@
 import createCustomer from "src/api/api";
 import { createSnackbar } from "src/components/elements";
-import { authorizeUserWithToken } from "../loginPage/loginHandler";
+import authorizeUserWithToken from "../loginPage/loginHandler";
 
 export function formRegistrationHandler() {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
-  form.addEventListener("click", (event) => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const email = <string>formData.get("email");

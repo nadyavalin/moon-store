@@ -28,7 +28,7 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-export const authorizeUserWithToken = (email: string, password: string) => {
+const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",
@@ -64,6 +64,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
   const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
 
   apiRoot
+    .me()
     .login()
     .post({
       body: {
@@ -73,7 +74,8 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     })
     .execute()
     .then((response) => {
-      localStorage.setItem("token", tokenCache.myCache.token);
+      console.log(tokenCache.myCache);
+      localStorage.setItem("refreshToken", tokenCache.myCache.refreshToken!);
       if (response.statusCode === 200) {
         createSnackbar("Вы авторизованы!");
         window.location.hash = "#main";
@@ -84,8 +86,4 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     });
 };
 
-function loginFormHandler(email: string, password: string) {
-  authorizeUserWithToken(email, password);
-}
-
-export default loginFormHandler;
+export default authorizeUserWithToken;
