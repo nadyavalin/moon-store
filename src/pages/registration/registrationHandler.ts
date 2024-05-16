@@ -1,7 +1,7 @@
 import createCustomer from "src/api/api";
 import { createSnackbar } from "src/components/elements";
 import { Pages } from "src/types/types";
-import { authorizeUserWithToken } from "../loginPage/loginHandler";
+import authorizeUserWithToken from "../loginPage/loginHandler";
 
 export function formRegistrationHandler() {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
@@ -32,7 +32,7 @@ export function formRegistrationHandler() {
       .then(({ body }) => {
         createSnackbar(`Пользователь ${body.customer.firstName} создан`);
         authorizeUserWithToken(email.trim(), password.trim());
-        window.location.href = Pages.ROOT;
+        window.location.href = Pages.MAIN;
       })
       .catch(({ statusCode }) => {
         if (statusCode === 400) {
