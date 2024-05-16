@@ -1,5 +1,5 @@
 export interface State {
-  name: string | undefined;
+  name?: string;
 }
 
 export interface CardData {

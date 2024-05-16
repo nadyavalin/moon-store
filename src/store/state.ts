@@ -1,7 +1,7 @@
 import { State } from "../types/types";
 
 export const state: State = {
-  name: "",
+  name: undefined,
 };
 
 export default state;

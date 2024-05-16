@@ -32,7 +32,7 @@ export function formRegistrationHandler() {
       .then(({ body }) => {
         createSnackbar(`Пользователь ${body.customer.firstName} создан`);
         authorizeUserWithToken(email.trim(), password.trim());
-        window.location.href = `${Pages.ROOT}`;
+        window.location.href = Pages.ROOT;
       })
       .catch(({ statusCode }) => {
         if (statusCode === 400) {

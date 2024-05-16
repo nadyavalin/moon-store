@@ -16,20 +16,20 @@ const ulItem = createElement("ul", ["navbar"]);
 const hrHeaderLine = createElement("hr", ["hr-line__header"]);
 const hrFooterLine = createElement("hr", ["hr-line__footer"]);
 
-const menuItemSingUp = createLinkMenuItem(`${Pages.REGISTRATION}`, "Регистрация");
-const menuItemLogIn = createLinkMenuItem(`${Pages.LOGIN}`, "Вход");
+const menuItemSingUp = createLinkMenuItem(Pages.REGISTRATION, "Регистрация");
+const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
 
 const menuItemUserProfile = createLinkMenuItem(`${Pages.PROFILE}`, "Профиль");
-const menuItemLogOut = createLinkMenuItem(`${Pages.ROOT}`, "Выход");
+const menuItemLogOut = createLinkMenuItem(Pages.ROOT, "Выход");
 
 const liItemHome = createElement("li");
 const liItemCatalog = createElement("li");
 const litItemBasket = createElement("li");
 const liItemAboutUs = createElement("li");
-const menuItemMain = createLinkMenuItem(`${Pages.ROOT}`, "Главная");
-const menuItemCatalog = createLinkMenuItem(`${Pages.CATALOG}`, "Каталог");
-const menuItemBasket = createLinkMenuItem(`${Pages.BASKET}`, "Корзина");
-const menuItemAboutUs = createLinkMenuItem(`${Pages.ABOUT}`, "О нас");
+const menuItemMain = createLinkMenuItem(Pages.ROOT, "Главная");
+const menuItemCatalog = createLinkMenuItem(Pages.CATALOG, "Каталог");
+const menuItemBasket = createLinkMenuItem(Pages.BASKET, "Корзина");
+const menuItemAboutUs = createLinkMenuItem(Pages.ABOUT, "О нас");
 
 // burger
 const burgerMenuWrapper = createElement("div", ["burger-menu__wrapper"]);
@@ -48,7 +48,7 @@ ulItem.addEventListener("click", () => {
   burgerMenu.classList.remove("active");
 });
 
-export function getUserName() {
+export function addUserGreetingToHeader() {
   const greeting = createEmptyDiv(["user-greeting"], `${state.name}, здравствуйте!`);
   header.append(greeting);
 }
