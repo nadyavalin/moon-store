@@ -102,7 +102,7 @@ export function createSnackbar(text: string) {
         document.body.removeChild(snackbar);
       }
     }, 300);
-  }, 3000);
+  }, 2000);
 
   if (open) {
     snackbar.style.position = "fixed";
