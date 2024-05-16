@@ -1,4 +1,5 @@
 import { Pages } from "src/types/types";
+import { state } from "src/store/state";
 import { createDiv, createElement, createImage, createLink, createLinkMenuItem, createOuterLink, createEmptyDiv } from "../../components/elements";
 
 export const header = createElement("header", ["header"]);
@@ -46,6 +47,11 @@ ulItem.addEventListener("click", () => {
   navMenu.classList.remove("open");
   burgerMenu.classList.remove("active");
 });
+
+export function getUserName() {
+  const greeting = createEmptyDiv(["user-greeting"], `${state.name}, добрый день!`);
+  header.append(greeting);
+}
 
 navMenu.append(ulItem);
 ulItem.append(liItemHome, menuItemUserProfile, liItemCatalog, litItemBasket, liItemAboutUs);

@@ -7,6 +7,8 @@ import {
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "src/components/elements";
 import { Pages } from "src/types/types";
+import state from "src/store/state";
+import { getUserName } from "../basePage/basePage";
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
@@ -57,6 +59,8 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       if (response.statusCode === 200) {
         createSnackbar("Вы авторизованы");
         window.location.hash = `${Pages.ROOT}`;
+        state.name = response.body.customer.firstName;
+        getUserName();
       }
     })
     .catch(() => {

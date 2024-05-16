@@ -1,4 +1,6 @@
-export interface State {}
+export interface State {
+  name: string | undefined;
+}
 
 export interface CardData {
   photo: string;
