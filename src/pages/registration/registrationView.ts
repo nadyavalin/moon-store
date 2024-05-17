@@ -1,22 +1,22 @@
-import { createElement, createInput, createLink, createSubmitButton, createEmptyDiv } from "src/components/elements";
+import { createElement, createInput, createLink, createSubmitButton, createEmptyDiv, createSpan } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
 
-export const emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+";
+export const emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]$";
 export const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern = "^[A-Za-zА-Яа-яё]{1,}$";
+const namePattern = "[A-Za-zА-Яа-яё]{1,}$";
 const surnamePattern = "^[A-Za-zА-Яа-яё]{1,20}$";
 const birthdayPattern = "";
 const cityPattern = "^[A-Za-zА-Яа-яё]{1,15}$";
 const streetPattern = "[^s]{1,20}";
 const indexPattern = "[0-9]{6,6}";
 
-const emailTitle = "Email должен быть в формате example@example.ru";
-const passwordTitle = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы";
-const nameTitle = "Имя должно содержать не менее одной буквы";
-const surnameTitle = "Фамилия должна содержать только буквы";
+export const emailTitle = "Email должен быть в формате example@example.ru";
+export const passwordTitle = "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы";
+const nameTitle = "Имя должно содержать только буквы, не менее одной";
+const surnameTitle = "Фамилия должна содержать только буквы, не менее одной";
 const birthdayTitle = "Возраст должен быть не младше 13 лет";
 const cityTitle = "Название города должно содержать не менее 1 буквы";
 const streetTitle = "Название улицы должно содержать не менее 1 символа";
@@ -52,14 +52,18 @@ function createAddressWrapper(): HTMLElement {
   const city = createInput("city", "text", ["city"], "Город", cityPattern, cityTitle);
   const street = createInput("street", "text", ["street"], "Улица", streetPattern, streetTitle);
   const index = createInput("index", "text", ["index"], "Индекс", indexPattern, indexTitle);
-  const defaultAddress = createInput("default-address", "checkbox", ["default-address"]);
-  defaultAddress.removeAttribute("required");
+
+  const defaultAddressCheckbox = createInput("", "checkbox", ["checkbox"]);
+  const defaultWrapper = createEmptyDiv(["default-wrapper"]);
+  const labelDefault = createSpan(["label"], "Cделать адресом по умолчанию");
+  defaultAddressCheckbox.removeAttribute("required");
+  defaultWrapper.append(defaultAddressCheckbox, labelDefault);
+
   addValidationListenersToInput(city, cityTitle, street, addressWrapper, cityPattern);
   addValidationListenersToInput(street, streetTitle, index, addressWrapper, streetPattern);
-  addValidationListenersToInput(index, indexTitle, defaultAddress, addressWrapper, indexPattern);
-  addValidationListenersToInput(defaultAddress, "", defaultAddress, addressWrapper);
-  addValidationListenersToInput(defaultAddress, "", defaultAddress, addressWrapper);
-  addressWrapper.append(labelAddress, country, city, street, index, defaultAddress);
+  addValidationListenersToInput(index, indexTitle, defaultWrapper, addressWrapper, indexPattern);
+  addValidationListenersToInput(defaultAddressCheckbox, "", defaultWrapper, addressWrapper);
+  addressWrapper.append(labelAddress, country, city, street, index, defaultWrapper);
   return addressWrapper;
 }
 
@@ -72,7 +76,7 @@ export function renderRegistrationFormContent(): HTMLElement {
   addressesWrapper.append(address);
   const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
   const regFormSubmitButton = createSubmitButton("Регистрация");
-  regFormSubmitButton.addEventListener("click", formRegistrationHandler);
+  form.addEventListener("submit", formRegistrationHandler);
   const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
   loginLinkWrapper.append(linkToLogin);
   form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
