@@ -1,8 +1,9 @@
+import { getItemFromLocalStorage } from "src/utils/utils";
 import { State } from "../types/types";
 
 export const state: State = {
-  name: undefined,
-  refreshToken: localStorage.getItem("refreshToken"),
+  name: getItemFromLocalStorage("user"),
+  refreshToken: getItemFromLocalStorage("refreshToken"),
 };
 
 export default state;

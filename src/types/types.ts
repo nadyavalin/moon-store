@@ -1,5 +1,5 @@
 export interface State {
-  name?: string;
+  name?: string | null;
   refreshToken: string | null;
 }
 

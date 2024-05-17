@@ -49,8 +49,8 @@ ulItem.addEventListener("click", () => {
 });
 
 export function addUserGreetingToHeader() {
-  const profileLink = createLink(`${Pages.PROFILE}`, ["user-greeting__link"], state.name);
   const greeting = createEmptyDiv(["user-greeting"], ``);
+  const profileLink = createLink(`${Pages.PROFILE}`, ["user-greeting__link"], state.name);
   greeting.appendChild(profileLink);
   greeting.appendChild(document.createTextNode(", здравствуйте!"));
   header.append(greeting);

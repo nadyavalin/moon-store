@@ -25,7 +25,7 @@ export function createSubmitButton(text: string) {
   return button;
 }
 
-export function createLink(link: string, className?: string[], text?: string) {
+export function createLink(link: string, className?: string[], text?: string | null) {
   const linkA = document.createElement("a");
   linkA.href = link;
   if (className) linkA.classList.add(...className);
