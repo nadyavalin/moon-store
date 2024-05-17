@@ -10,7 +10,7 @@ import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "src/components/elements";
 import { Pages } from "src/types/types";
 import { state } from "src/store/state";
-import { addUserGreetingToHeader } from "../basePage/basePage";
+import { addUserGreetingToHeader, userMenu, menuItemLogOut, menuItemLogIn, menuItemSingUp } from "../basePage/basePage";
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
@@ -79,6 +79,9 @@ const authorizeUserWithToken = (email: string, password: string) => {
     .then((response) => {
       localStorage.setItem("refreshToken", tokenCache.myCache.refreshToken!);
       if (response.statusCode === 200) {
+        userMenu.append(menuItemLogOut);
+        menuItemLogIn.href = Pages.MAIN;
+        menuItemSingUp.href = Pages.MAIN;
         createSnackbar("Вы авторизованы");
         window.location.hash = Pages.MAIN;
         state.name = response.body.customer.firstName;

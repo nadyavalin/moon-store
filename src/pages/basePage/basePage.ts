@@ -10,17 +10,17 @@ const logoLink = createLink(Pages.ROOT, ["logo-link"]);
 const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
 const logoLinkH1 = createLink(Pages.ROOT, ["logo-link"]);
 const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
-const userMenu = createDiv(["user-menu"]);
+export const userMenu = createDiv(["user-menu"]);
 const navMenu = createElement("nav", ["nav"]);
 const ulItem = createElement("ul", ["navbar"]);
 const hrHeaderLine = createElement("hr", ["hr-line__header"]);
 const hrFooterLine = createElement("hr", ["hr-line__footer"]);
 
-const menuItemSingUp = createLinkMenuItem(Pages.REGISTRATION, "Регистрация");
-const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
+export const menuItemSingUp = createLinkMenuItem(Pages.REGISTRATION, "Регистрация");
+export const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
 
 const menuItemUserProfile = createLinkMenuItem(Pages.PROFILE, "Профиль");
-const menuItemLogOut = createLinkMenuItem(Pages.ROOT, "Выход");
+export const menuItemLogOut = createLinkMenuItem(Pages.MAIN, "Выход");
 
 const liItemHome = createElement("li");
 const liItemCatalog = createElement("li");
@@ -59,7 +59,7 @@ liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
 litItemBasket.append(menuItemBasket);
 liItemAboutUs.append(menuItemAboutUs);
-userMenu.append(menuItemSingUp, menuItemLogIn, menuItemLogOut);
+userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
 logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
