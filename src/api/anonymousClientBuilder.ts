@@ -27,7 +27,11 @@ function generateAnonymousSessionFlow(): Client {
     fetch,
   };
 
-  const ctpClient = new ClientBuilder().withAnonymousSessionFlow(anonymousAuthMiddlewareOptions).withHttpMiddleware(httpMiddlewareOptions).build();
+  const ctpClient = new ClientBuilder()
+    .withAnonymousSessionFlow(anonymousAuthMiddlewareOptions)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
 
   return ctpClient;
 }

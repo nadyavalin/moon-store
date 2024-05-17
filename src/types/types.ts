@@ -20,3 +20,17 @@ export enum Pages {
   LOGIN = "#login",
   REGISTRATION = "#registration",
 }
+
+export interface Customer {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addresses: [{ country: string; city: string; streetName: string; postalCode: string }];
+  shippingAddresses: [number];
+  billingAddresses?: [number];
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+  
+}

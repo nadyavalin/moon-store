@@ -3,10 +3,7 @@ import "./loginPage.css";
 import { createElement, createInput, createLink, createSubmitButton } from "src/components/elements";
 import validateListener from "../registration/checkValidityForm";
 import authorizeUserWithToken from "./loginHandler";
-import { emailPattern, passwordPattern } from "../registration/registrationView";
-
-const emailTitle = "Email должен быть в формате example@example.ru";
-const passwordTitle = "Пароль должен содержать 8 символов и включать 1 цифру, 1 заглавную и 1 строчную латинские буквы";
+import { emailPattern, emailTitle, passwordPattern, passwordTitle } from "../registration/registrationView";
 
 const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;

@@ -122,6 +122,10 @@ input:invalid {
 
 input[type="checkbox"] {
   box-shadow: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 button {
@@ -156,6 +160,7 @@ button {
   background-color: var(--main-light);
   color: var(--main-black);
   padding: 10px;
+  z-index: 100;
 }
 
 @media (hover: hover) {
