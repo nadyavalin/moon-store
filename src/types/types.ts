@@ -32,5 +32,4 @@ export interface Customer {
   billingAddresses?: [number];
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
-  
 }

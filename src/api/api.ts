@@ -1,12 +1,13 @@
 import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
+import { state } from "src/store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 
 let ctpClient;
-if (!localStorage.getItem("refreshToken")) {
+if (!state.refreshToken) {
   ctpClient = generateAnonymousSessionFlow();
 }
-if (localStorage.getItem("refreshToken")) {
+if (state.refreshToken) {
   ctpClient = generateRefreshTokenFlow();
   const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
   apiRoot.me().get().execute();
