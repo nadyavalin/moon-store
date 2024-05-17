@@ -1,3 +1,4 @@
+import logout from "src/pages/loginPage/ logoutHandler";
 import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
@@ -7,6 +8,7 @@ if (!localStorage.getItem("refreshToken")) {
   ctpClient = generateAnonymousSessionFlow();
 }
 if (localStorage.getItem("refreshToken")) {
+  logout();
   ctpClient = generateRefreshTokenFlow();
   const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
   apiRoot.me().get().execute();
