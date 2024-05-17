@@ -1,5 +1,6 @@
 export interface State {
   name?: string;
+  refreshToken: string | null;
 }
 
 export interface CardData {

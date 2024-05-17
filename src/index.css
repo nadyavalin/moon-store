@@ -11,7 +11,7 @@
   --light-grey: #fbfaf3;
   --text-dark: #292929;
   --text-light: #ffffff;
-  --accent-blue: #0d3e91;
+  --accent-blue: #004cd0;
   --blue-hover: #1a6eff;
   --blue-disabled: #6079a5;
   --accent-red: #f64137;
@@ -34,7 +34,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 35px;
   flex-grow: 1;
 }
 
