@@ -1,4 +1,6 @@
-export interface State {}
+export interface State {
+  name?: string;
+}
 
 export interface CardData {
   photo: string;
@@ -8,10 +10,26 @@ export interface CardData {
 }
 
 export enum Pages {
-  MAIN = "main",
-  CATALOG = "catalog",
-  BASKET = "basket",
-  ABOUT = "about",
-  LOGIN = "login",
-  REGISTRATION = "registration",
+  ROOT = "",
+  MAIN = "#main",
+  PROFILE = "#profile",
+  CATALOG = "#catalog",
+  BASKET = "#basket",
+  ABOUT = "#about",
+  LOGIN = "#login",
+  REGISTRATION = "#registration",
+}
+
+export interface Customer {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addresses: [{ country: string; city: string; streetName: string; postalCode: string }];
+  shippingAddresses: [number];
+  billingAddresses?: [number];
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+  
 }

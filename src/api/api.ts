@@ -1,20 +1,23 @@
-import { CustomerDraft, createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
+import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
+import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 
 let ctpClient;
-if (!localStorage.getItem("token")) {
+if (!localStorage.getItem("refreshToken")) {
   ctpClient = generateAnonymousSessionFlow();
-  console.log("аноним");
 }
-if (localStorage.getItem("token")) {
-  ctpClient = console.log("рефреш"); // generateAnonymousSessionFlow();
+if (localStorage.getItem("refreshToken")) {
+  ctpClient = generateRefreshTokenFlow();
+  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+  apiRoot.me().get().execute();
 }
 
 const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 
-const createCustomer = (requestBody: CustomerDraft) =>
+const createCustomer = (requestBody: MyCustomerDraft) =>
   apiRoot
-    .customers()
+    .me()
+    .signup()
     .post({
       body: requestBody,
     })

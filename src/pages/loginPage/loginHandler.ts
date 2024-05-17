@@ -3,14 +3,35 @@ import {
   ClientBuilder,
   type PasswordAuthMiddlewareOptions, // Required for password flow
   type HttpMiddlewareOptions,
+  TokenCache,
+  TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "src/components/elements";
+import { Pages } from "src/types/types";
+import { state } from "src/store/state";
+import { addUserGreetingToHeader } from "../basePage/basePage";
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
 
-export const authorizeUserWithToken = (email: string, password: string) => {
+class MyTokenCache implements TokenCache {
+  myCache: TokenStore = { token: "", expirationTime: 0 }; // начальные значения для кэша
+
+  set(newCache: TokenStore) {
+    // устанавливаем новый кэш
+    this.myCache = newCache;
+  }
+
+  get(): TokenStore {
+    // возвращаем текущий кэш
+    return this.myCache;
+  }
+}
+
+const tokenCache = new MyTokenCache();
+
+const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",
@@ -25,6 +46,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     },
     scopes,
     fetch,
+    tokenCache,
   };
 
   // Configure httpMiddlewareOptions
@@ -35,6 +57,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
 
   // ClientBuilder
   const ctpClient = new ClientBuilder()
+    .withProjectKey(projectKey)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withPasswordFlow(passwordAuthMiddlewareOptions)
     .withLoggerMiddleware() // Include middleware for logging
@@ -44,6 +67,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
   const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
 
   apiRoot
+    .me()
     .login()
     .post({
       body: {
@@ -53,18 +77,17 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     })
     .execute()
     .then((response) => {
+      localStorage.setItem("refreshToken", tokenCache.myCache.refreshToken!);
       if (response.statusCode === 200) {
-        createSnackbar("Вы авторизованы!");
-        window.location.hash = "#main";
+        createSnackbar("Вы авторизованы");
+        window.location.hash = Pages.MAIN;
+        state.name = response.body.customer.firstName;
+        addUserGreetingToHeader();
       }
     })
     .catch(() => {
-      createSnackbar("Такого пользователя не существует!");
+      createSnackbar("Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
 
-function loginFormHandler(email: string, password: string) {
-  authorizeUserWithToken(email, password);
-}
-
-export default loginFormHandler;
+export default authorizeUserWithToken;

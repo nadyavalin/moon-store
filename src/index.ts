@@ -13,6 +13,7 @@ import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
+import { renderProfileContent } from "./pages/profile/profile";
 
 document.body.append(header, main, footer);
 
@@ -36,13 +37,16 @@ function setActiveLink(fragmentId: string) {
 
 function navigate() {
   const contentDiv = document.querySelector(".main");
-  const fragmentId = window.location.hash.substring(1);
+  const fragmentId = window.location.hash.substring(-1);
   if (contentDiv) {
     contentDiv.innerHTML = "";
     switch (fragmentId) {
-      case "":
+      case Pages.ROOT:
       case Pages.MAIN:
         contentDiv.append(renderMainPageContent());
+        break;
+      case Pages.PROFILE:
+        contentDiv.innerHTML = renderProfileContent();
         break;
       case Pages.CATALOG:
         contentDiv.innerHTML = renderCatalogContent();

@@ -4,17 +4,17 @@ import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
 
-const emailPattern = "";
-const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern = "^[A-Za-zА-Яа-яё]{1,}$";
+export const emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]$";
+export const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
+const namePattern = "[A-Za-zА-Яа-яё]{1,}$";
 const surnamePattern = "^[A-Za-zА-Яа-яё]{1,20}$";
 const birthdayPattern = "";
 const cityPattern = "^[A-Za-zА-Яа-яё]{1,15}$";
 const streetPattern = "[^s]{1,20}";
 const indexPattern = "[0-9]{6,6}";
 
-const emailTitle = "Email должен быть в формате example@example.ru";
-const passwordTitle = "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы";
+export const emailTitle = "Email должен быть в формате example@example.ru";
+export const passwordTitle = "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы";
 const nameTitle = "Имя должно содержать только буквы, не менее одной";
 const surnameTitle = "Фамилия должна содержать только буквы, не менее одной";
 const birthdayTitle = "Возраст должен быть не младше 13 лет";
