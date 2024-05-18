@@ -12,12 +12,16 @@ export function formRegistrationHandler(event: Event) {
   const name = <string>formData.get("name");
   const surname = <string>formData.get("surname");
   const birthday = <string>formData.get("birthday");
-  const city = <string>formData.get("city");
-  const streetName = <string>formData.get("street");
-  const postalCode = <string>formData.get("index");
-  const countries = <HTMLSelectElement>document.querySelector(".countries");
-  const country = countries.value;
-  const checkboxDefault = <HTMLInputElement>document.querySelector(".checkbox");
+  const checkboxSettingOneAddress = <HTMLInputElement>document.querySelector(".setting-one-address");
+  const countriesShipping = <HTMLSelectElement>document.querySelector(".countries-shipping");
+  const checkboxSettingDefaultAddressShipping = <HTMLInputElement>document.querySelector(".setting-default-address-shipping");
+
+  const addressShipping = {
+    city: <string>formData.get("city-shipping"),
+    streetName: <string>formData.get("street-shipping"),
+    postalCode: <string>formData.get("index-shipping"),
+    country: countriesShipping.value,
+  };
 
   const customer: Customer = {
     email: email.trim(),
@@ -25,12 +29,25 @@ export function formRegistrationHandler(event: Event) {
     firstName: name.trim(),
     lastName: surname.trim(),
     dateOfBirth: birthday,
-    addresses: [{ country, city, streetName, postalCode }],
+    addresses: [addressShipping],
     shippingAddresses: [0],
   };
-  if (checkboxDefault.checked) customer.defaultShippingAddress = 0;
-  // customer.billingAddresses = [0];
-  // customer.defaultBillingAddress = 0;
+
+  if (checkboxSettingDefaultAddressShipping.checked) customer.defaultShippingAddress = 0;
+
+  if (checkboxSettingOneAddress.checked) {
+    const countriesBilling = <HTMLSelectElement>document.querySelector(".countries-billing");
+    const addressBilling = {
+      city: <string>formData.get("city-billing"),
+      streetName: <string>formData.get("street-billing"),
+      postalCode: <string>formData.get("index-billing"),
+      country: countriesBilling.value,
+    };
+    const checkboxSettingDefaultAddressBilling = <HTMLInputElement>document.querySelector(".setting-default-address-billing");
+    if (checkboxSettingDefaultAddressBilling.checked) customer.defaultBillingAddress = 1;
+    customer.billingAddresses = [1];
+    customer.addresses.push(addressBilling);
+  }
 
   createCustomer(customer)
     .then((response) => {

@@ -4,14 +4,14 @@ import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
 
-export const emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]$";
-export const passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern = "[A-Za-zА-Яа-яё]{1,}$";
-const surnamePattern = "^[A-Za-zА-Яа-яё]{1,20}$";
-const birthdayPattern = "";
-const cityPattern = "^[A-Za-zА-Яа-яё]{1,15}$";
-const streetPattern = "[^s]{1,20}";
-const indexPattern = "[0-9]{6,6}";
+export const emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const passwordPattern: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/;
+const namePattern: RegExp = /^[A-Za-zА-Яа-яё]{1,}$/;
+const surnamePattern: RegExp = /^[A-Za-zА-Яа-яё]{1,20}$/;
+const birthdayPattern: RegExp = /[0-9]/;
+const cityPattern: RegExp = /^[A-Za-zА-Яа-яё]{1,15}$/;
+const streetPattern: RegExp = /^[^s]{1,20}$/;
+const indexPattern: RegExp = /^[0-9]{6,6}$/;
 
 export const emailTitle = "Email должен быть в формате example@example.ru";
 export const passwordTitle = "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы";
@@ -31,55 +31,74 @@ function createAccountWrapper(): HTMLElement {
   const labelBirthday = createEmptyDiv(["label"], "Дата рождения:");
   const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
   birthday.max = "2011-01-01";
+  const blockForBirthdayError = createEmptyDiv(["wrapper"]);
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
   addValidationListenersToInput(password, passwordTitle, name, accountWrapper, passwordPattern);
   addValidationListenersToInput(name, nameTitle, surname, accountWrapper, namePattern);
   addValidationListenersToInput(surname, surnameTitle, labelBirthday, accountWrapper, surnamePattern);
-  addValidationListenersToInput(birthday, birthdayTitle, labelBirthday, accountWrapper, birthdayPattern);
-  accountWrapper.append(email, password, name, surname, labelBirthday, birthday);
+  addValidationListenersToInput(birthday, birthdayTitle, blockForBirthdayError, accountWrapper, birthdayPattern);
+  accountWrapper.append(email, password, name, surname, labelBirthday, birthday, blockForBirthdayError);
   return accountWrapper;
 }
 
-function createAddressWrapper(): HTMLElement {
+function createAddressView(addressTitle: string, addressType: string): HTMLElement {
   const addressWrapper = createElement("div", ["address-wrapper"]);
-  const labelAddress = createEmptyDiv(["label"], "Адрес доставки:");
-  const country = createElement("select", ["countries"], "Страна");
+  const labelAddress = createEmptyDiv(["label"], addressTitle);
+  const country = createElement("select", [`countries-${addressType}`], "Страна");
   const optionBelarus = <HTMLOptionElement>createElement("option", ["option-country"], "Беларусь");
   optionBelarus.value = "BY";
   const optionRussia = <HTMLOptionElement>createElement("option", ["option-country"], "Россия");
   optionRussia.value = "RU";
   country.append(optionBelarus, optionRussia);
-  const city = createInput("city", "text", ["city"], "Город", cityPattern, cityTitle);
-  const street = createInput("street", "text", ["street"], "Улица", streetPattern, streetTitle);
-  const index = createInput("index", "text", ["index"], "Индекс", indexPattern, indexTitle);
+  const city = createInput(`city-${addressType}`, "text", [`city-${addressType}`], "Город", cityPattern, cityTitle);
+  const street = createInput(`street-${addressType}`, "text", [`street-${addressType}`], "Улица", streetPattern, streetTitle);
+  const index = createInput(`index-${addressType}`, "text", [`index-${addressType}`], "Индекс", indexPattern, indexTitle);
 
-  const defaultAddressCheckbox = createInput("", "checkbox", ["checkbox"]);
-  const defaultWrapper = createEmptyDiv(["default-wrapper"]);
-  const labelDefault = createSpan(["label"], "Cделать адресом по умолчанию");
-  defaultAddressCheckbox.removeAttribute("required");
-  defaultWrapper.append(defaultAddressCheckbox, labelDefault);
+  const checkboxSettingDefaultAddress = createInput(`setting-default-address-${addressType}`, "checkbox", [`setting-default-address-${addressType}`]);
+  const checkboxWrapper = createEmptyDiv(["checkbox-wrapper"]);
+  const labelSettingDefaultAddress = createSpan(["label"], "Cделать адресом по умолчанию");
+  checkboxSettingDefaultAddress.removeAttribute("required");
+  checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
 
   addValidationListenersToInput(city, cityTitle, street, addressWrapper, cityPattern);
   addValidationListenersToInput(street, streetTitle, index, addressWrapper, streetPattern);
-  addValidationListenersToInput(index, indexTitle, defaultWrapper, addressWrapper, indexPattern);
-  addValidationListenersToInput(defaultAddressCheckbox, "", defaultWrapper, addressWrapper);
-  addressWrapper.append(labelAddress, country, city, street, index, defaultWrapper);
+  addValidationListenersToInput(index, indexTitle, checkboxWrapper, addressWrapper, indexPattern);
+  addressWrapper.append(labelAddress, country, city, street, index, checkboxWrapper);
   return addressWrapper;
+}
+
+function switchAddingSecondAddress() {
+  const checkboxSettingOneAddress = <HTMLInputElement>document.querySelector(".setting-one-address");
+  if (checkboxSettingOneAddress.checked) {
+    const addressView = createAddressView("Адрес для счетов:", "billing");
+    document.querySelector(".addresses-wrapper")?.append(addressView);
+    document.querySelector(".submit-button")?.classList.add("disabled");
+  } else {
+    document.querySelectorAll(".address-wrapper")[1].remove();
+  }
 }
 
 export function renderRegistrationFormContent(): HTMLElement {
   const form = createElement("form", ["registration-form"]);
-  const h1 = createElement("h2", ["registration-form__heading"], "Заполните форму регистрации");
+  const h2 = createElement("h2", ["registration-form__heading"], "Заполните форму регистрации");
+  const h5 = createElement("h5", ["registration-form__info"], " * Все поля обязательны для заполнения");
   const accountWrapper = createAccountWrapper();
   const addressesWrapper = createElement("div", ["addresses-wrapper"]);
-  const address = createAddressWrapper();
-  addressesWrapper.append(address);
+  const address = createAddressView("Адрес для доставки:", "shipping");
+
+  const defaultWrapper = createEmptyDiv(["checkbox-wrapper"]);
+  const checkboxSettingOneAddress = createInput("setting-one-address", "checkbox", ["setting-one-address"]);
+  checkboxSettingOneAddress.addEventListener("change", switchAddingSecondAddress);
+  const labelDefault = createSpan(["label"], "Использовать разные адреса для доставки и счетов");
+  checkboxSettingOneAddress.removeAttribute("required");
+  defaultWrapper.append(checkboxSettingOneAddress, labelDefault);
+  addressesWrapper.append(address, defaultWrapper);
   const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
   const regFormSubmitButton = createSubmitButton("Регистрация");
   form.addEventListener("submit", formRegistrationHandler);
   const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
   loginLinkWrapper.append(linkToLogin);
-  form.append(h1, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
+  form.append(h2, h5, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
   return form;
 }
 
