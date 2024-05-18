@@ -1,3 +1,4 @@
+import { getItemFromLocalStorage } from "src/utils/utils";
 import fetch from "node-fetch";
 import {
   ClientBuilder,
@@ -9,7 +10,7 @@ import {
 
 function generateRefreshTokenFlow() {
   const projectKey = process.env.CTP_PROJECT_KEY as string;
-  const refreshToken = localStorage.getItem("refreshToken") as string;
+  const refreshToken = getItemFromLocalStorage<string>("refreshToken") as string;
 
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: "https://api.europe-west1.gcp.commercetools.com",

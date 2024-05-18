@@ -22,6 +22,17 @@ export const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
 const menuItemUserProfile = createLinkMenuItem(Pages.PROFILE, "Профиль");
 export const menuItemLogOut = createLinkMenuItem(Pages.MAIN, "Выход");
 
+menuItemLogOut.addEventListener("click", () => {
+  const greeting = header.querySelector(".user-greeting");
+  localStorage.removeItem("user");
+  localStorage.removeItem("refreshToken");
+  window.location.hash = Pages.LOGIN;
+  menuItemLogIn.href = Pages.LOGIN;
+  menuItemSingUp.href = Pages.REGISTRATION;
+  greeting?.remove();
+  menuItemLogOut.remove();
+});
+
 const liItemHome = createElement("li");
 const liItemCatalog = createElement("li");
 const litItemBasket = createElement("li");

@@ -32,7 +32,7 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-export function changeAppAfterLogin(userName: string | undefined, refreshToken: string | undefined) {
+function changeAppAfterLogin(userName: string, refreshToken: string) {
   setItemToLocalStorage("user", userName);
   setItemToLocalStorage("refreshToken", refreshToken);
   createErrorSuccessSnackbar(200, "Вы авторизованы");
@@ -91,7 +91,9 @@ const authorizeUserWithToken = (email: string, password: string) => {
     .execute()
     .then((response) => {
       if (response.statusCode === 200) {
-        changeAppAfterLogin(response.body.customer.firstName, tokenCache.myCache.refreshToken);
+        const user = response.body.customer.firstName as string;
+        const token = tokenCache.myCache.refreshToken as string;
+        changeAppAfterLogin(user, token);
       }
     })
     .catch(() => {
