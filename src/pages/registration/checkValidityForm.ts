@@ -6,7 +6,7 @@ function isValidInput(inputValue: string, pattern: RegExp): boolean {
 
 function checkValidityAllFields() {
   const arrInputs = Array.from(document.querySelectorAll("input"));
-  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern.replace('"', "/"))));
+  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern)));
 }
 
 export function addValidationListenersToInput(
@@ -14,10 +14,9 @@ export function addValidationListenersToInput(
   text: string,
   nextElem: HTMLElement,
   parent: HTMLElement,
-  pattern?: string,
+  pattern?: RegExp,
 ) {
   if (!pattern) return;
-  const regExp = new RegExp(pattern.replace('"', "/"));
   inputTag.addEventListener("input", () => {
     const btnSubmit = document.querySelector(".submit-button");
     document.querySelector(`.error-${inputTag.name}`)?.remove();
@@ -26,11 +25,15 @@ export function addValidationListenersToInput(
     } else {
       btnSubmit?.classList.add("disabled");
     }
-    if (!isValidInput(inputTag.value, regExp)) {
-      const errorMessage = createEmptyDiv([`error-${inputTag.name}`, "error-message"], text);
-      parent.insertBefore(errorMessage, nextElem);
-    } else {
+    if (isValidInput(inputTag.value, pattern)) {
       document.querySelector(`.error-${inputTag.name}`)?.remove();
+      inputTag.classList.remove("invalid");
+      inputTag.classList.add("valid");
+    } else {
+      const errorMessage = createEmptyDiv([`error-${inputTag.name}`, "error-message"], text);
+      inputTag.classList.remove("valid");
+      inputTag.classList.add("invalid");
+      parent.insertBefore(errorMessage, nextElem);
     }
   });
   inputTag.addEventListener("invalid", (e: Event) => {
