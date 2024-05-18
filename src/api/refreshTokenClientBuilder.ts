@@ -7,9 +7,8 @@ import {
   type RefreshAuthMiddlewareOptions,
 } from "@commercetools/sdk-client-v2";
 
-function generateRefreshTokenFlow() {
+function generateRefreshTokenFlow(refreshToken: string) {
   const projectKey = process.env.CTP_PROJECT_KEY as string;
-  const refreshToken = localStorage.getItem("refreshToken") as string;
 
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: "https://api.europe-west1.gcp.commercetools.com",

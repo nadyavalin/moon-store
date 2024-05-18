@@ -11,10 +11,12 @@
   --light-grey: #fbfaf3;
   --text-dark: #292929;
   --text-light: #ffffff;
-  --accent-blue: #0d3e91;
+  --accent-blue: #004cd0;
+  --accent-purple: #fa66ff;
   --blue-hover: #1a6eff;
   --blue-disabled: #6079a5;
   --accent-red: #f64137;
+  --accent-green: #4ad300;
   --card-grey: #333333;
 }
 
@@ -34,7 +36,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 35px;
   flex-grow: 1;
 }
 
@@ -46,7 +47,8 @@ a {
 
 .menu-item,
 .login-link,
-.registration-link {
+.registration-link,
+.link-from-404 {
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -56,7 +58,8 @@ a {
 
 .menu-item::after,
 .login-link::after,
-.registration-link::after {
+.registration-link::after,
+.link-from-404::after {
   position: absolute;
   content: "";
   left: 50%;
@@ -162,16 +165,26 @@ button {
   z-index: 100;
 }
 
+.snackbar_red {
+  color: var(--accent-red);
+}
+
+.snackbar_green {
+  color: var(--accent-green);
+}
+
 @media (hover: hover) {
   .menu-item:hover,
   .login-link:hover,
-  .registration-link:hover {
+  .registration-link:hover,
+  .link-from-404:hover {
     color: var(--blue-hover);
   }
 
   .menu-item:hover::after,
   .login-link:hover::after,
-  .registration-link:hover::after {
+  .registration-link:hover::after,
+  .link-from-404:hover::after {
     width: 100%;
   }
 

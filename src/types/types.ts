@@ -1,5 +1,6 @@
 export interface State {
-  name?: string;
+  name?: string | null;
+  refreshToken: string | null;
 }
 
 export interface CardData {
@@ -31,5 +32,4 @@ export interface Customer {
   billingAddresses?: [number];
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
-  
 }

@@ -6,9 +6,9 @@ export const header = createElement("header", ["header"]);
 export const main = createElement("main", ["main"]);
 export const footer = createElement("footer", ["footer"]);
 
-const logoLink = createLink(Pages.ROOT, ["logo-link"]);
+const logoLink = createLink(Pages.MAIN, ["logo-link"]);
 const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
-const logoLinkH1 = createLink(Pages.ROOT, ["logo-link"]);
+const logoLinkH1 = createLink(Pages.MAIN, ["logo-link"]);
 const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
 export const userMenu = createDiv(["user-menu"]);
 const navMenu = createElement("nav", ["nav"]);
@@ -22,11 +22,22 @@ export const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
 const menuItemUserProfile = createLinkMenuItem(Pages.PROFILE, "Профиль");
 export const menuItemLogOut = createLinkMenuItem(Pages.MAIN, "Выход");
 
+menuItemLogOut.addEventListener("click", () => {
+  const greeting = header.querySelector(".user-greeting");
+  localStorage.removeItem("user");
+  localStorage.removeItem("refreshToken");
+  window.location.hash = Pages.LOGIN;
+  menuItemLogIn.href = Pages.LOGIN;
+  menuItemSingUp.href = Pages.REGISTRATION;
+  greeting?.remove();
+  menuItemLogOut.remove();
+});
+
 const liItemHome = createElement("li");
 const liItemCatalog = createElement("li");
 const litItemBasket = createElement("li");
 const liItemAboutUs = createElement("li");
-const menuItemMain = createLinkMenuItem(Pages.ROOT, "Главная");
+const menuItemMain = createLinkMenuItem(Pages.MAIN, "Главная");
 const menuItemCatalog = createLinkMenuItem(Pages.CATALOG, "Каталог");
 const menuItemBasket = createLinkMenuItem(Pages.BASKET, "Корзина");
 const menuItemAboutUs = createLinkMenuItem(Pages.ABOUT, "О нас");
@@ -49,7 +60,10 @@ ulItem.addEventListener("click", () => {
 });
 
 export function addUserGreetingToHeader() {
-  const greeting = createEmptyDiv(["user-greeting"], `${state.name}, здравствуйте!`);
+  const greeting = createEmptyDiv(["user-greeting"], ``);
+  const profileLink = createLink(`${Pages.PROFILE}`, ["user-greeting__link"], state.name);
+  greeting.appendChild(profileLink);
+  greeting.appendChild(document.createTextNode(", здравствуйте!"));
   header.append(greeting);
 }
 

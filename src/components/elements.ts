@@ -25,7 +25,7 @@ export function createSubmitButton(text: string) {
   return button;
 }
 
-export function createLink(link: string, className?: string[], text?: string) {
+export function createLink(link: string, className?: string[], text?: string | null) {
   const linkA = document.createElement("a");
   linkA.href = link;
   if (className) linkA.classList.add(...className);
@@ -113,6 +113,17 @@ export function createSnackbar(text: string) {
   snackbar.classList.add("snackbar");
   snackbar.textContent = text;
   return snackbar;
+}
+
+export function createErrorSuccessSnackbar(type: number, text: string) {
+  if (type === 400 || type === 500) {
+    const snackbar = createSnackbar(text);
+    snackbar.classList.add("snackbar_red");
+  }
+  if (type === 200 || type === 201) {
+    const snackbar = createSnackbar(text);
+    snackbar.classList.add("snackbar_green");
+  }
 }
 
 export function createSvgElement(svgString: string, className?: string) {
