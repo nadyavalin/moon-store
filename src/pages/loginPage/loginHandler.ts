@@ -32,10 +32,12 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-function changeAppAfterLogin(userName: string, refreshToken: string) {
+export function changeAppAfterLogin(userName: string, refreshToken?: string) {
+  if (refreshToken) {
+    setItemToLocalStorage("refreshToken", refreshToken);
+    createErrorSuccessSnackbar(200, "Вы авторизованы");
+  }
   setItemToLocalStorage("user", userName);
-  setItemToLocalStorage("refreshToken", refreshToken);
-  createErrorSuccessSnackbar(200, "Вы авторизованы");
   window.location.hash = Pages.MAIN;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
