@@ -41,22 +41,20 @@ function createAccountWrapper(): HTMLElement {
   return accountWrapper;
 }
 
-function createAddressView(nameAddress: string, addressNotice: string): HTMLElement {
+function createAddressView(addressTitle: string, addressType: string): HTMLElement {
   const addressWrapper = createElement("div", ["address-wrapper"]);
-  const labelAddress = createEmptyDiv(["label"], nameAddress);
-  const country = createElement("select", [`countries-${addressNotice}`], "Страна");
+  const labelAddress = createEmptyDiv(["label"], addressTitle);
+  const country = createElement("select", [`countries-${addressType}`], "Страна");
   const optionBelarus = <HTMLOptionElement>createElement("option", ["option-country"], "Беларусь");
   optionBelarus.value = "BY";
   const optionRussia = <HTMLOptionElement>createElement("option", ["option-country"], "Россия");
   optionRussia.value = "RU";
   country.append(optionBelarus, optionRussia);
-  const city = createInput(`city-${addressNotice}`, "text", [`city-${addressNotice}`], "Город", cityPattern, cityTitle);
-  const street = createInput(`street-${addressNotice}`, "text", [`street-${addressNotice}`], "Улица", streetPattern, streetTitle);
-  const index = createInput(`index-${addressNotice}`, "text", [`index-${addressNotice}`], "Индекс", indexPattern, indexTitle);
+  const city = createInput(`city-${addressType}`, "text", [`city-${addressType}`], "Город", cityPattern, cityTitle);
+  const street = createInput(`street-${addressType}`, "text", [`street-${addressType}`], "Улица", streetPattern, streetTitle);
+  const index = createInput(`index-${addressType}`, "text", [`index-${addressType}`], "Индекс", indexPattern, indexTitle);
 
-  const checkboxSettingDefaultAddress = createInput(`setting-default-address-${addressNotice}`, "checkbox", [
-    `setting-default-address-${addressNotice}`,
-  ]);
+  const checkboxSettingDefaultAddress = createInput(`setting-default-address-${addressType}`, "checkbox", [`setting-default-address-${addressType}`]);
   const checkboxWrapper = createEmptyDiv(["checkbox-wrapper"]);
   const labelSettingDefaultAddress = createSpan(["label"], "Cделать адресом по умолчанию");
   checkboxSettingDefaultAddress.removeAttribute("required");
