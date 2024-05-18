@@ -1,5 +1,4 @@
 import { changeAppAfterLogin } from "src/pages/loginPage/loginHandler";
-import { addUserGreetingToHeader } from "src/pages/basePage/basePage";
 import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
 import { Client } from "@commercetools/sdk-client-v2";
 import { state } from "src/store/state";
@@ -10,7 +9,6 @@ let ctpClient: Client;
 if (!state.refreshToken) {
   ctpClient = generateAnonymousSessionFlow();
 } else {
-  addUserGreetingToHeader();
   ctpClient = generateRefreshTokenFlow(state.refreshToken);
   const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
   apiRoot
