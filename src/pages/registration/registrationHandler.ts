@@ -1,5 +1,5 @@
 import createCustomer from "src/api/api";
-import { createSnackbar } from "src/components/elements";
+import { createErrorSuccessSnackbar } from "src/components/elements";
 import { Customer, Pages } from "src/types/types";
 import authorizeUserWithToken from "../loginPage/loginHandler";
 
@@ -35,19 +35,20 @@ export function formRegistrationHandler(event: Event) {
   createCustomer(customer)
     .then((response) => {
       if (response.statusCode === 201) {
-        createSnackbar(`Пользователь ${response.body.customer.firstName} создан`);
+        createErrorSuccessSnackbar(201, `Пользователь ${response.body.customer.firstName} создан`);
         setTimeout(() => authorizeUserWithToken(email.trim(), password.trim()), 4000);
         window.location.href = Pages.MAIN;
       }
     })
     .catch(({ statusCode }) => {
       if (statusCode === 400) {
-        createSnackbar(
-          `Пользователь c таким адресом электронной почты уже существует. Войдите в приложение или используйте другой адрес электронной почты`,
+        createErrorSuccessSnackbar(
+          400,
+          "Пользователь c таким адресом электронной почты уже существует. Войдите в приложение или используйте другой адрес электронной почты",
         );
       }
       if (statusCode === 500) {
-        createSnackbar(`Что-то пошло не так... Попробуйте зарегистрироваться позже`);
+        createErrorSuccessSnackbar(500, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
       }
     });
 }

@@ -7,7 +7,7 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createSnackbar } from "src/components/elements";
+import { createErrorSuccessSnackbar } from "src/components/elements";
 import { Pages } from "src/types/types";
 import { state } from "src/store/state";
 import { setItemToLocalStorage } from "src/utils/utils";
@@ -32,13 +32,13 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-function changeAppAfterLogin(userName: string | undefined, refreshToken: string | undefined) {
+export function changeAppAfterLogin(userName: string | undefined, refreshToken: string | undefined) {
+  setItemToLocalStorage("user", userName);
   setItemToLocalStorage("refreshToken", refreshToken);
-  createSnackbar("Вы авторизованы");
+  createErrorSuccessSnackbar(200, "Вы авторизованы");
   window.location.hash = Pages.MAIN;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
-  setItemToLocalStorage("user", userName);
   state.name = userName;
   addUserGreetingToHeader();
   userMenu.append(menuItemLogOut);
@@ -95,7 +95,7 @@ const authorizeUserWithToken = (email: string, password: string) => {
       }
     })
     .catch(() => {
-      createSnackbar("Вы ввели неправильный адрес электронной почты или пароль");
+      createErrorSuccessSnackbar(400, "Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
 

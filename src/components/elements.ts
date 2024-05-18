@@ -115,6 +115,17 @@ export function createSnackbar(text: string) {
   return snackbar;
 }
 
+export function createErrorSuccessSnackbar(type: number, text: string) {
+  if (type === 400 || type === 500) {
+    const snackbar = createSnackbar(text);
+    snackbar.classList.add("snackbar_red");
+  }
+  if (type === 200 || type === 201) {
+    const snackbar = createSnackbar(text);
+    snackbar.classList.add("snackbar_green");
+  }
+}
+
 export function createSvgElement(svgString: string, className?: string) {
   const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svgElement.innerHTML = svgString;
