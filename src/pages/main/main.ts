@@ -1,7 +1,7 @@
 import { arrowLeft, arrowRight } from "src/components/svg";
 import { CardData } from "src/types/types";
 import { priceFormatter } from "src/utils/utils";
-import { createButton, createElement, createImage, createSvgElement } from "../../components/elements";
+import { createElement, createSvgElement } from "../../components/elements";
 import { main } from "../basePage/basePage";
 
 const discountPhotos = [
@@ -11,8 +11,8 @@ const discountPhotos = [
   "../../public/img/discount-4.png",
   "../../public/img/discount-5.png",
 ];
-const container = createElement("div", ["slider__wrapper"]);
-const carousel = createElement("ul", ["slider__carousel"]);
+const container = createElement({ tagName: "div", classNames: ["slider__wrapper"] });
+const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow");
 const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
 arrowLeftElement.id = "left";
@@ -120,16 +120,16 @@ function dragSlider() {
 
 function createCard(cardData: CardData) {
   const { photo, title, price, discount } = cardData;
-  const cardWrapper = createElement("li", ["card__wrapper"]);
-  const card = createElement("div", ["card"]);
-  const cardImage = createImage(photo, "Photo", ["card__img"]);
+  const cardWrapper = createElement({ tagName: "li", classNames: ["card__wrapper"] });
+  const card = createElement({ tagName: "div", classNames: ["card"] });
+  const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: photo, alt: "Photo" } });
   cardImage.setAttribute("draggable", "false");
-  const cardBottom = createElement("div", ["card__bottom-wrapper"]);
-  const cardTextWrapper = createElement("div", ["card__text-wrapper"]);
-  const cardTitle = createElement("h3", ["card__title"], title);
-  const cardPrice = createElement("p", ["card__price"], priceFormatter.format(price));
-  const cardDiscount = createElement("p", ["card__discount"], priceFormatter.format(discount));
-  const buyButton = createButton(["card__button"], "Купить");
+  const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
+  const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
+  const cardTitle = createElement({ tagName: "h3", classNames: ["card__title"], textContent: title });
+  const cardPrice = createElement({ tagName: "p", classNames: ["card__price"], textContent: priceFormatter.format(price) });
+  const cardDiscount = createElement({ tagName: "p", classNames: ["card__discount"], textContent: priceFormatter.format(discount) });
+  const buyButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Купить" });
   cardTextWrapper.append(cardTitle, cardPrice, cardDiscount);
   cardBottom.append(cardTextWrapper, buyButton);
   card.append(cardImage, cardBottom);

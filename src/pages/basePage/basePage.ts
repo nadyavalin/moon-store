@@ -1,26 +1,30 @@
 import { Pages } from "src/types/types";
 import { state } from "src/store/state";
-import { createDiv, createElement, createImage, createLink, createLinkMenuItem, createOuterLink, createEmptyDiv } from "../../components/elements";
+import { createElement } from "../../components/elements";
 
-export const header = createElement("header", ["header"]);
-export const main = createElement("main", ["main"]);
-export const footer = createElement("footer", ["footer"]);
+export const header = createElement({ tagName: "header", classNames: ["header"] });
+export const main = createElement({ tagName: "main", classNames: ["main"] });
+export const footer = createElement({ tagName: "footer", classNames: ["footer"] });
 
-const logoLink = createLink(Pages.MAIN, ["logo-link"]);
-const logo = createImage("../../public/img/logo.png", "Logo", ["logo"]);
-const logoLinkH1 = createLink(Pages.MAIN, ["logo-link"]);
-const h1 = createElement("h1", ["shop-name"], "Online Moon Store");
-export const userMenu = createDiv(["user-menu"]);
-const navMenu = createElement("nav", ["nav"]);
-const ulItem = createElement("ul", ["navbar"]);
-const hrHeaderLine = createElement("hr", ["hr-line__header"]);
-const hrFooterLine = createElement("hr", ["hr-line__footer"]);
+const logoLink = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.MAIN } });
+const logo = createElement({ tagName: "img", classNames: ["logo"], attributes: { src: "../../public/img/logo.png", alt: "Logo" } });
+const logoLinkH1 = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.MAIN } });
+const h1 = createElement({ tagName: "h1", classNames: ["shop-name"], textContent: "Online Moon Store" });
+export const userMenu = createElement({ tagName: "div", classNames: ["user-menu"] });
+const navMenu = createElement({ tagName: "nav", classNames: ["nav"] });
+const ulItem = createElement({ tagName: "ul", classNames: ["navbar"] });
+const hrHeaderLine = createElement({ tagName: "hr", classNames: ["hr-line__header"] });
+const hrFooterLine = createElement({ tagName: "hr", classNames: ["hr-line__footer"] });
 
-export const menuItemSingUp = createLinkMenuItem(Pages.REGISTRATION, "Регистрация");
-export const menuItemLogIn = createLinkMenuItem(Pages.LOGIN, "Вход");
-
-const menuItemUserProfile = createLinkMenuItem(Pages.PROFILE, "Профиль");
-export const menuItemLogOut = createLinkMenuItem(Pages.MAIN, "Выход");
+export const menuItemSingUp = createElement({
+  tagName: "a",
+  classNames: ["menu-item"],
+  textContent: "Регистрация",
+  attributes: { href: Pages.REGISTRATION },
+});
+export const menuItemLogIn = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Вход", attributes: { href: Pages.LOGIN } });
+const menuItemUserProfile = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Профиль", attributes: { href: Pages.PROFILE } });
+export const menuItemLogOut = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Выход", attributes: { href: Pages.MAIN } });
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
@@ -33,19 +37,19 @@ menuItemLogOut.addEventListener("click", () => {
   menuItemLogOut.remove();
 });
 
-const liItemHome = createElement("li");
-const liItemCatalog = createElement("li");
-const litItemBasket = createElement("li");
-const liItemAboutUs = createElement("li");
-const menuItemMain = createLinkMenuItem(Pages.MAIN, "Главная");
-const menuItemCatalog = createLinkMenuItem(Pages.CATALOG, "Каталог");
-const menuItemBasket = createLinkMenuItem(Pages.BASKET, "Корзина");
-const menuItemAboutUs = createLinkMenuItem(Pages.ABOUT, "О нас");
+const liItemHome = createElement({ tagName: "li" });
+const liItemCatalog = createElement({ tagName: "li" });
+const litItemBasket = createElement({ tagName: "li" });
+const liItemAboutUs = createElement({ tagName: "li" });
+const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
+const menuItemCatalog = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Каталог", attributes: { href: Pages.CATALOG } });
+const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
+const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
 // burger
-const burgerMenuWrapper = createElement("div", ["burger-menu__wrapper"]);
-const burgerMenu = createElement("div", ["burger-menu"]);
-const burgerLine = createElement("span");
+const burgerMenuWrapper = createElement({ tagName: "div", classNames: ["burger-menu__wrapper"] });
+const burgerMenu = createElement({ tagName: "div", classNames: ["burger-menu"] });
+const burgerLine = createElement({ tagName: "span" });
 burgerMenu.append(burgerLine);
 burgerMenuWrapper.append(burgerMenu);
 
@@ -60,8 +64,13 @@ ulItem.addEventListener("click", () => {
 });
 
 export function addUserGreetingToHeader() {
-  const greeting = createEmptyDiv(["user-greeting"], ``);
-  const profileLink = createLink(`${Pages.PROFILE}`, ["user-greeting__link"], state.name);
+  const greeting = createElement({ tagName: "div", classNames: ["user-greeting"] });
+  const profileLink = createElement({
+    tagName: "a",
+    classNames: ["user-greeting__link"],
+    textContent: `${state.name}`,
+    attributes: { href: Pages.PROFILE },
+  });
   greeting.appendChild(profileLink);
   greeting.appendChild(document.createTextNode(", здравствуйте!"));
   header.append(greeting);
@@ -78,14 +87,30 @@ logoLink.append(logo);
 logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
 
-const developersWrapper = createEmptyDiv(["developers__wrapper"]);
-const developerLinkFirst = createOuterLink("https://github.com/nadyavalin", "nadyavalin");
-const developerLinkSecond = createOuterLink("https://github.com/raenlin", "raenlin");
-const developerLinkThird = createOuterLink("https://github.com/ifbfirst", "ifbfirst");
-const rsschoolLogo = createImage("../../public/img/rsschool-logo.png", "RSSchool Logo", ["rsschool-logo"]);
-const rsschoolLogoLink = createOuterLink("https://rs.school/courses");
-const footerContentWrapper = createElement("div", ["footer-content__wrapper"]);
-const yearOfApp = createEmptyDiv(["year-app"], "2024");
+const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
+const developerLinkFirst = createElement({
+  tagName: "a",
+  textContent: "nadyavalin",
+  attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
+});
+const developerLinkSecond = createElement({
+  tagName: "a",
+  textContent: "raenlin",
+  attributes: { href: "https://github.com/raenlin", target: "_blank" },
+});
+const developerLinkThird = createElement({
+  tagName: "a",
+  textContent: "ifbfirst",
+  attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
+});
+const rsschoolLogo = createElement({
+  tagName: "img",
+  classNames: ["rsschool-logo"],
+  attributes: { src: "../../public/img/rsschool-logo.png", alt: "RSSchool Logo" },
+});
+const rsschoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
+const footerContentWrapper = createElement({ tagName: "div", classNames: ["footer-content__wrapper"] });
+const yearOfApp = createElement({ tagName: "div", classNames: ["year-app"], textContent: "2024" });
 developersWrapper.append(developerLinkFirst, developerLinkSecond, developerLinkThird);
 rsschoolLogoLink.append(rsschoolLogo);
 footerContentWrapper.append(developersWrapper, rsschoolLogoLink, yearOfApp);

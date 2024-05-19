@@ -1,4 +1,4 @@
-import { createEmptyDiv } from "src/components/elements";
+import { createElement } from "src/components/elements";
 
 function isValidInput(inputValue: string, pattern: RegExp): boolean {
   return pattern.test(inputValue);
@@ -30,7 +30,7 @@ export function addValidationListenersToInput(
       inputTag.classList.remove("invalid");
       inputTag.classList.add("valid");
     } else {
-      const errorMessage = createEmptyDiv([`error-${inputTag.name}`, "error-message"], text);
+      const errorMessage = createElement({ tagName: "div", classNames: [`error-${inputTag.name}`, "error-message"], textContent: text });
       inputTag.classList.remove("valid");
       inputTag.classList.add("invalid");
       parent.insertBefore(errorMessage, nextElem);

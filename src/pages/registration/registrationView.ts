@@ -1,6 +1,7 @@
-import { createElement, createInput, createLink, createSubmitButton, createEmptyDiv, createSpan } from "src/components/elements";
+import { createElement, createInput } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
+import { Pages } from "src/types/types";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
 
@@ -23,15 +24,15 @@ const streetTitle = "Название улицы должно содержать
 const indexTitle = "Индекс должен содержать 6 цифр";
 
 function createAccountWrapper(): HTMLElement {
-  const accountWrapper = createElement("div", ["account-wrapper"]);
+  const accountWrapper = createElement({ tagName: "div", classNames: ["account-wrapper"] });
   const email = createInput("email", "email", ["email"], "Email", emailPattern, emailTitle);
   const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
   const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
   const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
-  const labelBirthday = createEmptyDiv(["label"], "Дата рождения:");
+  const labelBirthday = createElement({ tagName: "div", classNames: ["label"], textContent: "Дата рождения:" });
   const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
   birthday.max = "2011-01-01";
-  const blockForBirthdayError = createEmptyDiv(["wrapper"]);
+  const blockForBirthdayError = createElement({ tagName: "div", classNames: ["wrapper"] });
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
   addValidationListenersToInput(password, passwordTitle, name, accountWrapper, passwordPattern);
   addValidationListenersToInput(name, nameTitle, surname, accountWrapper, namePattern);
@@ -42,21 +43,29 @@ function createAccountWrapper(): HTMLElement {
 }
 
 function createAddressView(addressTitle: string, addressType: string): HTMLElement {
-  const addressWrapper = createElement("div", ["address-wrapper"]);
-  const labelAddress = createEmptyDiv(["label"], addressTitle);
-  const country = createElement("select", [`countries-${addressType}`], "Страна");
-  const optionBelarus = <HTMLOptionElement>createElement("option", ["option-country"], "Беларусь");
+  const addressWrapper = createElement({ tagName: "div", classNames: [".address-wrapper"] });
+  const labelAddress = createElement({ tagName: "div", classNames: ["label"], textContent: addressTitle });
+  const country = createElement({ tagName: "select", classNames: [`countries-${addressType}`], textContent: "Страна" });
+  const optionBelarus = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Беларусь" });
   optionBelarus.value = "BY";
-  const optionRussia = <HTMLOptionElement>createElement("option", ["option-country"], "Россия");
+  const optionRussia = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Россия" });
   optionRussia.value = "RU";
   country.append(optionBelarus, optionRussia);
   const city = createInput(`city-${addressType}`, "text", [`city-${addressType}`], "Город", cityPattern, cityTitle);
   const street = createInput(`street-${addressType}`, "text", [`street-${addressType}`], "Улица", streetPattern, streetTitle);
   const index = createInput(`index-${addressType}`, "text", [`index-${addressType}`], "Индекс", indexPattern, indexTitle);
 
-  const checkboxSettingDefaultAddress = createInput(`setting-default-address-${addressType}`, "checkbox", [`setting-default-address-${addressType}`]);
-  const checkboxWrapper = createEmptyDiv(["checkbox-wrapper"]);
-  const labelSettingDefaultAddress = createSpan(["label"], "Cделать адресом по умолчанию");
+  const checkboxSettingDefaultAddress = createElement({
+    tagName: "input",
+    classNames: [`setting-default-address-${addressType}`],
+    attributes: { id: `setting-default-address-${addressType}`, type: "checkbox" },
+  });
+  const checkboxWrapper = createElement({ tagName: "div", classNames: ["checkbox-wrapper"] });
+  const labelSettingDefaultAddress = createElement({
+    tagName: "span",
+    classNames: ["label"],
+    textContent: "Cделать адресом по умолчанию",
+  });
   checkboxSettingDefaultAddress.removeAttribute("required");
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
 
@@ -79,24 +88,42 @@ function switchAddingSecondAddress() {
 }
 
 export function renderRegistrationFormContent(): HTMLElement {
-  const form = createElement("form", ["registration-form"]);
-  const h2 = createElement("h2", ["registration-form__heading"], "Заполните форму регистрации");
-  const h5 = createElement("h5", ["registration-form__info"], " * Все поля обязательны для заполнения");
+  const form = createElement({ tagName: "form", classNames: ["registration-form"] });
+  const h2 = createElement({ tagName: "h2", classNames: ["registration-form__heading"], textContent: "Заполните форму регистрации" });
+  const h5 = createElement({ tagName: "h5", classNames: ["registration-form__info"], textContent: "* Все поля обязательны для заполнения" });
   const accountWrapper = createAccountWrapper();
-  const addressesWrapper = createElement("div", ["addresses-wrapper"]);
+  const addressesWrapper = createElement({ tagName: "div", classNames: ["addresses-wrapper"] });
   const address = createAddressView("Адрес для доставки:", "shipping");
 
-  const defaultWrapper = createEmptyDiv(["checkbox-wrapper"]);
-  const checkboxSettingOneAddress = createInput("setting-one-address", "checkbox", ["setting-one-address"]);
+  const defaultWrapper = createElement({ tagName: "div", classNames: ["checkbox-wrapper"] });
+  const checkboxSettingOneAddress = createElement({
+    tagName: "input",
+    classNames: ["setting-one-address"],
+    attributes: { id: "setting-one-address", type: "checkbox" },
+  });
   checkboxSettingOneAddress.addEventListener("change", switchAddingSecondAddress);
-  const labelDefault = createSpan(["label"], "Использовать разные адреса для доставки и счетов");
+  const labelDefault = createElement({
+    tagName: "span",
+    classNames: ["label"],
+    textContent: "Использовать разные адреса для доставки и счетов",
+  });
   checkboxSettingOneAddress.removeAttribute("required");
   defaultWrapper.append(checkboxSettingOneAddress, labelDefault);
   addressesWrapper.append(address, defaultWrapper);
-  const linkToLogin = createLink("#login", ["login-link"], "У вас уже есть аккаунт? Войти...");
-  const regFormSubmitButton = createSubmitButton("Регистрация");
+  const linkToLogin = createElement({
+    tagName: "a",
+    classNames: ["login-link"],
+    textContent: "У вас уже есть аккаунт? Войти...",
+    attributes: { href: Pages.LOGIN },
+  });
+  const regFormSubmitButton = createElement({
+    tagName: "button",
+    classNames: ["submit-button", "disabled"],
+    textContent: "Регистрация",
+    attributes: { type: "submit" },
+  });
   form.addEventListener("submit", formRegistrationHandler);
-  const loginLinkWrapper = createElement("div", ["login-link-wrapper"]);
+  const loginLinkWrapper = createElement({ tagName: "div", classNames: ["login-link-wrapper"] });
   loginLinkWrapper.append(linkToLogin);
   form.append(h2, h5, accountWrapper, addressesWrapper, regFormSubmitButton, loginLinkWrapper);
   return form;

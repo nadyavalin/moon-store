@@ -107,6 +107,7 @@ select,
 select option {
   width: 100%;
   border: none;
+  border-radius: 5px;
   margin-top: 20px;
   padding: 10px 5%;
   background-color: var(--main-light);
