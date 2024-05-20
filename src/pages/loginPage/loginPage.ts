@@ -32,10 +32,10 @@ function renderLoginFormContent(): HTMLElement {
     textContent: "Войти",
     attributes: { type: "submit" },
   });
-  const showPasswordArea = createElement({ tagName: "div", classNames: ["login-form__show-password"] });
+  const showPasswordArea = createElement({ tagName: "div", classNames: ["form__show-password", "login-form__show-password"] });
   const togglePassword = createElement({
     tagName: "input",
-    classNames: ["login-form__password-toggle"],
+    classNames: ["form__password-toggle"],
     attributes: { id: "checkbox", type: "checkbox" },
   });
   togglePassword.removeAttribute("required");

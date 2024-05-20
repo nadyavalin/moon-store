@@ -4,15 +4,5 @@
 }
 
 .login-form__show-password {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  padding-top: 20px;
-}
-
-.login-form__password-toggle {
-  width: 10%;
-  margin-top: 0;
-  position: relative;
-  margin-right: 5px;
+  padding-bottom: 20px;
 }

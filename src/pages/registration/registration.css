@@ -2,28 +2,28 @@
   padding: 20px 0 20px 0;
 }
 
-.label {
+.registration-form__label {
   font-size: 1em;
   margin-top: 20px;
   color: var(--main-light);
 }
 
-.addresses-wrapper {
+.registration-form__addresses-wrapper {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.address-wrapper {
+.registration-form__address-wrapper {
   border-top: 1px solid var(--main-light);
 }
 
-.login-link-wrapper {
+.registration-form__login-link-wrapper {
   margin-top: 20px;
 }
 
-.checkbox-wrapper {
+.registration-form__checkbox-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;

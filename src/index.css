@@ -160,6 +160,20 @@ button {
   color: var(--main-light);
 }
 
+.form__show-password {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.form__password-toggle {
+  width: 10%;
+  margin-top: 0;
+  position: relative;
+  margin-right: 5px;
+}
+
 .snackbar-container {
   max-width: 30%;
   position: fixed;
