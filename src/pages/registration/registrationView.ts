@@ -1,4 +1,4 @@
-import { createElement, createInput } from "src/components/elements";
+import { createElement } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
 import { Pages } from "src/types/types";
@@ -25,12 +25,67 @@ const indexTitle = "Индекс должен содержать 6 цифр";
 
 function createAccountWrapper(): HTMLElement {
   const accountWrapper = createElement({ tagName: "div", classNames: ["account-wrapper"] });
-  const email = createInput("email", "email", ["email"], "Email", emailPattern, emailTitle);
-  const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
-  const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
-  const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
+  const email = createElement({
+    tagName: "input",
+    classNames: ["email"],
+    attributes: {
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      pattern: `${emailPattern}`.replaceAll("/", ""),
+      title: emailTitle,
+      required: "true",
+    },
+  });
+  const password = createElement({
+    tagName: "input",
+    classNames: ["password"],
+    attributes: {
+      name: "password",
+      type: "password",
+      placeholder: "Пароль",
+      pattern: `${passwordPattern}`.replaceAll("/", ""),
+      title: passwordTitle,
+      required: "true",
+    },
+  });
+  const name = createElement({
+    tagName: "input",
+    classNames: ["name"],
+    attributes: {
+      name: "name",
+      type: "text",
+      placeholder: "Имя",
+      pattern: `${namePattern}`.replaceAll("/", ""),
+      title: nameTitle,
+      required: "true",
+    },
+  });
+  const surname = createElement({
+    tagName: "input",
+    classNames: ["surname"],
+    attributes: {
+      name: "surname",
+      type: "text",
+      placeholder: "Фамилия",
+      pattern: `${surnamePattern}`.replaceAll("/", ""),
+      title: surnameTitle,
+      required: "true",
+    },
+  });
   const labelBirthday = createElement({ tagName: "div", classNames: ["label"], textContent: "Дата рождения:" });
-  const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
+  const birthday = createElement({
+    tagName: "input",
+    classNames: ["birthday"],
+    attributes: {
+      name: "birthday",
+      type: "date",
+      placeholder: "",
+      pattern: `${birthdayPattern}`.replaceAll("/", ""),
+      title: birthdayTitle,
+      required: "true",
+    },
+  });
   birthday.max = "2011-01-01";
   const blockForBirthdayError = createElement({ tagName: "div", classNames: ["wrapper"] });
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
@@ -51,14 +106,47 @@ function createAddressView(addressTitle: string, addressType: string): HTMLEleme
   const optionRussia = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Россия" });
   optionRussia.value = "RU";
   country.append(optionBelarus, optionRussia);
-  const city = createInput(`city-${addressType}`, "text", [`city-${addressType}`], "Город", cityPattern, cityTitle);
-  const street = createInput(`street-${addressType}`, "text", [`street-${addressType}`], "Улица", streetPattern, streetTitle);
-  const index = createInput(`index-${addressType}`, "text", [`index-${addressType}`], "Индекс", indexPattern, indexTitle);
+  const city = createElement({
+    tagName: "input",
+    classNames: [`city-${addressType}`],
+    attributes: {
+      name: `city-${addressType}`,
+      type: "text",
+      placeholder: "Город",
+      pattern: `${cityPattern}`.replaceAll("/", ""),
+      title: cityTitle,
+      required: "true",
+    },
+  });
+  const street = createElement({
+    tagName: "input",
+    classNames: [`street-${addressType}`],
+    attributes: {
+      name: `street-${addressType}`,
+      type: "text",
+      placeholder: "Город",
+      pattern: `${streetPattern}`.replaceAll("/", ""),
+      title: streetTitle,
+      required: "true",
+    },
+  });
+  const index = createElement({
+    tagName: "input",
+    classNames: [`index-${addressType}`],
+    attributes: {
+      name: `index-${addressType}`,
+      type: "text",
+      placeholder: "Индекс",
+      pattern: `${indexPattern}`.replaceAll("/", ""),
+      title: indexTitle,
+      required: "true",
+    },
+  });
 
   const checkboxSettingDefaultAddress = createElement({
     tagName: "input",
     classNames: [`setting-default-address-${addressType}`],
-    attributes: { id: `setting-default-address-${addressType}`, type: "checkbox" },
+    attributes: { name: `setting-default-address-${addressType}`, type: "checkbox" },
   });
   const checkboxWrapper = createElement({ tagName: "div", classNames: ["checkbox-wrapper"] });
   const labelSettingDefaultAddress = createElement({
@@ -96,7 +184,11 @@ export function renderRegistrationFormContent(): HTMLElement {
   const address = createAddressView("Адрес для доставки:", "shipping");
 
   const defaultWrapper = createElement({ tagName: "div", classNames: ["checkbox-wrapper"] });
-  const checkboxSettingOneAddress = createInput("setting-one-address", "checkbox", ["setting-one-address"]);
+  const checkboxSettingOneAddress = createElement({
+    tagName: "input",
+    classNames: ["setting-one-address"],
+    attributes: { name: "setting-one-address", type: "checkbox" },
+  });
   checkboxSettingOneAddress.addEventListener("change", switchAddingSecondAddress);
   const labelDefault = createElement({
     tagName: "span",
