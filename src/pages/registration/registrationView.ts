@@ -43,7 +43,7 @@ function createAccountWrapper(): HTMLElement {
 }
 
 function createAddressView(addressTitle: string, addressType: string): HTMLElement {
-  const addressWrapper = createElement({ tagName: "div", classNames: [".address-wrapper"] });
+  const addressWrapper = createElement({ tagName: "div", classNames: ["address-wrapper"] });
   const labelAddress = createElement({ tagName: "div", classNames: ["label"], textContent: addressTitle });
   const country = createElement({ tagName: "select", classNames: [`countries-${addressType}`], textContent: "Страна" });
   const optionBelarus = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Беларусь" });
@@ -96,11 +96,7 @@ export function renderRegistrationFormContent(): HTMLElement {
   const address = createAddressView("Адрес для доставки:", "shipping");
 
   const defaultWrapper = createElement({ tagName: "div", classNames: ["checkbox-wrapper"] });
-  const checkboxSettingOneAddress = createElement({
-    tagName: "input",
-    classNames: ["setting-one-address"],
-    attributes: { id: "setting-one-address", type: "checkbox" },
-  });
+  const checkboxSettingOneAddress = createInput("setting-one-address", "checkbox", ["setting-one-address"]);
   checkboxSettingOneAddress.addEventListener("change", switchAddingSecondAddress);
   const labelDefault = createElement({
     tagName: "span",
