@@ -3,20 +3,8 @@ import "./loginPage.css";
 import { createElement } from "src/components/elements";
 import { Pages } from "src/types/types";
 import validateListener from "../registration/checkValidityForm";
-import authorizeUserWithToken from "./loginHandler";
+import { authorizeUserWithToken, showHidePasswordHandler } from "./loginHandler";
 import { emailPattern, emailTitle, passwordPattern, passwordTitle } from "../registration/registrationView";
-
-const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
-  const toggle = togglePassword;
-  const password = passwordInput;
-  toggle.onchange = () => {
-    if (toggle.checked) {
-      password.type = "text";
-    } else {
-      password.type = "password";
-    }
-  };
-};
 
 function renderLoginFormContent(): HTMLElement {
   const loginFormInner = createElement({ tagName: "div", classNames: ["login-form__inner"] });

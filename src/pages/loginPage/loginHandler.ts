@@ -13,6 +13,18 @@ import { state } from "src/store/state";
 import { setItemToLocalStorage } from "src/utils/utils";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
 
+export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
+  const toggle = togglePassword;
+  const password = passwordInput;
+  toggle.onchange = () => {
+    if (toggle.checked) {
+      password.type = "text";
+    } else {
+      password.type = "password";
+    }
+  };
+};
+
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
 
@@ -46,7 +58,7 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
   userMenu.append(menuItemLogOut);
 }
 
-const authorizeUserWithToken = (email: string, password: string) => {
+export const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",
@@ -102,5 +114,3 @@ const authorizeUserWithToken = (email: string, password: string) => {
       createSnackbar(SnackbarType.error, "Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
-
-export default authorizeUserWithToken;

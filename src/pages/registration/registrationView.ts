@@ -4,6 +4,7 @@ import "../../index.css";
 import { Pages } from "src/types/types";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput } from "./checkValidityForm";
+import { showHidePasswordHandler } from "../loginPage/loginHandler";
 
 export const emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const passwordPattern: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/;
@@ -49,6 +50,14 @@ function createAccountWrapper(): HTMLElement {
       required: "true",
     },
   });
+  const showPasswordArea = createElement({ tagName: "div", classNames: ["login-form__show-password"] });
+  const togglePassword = createElement({
+    tagName: "input",
+    classNames: ["login-form__password-toggle"],
+    attributes: { id: "checkbox", type: "checkbox" },
+  });
+  togglePassword.removeAttribute("required");
+  showPasswordArea.append(togglePassword, `Показать пароль`);
   const name = createElement({
     tagName: "input",
     classNames: ["name"],
@@ -88,12 +97,13 @@ function createAccountWrapper(): HTMLElement {
   });
   birthday.max = "2011-01-01";
   const blockForBirthdayError = createElement({ tagName: "div", classNames: ["wrapper"] });
+  showHidePasswordHandler(togglePassword, password);
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
-  addValidationListenersToInput(password, passwordTitle, name, accountWrapper, passwordPattern);
+  addValidationListenersToInput(password, passwordTitle, showPasswordArea, accountWrapper, passwordPattern);
   addValidationListenersToInput(name, nameTitle, surname, accountWrapper, namePattern);
   addValidationListenersToInput(surname, surnameTitle, labelBirthday, accountWrapper, surnamePattern);
   addValidationListenersToInput(birthday, birthdayTitle, blockForBirthdayError, accountWrapper, birthdayPattern);
-  accountWrapper.append(email, password, name, surname, labelBirthday, birthday, blockForBirthdayError);
+  accountWrapper.append(email, password, showPasswordArea, name, surname, labelBirthday, birthday, blockForBirthdayError);
   return accountWrapper;
 }
 
