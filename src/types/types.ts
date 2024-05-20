@@ -10,17 +10,6 @@ export interface CardData {
   discount: number;
 }
 
-export enum Pages {
-  ROOT = "",
-  MAIN = "#main",
-  PROFILE = "#profile",
-  CATALOG = "#catalog",
-  BASKET = "#basket",
-  ABOUT = "#about",
-  LOGIN = "#login",
-  REGISTRATION = "#registration",
-}
-
 export interface Customer {
   email: string;
   password: string;
@@ -32,4 +21,20 @@ export interface Customer {
   billingAddresses?: [number];
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
+}
+
+export enum Pages {
+  ROOT = "",
+  MAIN = "#main",
+  PROFILE = "#profile",
+  CATALOG = "#catalog",
+  BASKET = "#basket",
+  ABOUT = "#about",
+  LOGIN = "#login",
+  REGISTRATION = "#registration",
+}
+
+export enum SnackbarType {
+  error = "error",
+  success = "success",
 }

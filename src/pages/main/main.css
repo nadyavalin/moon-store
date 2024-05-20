@@ -100,7 +100,6 @@
 
 .card__button {
   background-color: var(--blue-hover);
-  border-radius: 10px;
 }
 
 @media (hover: hover) {

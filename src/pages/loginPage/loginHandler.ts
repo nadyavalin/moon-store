@@ -7,11 +7,23 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createErrorSuccessSnackbar } from "src/components/elements";
-import { Pages } from "src/types/types";
+import { createSnackbar } from "src/components/elements";
+import { Pages, SnackbarType } from "src/types/types";
 import { state } from "src/store/state";
 import { setItemToLocalStorage } from "src/utils/utils";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
+
+export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
+  const toggle = togglePassword;
+  const password = passwordInput;
+  toggle.onchange = () => {
+    if (toggle.checked) {
+      password.type = "text";
+    } else {
+      password.type = "password";
+    }
+  };
+};
 
 const projectKey = process.env.CTP_PROJECT_KEY as string;
 const scopes = [process.env.CTP_SCOPES] as string[];
@@ -35,7 +47,7 @@ const tokenCache = new MyTokenCache();
 export function changeAppAfterLogin(userName: string, refreshToken?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
-    createErrorSuccessSnackbar(200, "Вы авторизованы");
+    createSnackbar(SnackbarType.success, "Вы авторизованы");
   }
   setItemToLocalStorage("user", userName);
   window.location.hash = Pages.MAIN;
@@ -46,7 +58,7 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
   userMenu.append(menuItemLogOut);
 }
 
-const authorizeUserWithToken = (email: string, password: string) => {
+export const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: "https://auth.europe-west1.gcp.commercetools.com",
@@ -99,8 +111,6 @@ const authorizeUserWithToken = (email: string, password: string) => {
       }
     })
     .catch(() => {
-      createErrorSuccessSnackbar(400, "Вы ввели неправильный адрес электронной почты или пароль");
+      createSnackbar(SnackbarType.error, "Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
-
-export default authorizeUserWithToken;

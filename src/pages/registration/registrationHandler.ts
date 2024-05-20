@@ -1,7 +1,7 @@
 import createCustomer from "src/api/api";
-import { createErrorSuccessSnackbar } from "src/components/elements";
-import { Customer, Pages } from "src/types/types";
-import authorizeUserWithToken from "../loginPage/loginHandler";
+import { createSnackbar } from "src/components/elements";
+import { Customer, Pages, SnackbarType } from "src/types/types";
+import { authorizeUserWithToken } from "../loginPage/loginHandler";
 
 export function formRegistrationHandler(event: Event) {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
@@ -52,20 +52,20 @@ export function formRegistrationHandler(event: Event) {
   createCustomer(customer)
     .then((response) => {
       if (response.statusCode === 201) {
-        createErrorSuccessSnackbar(201, `Пользователь ${response.body.customer.firstName} создан`);
-        setTimeout(() => authorizeUserWithToken(email.trim(), password.trim()), 4000);
+        createSnackbar(SnackbarType.success, `Пользователь ${response.body.customer.firstName} создан`);
+        authorizeUserWithToken(email.trim(), password.trim());
         window.location.href = Pages.MAIN;
       }
     })
     .catch(({ statusCode }) => {
       if (statusCode === 400) {
-        createErrorSuccessSnackbar(
-          400,
+        createSnackbar(
+          SnackbarType.error,
           "Пользователь c таким адресом электронной почты уже существует. Войдите в приложение или используйте другой адрес электронной почты",
         );
       }
       if (statusCode === 500) {
-        createErrorSuccessSnackbar(500, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
+        createSnackbar(SnackbarType.error, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
       }
     });
 }

@@ -1,34 +1,51 @@
 import "./loginPage.css";
 
-import { createElement, createInput, createLink, createSubmitButton } from "src/components/elements";
+import { createElement } from "src/components/elements";
+import { Pages } from "src/types/types";
 import validateListener from "../registration/checkValidityForm";
-import authorizeUserWithToken from "./loginHandler";
+import { authorizeUserWithToken, showHidePasswordHandler } from "./loginHandler";
 import { emailPattern, emailTitle, passwordPattern, passwordTitle } from "../registration/registrationView";
 
-const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
-  const toggle = togglePassword;
-  const password = passwordInput;
-  toggle.onchange = () => {
-    if (toggle.checked) {
-      password.type = "text";
-    } else {
-      password.type = "password";
-    }
-  };
-};
-
 function renderLoginFormContent(): HTMLElement {
-  const loginFormInner = <HTMLDivElement>createElement("div", ["login-form__inner"]);
-  const loginFormHeading = <HTMLHeadingElement>createElement("h2", ["login-form__heading"], "Авторизация");
-  const loginForm = <HTMLFormElement>createElement("form", ["login-form"]);
-  const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
-  const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
-  const loginFormSubmitButton = <HTMLButtonElement>createSubmitButton("Войти");
-  const showPasswordArea = <HTMLDivElement>createElement("div", ["login-form__show-password"]);
-  const togglePassword = <HTMLInputElement>createInput("checkbox", "checkbox", ["login-form__password-toggle"]);
+  const loginFormInner = createElement({ tagName: "div", classNames: ["login-form__inner"] });
+  const loginFormHeading = createElement({ tagName: "h2", classNames: ["login-form__heading"], textContent: "Авторизация" });
+  const loginForm = createElement({ tagName: "form", classNames: ["login-form"] });
+  const emailInput = createElement({
+    tagName: "input",
+    classNames: ["email-input"],
+    attributes: {
+      id: "email",
+      type: "email",
+      placeholder: "Email",
+      pattern: `${emailPattern}`,
+      title: emailTitle,
+    },
+  });
+  const passwordInput = createElement({
+    tagName: "input",
+    classNames: ["password-input"],
+    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`, title: passwordTitle },
+  });
+  const loginFormSubmitButton = createElement({
+    tagName: "button",
+    classNames: ["submit-button", "disabled"],
+    textContent: "Войти",
+    attributes: { type: "submit" },
+  });
+  const showPasswordArea = createElement({ tagName: "div", classNames: ["form__show-password", "login-form__show-password"] });
+  const togglePassword = createElement({
+    tagName: "input",
+    classNames: ["form__password-toggle"],
+    attributes: { id: "checkbox", type: "checkbox" },
+  });
   togglePassword.removeAttribute("required");
   showPasswordArea.append(togglePassword, `Показать пароль`);
-  const linkToRegistration = <HTMLAnchorElement>createLink("#registration", ["registration-link"], "Еще не зарегистрированы? Регистрация...");
+  const linkToRegistration = createElement({
+    tagName: "a",
+    classNames: ["registration-link"],
+    textContent: "Еще не зарегистрированы? Регистрация...",
+    attributes: { href: Pages.REGISTRATION },
+  });
 
   showHidePasswordHandler(togglePassword, passwordInput);
   validateListener(emailInput, emailTitle, passwordInput, loginForm, emailPattern);
