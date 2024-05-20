@@ -4,16 +4,16 @@ import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
 import { addValidationListenersToInput, checkValidityAllFields } from "./checkValidityForm";
 
-export const emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-export const passwordPattern: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/;
-const namePattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,20}$/;
-const surnamePattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,20}$/;
-const birthdayPattern: RegExp = /[0-9]/;
-const cityPattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,15}$/;
-const streetPattern: RegExp = /^.{1,20}$/;
-const indexPattern: RegExp = /^[0-9]{6,6}$/;
+export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+.[a-zA-Z]{2,}$";
+export const passwordPattern: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
+const namePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,20}$";
+const surnamePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,20}$";
+const birthdayPattern: string = "[0-9]";
+const cityPattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,15}$";
+const streetPattern: string = "^.{1,20}$";
+const indexPattern: string = "^[0-9]{6,6}$";
 
-export const emailTitle = "Email должен быть в формате example@example.ru без пробелов";
+export const emailTitle = "Email должен быть в формате example@example.ru без пробелов. Допустимы латинские буквы, цифры, символы ._%+-";
 export const passwordTitle =
   "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы без пробелов";
 const nameTitle = "Имя должно содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";

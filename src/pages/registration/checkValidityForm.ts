@@ -1,6 +1,6 @@
 import { createEmptyDiv } from "src/components/elements";
 
-function isValidInput(inputTag: HTMLInputElement, pattern: RegExp): boolean {
+function isValidInput(inputTag: HTMLInputElement, pattern: string): boolean {
   if (inputTag.name === "birthday") {
     const date = new Date();
     const dateOfBirthday = Date.parse(inputTag.value);
@@ -8,7 +8,8 @@ function isValidInput(inputTag: HTMLInputElement, pattern: RegExp): boolean {
     if (Number(date.setFullYear(date.getFullYear() - minAge)) > dateOfBirthday) return true;
     return false;
   }
-  return pattern.test(inputTag.value);
+  const patternReg = new RegExp(pattern);
+  return patternReg.test(inputTag.value);
 }
 
 function hasStartFinishSpaces(inputValue: string): boolean {
@@ -17,7 +18,7 @@ function hasStartFinishSpaces(inputValue: string): boolean {
 
 export function checkValidityAllFields() {
   const arrInputs = Array.from(document.querySelectorAll("input"));
-  return arrInputs.every((element) => isValidInput(element, new RegExp(element.pattern)) && !hasStartFinishSpaces(element.value));
+  return arrInputs.every((element) => isValidInput(element, element.pattern) && !hasStartFinishSpaces(element.value));
 }
 
 export function addValidationListenersToInput(
@@ -25,7 +26,7 @@ export function addValidationListenersToInput(
   text: string,
   nextElem: HTMLElement,
   parent: HTMLElement,
-  pattern?: RegExp,
+  pattern?: string,
 ) {
   if (!pattern) return;
   inputTag.addEventListener("input", () => {
