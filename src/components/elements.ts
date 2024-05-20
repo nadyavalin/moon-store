@@ -47,5 +47,5 @@ export function createSnackbar(type: SnackbarType, text: string) {
   snackbarContainer.prepend(snackbar);
   setTimeout(() => {
     snackbarContainer.removeChild(snackbar);
-  }, 4000);
+  }, 3900);
 }
