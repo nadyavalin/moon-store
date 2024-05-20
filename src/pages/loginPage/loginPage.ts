@@ -1,6 +1,6 @@
 import "./loginPage.css";
 
-import { createElement, createInput } from "src/components/elements";
+import { createElement } from "src/components/elements";
 import { Pages } from "src/types/types";
 import validateListener from "../registration/checkValidityForm";
 import authorizeUserWithToken from "./loginHandler";
@@ -22,8 +22,22 @@ function renderLoginFormContent(): HTMLElement {
   const loginFormInner = createElement({ tagName: "div", classNames: ["login-form__inner"] });
   const loginFormHeading = createElement({ tagName: "h2", classNames: ["login-form__heading"], textContent: "Авторизация" });
   const loginForm = createElement({ tagName: "form", classNames: ["login-form"] });
-  const emailInput = <HTMLInputElement>createInput("email", "email", ["email-input"], "Email", emailPattern, emailTitle);
-  const passwordInput = <HTMLInputElement>createInput("password", "password", ["password-input"], "Пароль", passwordPattern, passwordTitle);
+  const emailInput = createElement({
+    tagName: "input",
+    classNames: ["email-input"],
+    attributes: {
+      id: "email",
+      type: "email",
+      placeholder: "Email",
+      pattern: `${emailPattern}`.replaceAll("/", ""),
+      title: emailTitle,
+    },
+  });
+  const passwordInput = createElement({
+    tagName: "input",
+    classNames: ["password-input"],
+    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`, title: passwordTitle },
+  });
   const loginFormSubmitButton = createElement({
     tagName: "button",
     classNames: ["submit-button", "disabled"],
