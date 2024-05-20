@@ -5,8 +5,7 @@ function isValidInput(inputTag: HTMLInputElement, pattern: string): boolean {
     const date = new Date();
     const dateOfBirthday = Date.parse(inputTag.value);
     const minAge = 13;
-    if (Number(date.setFullYear(date.getFullYear() - minAge)) > dateOfBirthday) return true;
-    return false;
+    return Number(date.setFullYear(date.getFullYear() - minAge)) > dateOfBirthday;
   }
   const patternReg = new RegExp(pattern);
   return patternReg.test(inputTag.value);
