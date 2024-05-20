@@ -2,35 +2,35 @@ import { createElement, createInput, createLink, createSubmitButton, createEmpty
 import "./registration.css";
 import "../../index.css";
 import { formRegistrationHandler } from "./registrationHandler";
-import { addValidationListenersToInput } from "./checkValidityForm";
+import { addValidationListenersToInput, checkValidityAllFields } from "./checkValidityForm";
 
 export const emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const passwordPattern: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/;
-const namePattern: RegExp = /^[A-Za-zА-Яа-яё]{1,}$/;
-const surnamePattern: RegExp = /^[A-Za-zА-Яа-яё]{1,20}$/;
+const namePattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,20}$/;
+const surnamePattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,20}$/;
 const birthdayPattern: RegExp = /[0-9]/;
-const cityPattern: RegExp = /^[A-Za-zА-Яа-яё]{1,15}$/;
-const streetPattern: RegExp = /^[^s]{1,20}$/;
+const cityPattern: RegExp = /^[^0-9.*^/\\$+|?()\][]{1,15}$/;
+const streetPattern: RegExp = /^.{1,20}$/;
 const indexPattern: RegExp = /^[0-9]{6,6}$/;
 
-export const emailTitle = "Email должен быть в формате example@example.ru";
-export const passwordTitle = "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы";
-const nameTitle = "Имя должно содержать только буквы, не менее одной";
-const surnameTitle = "Фамилия должна содержать только буквы, не менее одной";
+export const emailTitle = "Email должен быть в формате example@example.ru без пробелов";
+export const passwordTitle =
+  "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы без пробелов";
+const nameTitle = "Имя должно содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
+const surnameTitle = "Фамилия должна содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
 const birthdayTitle = "Возраст должен быть не младше 13 лет";
-const cityTitle = "Название города должно содержать не менее 1 буквы";
+const cityTitle = "Название города должно содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
 const streetTitle = "Название улицы должно содержать не менее 1 символа";
 const indexTitle = "Индекс должен содержать 6 цифр";
 
 function createAccountWrapper(): HTMLElement {
   const accountWrapper = createElement("div", ["account-wrapper"]);
-  const email = createInput("email", "email", ["email"], "Email", emailPattern, emailTitle);
+  const email = createInput("email", "text", ["email"], "Email", emailPattern, emailTitle);
   const password = createInput("password", "password", ["password"], "Пароль", passwordPattern, passwordTitle);
   const name = createInput("name", "text", ["name"], "Имя", namePattern, nameTitle);
   const surname = createInput("surname", "text", ["surname"], "Фамилия", surnamePattern, surnameTitle);
   const labelBirthday = createEmptyDiv(["label"], "Дата рождения:");
   const birthday = createInput("birthday", "date", ["birthday"], "", birthdayPattern, birthdayTitle);
-  birthday.max = "2011-01-01";
   const blockForBirthdayError = createEmptyDiv(["wrapper"]);
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
   addValidationListenersToInput(password, passwordTitle, name, accountWrapper, passwordPattern);
@@ -75,6 +75,9 @@ function switchAddingSecondAddress() {
     document.querySelector(".submit-button")?.classList.add("disabled");
   } else {
     document.querySelectorAll(".address-wrapper")[1].remove();
+    if (checkValidityAllFields()) {
+      document.querySelector(".submit-button")?.classList.remove("disabled");
+    }
   }
 }
 

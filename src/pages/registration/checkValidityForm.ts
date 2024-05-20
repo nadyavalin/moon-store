@@ -1,12 +1,23 @@
 import { createEmptyDiv } from "src/components/elements";
 
-function isValidInput(inputValue: string, pattern: RegExp): boolean {
-  return pattern.test(inputValue);
+function isValidInput(inputTag: HTMLInputElement, pattern: RegExp): boolean {
+  if (inputTag.name === "birthday") {
+    const date = new Date();
+    const dateOfBirthday = Date.parse(inputTag.value);
+    const minAge = 13;
+    if (Number(date.setFullYear(date.getFullYear() - minAge)) > dateOfBirthday) return true;
+    return false;
+  }
+  return pattern.test(inputTag.value);
 }
 
-function checkValidityAllFields() {
+function hasStartFinishSpaces(inputValue: string): boolean {
+  return /^[ \s]+|[ \s]+$/.test(inputValue);
+}
+
+export function checkValidityAllFields() {
   const arrInputs = Array.from(document.querySelectorAll("input"));
-  return arrInputs.every((element) => isValidInput(element.value, new RegExp(element.pattern)));
+  return arrInputs.every((element) => isValidInput(element, new RegExp(element.pattern)) && !hasStartFinishSpaces(element.value));
 }
 
 export function addValidationListenersToInput(
@@ -25,7 +36,8 @@ export function addValidationListenersToInput(
     } else {
       btnSubmit?.classList.add("disabled");
     }
-    if (isValidInput(inputTag.value, pattern)) {
+
+    if (isValidInput(inputTag, pattern) && !hasStartFinishSpaces(inputTag.value)) {
       document.querySelector(`.error-${inputTag.name}`)?.remove();
       inputTag.classList.remove("invalid");
       inputTag.classList.add("valid");
