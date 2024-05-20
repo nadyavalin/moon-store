@@ -36,7 +36,7 @@ function renderLoginFormContent(): HTMLElement {
   const passwordInput = createElement({
     tagName: "input",
     classNames: ["password-input"],
-    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`, title: passwordTitle },
+    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`.replaceAll("/", ""), title: passwordTitle },
   });
   const loginFormSubmitButton = createElement({
     tagName: "button",
