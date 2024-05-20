@@ -7,8 +7,8 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createErrorSuccessSnackbar } from "src/components/elements";
-import { Pages } from "src/types/types";
+import { createSnackbar } from "src/components/elements";
+import { Pages, SnackbarType } from "src/types/types";
 import { state } from "src/store/state";
 import { setItemToLocalStorage } from "src/utils/utils";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
@@ -35,7 +35,7 @@ const tokenCache = new MyTokenCache();
 export function changeAppAfterLogin(userName: string, refreshToken?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
-    createErrorSuccessSnackbar(200, "Вы авторизованы");
+    createSnackbar(SnackbarType.success, "Вы авторизованы");
   }
   setItemToLocalStorage("user", userName);
   window.location.hash = Pages.MAIN;
@@ -99,7 +99,7 @@ const authorizeUserWithToken = (email: string, password: string) => {
       }
     })
     .catch(() => {
-      createErrorSuccessSnackbar(400, "Вы ввели неправильный адрес электронной почты или пароль");
+      createSnackbar(SnackbarType.error, "Вы ввели неправильный адрес электронной почты или пароль");
     });
 };
 

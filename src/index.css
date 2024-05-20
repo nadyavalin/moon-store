@@ -165,13 +165,18 @@ button {
   color: var(--main-black);
   padding: 10px;
   z-index: 100;
+  max-width: 30%;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  animation: snackbarAnimation 4s;
 }
 
-.snackbar_red {
+.snackbar_error {
   color: var(--accent-red);
 }
 
-.snackbar_green {
+.snackbar_success {
   color: var(--accent-green);
 }
 
@@ -192,5 +197,20 @@ button {
 
   button:hover {
     background-color: var(--blue-hover);
+  }
+}
+
+@keyframes snackbarAnimation {
+  0% {
+    transform: translateX(150%);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(150%);
   }
 }

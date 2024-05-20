@@ -1,3 +1,5 @@
+import { SnackbarType } from "src/types/types";
+
 export function createElement<T extends keyof HTMLElementTagNameMap>({
   tagName,
   classNames,
@@ -39,44 +41,12 @@ export function createSvgElement(svgString: string, className?: string) {
   return svgElement;
 }
 
-export function createSnackbar(text: string) {
-  let opacity = 1;
-  const snackbar = createElement({ tagName: "div" });
+export function createSnackbar(type: SnackbarType, text: string) {
+  const snackbar = createElement({ tagName: "div", classNames: ["snackbar", `snackbar_${type}`], textContent: text });
   document.body.appendChild(snackbar);
-  const vertical = "top";
-  const horizontal = "right";
-  const open = true;
   setTimeout(() => {
-    const fadeOutInterval = setInterval(() => {
-      opacity -= 0.1;
-      snackbar.style.opacity = opacity.toString();
-      if (opacity <= 0) {
-        clearInterval(fadeOutInterval);
-        document.body.removeChild(snackbar);
-      }
-    }, 300);
-  }, 2000);
-
-  if (open) {
-    snackbar.style.position = "fixed";
-    snackbar.style.top = vertical === "top" ? "20px" : "auto";
-    snackbar.style.right = horizontal === "right" ? "20px" : "auto";
-  }
-
-  snackbar.classList.add("snackbar");
-  snackbar.textContent = text;
-  return snackbar;
-}
-
-export function createErrorSuccessSnackbar(type: number, text: string) {
-  if (type === 400 || type === 500) {
-    const snackbar = createSnackbar(text);
-    snackbar.classList.add("snackbar_red");
-  }
-  if (type === 200 || type === 201) {
-    const snackbar = createSnackbar(text);
-    snackbar.classList.add("snackbar_green");
-  }
+    document.body.removeChild(snackbar);
+  }, 4000);
 }
 
 // TODO пришлось вернуть эту функцию, потому что createElement некорректно работает с паттернами
