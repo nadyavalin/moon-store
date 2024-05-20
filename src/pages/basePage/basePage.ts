@@ -15,7 +15,7 @@ const navMenu = createElement({ tagName: "nav", classNames: ["nav"] });
 const ulItem = createElement({ tagName: "ul", classNames: ["navbar"] });
 const hrHeaderLine = createElement({ tagName: "hr", classNames: ["hr-line__header"] });
 const hrFooterLine = createElement({ tagName: "hr", classNames: ["hr-line__footer"] });
-
+export const snackbarContainer = createElement({ tagName: "div", classNames: ["snackbar-container"] });
 export const menuItemSingUp = createElement({
   tagName: "a",
   classNames: ["menu-item"],
@@ -86,6 +86,7 @@ userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
 logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
+document.body.append(snackbarContainer);
 
 const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
 const developerLinkFirst = createElement({

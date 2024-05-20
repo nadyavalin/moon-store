@@ -1,3 +1,4 @@
+import { snackbarContainer } from "src/pages/basePage/basePage";
 import { SnackbarType } from "src/types/types";
 
 export function createElement<T extends keyof HTMLElementTagNameMap>({
@@ -43,9 +44,9 @@ export function createSvgElement(svgString: string, className?: string) {
 
 export function createSnackbar(type: SnackbarType, text: string) {
   const snackbar = createElement({ tagName: "div", classNames: ["snackbar", `snackbar_${type}`], textContent: text });
-  document.body.appendChild(snackbar);
+  snackbarContainer.prepend(snackbar);
   setTimeout(() => {
-    document.body.removeChild(snackbar);
+    snackbarContainer.removeChild(snackbar);
   }, 4000);
 }
 
