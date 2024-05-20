@@ -15,7 +15,7 @@ function renderLoginFormContent(): HTMLElement {
     classNames: ["email-input"],
     attributes: {
       id: "email",
-      type: "email",
+      type: "text",
       placeholder: "Email",
       pattern: `${emailPattern}`,
       title: emailTitle,

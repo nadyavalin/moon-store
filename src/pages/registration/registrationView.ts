@@ -6,13 +6,13 @@ import { formRegistrationHandler } from "./registrationHandler";
 import { showHidePasswordHandler } from "../loginPage/loginHandler";
 import { addValidationListenersToInput, checkValidityAllFields } from "./checkValidityForm";
 
-export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+.[a-zA-Z]{2,}$";
+export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$";
 export const passwordPattern: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,20}$";
-const surnamePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,20}$";
+const namePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
+const surnamePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
 const birthdayPattern: string = "[0-9]";
-const cityPattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,15}$";
-const streetPattern: string = "^.{1,20}$";
+const cityPattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
+const streetPattern: string = "^.{1,40}$";
 const indexPattern: string = "^[0-9]{6,6}$";
 
 export const emailTitle = "Email должен быть в формате example@example.ru без пробелов. Допустимы латинские буквы, цифры, символы ._%+-";
@@ -32,7 +32,7 @@ function createAccountWrapper(): HTMLElement {
     classNames: ["email"],
     attributes: {
       name: "email",
-      type: "email",
+      type: "text",
       placeholder: "Email",
       pattern: `${emailPattern}`,
       title: emailTitle,
@@ -96,7 +96,6 @@ function createAccountWrapper(): HTMLElement {
       required: "true",
     },
   });
-  birthday.max = "2011-01-01";
   const blockForBirthdayError = createElement({ tagName: "div", classNames: ["wrapper"] });
   showHidePasswordHandler(togglePassword, password);
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
