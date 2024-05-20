@@ -29,14 +29,14 @@ function renderLoginFormContent(): HTMLElement {
       id: "email",
       type: "email",
       placeholder: "Email",
-      pattern: `${emailPattern}`.replaceAll("/", ""),
+      pattern: `${emailPattern}`,
       title: emailTitle,
     },
   });
   const passwordInput = createElement({
     tagName: "input",
     classNames: ["password-input"],
-    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`.replaceAll("/", ""), title: passwordTitle },
+    attributes: { id: "password", type: "password", placeholder: "Пароль", pattern: `${passwordPattern}`, title: passwordTitle },
   });
   const loginFormSubmitButton = createElement({
     tagName: "button",
