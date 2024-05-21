@@ -26,9 +26,6 @@ export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwo
   };
 };
 
-// const projectKey = process.env.CTP_PROJECT_KEY as string;
-// const scopes = [process.env.CTP_SCOPES] as string[];
-
 class MyTokenCache implements TokenCache {
   myCache: TokenStore = { token: "", expirationTime: 0 }; // начальные значения для кэша
 
