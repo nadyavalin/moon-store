@@ -8,20 +8,20 @@ import { addValidationListenersToInput, checkValidityAllFields } from "./checkVa
 
 export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$";
 export const passwordPattern: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
-const surnamePattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
+const namePattern: string = "^[А-яа-я]{1,40}$";
+const surnamePattern: string = "^[А-яа-я]{1,40}$";
 const birthdayPattern: string = "[0-9]";
-const cityPattern: string = "^[^0-9.*^\\/$+\\|?\\(\\)\\]\\[]{1,40}$";
+const cityPattern: string = "^[А-яа-я\\-\\s]{1,40}$";
 const streetPattern: string = "^.{1,40}$";
 const indexPattern: string = "^[0-9]{6,6}$";
 
 export const emailTitle = "Email должен быть в формате example@example.ru без пробелов. Допустимы латинские буквы, цифры, символы ._%+-";
 export const passwordTitle =
   "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы без пробелов";
-const nameTitle = "Имя должно содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
-const surnameTitle = "Фамилия должна содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
+const nameTitle = "Имя должно содержать не менее 1 символа и состоять только из букв русского алфавита";
+const surnameTitle = "Фамилия должна содержать не менее 1 символа и состоять только из букв русского алфавита";
 const birthdayTitle = "Возраст должен быть не младше 13 лет";
-const cityTitle = "Название города должно содержать не менее 1 символа и не содержать специальных символов (*.^/\\$+|?()][) или цифр";
+const cityTitle = "Название города должно содержать не менее 1 символа и состоять из букв русского алфавита";
 const streetTitle = "Название улицы должно содержать не менее 1 символа";
 const indexTitle = "Индекс должен содержать 6 цифр";
 
@@ -55,10 +55,15 @@ function createAccountWrapper(): HTMLElement {
   const togglePassword = createElement({
     tagName: "input",
     classNames: ["form__password-toggle"],
-    attributes: { id: "checkbox", type: "checkbox" },
+    attributes: { id: "form__password-toggle", type: "checkbox" },
   });
-  togglePassword.removeAttribute("required");
-  showPasswordArea.append(togglePassword, `Показать пароль`);
+  const labelTogglePassword = createElement({
+    tagName: "label",
+    classNames: ["registration-form__label"],
+    attributes: { for: "form__password-toggle" },
+    textContent: "Показать пароль",
+  });
+  showPasswordArea.append(togglePassword, labelTogglePassword);
   const name = createElement({
     tagName: "input",
     classNames: ["name"],
@@ -96,7 +101,7 @@ function createAccountWrapper(): HTMLElement {
       required: "true",
     },
   });
-  const blockForBirthdayError = createElement({ tagName: "div", classNames: ["wrapper"] });
+  const blockForBirthdayError = createElement({ tagName: "div" });
   showHidePasswordHandler(togglePassword, password);
   addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
   addValidationListenersToInput(password, passwordTitle, showPasswordArea, accountWrapper, passwordPattern);
@@ -110,7 +115,14 @@ function createAccountWrapper(): HTMLElement {
 function createAddressView(addressTitle: string, addressType: string): HTMLElement {
   const addressWrapper = createElement({ tagName: "div", classNames: ["registration-form__address-wrapper"] });
   const labelAddress = createElement({ tagName: "div", classNames: ["registration-form__label"], textContent: addressTitle });
-  const country = createElement({ tagName: "select", classNames: [`countries-${addressType}`], textContent: "Страна" });
+  const country = createElement({
+    tagName: "select",
+    classNames: [`countries-${addressType}`],
+    attributes: {
+      name: "country",
+    },
+    textContent: "Страна",
+  });
   const optionBelarus = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Беларусь" });
   optionBelarus.value = "BY";
   const optionRussia = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Россия" });
@@ -156,15 +168,15 @@ function createAddressView(addressTitle: string, addressType: string): HTMLEleme
   const checkboxSettingDefaultAddress = createElement({
     tagName: "input",
     classNames: [`setting-default-address-${addressType}`],
-    attributes: { name: `setting-default-address-${addressType}`, type: "checkbox" },
+    attributes: { name: `setting-default-address-${addressType}`, type: "checkbox", id: `setting-default-address-${addressType}` },
   });
   const checkboxWrapper = createElement({ tagName: "div", classNames: ["registration-form__checkbox-wrapper"] });
   const labelSettingDefaultAddress = createElement({
-    tagName: "span",
+    tagName: "label",
     classNames: ["registration-form__label"],
-    textContent: "Cделать адресом по умолчанию",
+    attributes: { for: `setting-default-address-${addressType}` },
+    textContent: "Сделать адресом по умолчанию",
   });
-  checkboxSettingDefaultAddress.removeAttribute("required");
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
 
   addValidationListenersToInput(city, cityTitle, street, addressWrapper, cityPattern);
@@ -200,12 +212,13 @@ export function renderRegistrationFormContent(): HTMLElement {
   const checkboxSettingOneAddress = createElement({
     tagName: "input",
     classNames: ["setting-one-address"],
-    attributes: { name: "setting-one-address", type: "checkbox" },
+    attributes: { name: "setting-one-address", type: "checkbox", id: "setting-one-address" },
   });
   checkboxSettingOneAddress.addEventListener("change", switchAddingSecondAddress);
   const labelDefault = createElement({
-    tagName: "span",
+    tagName: "label",
     classNames: ["registration-form__label"],
+    attributes: { for: "setting-one-address" },
     textContent: "Использовать разные адреса для доставки и счетов",
   });
   checkboxSettingOneAddress.removeAttribute("required");

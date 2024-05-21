@@ -33,3 +33,7 @@
 .registration-form button {
   margin-top: 20px;
 }
+
+.registration-form__label {
+  cursor: pointer;
+}

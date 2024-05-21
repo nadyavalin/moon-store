@@ -35,6 +35,12 @@ export function formRegistrationHandler(event: Event) {
 
   if (checkboxSettingDefaultAddressShipping.checked) customer.defaultShippingAddress = 0;
 
+  if (!checkboxSettingOneAddress.checked) {
+    if (checkboxSettingDefaultAddressShipping.checked) {
+      customer.defaultBillingAddress = 0;
+      customer.billingAddresses = [0];
+    }
+  }
   if (checkboxSettingOneAddress.checked) {
     const countriesBilling = <HTMLSelectElement>document.querySelector(".countries-billing");
     const addressBilling = {
