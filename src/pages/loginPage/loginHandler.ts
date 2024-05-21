@@ -11,6 +11,7 @@ import { createSnackbar } from "src/components/elements";
 import { Pages, SnackbarType } from "src/types/types";
 import { state } from "src/store/state";
 import { setItemToLocalStorage } from "src/utils/utils";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
@@ -25,8 +26,8 @@ export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwo
   };
 };
 
-const projectKey = process.env.CTP_PROJECT_KEY as string;
-const scopes = [process.env.CTP_SCOPES] as string[];
+// const projectKey = process.env.CTP_PROJECT_KEY as string;
+// const scopes = [process.env.CTP_SCOPES] as string[];
 
 class MyTokenCache implements TokenCache {
   myCache: TokenStore = { token: "", expirationTime: 0 }; // начальные значения для кэша
@@ -61,24 +62,24 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
 export const authorizeUserWithToken = (email: string, password: string) => {
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
-    host: "https://auth.europe-west1.gcp.commercetools.com",
+    host: authHost,
     projectKey,
     credentials: {
-      clientId: process.env.CTP_CLIENT_ID as string,
-      clientSecret: process.env.CTP_CLIENT_SECRET as string,
+      clientId,
+      clientSecret,
       user: {
         username: email,
         password,
       },
     },
-    scopes,
+    scopes: [scopes],
     fetch,
     tokenCache,
   };
 
   // Configure httpMiddlewareOptions
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
-    host: "https://api.europe-west1.gcp.commercetools.com",
+    host: apiHost,
     fetch,
   };
 

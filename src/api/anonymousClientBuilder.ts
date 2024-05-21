@@ -6,24 +6,22 @@ import {
   // Import middlewares
   type HttpMiddlewareOptions, // Required for sending HTTP requests
 } from "@commercetools/sdk-client-v2";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
 
 function generateAnonymousSessionFlow(): Client {
-  const projectKey = process.env.CTP_PROJECT_KEY as string;
-  const scopes = [process.env.CTP_SCOPES as string];
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
-    host: "https://api.europe-west1.gcp.commercetools.com",
+    host: apiHost,
     fetch,
   };
 
   const anonymousAuthMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
-    host: "https://auth.europe-west1.gcp.commercetools.com",
+    host: authHost,
     projectKey,
     credentials: {
-      clientId: process.env.CTP_CLIENT_ID as string,
-      clientSecret: process.env.CTP_CLIENT_SECRET as string,
-      anonymousId: process.env.CTP_ANONYMOUS_ID, // a unique id
+      clientId,
+      clientSecret,
     },
-    scopes,
+    scopes: [scopes],
     fetch,
   };
 
