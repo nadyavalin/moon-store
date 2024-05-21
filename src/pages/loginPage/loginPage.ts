@@ -38,8 +38,14 @@ function renderLoginFormContent(): HTMLElement {
     classNames: ["form__password-toggle"],
     attributes: { id: "checkbox", type: "checkbox" },
   });
+  const labelTogglePassword = createElement({
+    tagName: "label",
+    classNames: ["registration-form__label"],
+    attributes: { for: "checkbox" },
+    textContent: "Показать пароль",
+  });
   togglePassword.removeAttribute("required");
-  showPasswordArea.append(togglePassword, `Показать пароль`);
+  showPasswordArea.append(togglePassword, labelTogglePassword);
   const linkToRegistration = createElement({
     tagName: "a",
     classNames: ["registration-link"],
