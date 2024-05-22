@@ -1,5 +1,5 @@
-import { snackbarContainer } from "src/pages/basePage/basePage";
-import { SnackbarType } from "src/types/types";
+import { snackbarContainer } from "../pages/basePage/basePage";
+import { SnackbarType } from "../types/types";
 
 export function createElement<T extends keyof HTMLElementTagNameMap>({
   tagName,

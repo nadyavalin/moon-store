@@ -1,7 +1,9 @@
 import { Pages } from "../../types/types";
+import { render404PageContent } from "./404";
 
-export function render404PageContent() {
-  return `
+describe("render404PageContent function", () => {
+  it("should render the 404 page content correctly", () => {
+    const expectedContent = `
       <div class="error-404-wrapper">
         <div class="error-404-text">Что-то пошло не так! Страница не найдена...</div>
         <div class="error-404">
@@ -12,6 +14,9 @@ export function render404PageContent() {
         <a href="${Pages.ROOT}" class="link-from-404">Вернуться на главную страницу ===>>></a>
       </div>
     `;
-}
 
-export default render404PageContent;
+    const renderedContent = render404PageContent();
+
+    expect(renderedContent).toBe(expectedContent);
+  });
+});
