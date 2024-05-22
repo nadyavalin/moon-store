@@ -13,5 +13,5 @@
     "isolatedModules": true,
     "incremental": true
   },
-  "exclude": ["node_modules", "coverage", "*.config.js"]
+  "exclude": ["node_modules", "coverage", "dist", "*.config.js"]
 }
