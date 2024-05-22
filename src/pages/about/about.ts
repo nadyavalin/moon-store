@@ -4,7 +4,7 @@ export function renderAboutUsContent() {
       <div class="about-us-page">
           ${aboutUsTemporaryContent}
       </div>
-  `;
+    `;
 }
 
 export default renderAboutUsContent;

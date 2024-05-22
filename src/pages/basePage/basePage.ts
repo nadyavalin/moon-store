@@ -1,5 +1,5 @@
-import { Pages } from "src/types/types";
-import { state } from "src/store/state";
+import { Pages } from "../../types/types";
+import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });

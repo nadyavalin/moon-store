@@ -1,4 +1,4 @@
-import { getItemFromLocalStorage } from "src/utils/utils";
+import { getItemFromLocalStorage } from "../utils/utils";
 import { State } from "../types/types";
 
 export const state: State = {
