@@ -30,7 +30,7 @@ const baseConfig = {
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", ".jsx"],
+    extensions: [".ts", ".js"],
     plugins: [new TsconfigPathsPlugin()],
   },
   output: {
