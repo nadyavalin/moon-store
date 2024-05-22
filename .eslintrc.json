@@ -11,5 +11,14 @@
     "es6": true,
     "browser": true
   },
-  "ignorePatterns": ["*.config.js"]
+  "ignorePatterns": ["*.config.js"],
+  "overrides": [
+    {
+      "files": ["tests/**/*"],
+      "plugins": ["jest"],
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ]
 }
