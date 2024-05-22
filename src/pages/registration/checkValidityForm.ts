@@ -20,7 +20,13 @@ export function checkValidityAllFields() {
   const btnSubmit = document.querySelector(".submit-button");
   const arrInputs = Array.from(document.querySelectorAll("input"));
   const birthday = <HTMLInputElement>document.querySelector(".birthday");
-  if (arrInputs.every((element) => patternValidator(element) && spacesValidator(element)) && ageValidator(birthday)) {
+  let validationResult;
+  if (!birthday) {
+    validationResult = arrInputs.every((element) => patternValidator(element) && spacesValidator(element));
+  } else {
+    validationResult = arrInputs.every((element) => patternValidator(element) && spacesValidator(element) && ageValidator(birthday));
+  }
+  if (validationResult) {
     btnSubmit?.classList.remove("disabled");
   } else {
     btnSubmit?.classList.add("disabled");
