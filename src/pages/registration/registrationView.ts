@@ -10,7 +10,6 @@ export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-
 export const passwordPattern: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
 const namePattern: string = "^[А-яа-я]{1,40}$";
 const surnamePattern: string = "^[А-яа-я]{1,40}$";
-const birthdayPattern: string = "[0-9]";
 const cityPattern: string = "^[А-яа-я\\-\\s]{1,40}$";
 const streetPattern: string = "^.{1,40}$";
 const indexPattern: string = "^[0-9]{6,6}$";
@@ -96,18 +95,17 @@ function createAccountWrapper(): HTMLElement {
       name: "birthday",
       type: "date",
       placeholder: "",
-      pattern: `${birthdayPattern}`,
       title: birthdayTitle,
       required: "true",
     },
   });
   const blockForBirthdayError = createElement({ tagName: "div" });
   showHidePasswordHandler(togglePassword, password);
-  addValidationListenersToInput(email, emailTitle, password, accountWrapper, emailPattern);
-  addValidationListenersToInput(password, passwordTitle, showPasswordArea, accountWrapper, passwordPattern);
-  addValidationListenersToInput(name, nameTitle, surname, accountWrapper, namePattern);
-  addValidationListenersToInput(surname, surnameTitle, labelBirthday, accountWrapper, surnamePattern);
-  addValidationListenersToInput(birthday, birthdayTitle, blockForBirthdayError, accountWrapper, birthdayPattern);
+  addValidationListenersToInput(email, password, accountWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(password, showPasswordArea, accountWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(name, surname, accountWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(surname, labelBirthday, accountWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(birthday, blockForBirthdayError, accountWrapper, ["date"]);
   accountWrapper.append(email, password, showPasswordArea, name, surname, labelBirthday, birthday, blockForBirthdayError);
   return accountWrapper;
 }
@@ -119,7 +117,7 @@ function createAddressView(addressTitle: string, addressType: string): HTMLEleme
     tagName: "select",
     classNames: [`countries-${addressType}`],
     attributes: {
-      name: "country",
+      name: `countries-${addressType}`,
     },
     textContent: "Страна",
   });
@@ -179,9 +177,9 @@ function createAddressView(addressTitle: string, addressType: string): HTMLEleme
   });
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
 
-  addValidationListenersToInput(city, cityTitle, street, addressWrapper, cityPattern);
-  addValidationListenersToInput(street, streetTitle, index, addressWrapper, streetPattern);
-  addValidationListenersToInput(index, indexTitle, checkboxWrapper, addressWrapper, indexPattern);
+  addValidationListenersToInput(city, street, addressWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(street, index, addressWrapper, ["pattern", "spaces"]);
+  addValidationListenersToInput(index, checkboxWrapper, addressWrapper, ["pattern"]);
   addressWrapper.append(labelAddress, country, city, street, index, checkboxWrapper);
   return addressWrapper;
 }
@@ -194,9 +192,7 @@ function switchAddingSecondAddress() {
     document.querySelector(".submit-button")?.classList.add("disabled");
   } else {
     document.querySelectorAll(".registration-form__address-wrapper")[1].remove();
-    if (checkValidityAllFields()) {
-      document.querySelector(".submit-button")?.classList.remove("disabled");
-    }
+    checkValidityAllFields();
   }
 }
 

@@ -202,6 +202,10 @@ button {
   color: var(--accent-green);
 }
 
+.hidden {
+  display: none;
+}
+
 @media (hover: hover) {
   .menu-item:hover,
   .login-link:hover,

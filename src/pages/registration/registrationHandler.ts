@@ -7,50 +7,43 @@ export function formRegistrationHandler(event: Event) {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
   event.preventDefault();
   const formData = new FormData(form);
-  const email = <string>formData.get("email");
-  const password = <string>formData.get("password");
-  const name = <string>formData.get("name");
-  const surname = <string>formData.get("surname");
-  const birthday = <string>formData.get("birthday");
-  const checkboxSettingOneAddress = <HTMLInputElement>document.querySelector(".setting-one-address");
-  const countriesShipping = <HTMLSelectElement>document.querySelector(".countries-shipping");
-  const checkboxSettingDefaultAddressShipping = <HTMLInputElement>document.querySelector(".setting-default-address-shipping");
+  const checkboxSettingOneAddress = <string>formData.get("setting-one-address");
+  const checkboxSettingDefaultAddressShipping = <string>formData.get("setting-default-address-shipping");
 
   const addressShipping = {
     city: <string>formData.get("city-shipping"),
     streetName: <string>formData.get("street-shipping"),
     postalCode: <string>formData.get("index-shipping"),
-    country: countriesShipping.value,
+    country: <string>formData.get("countries-shipping"),
   };
 
   const customer: Customer = {
-    email: email.trim(),
-    password: password.trim(),
-    firstName: name.trim(),
-    lastName: surname.trim(),
-    dateOfBirth: birthday,
+    email: <string>formData.get("email"),
+    password: <string>formData.get("password"),
+    firstName: <string>formData.get("name"),
+    lastName: <string>formData.get("surname"),
+    dateOfBirth: <string>formData.get("birthday"),
     addresses: [addressShipping],
     shippingAddresses: [0],
   };
 
-  if (checkboxSettingDefaultAddressShipping.checked) customer.defaultShippingAddress = 0;
+  if (checkboxSettingDefaultAddressShipping) customer.defaultShippingAddress = 0;
 
-  if (!checkboxSettingOneAddress.checked) {
+  if (!checkboxSettingOneAddress) {
     customer.billingAddresses = [0];
-    if (checkboxSettingDefaultAddressShipping.checked) {
+    if (checkboxSettingDefaultAddressShipping) {
       customer.defaultBillingAddress = 0;
     }
   }
-  if (checkboxSettingOneAddress.checked) {
-    const countriesBilling = <HTMLSelectElement>document.querySelector(".countries-billing");
+  if (checkboxSettingOneAddress) {
     const addressBilling = {
       city: <string>formData.get("city-billing"),
       streetName: <string>formData.get("street-billing"),
       postalCode: <string>formData.get("index-billing"),
-      country: countriesBilling.value,
+      country: <string>formData.get("countries-billing"),
     };
-    const checkboxSettingDefaultAddressBilling = <HTMLInputElement>document.querySelector(".setting-default-address-billing");
-    if (checkboxSettingDefaultAddressBilling.checked) customer.defaultBillingAddress = 1;
+    const checkboxSettingDefaultAddressBilling = <string>formData.get("setting-default-address-billing");
+    if (checkboxSettingDefaultAddressBilling) customer.defaultBillingAddress = 1;
     customer.billingAddresses = [1];
     customer.addresses.push(addressBilling);
   }
@@ -59,7 +52,7 @@ export function formRegistrationHandler(event: Event) {
     .then((response) => {
       if (response.statusCode === 201) {
         createSnackbar(SnackbarType.success, `Пользователь ${response.body.customer.firstName} создан`);
-        authorizeUserWithToken(email.trim(), password.trim());
+        authorizeUserWithToken(<string>formData.get("email"), <string>formData.get("password"));
         window.location.href = Pages.MAIN;
       }
     })
