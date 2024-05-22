@@ -54,8 +54,8 @@ function renderLoginFormContent(): HTMLElement {
   });
 
   showHidePasswordHandler(togglePassword, passwordInput);
-  validateListener(emailInput, emailTitle, passwordInput, loginForm, emailPattern);
-  validateListener(passwordInput, passwordTitle, showPasswordArea, loginForm, passwordPattern);
+  validateListener(emailInput, passwordInput, loginForm, ["pattern", "spaces"]);
+  validateListener(passwordInput, showPasswordArea, loginForm, ["pattern", "spaces"]);
 
   loginForm.append(emailInput, passwordInput, showPasswordArea, loginFormSubmitButton);
   loginFormInner.append(loginFormHeading, loginForm, linkToRegistration);
