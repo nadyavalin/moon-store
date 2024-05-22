@@ -27,28 +27,10 @@ const baseConfig = {
         test: /\.svg$/,
         loader: "svg-inline-loader",
       },
-      {
-        test: /\.jsx?$/,
-        exclude: ["node_modules"],
-        use: ["babel-loader"],
-      },
-      {
-        test: /\.gif$/,
-        type: "asset/inline",
-      },
-      {
-        test: /\.(ttf|eot|svg)$/,
-        type: "asset/resource",
-      },
     ],
   },
   resolve: {
-    alias: {
-      config$: "./configs/app-config.js",
-      react: "./vendor/react-master",
-    },
-    extensions: [".ts", ".js", ".jsx"],
-    modules: ["node_modules", "bower_components", "shared", "/shared/vendor/modules"],
+    extensions: [".ts", ".js"],
     plugins: [new TsconfigPathsPlugin()],
   },
   output: {
