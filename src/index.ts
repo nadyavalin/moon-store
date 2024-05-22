@@ -58,10 +58,18 @@ function navigate() {
         contentDiv.innerHTML = renderAboutUsContent();
         break;
       case Pages.LOGIN:
-        contentDiv.append(renderLoginFormContent());
+        if (!localStorage.getItem("refreshToken")) {
+          contentDiv.append(renderLoginFormContent());
+        } else {
+          window.location.href = Pages.MAIN;
+        }
         break;
       case Pages.REGISTRATION:
-        contentDiv.append(renderRegistrationFormContent());
+        if (!localStorage.getItem("refreshToken")) {
+          contentDiv.append(renderRegistrationFormContent());
+        } else {
+          window.location.href = Pages.MAIN;
+        }
         break;
       default:
         contentDiv.innerHTML = render404PageContent();

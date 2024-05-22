@@ -6,21 +6,20 @@ import {
   type HttpMiddlewareOptions, // Required for sending HTTP requests
   type RefreshAuthMiddlewareOptions,
 } from "@commercetools/sdk-client-v2";
+import { projectKey, clientId, clientSecret, authHost, apiHost } from "src/api/constants";
 
 function generateRefreshTokenFlow(refreshToken: string) {
-  const projectKey = process.env.CTP_PROJECT_KEY as string;
-
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
-    host: "https://api.europe-west1.gcp.commercetools.com",
+    host: apiHost,
     fetch,
   };
 
   const options: RefreshAuthMiddlewareOptions = {
-    host: "https://auth.europe-west1.gcp.commercetools.com",
+    host: authHost,
     projectKey,
     credentials: {
-      clientId: process.env.CTP_CLIENT_ID as string,
-      clientSecret: process.env.CTP_CLIENT_SECRET as string,
+      clientId,
+      clientSecret,
     },
     refreshToken,
     fetch,

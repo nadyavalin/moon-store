@@ -164,12 +164,13 @@ button {
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-top: 20px;
+  align-content: center;
 }
-
+.form__show-password label {
+  cursor: pointer;
+}
 .form__password-toggle {
   width: 10%;
-  margin-top: 0;
   position: relative;
   margin-right: 5px;
 }
