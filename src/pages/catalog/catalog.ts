@@ -5,19 +5,23 @@ import { SnackbarType } from "src/types/types";
 import { getProducts } from "../../api/api";
 import { ClientResponse, ProductProjectionPagedQueryResponse, ProductProjection } from "@commercetools/platform-sdk";
 
+export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
+const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+catalog.append(catalogWrapper);
+
 menuItemCatalog.onclick = () => {
   getProducts().then((response) => {
     if (response.statusCode === 200) {
+      const catalogItems = catalogWrapper.querySelectorAll(".catalog-item");
+      if (catalogItems) {
+        catalogItems.forEach((item) => item.remove());
+      }
       renderCatalogContent(response);
     } else {
       createSnackbar(SnackbarType.error, "Что-то пошло не так...");
     }
   });
 };
-
-export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
-const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
-catalog.append(catalogWrapper);
 
 function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
   const items = response.body.results;
