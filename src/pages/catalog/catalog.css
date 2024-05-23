@@ -1,0 +1,44 @@
+.catalog {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.catalog-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.catalog-item {
+  display: flex;
+  width: 340px;
+  background-color: var(--card-grey);
+  cursor: pointer;
+}
+
+.catalog-item__img {
+  overflow: hidden;
+  width: 340px;
+}
+
+.catalog-item__img-inner {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.catalog-item__img-item {
+  width: 340px;
+}
+
+.catalog-item__bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.catalog-item__price {
+  text-decoration: line-through;
+}

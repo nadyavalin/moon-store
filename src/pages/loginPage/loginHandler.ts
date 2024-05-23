@@ -47,7 +47,6 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
     setItemToLocalStorage("refreshToken", refreshToken);
     createSnackbar(SnackbarType.success, "Вы авторизованы");
   }
-  setItemToLocalStorage("user", userName);
   window.location.hash = Pages.MAIN;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
@@ -104,6 +103,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .then((response) => {
       if (response.statusCode === 200) {
         const user = response.body.customer.firstName as string;
+        setItemToLocalStorage("user", user);
         const token = tokenCache.myCache.refreshToken as string;
         changeAppAfterLogin(user, token);
       }

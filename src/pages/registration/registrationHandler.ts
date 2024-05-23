@@ -1,4 +1,4 @@
-import createCustomer from "src/api/api";
+import { createCustomer } from "src/api/api";
 import { createSnackbar } from "src/components/elements";
 import { Customer, Pages, SnackbarType } from "src/types/types";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
