@@ -1,16 +1,20 @@
 import { changeAppAfterLogin } from "src/pages/loginPage/loginHandler";
-import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
-import { Client } from "@commercetools/sdk-client-v2";
+import { ByProjectKeyRequestBuilder, createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
 import { state } from "src/store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 
-let ctpClient: Client;
+let apiRoot: ByProjectKeyRequestBuilder;
 if (!state.refreshToken) {
-  ctpClient = generateAnonymousSessionFlow();
+  const ctpClient = generateAnonymousSessionFlow();
+  apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 } else {
-  ctpClient = generateRefreshTokenFlow(state.refreshToken);
-  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+  const ctpClient = generateRefreshTokenFlow(state.refreshToken);
+  apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+  getCustomerData();
+}
+
+function getCustomerData() {
   apiRoot
     .me()
     .get()
@@ -23,9 +27,9 @@ if (!state.refreshToken) {
     });
 }
 
-const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+export const getProfileInfo = () => apiRoot.me().get().execute();
 
-const createCustomer = (requestBody: MyCustomerDraft) =>
+export const createCustomer = (requestBody: MyCustomerDraft) =>
   apiRoot
     .me()
     .signup()
@@ -33,5 +37,3 @@ const createCustomer = (requestBody: MyCustomerDraft) =>
       body: requestBody,
     })
     .execute();
-
-export default createCustomer;

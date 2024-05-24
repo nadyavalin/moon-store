@@ -13,7 +13,7 @@ import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
-import { renderProfileContent } from "./pages/profile/profile";
+import { profile } from "./pages/profile/profile";
 
 document.body.append(header, main, footer);
 
@@ -46,7 +46,11 @@ function navigate() {
         contentDiv.append(renderMainPageContent());
         break;
       case Pages.PROFILE:
-        contentDiv.innerHTML = renderProfileContent();
+        if (localStorage.getItem("refreshToken")) {
+          contentDiv.append(profile);
+        } else {
+          window.location.href = Pages.MAIN;
+        }
         break;
       case Pages.CATALOG:
         contentDiv.innerHTML = renderCatalogContent();

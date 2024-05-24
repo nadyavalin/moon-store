@@ -1,0 +1,78 @@
+.profile-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  margin: 20px;
+  max-width: 1000px;
+}
+
+.addresses-shipping-wrapper,
+.addresses-billing-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+.profile-account-wrapper,
+.addresses-shipping-info,
+.addresses-billing-info {
+  background-color: var(--dark-grey);
+  padding: 0px 40px 40px 40px;
+  box-shadow: 0 0px 5px rgba(246, 244, 213, 1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+.profile-account__data div,
+.addresses-shipping__data div,
+.addresses-billing__data div {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 20px;
+}
+
+.profile-account__data span,
+.addresses-shipping__data span,
+.addresses-billing__data span {
+  display: inline-block;
+  width: 90px;
+  text-transform: uppercase;
+}
+.profile-addresses-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.profile-wrapper input,
+.profile-wrapper select,
+.profile-wrapper label {
+  padding: 10px;
+  border-bottom: 1px solid var(--main-light);
+  background-color: var(--main-dark);
+  color: var(--main-light);
+  pointer-events: none;
+  font-style: italic;
+}
+.profile-wrapper label {
+  border-bottom: none;
+}
+.profile-wrapper span {
+  font-size: 0.9em;
+}
+.profile-wrapper i {
+  margin-top: 20px;
+  font-size: 2em;
+}
+.profile__checkbox-wrapper label {
+  margin-top: 30px;
+  padding: 0;
+}
+@media (max-width: 700px) {
+  .profile-addresses-wrapper {
+    flex-direction: column;
+  }
+}
