@@ -1,15 +1,20 @@
 import { Address, AddressDraft, BaseAddress, Customer, CustomerDraft, MyCustomerDraft } from "@commercetools/platform-sdk";
 import { getUserData } from "../../api/api";
-import { createElement } from "../../components/elements";
+import { createElement, createSnackbar } from "../../components/elements";
 import "./profile.css";
 import "../../index.css";
 import { cityPattern, indexPattern, namePattern, streetPattern, surnamePattern } from "../registration/registrationView";
+import { SnackbarType } from "src/types/types";
 
-getUserData().then((response) => {
-  if (response.statusCode === 200) {
-    renderProfileContent(response.body);
-  }
-});
+export const renderCustomerDataFromApi = () =>
+  getUserData().then((response) => {
+    if (response.statusCode === 200) {
+      document.querySelector("profile-wrapper")?.remove();
+      renderProfileContent(response.body);
+    } else {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+    }
+  });
 
 export const profile = createElement({ tagName: "div", classNames: ["profile-wrapper"] });
 

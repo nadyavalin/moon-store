@@ -44,7 +44,7 @@
 .profile-addresses-wrapper {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 40px;
 }
 
 .profile-wrapper input,

@@ -105,6 +105,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
         const user = response.body.customer.firstName as string;
         setItemToLocalStorage("user", user);
         const token = tokenCache.myCache.refreshToken as string;
+        window.location.reload();
         changeAppAfterLogin(user, token);
       }
     })

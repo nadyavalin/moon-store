@@ -13,7 +13,7 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
-import { profile } from "./pages/profile/profile";
+import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 
 document.body.append(header, main, footer);
 
@@ -46,7 +46,12 @@ function navigate() {
         contentDiv.append(renderMainPageContent());
         break;
       case Pages.PROFILE:
-        contentDiv.append(profile);
+        if (localStorage.getItem("refreshToken")) {
+          contentDiv.append(profile);
+          renderCustomerDataFromApi();
+        } else {
+          window.location.href = Pages.MAIN;
+        }
         break;
       case Pages.CATALOG:
         contentDiv.append(catalog);
