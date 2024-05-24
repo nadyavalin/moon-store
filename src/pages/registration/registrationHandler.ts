@@ -1,6 +1,6 @@
-import { createCustomer } from "src/api/api";
-import { createSnackbar } from "src/components/elements";
-import { Customer, Pages, SnackbarType } from "src/types/types";
+import { createCustomer } from "../../api/api";
+import { createSnackbar } from "../../components/elements";
+import { Customer, Pages, SnackbarType } from "../../types/types";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
 
 export function formRegistrationHandler(event: Event) {

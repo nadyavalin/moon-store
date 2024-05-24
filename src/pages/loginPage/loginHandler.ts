@@ -7,11 +7,11 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createSnackbar } from "src/components/elements";
-import { Pages, SnackbarType } from "src/types/types";
-import { state } from "src/store/state";
-import { setItemToLocalStorage } from "src/utils/utils";
-import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
+import { createSnackbar } from "../../components/elements";
+import { Pages, SnackbarType } from "../../types/types";
+import { state } from "../../store/state";
+import { setItemToLocalStorage } from "../../utils/utils";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {

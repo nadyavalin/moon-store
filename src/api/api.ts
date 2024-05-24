@@ -1,9 +1,9 @@
-import { changeAppAfterLogin } from "src/pages/loginPage/loginHandler";
+import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 import { createApiBuilderFromCtpClient, MyCustomerDraft, ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
-import { state } from "src/store/state";
+import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
-import { getItemFromLocalStorage } from "src/utils/utils";
+import { getItemFromLocalStorage } from "../utils/utils";
 
 let apiRoot: ByProjectKeyRequestBuilder;
 if (!state.refreshToken) {
@@ -16,7 +16,7 @@ if (!state.refreshToken) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
-/// Функция для получения данных по клику на "Профиль"
+/// Эта функция для получения данных только если юзер залогинен - придет ответ на me()
 export const getUserData = () => apiRoot.me().get().execute();
 
 export const getProducts = () => apiRoot.productProjections().get().execute();
