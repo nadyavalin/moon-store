@@ -1,21 +1,11 @@
 import { Address, AddressDraft, BaseAddress, Customer, CustomerDraft, MyCustomerDraft } from "@commercetools/platform-sdk";
-import { getProfileInfo } from "src/api/api";
-import { createElement } from "src/components/elements";
+import { getUserData } from "../../api/api";
+import { createElement } from "../../components/elements";
 import "./profile.css";
 import "../../index.css";
-import {
-  cityPattern,
-  cityTitle,
-  indexPattern,
-  indexTitle,
-  namePattern,
-  nameTitle,
-  streetPattern,
-  streetTitle,
-  surnamePattern,
-} from "../registration/registrationView";
+import { cityPattern, indexPattern, namePattern, streetPattern, surnamePattern } from "../registration/registrationView";
 
-getProfileInfo().then((response) => {
+getUserData().then((response) => {
   if (response.statusCode === 200) {
     renderProfileContent(response.body);
   }
@@ -52,7 +42,6 @@ function createAccountView(response: Customer, parent: HTMLElement) {
       name: "name",
       type: "text",
       pattern: `${namePattern}`,
-      title: nameTitle,
       required: "true",
       value: `${response.firstName}`,
     },
@@ -75,7 +64,6 @@ function createAccountView(response: Customer, parent: HTMLElement) {
       name: "surname",
       type: "text",
       pattern: `${surnamePattern}`,
-      title: nameTitle,
       required: "true",
       value: `${response.lastName}`,
     },
@@ -96,7 +84,6 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "birthday",
       type: "date",
-      title: nameTitle,
       required: "true",
       value: `${response.dateOfBirth}`,
     },

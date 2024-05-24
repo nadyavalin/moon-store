@@ -46,11 +46,7 @@ function navigate() {
         contentDiv.append(renderMainPageContent());
         break;
       case Pages.PROFILE:
-        if (localStorage.getItem("refreshToken")) {
-          contentDiv.append(profile);
-        } else {
-          window.location.href = Pages.MAIN;
-        }
+        contentDiv.append(profile);
         break;
       case Pages.CATALOG:
         contentDiv.append(catalog);
