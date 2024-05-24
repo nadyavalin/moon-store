@@ -13,7 +13,7 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { renderProfileContent } from "./pages/profile/profile";
-import { catalog } from "./pages/catalog/catalog";
+import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 
 document.body.append(header, main, footer);
 
@@ -50,6 +50,7 @@ function navigate() {
         break;
       case Pages.CATALOG:
         contentDiv.append(catalog);
+        renderProductsFromApi();
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();

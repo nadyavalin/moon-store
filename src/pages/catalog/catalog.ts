@@ -8,17 +8,18 @@ export const catalog = createElement({ tagName: "section", classNames: ["catalog
 const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
 catalog.append(catalogWrapper);
 
-getProducts().then((response) => {
-  if (response.statusCode === 200) {
-    const catalogItems = catalogWrapper.querySelectorAll(".card");
-    if (catalogItems) {
-      catalogItems.forEach((item) => item.remove());
+export const renderProductsFromApi = () =>
+  getProducts().then((response) => {
+    if (response.statusCode === 200) {
+      const catalogItems = catalogWrapper.querySelectorAll(".card");
+      if (catalogItems) {
+        catalogItems.forEach((item) => item.remove());
+      }
+      renderCatalogContent(response);
+    } else {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
     }
-    renderCatalogContent(response);
-  } else {
-    createSnackbar(SnackbarType.error, "Что-то пошло не так...");
-  }
-});
+  });
 
 function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
   const items = response.body.results;
@@ -29,7 +30,6 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQue
 }
 
 const renderCatalogCard = (item: ProductProjection) => {
-  console.log(item);
   const name = item.name.ru;
   const images = item.masterVariant.images;
   const description = item.description?.ru;
