@@ -16,11 +16,10 @@ if (!state.refreshToken) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
-/// Эта функция для получения данных только если юзер залогинен - придет ответ на me()
+
 export const getUserData = () => apiRoot.me().get().execute();
 
 export const getProducts = () => apiRoot.productProjections().get().execute();
-
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   apiRoot
     .me()

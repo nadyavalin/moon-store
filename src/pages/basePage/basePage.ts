@@ -28,7 +28,6 @@ export const menuItemLogOut = createElement({ tagName: "a", classNames: ["menu-i
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
-  window.location.reload();
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
   window.location.hash = Pages.LOGIN;
