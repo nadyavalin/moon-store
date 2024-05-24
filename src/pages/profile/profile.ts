@@ -42,7 +42,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const name = createElement({
     tagName: "input",
-    classNames: ["name"],
+    classNames: ["name__input"],
     attributes: {
       name: "name",
       type: "text",
@@ -51,7 +51,12 @@ function createAccountView(response: Customer, parent: HTMLElement) {
       value: `${response.firstName}`,
     },
   });
-  nameDiv.append(nameHeading, name);
+  const nameEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+  nameDiv.append(nameHeading, name, nameEditBtn);
 
   const surnameDiv = createElement({
     tagName: "div",
@@ -64,7 +69,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const surname = createElement({
     tagName: "input",
-    classNames: ["surname"],
+    classNames: ["surname__input"],
     attributes: {
       name: "surname",
       type: "text",
@@ -73,7 +78,12 @@ function createAccountView(response: Customer, parent: HTMLElement) {
       value: `${response.lastName}`,
     },
   });
-  surnameDiv.append(surnameHeading, surname);
+  const surnameEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+  surnameDiv.append(surnameHeading, surname, surnameEditBtn);
   const birthdayDiv = createElement({
     tagName: "div",
     classNames: ["birthday_wrapper"],
@@ -93,7 +103,12 @@ function createAccountView(response: Customer, parent: HTMLElement) {
       value: `${response.dateOfBirth}`,
     },
   });
-  birthdayDiv.append(birthdayHeading, birthday);
+  const birthdayEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+  birthdayDiv.append(birthdayHeading, birthday, birthdayEditBtn);
   accountInfo.append(nameDiv, surnameDiv, birthdayDiv);
   parent.append(iconUser, accountInfo);
 }
@@ -130,6 +145,12 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
   });
   const addressInfo = createElement({ tagName: "div", classNames: [`addresses-${addressType}__data`] });
 
+  const addressEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+
   const countryDiv = createElement({
     tagName: "div",
     classNames: ["country_wrapper"],
@@ -149,7 +170,7 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
     },
     textContent: "Страна",
   });
-  countryDiv.append(countryHeading, country);
+  countryDiv.append(countryHeading, country, addressEditBtn);
   const optionBelarus = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Беларусь" });
   optionBelarus.value = "BY";
   const optionRussia = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Россия" });

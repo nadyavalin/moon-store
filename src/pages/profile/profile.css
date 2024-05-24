@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
 }
 .profile-account-wrapper,
 .addresses-shipping-info,
@@ -38,7 +38,7 @@
 .addresses-shipping__data span,
 .addresses-billing__data span {
   display: inline-block;
-  width: 90px;
+  width: 80px;
   text-transform: uppercase;
 }
 .profile-addresses-wrapper {
@@ -56,6 +56,7 @@
   color: var(--main-light);
   pointer-events: none;
   font-style: italic;
+  width: 190px;
 }
 .profile-wrapper label {
   border-bottom: none;
@@ -71,8 +72,37 @@
   margin-top: 30px;
   padding: 0;
 }
-@media (max-width: 700px) {
+
+.edit-btn {
+  font-size: 0.6em;
+  border: none;
+  color: var(--accent-blue);
+  cursor: pointer;
+}
+.edit-btn:hover {
+  color: var(--blue-hover);
+}
+
+.profile-addresses-wrapper.edit-btn {
+  width: 10px;
+  align-self: flex-end;
+}
+
+@media (max-width: 1023px) {
   .profile-addresses-wrapper {
     flex-direction: column;
+  }
+  .profile-account-wrapper,
+  .addresses-shipping-info,
+  .addresses-billing-info {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 450px) {
+  .profile-account-wrapper,
+  .addresses-shipping-info,
+  .addresses-billing-info {
+    padding: 0 15px 15px 15px;
   }
 }
