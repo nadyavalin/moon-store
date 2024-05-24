@@ -1,31 +1,27 @@
-import { changeAppAfterLogin } from "src/pages/loginPage/loginHandler";
-import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
-import { Client } from "@commercetools/sdk-client-v2";
-import { state } from "src/store/state";
+import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
+import { createApiBuilderFromCtpClient, MyCustomerDraft, ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
+import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
+import { getItemFromLocalStorage } from "../utils/utils";
 
-let ctpClient: Client;
+let apiRoot: ByProjectKeyRequestBuilder;
 if (!state.refreshToken) {
-  ctpClient = generateAnonymousSessionFlow();
+  const ctpClient = generateAnonymousSessionFlow();
+  apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 } else {
-  ctpClient = generateRefreshTokenFlow(state.refreshToken);
-  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
-  apiRoot
-    .me()
-    .get()
-    .execute()
-    .then((response) => {
-      if (response.statusCode === 200) {
-        const userName = response.body.firstName as string;
-        changeAppAfterLogin(userName);
-      }
-    });
+  const user = getItemFromLocalStorage("user") as string;
+  changeAppAfterLogin(user);
+  const ctpClient = generateRefreshTokenFlow(state.refreshToken);
+  apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
-const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+/// Эта функция для получения данных только если юзер залогинен - придет ответ на me()
+export const getUserData = () => apiRoot.me().get().execute();
 
-const createCustomer = (requestBody: MyCustomerDraft) =>
+export const getProducts = () => apiRoot.productProjections().get().execute();
+
+export const createCustomer = (requestBody: MyCustomerDraft) =>
   apiRoot
     .me()
     .signup()
@@ -33,5 +29,3 @@ const createCustomer = (requestBody: MyCustomerDraft) =>
       body: requestBody,
     })
     .execute();
-
-export default createCustomer;

@@ -7,11 +7,11 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createSnackbar } from "src/components/elements";
-import { Pages, SnackbarType } from "src/types/types";
-import { state } from "src/store/state";
-import { setItemToLocalStorage } from "src/utils/utils";
-import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
+import { createSnackbar } from "../../components/elements";
+import { Pages, SnackbarType } from "../../types/types";
+import { state } from "../../store/state";
+import { setItemToLocalStorage } from "../../utils/utils";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
@@ -47,7 +47,6 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
     setItemToLocalStorage("refreshToken", refreshToken);
     createSnackbar(SnackbarType.success, "Вы авторизованы");
   }
-  setItemToLocalStorage("user", userName);
   window.location.hash = Pages.MAIN;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
@@ -104,6 +103,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .then((response) => {
       if (response.statusCode === 200) {
         const user = response.body.customer.firstName as string;
+        setItemToLocalStorage("user", user);
         const token = tokenCache.myCache.refreshToken as string;
         changeAppAfterLogin(user, token);
       }

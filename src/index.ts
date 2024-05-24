@@ -6,7 +6,6 @@ import "./api/api";
 
 import { header, main, footer } from "./pages/basePage/basePage";
 import { renderMainPageContent } from "./pages/main/main";
-import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
@@ -14,6 +13,7 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { renderProfileContent } from "./pages/profile/profile";
+import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 
 document.body.append(header, main, footer);
 
@@ -49,7 +49,8 @@ function navigate() {
         contentDiv.innerHTML = renderProfileContent();
         break;
       case Pages.CATALOG:
-        contentDiv.innerHTML = renderCatalogContent();
+        contentDiv.append(catalog);
+        renderProductsFromApi();
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
