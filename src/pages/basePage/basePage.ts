@@ -31,7 +31,7 @@ menuItemLogOut.addEventListener("click", () => {
   window.location.reload();
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
-  window.location.hash = Pages.MAIN;
+  window.location.hash = Pages.LOGIN;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   greeting?.remove();
@@ -43,7 +43,12 @@ const liItemCatalog = createElement({ tagName: "li" });
 const litItemBasket = createElement({ tagName: "li" });
 const liItemAboutUs = createElement({ tagName: "li" });
 const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
-const menuItemCatalog = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Каталог", attributes: { href: Pages.CATALOG } });
+export const menuItemCatalog = createElement({
+  tagName: "a",
+  classNames: ["menu-item"],
+  textContent: "Каталог",
+  attributes: { href: Pages.CATALOG },
+});
 const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
