@@ -1,7 +1,7 @@
 import "./catalog.css";
 import { menuItemCatalog } from "../basePage/basePage";
-import { createElement, createSnackbar } from "src/components/elements";
-import { SnackbarType } from "src/types/types";
+import { createElement, createSnackbar } from "../../components/elements";
+import { SnackbarType } from "../../types/types";
 import { getProducts } from "../../api/api";
 import { ClientResponse, ProductProjectionPagedQueryResponse, ProductProjection } from "@commercetools/platform-sdk";
 
@@ -41,16 +41,16 @@ const renderCatalogCard = (item: ProductProjection) => {
   const catalogItemLink = createElement({ tagName: "a", classNames: ["catalog-item__link"] });
   const catalogItem = createElement({ tagName: "li", classNames: ["catalog-item"] });
   const catalogItemImg = createElement({ tagName: "div", classNames: ["catalog-item__img"] });
-  const cataloItemImgInner = createElement({ tagName: "div", classNames: ["catalog-item__img-inner"] });
-  const catalogItemName = createElement({ tagName: "h3", classNames: ["catalog-item__name"], textContent: `${name}` });
-  const catalogItemDescription = createElement({ tagName: "h4", classNames: ["catalog-item__description"], textContent: `${description}` });
+  const catalogItemImgInner = createElement({ tagName: "div", classNames: ["catalog-item__img-inner"] });
+  const catalogItemName = createElement({ tagName: "h4", classNames: ["catalog-item__name"], textContent: `${name}` });
+  const catalogItemDescription = createElement({ tagName: "p", classNames: ["catalog-item__description"], textContent: `${description}` });
   const catalogItemBottom = createElement({ tagName: "div", classNames: ["catalog-item__bottom"] });
 
   if (images) {
     for (let i = 0; i < images.length; i++) {
       const img = createElement({ tagName: "img", classNames: ["catalog-item__img-item"] });
       img.src = `${images[i].url}`;
-      cataloItemImgInner.append(img);
+      catalogItemImgInner.append(img);
     }
   }
   if (prices) {
@@ -64,7 +64,7 @@ const renderCatalogCard = (item: ProductProjection) => {
     });
     catalogItemBottom.append(price, discount);
   }
-  catalogItemImg.append(cataloItemImgInner);
+  catalogItemImg.append(catalogItemImgInner);
   catalogItemLink.append(catalogItemImg, catalogItemName, catalogItemDescription, catalogItemBottom);
   catalogItem.append(catalogItemLink);
   catalogWrapper.append(catalogItem);
