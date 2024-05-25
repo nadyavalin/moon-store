@@ -39,12 +39,6 @@
   cursor: pointer;
 }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .card__img {
   width: 100%;
   border-top-left-radius: 8px;

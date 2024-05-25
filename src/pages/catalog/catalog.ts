@@ -37,8 +37,10 @@ const renderCatalogCard = (item: ProductProjection) => {
 
   const cardLink = createElement({ tagName: "a", classNames: ["card__link"] });
   const card = createElement({ tagName: "li", classNames: ["card"] });
+  const cardInner = createElement({ tagName: "div", classNames: ["card__inner"] });
   const cardImg = createElement({ tagName: "div", classNames: ["card__img"] });
   const cardImgInner = createElement({ tagName: "div", classNames: ["card__img-inner"] });
+  const cardText = createElement({ tagName: "div", classNames: ["card__text"] });
   const cardName = createElement({ tagName: "h4", classNames: ["card__name"], textContent: `${name}` });
   const cardDescription = createElement({ tagName: "p", classNames: ["card__description"], textContent: `${description}` });
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom"] });
@@ -61,8 +63,10 @@ const renderCatalogCard = (item: ProductProjection) => {
     });
     cardBottom.append(price, discount);
   }
-  cardImg.append(cardImgInner);
-  cardLink.append(cardImg, cardName, cardDescription, cardBottom);
+  cardImg.append(cardImgInner, cardName);
+  cardText.append(cardDescription, cardBottom);
+  cardInner.append(cardImg, cardText);
+  cardLink.append(cardInner);
   card.append(cardLink);
   catalogWrapper.append(card);
 };

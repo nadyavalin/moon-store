@@ -16,7 +16,6 @@ if (!state.refreshToken) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
-
 export const getUserData = () => apiRoot.me().get().execute();
 
 export const getProducts = () => apiRoot.productProjections().get().execute();
