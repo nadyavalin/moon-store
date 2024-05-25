@@ -57,6 +57,14 @@
   color: var(--accent-red);
 }
 
+@media (hover: hover) {
+  .card:hover {
+    background-color: var(--card-hover);
+    box-shadow: 0 0 20px rgba(246, 244, 213, 1);
+    transition: all 0.5s;
+  }
+}
+
 @media screen and (max-width: 900px) {
   .card {
     flex: 1 0 30%;
