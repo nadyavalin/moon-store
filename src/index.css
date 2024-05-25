@@ -132,6 +132,7 @@ input[type="checkbox"] {
 
 button {
   font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   height: 35px;
   padding: 10px;
   text-transform: uppercase;
