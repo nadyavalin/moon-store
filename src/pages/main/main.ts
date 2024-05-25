@@ -119,19 +119,22 @@ function dragSlider() {
 }
 
 function createCard(cardData: CardData) {
-  const { photo, title, price, discount } = cardData;
+  const { image, name, description, price, discount } = cardData;
   const cardWrapper = createElement({ tagName: "li", classNames: ["card__wrapper"] });
   const card = createElement({ tagName: "div", classNames: ["card"] });
-  const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: photo, alt: "Photo" } });
+  const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: image, alt: "Photo" } });
   cardImage.setAttribute("draggable", "false");
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
   const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
-  const cardTitle = createElement({ tagName: "h3", classNames: ["card__title"], textContent: title });
+  const cardname = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
+  const cardDescription = createElement({ tagName: "div", classNames: ["card__description"], textContent: description });
+  const cardPrices = createElement({ tagName: "div", classNames: ["card__prices"] });
   const cardPrice = createElement({ tagName: "p", classNames: ["card__price"], textContent: priceFormatter.format(price) });
   const cardDiscount = createElement({ tagName: "p", classNames: ["card__discount"], textContent: priceFormatter.format(discount) });
-  const buyButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Купить" });
-  cardTextWrapper.append(cardTitle, cardPrice, cardDiscount);
-  cardBottom.append(cardTextWrapper, buyButton);
+  const cardButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Добавить в корзину" });
+  cardPrices.append(cardPrice, cardDiscount);
+  cardTextWrapper.append(cardname, cardDescription, cardPrices);
+  cardBottom.append(cardTextWrapper, cardButton);
   card.append(cardImage, cardBottom);
   cardWrapper.append(card);
   carousel.append(cardWrapper);
@@ -139,11 +142,41 @@ function createCard(cardData: CardData) {
 
 export function renderMainPageContent() {
   const cardsData: CardData[] = [
-    { photo: discountPhotos[0], title: "Космо-хаос", price: 2500, discount: 1000 },
-    { photo: discountPhotos[1], title: "Чужой", price: 1000, discount: 500 },
-    { photo: discountPhotos[2], title: "Космонавт", price: 2000, discount: 1000 },
-    { photo: discountPhotos[3], title: "Венера", price: 1800, discount: 800 },
-    { photo: discountPhotos[4], title: "Пришельцы", price: 2500, discount: 1000 },
+    {
+      image: discountPhotos[0],
+      name: 'Футболки "Огонь и пламя"',
+      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
+      price: 2500,
+      discount: 1000,
+    },
+    {
+      image: discountPhotos[1],
+      name: 'Футболки "Чужой"',
+      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
+      price: 1000,
+      discount: 500,
+    },
+    {
+      image: discountPhotos[2],
+      name: 'Футболки "Космонавт"',
+      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
+      price: 2000,
+      discount: 1000,
+    },
+    {
+      image: discountPhotos[3],
+      name: 'Футболки "Венера"',
+      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
+      price: 1800,
+      discount: 800,
+    },
+    {
+      image: discountPhotos[4],
+      name: 'Футболки "Пришельцы"',
+      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
+      price: 2500,
+      discount: 1000,
+    },
   ];
 
   cardsData.forEach((cardData) => {

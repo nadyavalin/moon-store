@@ -75,6 +75,11 @@
   transition: stroke 1s ease;
 }
 
+.card__name,
+.card__description {
+  padding: 10px 0 10px 0;
+}
+
 .card__price {
   text-decoration: line-through;
 }
@@ -84,14 +89,17 @@
 }
 
 .card__bottom-wrapper {
-  padding: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 10px;
 }
 
 .card__button {
+  width: 100%;
   background-color: var(--blue-hover);
+  box-shadow: 2px 2px 30px var(--main-black);
 }
 
 @media (hover: hover) {

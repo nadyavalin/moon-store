@@ -4,8 +4,9 @@ export interface State {
 }
 
 export interface CardData {
-  photo: string;
-  title: string;
+  image: string;
+  name: string;
+  description: string;
   price: number;
   discount: number;
 }
