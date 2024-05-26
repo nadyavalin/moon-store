@@ -54,7 +54,7 @@ function navigate() {
         break;
       // TODO сделать правильное перенаправление на соответствующую карточку товара
       case Pages.PRODUCT:
-        contentDiv.innerHTML = renderProductContent();
+        contentDiv.append(renderProductContent());
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();

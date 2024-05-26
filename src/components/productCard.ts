@@ -11,8 +11,12 @@ export function createCard(item: ProductProjection) {
   const description = item.description?.ru;
   const prices = item.masterVariant.prices;
   const link = item.slug.ru;
+  const id = item.id;
 
   const card = createElement({ tagName: "li", classNames: ["card"] });
+  card.setAttribute("data-id", `${id}`);
+  // TODO сделать правильное перенаправление
+  // const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: `#${link}` } });
   const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: Pages.PRODUCT } });
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
   const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
