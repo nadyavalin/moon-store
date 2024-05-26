@@ -23,7 +23,7 @@ function setActiveLink(fragmentId: string) {
       const link = links[i];
       const href = link.getAttribute("href");
       if (href) {
-        const pageName = href.substring(1);
+        const pageName = href.substring(-1);
         if (pageName === fragmentId) {
           link.classList.add("active");
         } else {
