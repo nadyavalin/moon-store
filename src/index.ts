@@ -22,14 +22,8 @@ function setActiveLink(fragmentId: string) {
     for (let i = 0; i < links.length; i += 1) {
       const link = links[i];
       const href = link.getAttribute("href");
-      if (href) {
-        const pageName = href.substring(-1);
-        if (pageName === fragmentId) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
-        }
-      }
+      const pageName = href?.substring(-1);
+      link.classList.toggle("active", pageName === fragmentId);
     }
   }
 }

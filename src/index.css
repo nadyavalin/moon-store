@@ -46,6 +46,16 @@ a {
   transition: color 0.5s ease;
 }
 
+button.menu-item {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 20px;
+  padding: 0;
+  text-transform: capitalize;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .menu-item,
 .login-link,
 .registration-link,
@@ -221,6 +231,10 @@ button {
   .registration-link:hover::after,
   .link-from-404:hover::after {
     width: 100%;
+  }
+
+  button.menu-item:hover {
+    background-color: transparent;
   }
 
   button:hover {
