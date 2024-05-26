@@ -18,13 +18,14 @@
   overflow: hidden;
 }
 
-.card__text-wrapper {
-  padding: 0 10px 0 10px;
+.card__text-wrapper,
+.card__prices {
+  padding: 0 10px;
 }
 
 .card__name,
 .card__description {
-  padding: 10px 0 10px 0;
+  padding: 10px 0;
 }
 
 .card__name {
@@ -37,7 +38,6 @@
 
 .card__prices {
   font-size: 20px;
-  padding: 0 10px 0 10px;
   display: flex;
   justify-content: space-between;
 }
