@@ -30,29 +30,6 @@
   scroll-behavior: auto;
 }
 
-.card__wrapper {
-  scroll-snap-align: start;
-  border-radius: 8px;
-  background-color: var(--card-grey);
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.card__img {
-  width: 100%;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  object-fit: cover;
-  object-position: top;
-}
-
 .card__arrow {
   position: absolute;
   height: 40px;
@@ -79,25 +56,6 @@
   stroke: var(--main-light);
   stroke-width: 2;
   transition: stroke 1s ease;
-}
-
-.card__price {
-  text-decoration: line-through;
-}
-
-.card__discount {
-  color: var(--accent-red);
-}
-
-.card__bottom-wrapper {
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.card__button {
-  background-color: var(--blue-hover);
 }
 
 @media (hover: hover) {
