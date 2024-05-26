@@ -59,7 +59,7 @@ button.menu-item {
 .menu-item,
 .login-link,
 .registration-link,
-.link-from-404 {
+.link-from-404 .menu-category {
   position: relative;
   text-decoration: none;
   cursor: pointer;

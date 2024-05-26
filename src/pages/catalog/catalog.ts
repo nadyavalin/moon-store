@@ -92,14 +92,14 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
   });
   for (const categoryData of Object.values(categoryMap)) {
     const categoryWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper__item"] });
-    const parentCategoryElement = createElement({ tagName: "span", classNames: ["category-parent"] });
+    const parentCategoryElement = createElement({ tagName: "span", classNames: ["menu-category", "category-parent"] });
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
     categoryWrapper.append(parentCategoryElement);
     const childrenContainer = createElement({ tagName: "div", classNames: ["child-categories-wrapper"] });
 
     categoryData.children.forEach((childCategory) => {
-      const childCategoryElement = createElement({ tagName: "span", classNames: ["category-child"] });
+      const childCategoryElement = createElement({ tagName: "span", classNames: ["menu-category", "category-child"] });
       childCategoryElement.textContent = childCategory.name.ru;
       childCategoryElement.setAttribute("data-id", `${childCategory.id}`);
       childrenContainer.append(childCategoryElement);
@@ -117,5 +117,47 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQue
     catalogWrapper.append(card);
   });
 }
+
+// меню выбора категорий, добавление и удаление класса active
+categoriesWrapper.addEventListener("click", (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+
+  if (target.classList.contains("menu-category")) {
+    const clickedCategory = target as HTMLElement;
+
+    if (clickedCategory.classList.contains("category-parent")) {
+      const childCategories = Array.from(clickedCategory.parentElement?.children || []) as HTMLElement[];
+      childCategories.forEach((childCategory) => {
+        childCategory.classList.remove("active");
+      });
+    }
+
+    if (clickedCategory.classList.contains("category-child")) {
+      const siblings = Array.from(clickedCategory.parentElement?.children || []) as HTMLElement[];
+      siblings.forEach((item: HTMLElement) => {
+        if (item !== clickedCategory && item.classList.contains("category-child")) {
+          item.classList.remove("active");
+        }
+      });
+
+      const parentCategory = clickedCategory.closest(".category-parent") as HTMLElement;
+      parentCategory?.classList.add("active");
+    }
+
+    const mainCategories = ["Для мужчин", "Для женщин", "Для детей"];
+    if (mainCategories.includes(clickedCategory.textContent || "")) {
+      clickedCategory.classList.add("active");
+    }
+
+    const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+    allCategoryItems.forEach((item) => {
+      if (item !== clickedCategory) {
+        item.classList.remove("active");
+      }
+    });
+
+    clickedCategory.classList.toggle("active");
+  }
+});
 
 catalog.append(catalogWrapper);
