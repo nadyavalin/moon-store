@@ -25,6 +25,7 @@ export enum Pages {
   ABOUT = "#about",
   LOGIN = "#login",
   REGISTRATION = "#registration",
+  PRODUCT = "#product",
 }
 
 export enum SnackbarType {

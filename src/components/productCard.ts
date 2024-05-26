@@ -3,14 +3,17 @@ import "./productCard.css";
 import { createElement } from "./elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../utils/utils";
+import { Pages } from "../types/types";
 
 export function createCard(item: ProductProjection) {
   const name = item.name.ru;
   const images = item.masterVariant.images;
   const description = item.description?.ru;
   const prices = item.masterVariant.prices;
+  const link = item.slug.ru;
 
   const card = createElement({ tagName: "li", classNames: ["card"] });
+  const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: Pages.PRODUCT } });
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
   const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
   const cardName = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
@@ -20,7 +23,8 @@ export function createCard(item: ProductProjection) {
 
   const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: `${images?.[0].url}`, alt: "Photo" } });
   cardImage.setAttribute("draggable", "false");
-  card.append(cardImage);
+  card.append(cardLink);
+  cardLink.append(cardImage);
 
   const price = createElement({
     tagName: "p",
@@ -37,7 +41,7 @@ export function createCard(item: ProductProjection) {
 
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
-  card.append(cardTextWrapper, cardBottom);
+  cardLink.append(cardTextWrapper, cardBottom);
   return card;
 }
 
