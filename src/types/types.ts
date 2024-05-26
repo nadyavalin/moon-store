@@ -3,14 +3,6 @@ export interface State {
   refreshToken: string | null;
 }
 
-export interface CardData {
-  image: string;
-  name: string;
-  description: string;
-  price: number;
-  discount: number;
-}
-
 export interface Customer {
   email: string;
   password: string;

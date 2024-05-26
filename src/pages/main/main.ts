@@ -1,17 +1,11 @@
-import { arrowLeft, arrowRight } from "src/components/svg";
-import { CardData } from "src/types/types";
-import { priceFormatter } from "src/utils/utils";
-import { createElement, createSvgElement } from "../../components/elements";
-import { main } from "../basePage/basePage";
+import { getProducts } from "../../api/api";
+import { SnackbarType } from "../../types/types";
+import { createCard } from "../../components/productCard";
+import { arrowLeft, arrowRight } from "../../components/svg";
+import { createElement, createSnackbar, createSvgElement } from "../../components/elements";
+import { ClientResponse, ProductProjectionPagedQueryResponse } from "@commercetools/platform-sdk";
 
-const discountPhotos = [
-  "../../public/img/discount-1.png",
-  "../../public/img/discount-2.png",
-  "../../public/img/discount-3.png",
-  "../../public/img/discount-4.png",
-  "../../public/img/discount-5.png",
-];
-const container = createElement({ tagName: "div", classNames: ["slider__wrapper"] });
+export const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper"] });
 const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow");
 const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
@@ -41,7 +35,7 @@ const autoPlay = () => {
   }, 3000);
 };
 
-container.addEventListener("click", (event) => {
+sliderWrapper.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
     const direction = target.id;
@@ -118,77 +112,29 @@ function dragSlider() {
   carousel.addEventListener("scroll", infiniteScroll);
 }
 
-function createCard(cardData: CardData) {
-  const { image, name, description, price, discount } = cardData;
-  const cardWrapper = createElement({ tagName: "li", classNames: ["card__wrapper"] });
-  const card = createElement({ tagName: "div", classNames: ["card"] });
-  const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: image, alt: "Photo" } });
-  cardImage.setAttribute("draggable", "false");
-  const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
-  const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
-  const cardname = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
-  const cardDescription = createElement({ tagName: "div", classNames: ["card__description"], textContent: description });
-  const cardPrices = createElement({ tagName: "div", classNames: ["card__prices"] });
-  const cardPrice = createElement({ tagName: "p", classNames: ["card__price"], textContent: priceFormatter.format(price) });
-  const cardDiscount = createElement({ tagName: "p", classNames: ["card__discount"], textContent: priceFormatter.format(discount) });
-  const cardButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Добавить в корзину" });
-  cardPrices.append(cardPrice, cardDiscount);
-  cardTextWrapper.append(cardname, cardDescription, cardPrices);
-  cardBottom.append(cardTextWrapper, cardButton);
-  card.append(cardImage, cardBottom);
-  cardWrapper.append(card);
-  carousel.append(cardWrapper);
-}
-
-export function renderMainPageContent() {
-  const cardsData: CardData[] = [
-    {
-      image: discountPhotos[0],
-      name: 'Футболки "Огонь и пламя"',
-      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
-      price: 2500,
-      discount: 1000,
-    },
-    {
-      image: discountPhotos[1],
-      name: 'Футболки "Чужой"',
-      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
-      price: 1000,
-      discount: 500,
-    },
-    {
-      image: discountPhotos[2],
-      name: 'Футболки "Космонавт"',
-      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
-      price: 2000,
-      discount: 1000,
-    },
-    {
-      image: discountPhotos[3],
-      name: 'Футболки "Венера"',
-      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
-      price: 1800,
-      discount: 800,
-    },
-    {
-      image: discountPhotos[4],
-      name: 'Футболки "Пришельцы"',
-      description: "Футболки с космическим принтом. Плотная хлопковая ткань. Принт не выцветает, не линяет",
-      price: 2500,
-      discount: 1000,
-    },
-  ];
-
-  cardsData.forEach((cardData) => {
-    createCard(cardData);
+export function renderProductsForSliderFromApi() {
+  getProducts().then((response) => {
+    if (response.statusCode === 200) {
+      const sliderCards = carousel.querySelectorAll(".card");
+      if (sliderCards) {
+        sliderCards.forEach((item) => item.remove());
+      }
+      renderCardsForSlider(response);
+    } else {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+    }
   });
-
-  cycleSlider();
-  dragSlider();
-
-  container.append(arrowLeftElement, carousel, arrowRightElement);
-  main.append(container);
-  return container;
 }
 
-export default renderMainPageContent;
+function renderCardsForSlider(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
+  const items = response.body.results;
+  items.forEach((item) => {
+    const card = createCard(item);
+    carousel.append(card);
+  });
+}
+
+sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
+
+cycleSlider();
+dragSlider();

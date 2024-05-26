@@ -5,7 +5,6 @@ import "./pages/404/404.css";
 import "./api/api";
 
 import { header, main, footer } from "./pages/basePage/basePage";
-import { renderMainPageContent } from "./pages/main/main";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
@@ -13,6 +12,7 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
+import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 
 document.body.append(header, main, footer);
@@ -43,7 +43,8 @@ function navigate() {
     switch (fragmentId) {
       case Pages.ROOT:
       case Pages.MAIN:
-        contentDiv.append(renderMainPageContent());
+        contentDiv.append(sliderWrapper);
+        renderProductsForSliderFromApi();
         break;
       case Pages.PROFILE:
         if (localStorage.getItem("refreshToken")) {
