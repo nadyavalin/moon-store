@@ -29,7 +29,7 @@ categoriesWrapper.addEventListener("click", (event) => {
       .execute()
       .then((response) => {
         if (response.statusCode === 200) {
-          clearData();
+          clearCatalogData();
           renderCatalogContent(response);
         } else {
           createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
@@ -38,7 +38,14 @@ categoriesWrapper.addEventListener("click", (event) => {
   }
 });
 
-const clearData = () => {
+const clearCategoriesData = () => {
+  const categories = categoriesWrapper.querySelectorAll(".categories-wrapper__item");
+  if (categories) {
+    categories.forEach((category) => category.remove());
+  }
+};
+
+const clearCatalogData = () => {
   const catalogItems = catalogWrapper.querySelectorAll(".card");
   if (catalogItems) {
     catalogItems.forEach((item) => item.remove());
@@ -48,7 +55,7 @@ const clearData = () => {
 export function renderProductsFromApi() {
   getProducts().then((response) => {
     if (response.statusCode === 200) {
-      clearData();
+      clearCatalogData();
       renderCatalogContent(response);
     } else {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
@@ -56,6 +63,7 @@ export function renderProductsFromApi() {
   });
   getCategories().then((response) => {
     if (response.statusCode === 200) {
+      clearCategoriesData();
       renderCategories(response);
     }
   });
