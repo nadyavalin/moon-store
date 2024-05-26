@@ -5,13 +5,6 @@ export interface State {
   refreshToken: string | null;
 }
 
-export interface CardData {
-  photo: string;
-  title: string;
-  price: number;
-  discount: number;
-}
-
 export interface Customer {
   email: string;
   password: string;

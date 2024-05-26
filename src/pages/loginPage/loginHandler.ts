@@ -12,7 +12,7 @@ import { Pages, SnackbarType } from "../../types/types";
 import { state } from "../../store/state";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
-import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
+import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -51,7 +51,11 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;
   addUserGreetingToHeader();
+  menuItemLogIn.remove();
+  menuItemSingUp.remove();
+  userMenu.append(menuItemUserProfile);
   userMenu.append(menuItemLogOut);
+  menuItemLogOut.classList.remove("active");
 }
 
 export const authorizeUserWithToken = (email: string, password: string) => {

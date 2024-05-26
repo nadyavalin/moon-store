@@ -4,16 +4,9 @@
   justify-content: space-between;
 }
 
-.categories-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
 .catalog-wrapper {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   gap: 16px;
 }
 
