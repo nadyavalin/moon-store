@@ -10,7 +10,6 @@
 
 .card__img {
   width: 100%;
-  /* height: 300px; */
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   object-fit: cover;
@@ -20,12 +19,12 @@
 
 .card__text-wrapper,
 .card__prices {
-  padding: 0 10px;
+  margin: 0 10px;
 }
 
 .card__name,
 .card__description {
-  padding: 10px 0;
+  margin: 10px 0;
 }
 
 .card__name {
@@ -34,6 +33,11 @@
 
 .card__description {
   font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card__prices {
