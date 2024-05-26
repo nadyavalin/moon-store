@@ -16,7 +16,13 @@ if (!state.refreshToken) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
+// export const filterProducts = () => apiRoot.productProjections()
+// .search()
+// .get({queryArgs: {
+// filter.query: categories.id:subtree("id")
+// }})
 
+export const getCategories = () => apiRoot.categories().get().execute();
 export const getUserData = () => apiRoot.me().get().execute();
 
 export const getProducts = () => apiRoot.productProjections().get().execute();
