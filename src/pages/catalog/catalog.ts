@@ -39,7 +39,7 @@ categoriesWrapper.addEventListener("click", (event) => {
 });
 
 const clearCategoriesData = () => {
-  const categories = categoriesWrapper.querySelectorAll(".categories-wrapper__item");
+  const categories = categoriesWrapper.querySelectorAll(".category-wrapper");
   if (categories) {
     categories.forEach((category) => category.remove());
   }
@@ -91,7 +91,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
     }
   });
   for (const categoryData of Object.values(categoryMap)) {
-    const categoryWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper__item"] });
+    const categoryWrapper = createElement({ tagName: "div", classNames: ["category-wrapper"] });
     const parentCategoryElement = createElement({ tagName: "span", classNames: ["menu-category", "category-parent"] });
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
