@@ -10,6 +10,7 @@ import {
   CategoryPagedQueryResponse,
   Category,
 } from "@commercetools/platform-sdk";
+import { apiRoot } from "../../api/api";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
 const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
@@ -19,17 +20,34 @@ catalog.append(categoriesWrapper, catalogWrapper);
 categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
   if (target.tagName === "SPAN") {
-    console.log(target.getAttribute("data-id"));
+    const id = target.getAttribute("data-id");
+    apiRoot
+      .productProjections()
+      .search()
+      .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
+      .execute()
+      .then((response) => {
+        if (response.statusCode === 200) {
+          clearData();
+          renderCatalogContent(response);
+        } else {
+          createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+        }
+      });
   }
 });
+
+const clearData = () => {
+  const catalogItems = catalogWrapper.querySelectorAll(".card");
+  if (catalogItems) {
+    catalogItems.forEach((item) => item.remove());
+  }
+};
 
 export const renderProductsFromApi = () =>
   getProducts().then((response) => {
     if (response.statusCode === 200) {
-      const catalogItems = catalogWrapper.querySelectorAll(".card");
-      if (catalogItems) {
-        catalogItems.forEach((item) => item.remove());
-      }
+      clearData();
       renderCatalogContent(response);
     } else {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");

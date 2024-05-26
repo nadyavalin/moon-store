@@ -5,7 +5,7 @@ import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { getItemFromLocalStorage } from "../utils/utils";
 
-let apiRoot: ByProjectKeyRequestBuilder;
+export let apiRoot: ByProjectKeyRequestBuilder;
 if (!state.refreshToken) {
   const ctpClient = generateAnonymousSessionFlow();
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
@@ -16,16 +16,10 @@ if (!state.refreshToken) {
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
 
-// export const filterProducts = () => apiRoot.productProjections()
-// .search()
-// .get({queryArgs: {
-// filter.query: categories.id:subtree("id")
-// }})
-
+export const getProducts = () => apiRoot.productProjections().get().execute();
 export const getCategories = () => apiRoot.categories().get().execute();
 export const getUserData = () => apiRoot.me().get().execute();
 
-export const getProducts = () => apiRoot.productProjections().get().execute();
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   apiRoot
     .me()
