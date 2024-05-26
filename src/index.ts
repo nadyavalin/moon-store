@@ -1,6 +1,5 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
-import "./pages/main/main.css";
 import "./pages/404/404.css";
 import "./api/api";
 

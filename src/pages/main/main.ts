@@ -1,3 +1,5 @@
+import "./slider.css";
+
 import { getProducts } from "../../api/api";
 import { SnackbarType } from "../../types/types";
 import { createCard } from "../../components/productCard";
