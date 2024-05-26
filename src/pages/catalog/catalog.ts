@@ -11,7 +11,7 @@ import {
   Category,
 } from "@commercetools/platform-sdk";
 import { apiRoot } from "../../api/api";
-import createCard from "src/components/productCard";
+import createCard from "../../components/productCard";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
 const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
