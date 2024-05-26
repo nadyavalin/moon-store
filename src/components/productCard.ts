@@ -2,7 +2,7 @@ import "./productCard.css";
 
 import { createElement } from "./elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
-import priceFormatter from "../utils/utils";
+import { PriceFormatter } from "../utils/utils";
 
 export function createCard(item: ProductProjection) {
   const name = item.name.ru;
@@ -22,14 +22,17 @@ export function createCard(item: ProductProjection) {
   cardImage.setAttribute("draggable", "false");
   card.append(cardImage);
 
-  const priceAmount = (prices?.[0].value.centAmount ?? 0) / 100;
-  const discountAmount = (prices?.[0].discounted?.value.centAmount ?? 0) / 100;
-  const price = createElement({ tagName: "p", classNames: ["card__price"], textContent: priceFormatter.format(priceAmount) });
+  const price = createElement({
+    tagName: "p",
+    classNames: ["card__price"],
+    textContent: PriceFormatter.formatCents(prices?.[0].value.centAmount),
+  });
   const discount = createElement({
     tagName: "p",
     classNames: ["card__discount"],
-    textContent: priceFormatter.format(discountAmount),
+    textContent: PriceFormatter.formatCents(prices?.[0].discounted?.value.centAmount),
   });
+
   cardPrices.append(price, discount);
 
   cardTextWrapper.append(cardName, cardDescription);
