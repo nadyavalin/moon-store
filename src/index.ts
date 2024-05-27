@@ -29,12 +29,11 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-function navigate() {
+function renderContent(route: string) {
   const contentDiv = document.querySelector(".main");
-  const fragmentId = window.location.hash.substring(-1);
   if (contentDiv) {
     contentDiv.innerHTML = "";
-    switch (fragmentId) {
+    switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
         contentDiv.append(sliderWrapper);
@@ -52,7 +51,6 @@ function navigate() {
         contentDiv.append(catalog);
         renderProductsFromApi();
         break;
-      // TODO сделать правильное перенаправление на соответствующую карточку товара
       case Pages.PRODUCT:
         contentDiv.append(productWrapper);
         break;
@@ -81,10 +79,16 @@ function navigate() {
         break;
     }
   }
-  setActiveLink(fragmentId);
+  setActiveLink(route);
 }
 
-navigate();
+export const navigate = (route: string) => {
+  window.history.pushState({}, "", route);
+  renderContent(route);
+};
 
-window.addEventListener("hashchange", navigate);
-document.addEventListener("DOMContentLoaded", navigate);
+document.addEventListener("DOMContentLoaded", () => {
+  // const pathname = window.location.pathname;
+  // renderContent(pathname);
+  renderContent(Pages.ROOT);
+});
