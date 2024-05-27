@@ -21,31 +21,32 @@ export function editName(): void {
   const input = <HTMLInputElement>document.querySelector(".name__input");
   const btn = <HTMLElement>document.querySelector(".name__edit-btn");
   changeStateBtnInput(input, btn);
-  changeInputHandler(input, [{ action: "setFirstName", firstName: input.value }]);
+  updateCustomerHandler(input, [{ action: "setFirstName", firstName: input.value }], function changeGreeting() {
+    const nameInGreeting = document.querySelector(".user-greeting__link");
+    if (nameInGreeting) nameInGreeting.textContent = input.value;
+  });
   setItemToLocalStorage("user", input.value);
-  const nameInGreeting = document.querySelector(".user-greeting__link");
-  if (nameInGreeting) nameInGreeting.textContent = input.value;
 }
 
 export function editSurname(): void {
   const input = <HTMLInputElement>document.querySelector(".surname__input");
   const btn = <HTMLElement>document.querySelector(".surname__edit-btn");
   changeStateBtnInput(input, btn);
-  changeInputHandler(input, [{ action: "setLastName", lastName: input.value }]);
+  updateCustomerHandler(input, [{ action: "setLastName", lastName: input.value }]);
 }
 
 export function editBirthday(): void {
   const input = <HTMLInputElement>document.querySelector(".birthday__input");
   const btn = <HTMLElement>document.querySelector(".birthday__edit-btn");
   changeStateBtnInput(input, btn);
-  changeInputHandler(input, [{ action: "setDateOfBirth", dateOfBirth: input.value }]);
+  updateCustomerHandler(input, [{ action: "setDateOfBirth", dateOfBirth: input.value }]);
 }
 
 export function editEmail(): void {
   const input = <HTMLInputElement>document.querySelector(".email__input");
   const btn = <HTMLElement>document.querySelector(".email__edit-btn");
   changeStateBtnInput(input, btn);
-  changeInputHandler(input, [{ action: "changeEmail", email: input.value }]);
+  updateCustomerHandler(input, [{ action: "changeEmail", email: input.value }]);
 }
 
 export function editPassword(): void {
@@ -69,7 +70,7 @@ export function editAddress(e: Event): void {
   changeStateBtnInput(select, btn);
 }
 
-function changeInputHandler(input: HTMLInputElement, actions: CustomerUpdateAction[]) {
+function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], callback?: () => void) {
   if (!input.className.includes("active-input")) {
     getUserData(state.customerId as string).then(({ body }) => {
       const version = Number(body.version);
@@ -78,6 +79,7 @@ function changeInputHandler(input: HTMLInputElement, actions: CustomerUpdateActi
         updateCustomer(version, actions)
           .then((response) => {
             if (response.statusCode === 200) {
+              if (callback) callback();
               createSnackbar(SnackbarType.success, "Изменения сохранены");
             }
           })
