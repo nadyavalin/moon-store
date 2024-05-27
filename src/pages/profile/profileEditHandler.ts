@@ -1,9 +1,9 @@
-import { getUserData, updateDateOfBirthCustomer, updateEmailCustomer, updateFirstNameCustomer, updateLastNameCustomer } from "src/api/api";
-import { createSnackbar } from "src/components/elements";
-import state from "src/store/state";
-import { SnackbarType } from "src/types/types";
-import { setItemToLocalStorage } from "src/utils/utils";
-import { changeAppAfterLogin } from "../loginPage/loginHandler";
+import { CustomerUpdateAction } from "@commercetools/platform-sdk";
+import { getUserData, updateCustomer } from "../../api/api";
+import { createSnackbar } from "../../components/elements";
+import state from "../../store/state";
+import { SnackbarType } from "../../types/types";
+import { setItemToLocalStorage } from "../../utils/utils";
 
 function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   if (btn) btn.innerHTML = " ";
@@ -21,101 +21,39 @@ export function editName(): void {
   const input = <HTMLInputElement>document.querySelector(".name__input");
   const btn = <HTMLElement>document.querySelector(".name__edit-btn");
   changeStateBtnInput(input, btn);
-  if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string).then(({ body }) => {
-      const version = Number(body.version);
-      const previousName = body.firstName;
-      if (previousName !== input.value) {
-        updateFirstNameCustomer(input.value, version)
-          .then((response) => {
-            if (response.statusCode === 200) {
-              createSnackbar(SnackbarType.success, "Изменения сохранены");
-              setItemToLocalStorage("user", input.value);
-              const nameInGreeting = document.querySelector(".user-greeting__link");
-              if (nameInGreeting) nameInGreeting.textContent = input.value;
-            }
-          })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
-          });
-      }
-    });
-  }
+  changeInputHandler(input, [{ action: "setFirstName", firstName: input.value }]);
+  setItemToLocalStorage("user", input.value);
+  const nameInGreeting = document.querySelector(".user-greeting__link");
+  if (nameInGreeting) nameInGreeting.textContent = input.value;
 }
 
 export function editSurname(): void {
   const input = <HTMLInputElement>document.querySelector(".surname__input");
   const btn = <HTMLElement>document.querySelector(".surname__edit-btn");
   changeStateBtnInput(input, btn);
-  if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string).then(({ body }) => {
-      const version = Number(body.version);
-      const previousSurname = body.lastName;
-      if (previousSurname !== input.value) {
-        updateLastNameCustomer(input.value, version)
-          .then((response) => {
-            if (response.statusCode === 200) {
-              createSnackbar(SnackbarType.success, "Изменения сохранены");
-            }
-          })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
-          });
-      }
-    });
-  }
+  changeInputHandler(input, [{ action: "setLastName", lastName: input.value }]);
 }
 
 export function editBirthday(): void {
   const input = <HTMLInputElement>document.querySelector(".birthday__input");
   const btn = <HTMLElement>document.querySelector(".birthday__edit-btn");
   changeStateBtnInput(input, btn);
-  if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string).then(({ body }) => {
-      const version = Number(body.version);
-      const dateOfBirthPrevious = body.dateOfBirth;
-      if (dateOfBirthPrevious !== input.value) {
-        updateDateOfBirthCustomer(input.value, version)
-          .then((response) => {
-            if (response.statusCode === 200) {
-              createSnackbar(SnackbarType.success, "Изменения сохранены");
-            }
-          })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
-          });
-      }
-    });
-  }
+  changeInputHandler(input, [{ action: "setDateOfBirth", dateOfBirth: input.value }]);
 }
 
 export function editEmail(): void {
   const input = <HTMLInputElement>document.querySelector(".email__input");
   const btn = <HTMLElement>document.querySelector(".email__edit-btn");
   changeStateBtnInput(input, btn);
-  if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string).then(({ body }) => {
-      const version = Number(body.version);
-      const previousEmail = body.email;
-      if (previousEmail !== input.value) {
-        updateEmailCustomer(input.value, version)
-          .then((response) => {
-            if (response.statusCode === 200) {
-              createSnackbar(SnackbarType.success, "Изменения сохранены");
-            }
-          })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
-          });
-      }
-    });
-  }
+  changeInputHandler(input, [{ action: "changeEmail", email: input.value }]);
 }
+
 export function editPassword(): void {
   const input = <HTMLElement>document.querySelector(".password__input");
   const btn = <HTMLElement>document.querySelector(".password__edit-btn");
   changeStateBtnInput(input, btn);
 }
+
 export function editAddress(e: Event): void {
   const target = <HTMLElement>e.target;
   const btn = <HTMLButtonElement>target.closest(".edit-btn");
@@ -129,4 +67,24 @@ export function editAddress(e: Event): void {
     changeStateBtnInput(element);
   });
   changeStateBtnInput(select, btn);
+}
+
+function changeInputHandler(input: HTMLInputElement, actions: CustomerUpdateAction[]) {
+  if (!input.className.includes("active-input")) {
+    getUserData(state.customerId as string).then(({ body }) => {
+      const version = Number(body.version);
+      const previousName = body.firstName;
+      if (previousName !== input.value) {
+        updateCustomer(version, actions)
+          .then((response) => {
+            if (response.statusCode === 200) {
+              createSnackbar(SnackbarType.success, "Изменения сохранены");
+            }
+          })
+          .catch(() => {
+            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
+          });
+      }
+    });
+  }
 }

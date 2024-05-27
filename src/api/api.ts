@@ -1,5 +1,11 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
-import { createApiBuilderFromCtpClient, MyCustomerDraft, ByProjectKeyRequestBuilder, CustomerSetFirstNameAction } from "@commercetools/platform-sdk";
+import {
+  createApiBuilderFromCtpClient,
+  MyCustomerDraft,
+  ByProjectKeyRequestBuilder,
+  CustomerSetFirstNameAction,
+  CustomerUpdateAction,
+} from "@commercetools/platform-sdk";
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
@@ -29,7 +35,7 @@ export const createCustomer = (requestBody: MyCustomerDraft) =>
 
 export const getUserData = (customerID: string) => apiRoot.customers().withId({ ID: customerID }).get().execute();
 
-export const updateFirstNameCustomer = (firstName: string, version: number) =>
+export const updateCustomer = (version: number, actions: CustomerUpdateAction[]) =>
   apiRoot
     .customers()
     .withId({
@@ -38,69 +44,7 @@ export const updateFirstNameCustomer = (firstName: string, version: number) =>
     .post({
       body: {
         version,
-        actions: [
-          {
-            action: "setFirstName",
-            firstName,
-          },
-        ],
-      },
-    })
-    .execute();
-
-export const updateLastNameCustomer = (lastName: string, version: number) =>
-  apiRoot
-    .customers()
-    .withId({
-      ID: state.customerId as string,
-    })
-    .post({
-      body: {
-        version,
-        actions: [
-          {
-            action: "setLastName",
-            lastName,
-          },
-        ],
-      },
-    })
-    .execute();
-
-export const updateDateOfBirthCustomer = (dateOfBirth: string, version: number) =>
-  apiRoot
-    .customers()
-    .withId({
-      ID: state.customerId as string,
-    })
-    .post({
-      body: {
-        version,
-        actions: [
-          {
-            action: "setDateOfBirth",
-            dateOfBirth,
-          },
-        ],
-      },
-    })
-    .execute();
-
-export const updateEmailCustomer = (email: string, version: number) =>
-  apiRoot
-    .customers()
-    .withId({
-      ID: state.customerId as string,
-    })
-    .post({
-      body: {
-        version,
-        actions: [
-          {
-            action: "changeEmail",
-            email,
-          },
-        ],
+        actions,
       },
     })
     .execute();
