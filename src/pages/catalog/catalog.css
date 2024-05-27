@@ -5,10 +5,10 @@
 }
 
 .catalog-wrapper {
-  max-width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  flex-grow: 1;
 }
 
 .categories-wrapper {
@@ -17,6 +17,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .category-wrapper {

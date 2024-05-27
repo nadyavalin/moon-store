@@ -36,6 +36,16 @@ categoriesWrapper.addEventListener("click", (event) => {
         }
       });
   }
+
+  // переключение категорий (class active)
+  const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+  allCategoryItems.forEach((item) => {
+    if (item !== target) {
+      item.classList.remove("active");
+    }
+  });
+
+  target.classList.toggle("active");
 });
 
 const clearCategoriesData = () => {
@@ -117,47 +127,5 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQue
     catalogWrapper.append(card);
   });
 }
-
-// меню выбора категорий, добавление и удаление класса active
-categoriesWrapper.addEventListener("click", (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-
-  if (target.classList.contains("menu-category")) {
-    const clickedCategory = target as HTMLElement;
-
-    if (clickedCategory.classList.contains("category-parent")) {
-      const childCategories = Array.from(clickedCategory.parentElement?.children || []) as HTMLElement[];
-      childCategories.forEach((childCategory) => {
-        childCategory.classList.remove("active");
-      });
-    }
-
-    if (clickedCategory.classList.contains("category-child")) {
-      const siblings = Array.from(clickedCategory.parentElement?.children || []) as HTMLElement[];
-      siblings.forEach((item: HTMLElement) => {
-        if (item !== clickedCategory && item.classList.contains("category-child")) {
-          item.classList.remove("active");
-        }
-      });
-
-      const parentCategory = clickedCategory.closest(".category-parent") as HTMLElement;
-      parentCategory?.classList.add("active");
-    }
-
-    const mainCategories = ["Для мужчин", "Для женщин", "Для детей"];
-    if (mainCategories.includes(clickedCategory.textContent || "")) {
-      clickedCategory.classList.add("active");
-    }
-
-    const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
-    allCategoryItems.forEach((item) => {
-      if (item !== clickedCategory) {
-        item.classList.remove("active");
-      }
-    });
-
-    clickedCategory.classList.toggle("active");
-  }
-});
 
 catalog.append(catalogWrapper);
