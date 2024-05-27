@@ -20,7 +20,8 @@ import state from "src/store/state";
 export const renderCustomerDataFromApi = () =>
   getUserData(state.customerId as string).then((response) => {
     if (response.statusCode === 200) {
-      // document.querySelector("profile-wrapper")?.remove();
+      const wrapper = document.querySelector(".profile-wrapper");
+      if (wrapper) wrapper.innerHTML = "";
       renderProfileContent(response.body);
     } else {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
@@ -192,13 +193,15 @@ function createAddressesView(response: Customer, parent: HTMLElement) {
   const addressesBillingInfo = createElement({ tagName: "div", classNames: ["addresses-billing-info"] });
   addressesShippingWrapper.append(addressesShippingHeading, addressesShippingInfo);
   addressesBillingWrapper.append(addressesBillingHeading, addressesBillingInfo);
-  let isDefaultAddress = false;
+
   response.addresses?.forEach((address) => {
     response.shippingAddressIds?.forEach((shippingAddress) => {
+      let isDefaultAddress = false;
       if (response.defaultShippingAddressId === shippingAddress) isDefaultAddress = true;
       if (shippingAddress === address.id) createAddressView(address, "shipping", addressesShippingInfo, isDefaultAddress);
     });
     response.billingAddressIds?.forEach((billingAddressID) => {
+      let isDefaultAddress = false;
       if (response.defaultBillingAddressId === billingAddressID) isDefaultAddress = true;
       if (billingAddressID === address.id) createAddressView(address, "billing", addressesBillingInfo, isDefaultAddress);
     });
@@ -236,7 +239,6 @@ function createAddressView(address: Address, addressType: string, parent: HTMLEl
     classNames: [`countries-${addressType}__input`, "field"],
     attributes: {
       name: `countries-${addressType}`,
-      value: address.country,
     },
     textContent: "Страна",
   });
@@ -245,6 +247,8 @@ function createAddressView(address: Address, addressType: string, parent: HTMLEl
   optionBelarus.value = "BY";
   const optionRussia = createElement({ tagName: "option", classNames: ["option-country"], textContent: "Россия" });
   optionRussia.value = "RU";
+  if (address.country === "RU") optionRussia.setAttribute("selected", "true");
+  if (address.country === "BY") optionBelarus.setAttribute("selected", "true");
   country.append(optionBelarus, optionRussia);
 
   const cityDiv = createElement({
