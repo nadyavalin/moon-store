@@ -2,6 +2,8 @@ import { getUserData, updateDateOfBirthCustomer, updateEmailCustomer, updateFirs
 import { createSnackbar } from "src/components/elements";
 import state from "src/store/state";
 import { SnackbarType } from "src/types/types";
+import { setItemToLocalStorage } from "src/utils/utils";
+import { changeAppAfterLogin } from "../loginPage/loginHandler";
 
 function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   if (btn) btn.innerHTML = " ";
@@ -28,6 +30,9 @@ export function editName(): void {
           .then((response) => {
             if (response.statusCode === 200) {
               createSnackbar(SnackbarType.success, "Изменения сохранены");
+              setItemToLocalStorage("user", input.value);
+              const nameInGreeting = document.querySelector(".user-greeting__link");
+              if (nameInGreeting) nameInGreeting.textContent = input.value;
             }
           })
           .catch(() => {
