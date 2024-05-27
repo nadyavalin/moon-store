@@ -4,7 +4,7 @@ import { SnackbarType } from "../../types/types";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQueryResponse, Category } from "@commercetools/platform-sdk";
-import { apiRoot } from "../../api/api";
+import { getProductsByCategory } from "../../api/api";
 import createCard from "../../components/productCard";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
@@ -15,20 +15,15 @@ catalog.append(categoriesWrapper, catalogWrapper);
 categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
   if (target.classList.contains("menu-category")) {
-    const id = target.getAttribute("data-id");
-    apiRoot
-      .productProjections()
-      .search()
-      .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
-      .execute()
-      .then((response) => {
-        if (response.statusCode === 200) {
-          clearCatalogData();
-          renderCatalogContent(response);
-        } else {
-          createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
-        }
-      });
+    const id = target.getAttribute("data-id") as string;
+    getProductsByCategory(id).then((response) => {
+      if (response.statusCode === 200) {
+        clearCatalogData();
+        renderCatalogContent(response);
+      } else {
+        createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+      }
+    });
     const clickedCategory = target as HTMLElement;
 
     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];

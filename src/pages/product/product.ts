@@ -7,8 +7,6 @@ export const productWrapper = createElement({ tagName: "div", classNames: ["prod
 
 export function renderProductContent(response: ClientResponse<ProductProjection>) {
   productWrapper.innerHTML = "";
-  const productInner = productWrapper.querySelectorAll("div");
-  productInner.forEach((item) => item.remove());
 
   const cardName = response.body.name.ru;
   const cardDescription = response.body.description?.ru;

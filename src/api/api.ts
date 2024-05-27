@@ -1,11 +1,5 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
-import {
-  createApiBuilderFromCtpClient,
-  MyCustomerDraft,
-  ByProjectKeyRequestBuilder,
-  CustomerSetFirstNameAction,
-  CustomerUpdateAction,
-} from "@commercetools/platform-sdk";
+import { createApiBuilderFromCtpClient, MyCustomerDraft, ByProjectKeyRequestBuilder, CustomerUpdateAction } from "@commercetools/platform-sdk";
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
@@ -21,6 +15,15 @@ if (!state.refreshToken) {
   const ctpClient = generateRefreshTokenFlow(state.refreshToken);
   apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 }
+
+export const getProductDataWithId = (id: string) => apiRoot.productProjections().withId({ ID: id }).get().execute();
+
+export const getProductsByCategory = (id: string) =>
+  apiRoot
+    .productProjections()
+    .search()
+    .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
+    .execute();
 
 export const getProducts = () => apiRoot.productProjections().get().execute();
 export const getCategories = () => apiRoot.categories().get().execute();
