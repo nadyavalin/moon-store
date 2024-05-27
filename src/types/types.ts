@@ -3,6 +3,7 @@ import { Category } from "@commercetools/platform-sdk";
 export interface State {
   name?: string | null;
   refreshToken: string | null;
+  customerId: string | null;
 }
 
 export interface Customer {

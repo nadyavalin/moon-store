@@ -35,6 +35,7 @@ menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("customerId");
   window.location.reload();
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
