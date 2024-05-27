@@ -1,14 +1,9 @@
+import { Category } from "@commercetools/platform-sdk";
+
 export interface State {
   name?: string | null;
   refreshToken: string | null;
   customerId: string | null;
-}
-
-export interface CardData {
-  photo: string;
-  title: string;
-  price: number;
-  discount: number;
 }
 
 export interface Customer {
@@ -33,9 +28,15 @@ export enum Pages {
   ABOUT = "#about",
   LOGIN = "#login",
   REGISTRATION = "#registration",
+  PRODUCT = "#product",
 }
 
 export enum SnackbarType {
   error = "error",
   success = "success",
 }
+
+export type CategoryData = {
+  parent: Category;
+  children: Category[];
+};

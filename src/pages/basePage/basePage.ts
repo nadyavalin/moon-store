@@ -23,18 +23,25 @@ export const menuItemSingUp = createElement({
   attributes: { href: Pages.REGISTRATION },
 });
 export const menuItemLogIn = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Вход", attributes: { href: Pages.LOGIN } });
-const menuItemUserProfile = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Профиль", attributes: { href: Pages.PROFILE } });
-export const menuItemLogOut = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Выход", attributes: { href: Pages.MAIN } });
+export const menuItemUserProfile = createElement({
+  tagName: "a",
+  classNames: ["menu-item"],
+  textContent: "Профиль",
+  attributes: { href: Pages.PROFILE },
+});
+export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
-  window.location.hash = Pages.LOGIN;
+  window.location.reload();
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
+  userMenu.append(menuItemSingUp, menuItemLogIn);
   greeting?.remove();
   menuItemLogOut.remove();
+  menuItemUserProfile.remove();
 });
 
 const liItemHome = createElement({ tagName: "li" });
@@ -82,7 +89,7 @@ export function addUserGreetingToHeader() {
 }
 
 navMenu.append(ulItem);
-ulItem.append(liItemHome, menuItemUserProfile, liItemCatalog, litItemBasket, liItemAboutUs);
+ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
 litItemBasket.append(menuItemBasket);

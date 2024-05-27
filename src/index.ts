@@ -1,11 +1,9 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
-import "./pages/main/main.css";
 import "./pages/404/404.css";
 import "./api/api";
 
 import { header, main, footer } from "./pages/basePage/basePage";
-import { renderMainPageContent } from "./pages/main/main";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
@@ -13,7 +11,9 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
+import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
+import renderProductContent from "./pages/product/product";
 
 document.body.append(header, main, footer);
 
@@ -23,14 +23,8 @@ function setActiveLink(fragmentId: string) {
     for (let i = 0; i < links.length; i += 1) {
       const link = links[i];
       const href = link.getAttribute("href");
-      if (href) {
-        const pageName = href.substring(1);
-        if (pageName === fragmentId) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
-        }
-      }
+      const pageName = href?.substring(-1);
+      link.classList.toggle("active", pageName === fragmentId);
     }
   }
 }
@@ -43,7 +37,8 @@ function navigate() {
     switch (fragmentId) {
       case Pages.ROOT:
       case Pages.MAIN:
-        contentDiv.append(renderMainPageContent());
+        contentDiv.append(sliderWrapper);
+        renderProductsForSliderFromApi();
         break;
       case Pages.PROFILE:
         if (localStorage.getItem("refreshToken")) {
@@ -56,6 +51,10 @@ function navigate() {
       case Pages.CATALOG:
         contentDiv.append(catalog);
         renderProductsFromApi();
+        break;
+      // TODO сделать правильное перенаправление на соответствующую карточку товара
+      case Pages.PRODUCT:
+        contentDiv.append(renderProductContent());
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
