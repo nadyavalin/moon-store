@@ -1,3 +1,5 @@
+import { Category } from "@commercetools/platform-sdk";
+
 export interface State {
   name?: string | null;
   refreshToken: string | null;
@@ -31,3 +33,8 @@ export enum SnackbarType {
   error = "error",
   success = "success",
 }
+
+export type CategoryData = {
+  parent: Category;
+  children: Category[];
+};

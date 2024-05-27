@@ -47,7 +47,6 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string) {
     setItemToLocalStorage("refreshToken", refreshToken);
     createSnackbar(SnackbarType.success, "Вы авторизованы");
   }
-  // window.location.hash = Pages.MAIN;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;
