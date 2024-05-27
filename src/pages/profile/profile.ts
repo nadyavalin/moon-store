@@ -3,13 +3,24 @@ import { getUserData } from "../../api/api";
 import { createElement, createSnackbar } from "../../components/elements";
 import "./profile.css";
 import "../../index.css";
-import { cityPattern, indexPattern, namePattern, streetPattern, surnamePattern } from "../registration/registrationView";
+import {
+  cityPattern,
+  emailPattern,
+  emailTitle,
+  indexPattern,
+  namePattern,
+  passwordPattern,
+  streetPattern,
+  surnamePattern,
+} from "../registration/registrationView";
 import { SnackbarType } from "src/types/types";
+import { editAddress, editBirthday, editEmail, editName, editPassword, editSurname } from "./profileEditHandler";
+import state from "src/store/state";
 
 export const renderCustomerDataFromApi = () =>
-  getUserData().then((response) => {
+  getUserData(state.customerId as string).then((response) => {
     if (response.statusCode === 200) {
-      document.querySelector("profile-wrapper")?.remove();
+      // document.querySelector("profile-wrapper")?.remove();
       renderProfileContent(response.body);
     } else {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
@@ -42,7 +53,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const name = createElement({
     tagName: "input",
-    classNames: ["name__input"],
+    classNames: ["name__input", "field"],
     attributes: {
       name: "name",
       type: "text",
@@ -53,9 +64,10 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const nameEditBtn = createElement({
     tagName: "div",
-    classNames: ["edit-btn"],
+    classNames: ["edit-btn", "name__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
+  nameEditBtn.addEventListener("click", editName);
   nameDiv.append(nameHeading, name, nameEditBtn);
 
   const surnameDiv = createElement({
@@ -69,7 +81,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const surname = createElement({
     tagName: "input",
-    classNames: ["surname__input"],
+    classNames: ["surname__input", "field"],
     attributes: {
       name: "surname",
       type: "text",
@@ -80,9 +92,10 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const surnameEditBtn = createElement({
     tagName: "div",
-    classNames: ["edit-btn"],
+    classNames: ["edit-btn", "surname__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
+  surnameEditBtn.addEventListener("click", editSurname);
   surnameDiv.append(surnameHeading, surname, surnameEditBtn);
   const birthdayDiv = createElement({
     tagName: "div",
@@ -95,7 +108,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const birthday = createElement({
     tagName: "input",
-    classNames: ["birthday"],
+    classNames: ["birthday__input", "field"],
     attributes: {
       name: "birthday",
       type: "date",
@@ -105,11 +118,68 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   const birthdayEditBtn = createElement({
     tagName: "div",
-    classNames: ["edit-btn"],
+    classNames: ["edit-btn", "birthday__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
+  birthdayEditBtn.addEventListener("click", editBirthday);
   birthdayDiv.append(birthdayHeading, birthday, birthdayEditBtn);
-  accountInfo.append(nameDiv, surnameDiv, birthdayDiv);
+  const emailDiv = createElement({
+    tagName: "div",
+    classNames: ["email_wrapper"],
+  });
+  const emailHeading = createElement({
+    tagName: "span",
+    classNames: ["email__heading"],
+    textContent: "Email",
+  });
+  const email = createElement({
+    tagName: "input",
+    classNames: ["email__input", "field"],
+    attributes: {
+      name: "email",
+      type: "text",
+      pattern: `${emailPattern}`,
+      required: "true",
+      value: `${response.email}`,
+    },
+  });
+
+  const emailEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn", "email__edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+  emailEditBtn.addEventListener("click", editEmail);
+  emailDiv.append(emailHeading, email, emailEditBtn);
+
+  const passwordDiv = createElement({
+    tagName: "div",
+    classNames: ["password_wrapper"],
+  });
+  const passwordHeading = createElement({
+    tagName: "span",
+    classNames: ["password__heading"],
+    textContent: "Пароль",
+  });
+  const password = createElement({
+    tagName: "input",
+    classNames: ["password__input", "field"],
+    attributes: {
+      name: "password",
+      type: "password",
+      pattern: `${passwordPattern}`,
+      value: `${response.password}`,
+    },
+  });
+
+  const passwordEditBtn = createElement({
+    tagName: "div",
+    classNames: ["edit-btn", "password__edit-btn"],
+    innerHTML: '<i class="fa-solid fa-pen"></i>',
+  });
+  passwordEditBtn.addEventListener("click", editPassword);
+  passwordDiv.append(passwordHeading, password, passwordEditBtn);
+  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv);
   parent.append(iconUser, accountInfo);
 }
 
@@ -122,34 +192,34 @@ function createAddressesView(response: Customer, parent: HTMLElement) {
   const addressesBillingInfo = createElement({ tagName: "div", classNames: ["addresses-billing-info"] });
   addressesShippingWrapper.append(addressesShippingHeading, addressesShippingInfo);
   addressesBillingWrapper.append(addressesBillingHeading, addressesBillingInfo);
+  let isDefaultAddress = false;
   response.addresses?.forEach((address) => {
     response.shippingAddressIds?.forEach((shippingAddress) => {
-      let isDefaultAddress = false;
       if (response.defaultShippingAddressId === shippingAddress) isDefaultAddress = true;
       if (shippingAddress === address.id) createAddressView(address, "shipping", addressesShippingInfo, isDefaultAddress);
     });
-    response.billingAddressIds?.forEach((billingAddress) => {
-      let isDefaultAddress = false;
-      if (response.defaultBillingAddressId === billingAddress) isDefaultAddress = true;
-      if (billingAddress === address.id) createAddressView(address, "billing", addressesBillingInfo, isDefaultAddress);
+    response.billingAddressIds?.forEach((billingAddressID) => {
+      if (response.defaultBillingAddressId === billingAddressID) isDefaultAddress = true;
+      if (billingAddressID === address.id) createAddressView(address, "billing", addressesBillingInfo, isDefaultAddress);
     });
   });
   parent.append(addressesShippingWrapper, addressesBillingWrapper);
 }
 
-function createAddressView(response: Address, addressType: string, parent: HTMLElement, isDefaultAddress: boolean) {
+function createAddressView(address: Address, addressType: string, parent: HTMLElement, isDefaultAddress: boolean) {
   const iconAddress = createElement({
     tagName: "div",
-    classNames: [`addresses-${addressType}__address-icon`],
+    classNames: [`address-${addressType}__address-icon`],
     innerHTML: '<i class="fa-solid fa-truck-fast"></i>',
   });
-  const addressInfo = createElement({ tagName: "div", classNames: [`addresses-${addressType}__data`] });
-
+  const addressInfo = createElement({ tagName: "div", classNames: [`address__data`] });
   const addressEditBtn = createElement({
     tagName: "div",
-    classNames: ["edit-btn"],
+    classNames: ["edit-btn", `address-${addressType}__edit-btn`],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
+  addressEditBtn.id = `${address.id}`;
+  addressEditBtn.addEventListener("click", editAddress);
 
   const countryDiv = createElement({
     tagName: "div",
@@ -163,10 +233,10 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
 
   const country = createElement({
     tagName: "select",
-    classNames: [`countries-${addressType}`],
+    classNames: [`countries-${addressType}__input`, "field"],
     attributes: {
       name: `countries-${addressType}`,
-      value: response.country,
+      value: address.country,
     },
     textContent: "Страна",
   });
@@ -189,19 +259,19 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
 
   const city = createElement({
     tagName: "input",
-    classNames: [`city-${addressType}`],
+    classNames: [`city-${addressType}__input`, "field"],
     attributes: {
       name: `city-${addressType}`,
       type: "text",
       pattern: `${cityPattern}`,
       required: "true",
-      value: <string>response.city,
+      value: <string>address.city,
     },
   });
   cityDiv.append(cityHeading, city);
   const streetDiv = createElement({
     tagName: "div",
-    classNames: ["city_wrapper"],
+    classNames: ["street_wrapper"],
   });
   const streetHeading = createElement({
     tagName: "span",
@@ -210,13 +280,13 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
   });
   const street = createElement({
     tagName: "input",
-    classNames: [`street-${addressType}`],
+    classNames: [`street-${addressType}__input`, "field"],
     attributes: {
       name: `street-${addressType}`,
       type: "text",
       pattern: `${streetPattern}`,
       required: "true",
-      value: <string>response.streetName,
+      value: <string>address.streetName,
     },
   });
   streetDiv.append(streetHeading, street);
@@ -232,19 +302,19 @@ function createAddressView(response: Address, addressType: string, parent: HTMLE
   });
   const index = createElement({
     tagName: "input",
-    classNames: [`index-${addressType}`],
+    classNames: [`index-${addressType}__input`, "field"],
     attributes: {
       name: `index-${addressType}`,
       type: "text",
       pattern: `${indexPattern}`,
       required: "true",
-      value: <string>response.postalCode,
+      value: <string>address.postalCode,
     },
   });
   indexDiv.append(indexHeading, index);
   const checkboxSettingDefaultAddress = createElement({
     tagName: "input",
-    classNames: [`setting-default-address-${addressType}`],
+    classNames: [`setting-default-address-${addressType}`, "field"],
     attributes: { name: `setting-default-address-${addressType}`, type: "checkbox", id: `setting-default-address-${addressType}` },
   });
   const checkboxWrapper = createElement({ tagName: "div", classNames: ["profile__checkbox-wrapper"] });

@@ -1,6 +1,7 @@
 export interface State {
   name?: string | null;
   refreshToken: string | null;
+  customerId: string | null;
 }
 
 export interface CardData {
