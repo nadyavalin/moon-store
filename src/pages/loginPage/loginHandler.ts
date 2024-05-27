@@ -107,6 +107,8 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       if (response.statusCode === 200) {
         const user = response.body.customer.firstName as string;
         setItemToLocalStorage("user", user);
+        const userID = response.body.customer.id;
+        setItemToLocalStorage("customerId", userID);
         const token = tokenCache.myCache.refreshToken as string;
         window.location.reload();
         changeAppAfterLogin(user, token);

@@ -4,6 +4,7 @@ import { State } from "../types/types";
 export const state: State = {
   name: getItemFromLocalStorage<string>("user"),
   refreshToken: getItemFromLocalStorage<string>("refreshToken"),
+  customerId: getItemFromLocalStorage<string>("customerId"),
 };
 
 export default state;

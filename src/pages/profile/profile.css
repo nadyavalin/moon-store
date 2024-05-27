@@ -26,8 +26,7 @@
   gap: 30px;
 }
 .profile-account__data div,
-.addresses-shipping__data div,
-.addresses-billing__data div {
+.address__data div {
   display: flex;
   flex-direction: row;
   align-items: end;
@@ -35,8 +34,7 @@
 }
 
 .profile-account__data span,
-.addresses-shipping__data span,
-.addresses-billing__data span {
+.address__data span {
   display: inline-block;
   width: 80px;
   text-transform: uppercase;
@@ -58,6 +56,9 @@
   font-style: italic;
   width: 190px;
 }
+.profile-wrapper.option-country option {
+  color: var(--main-dark);
+}
 .profile-wrapper label {
   border-bottom: none;
 }
@@ -78,14 +79,17 @@
   border: none;
   color: var(--accent-blue);
   cursor: pointer;
+  align-self: flex-start;
+  margin-top: 10px;
+  width: 20px;
 }
 .edit-btn:hover {
   color: var(--blue-hover);
 }
 
-.profile-addresses-wrapper.edit-btn {
-  width: 10px;
-  align-self: flex-end;
+.active-input.field {
+  pointer-events: auto;
+  border: 1px solid var(--main-light);
 }
 
 @media (max-width: 1023px) {
