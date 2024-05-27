@@ -4,6 +4,8 @@ import { createElement } from "./elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../utils/utils";
 import { Pages } from "../types/types";
+import { apiRoot } from "src/api/api";
+import { renderProductContent } from "src/pages/product/product";
 
 export function createCard(item: ProductProjection) {
   const name = item.name.ru;
@@ -46,7 +48,21 @@ export function createCard(item: ProductProjection) {
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
   cardLink.append(cardTextWrapper, cardBottom);
+
+  returnCardData(card);
   return card;
 }
+
+const returnCardData = (card: HTMLLIElement) => {
+  card.addEventListener("click", () => {
+    const id = card.getAttribute("data-id");
+    apiRoot
+      .productProjections()
+      .withId({ ID: `${id}` })
+      .get()
+      .execute()
+      .then((response) => renderProductContent(response));
+  });
+};
 
 export default createCard;

@@ -6,7 +6,6 @@ import { CategoryData } from "../../types/types";
 import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import { apiRoot } from "../../api/api";
 import createCard from "../../components/productCard";
-import { renderProductContent } from "../product/product";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
 const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
@@ -116,20 +115,7 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQue
   items.forEach((item) => {
     const card = createCard(item);
     catalogWrapper.append(card);
-    returnCardData(card);
   });
 }
-
-const returnCardData = (card: HTMLLIElement) => {
-  card.addEventListener("click", () => {
-    const id = card.getAttribute("data-id");
-    apiRoot
-      .productProjections()
-      .withId({ ID: `${id}` })
-      .get()
-      .execute()
-      .then((response) => renderProductContent(response));
-  });
-};
 
 catalog.append(catalogWrapper);

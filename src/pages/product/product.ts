@@ -6,7 +6,6 @@ import { ProductProjection, ClientResponse } from "@commercetools/platform-sdk";
 export const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
 
 export function renderProductContent(response: ClientResponse<ProductProjection>) {
-  console.log(response);
   const productInner = productWrapper.querySelectorAll("div");
   productInner.forEach((item) => item.remove());
 
