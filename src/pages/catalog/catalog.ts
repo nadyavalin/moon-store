@@ -20,7 +20,7 @@ catalog.append(categoriesWrapper, catalogWrapper);
 
 categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
-  if (target.tagName === "SPAN") {
+  if (target.classList.contains("menu-category")) {
     const id = target.getAttribute("data-id");
     apiRoot
       .productProjections()
@@ -35,9 +35,6 @@ categoriesWrapper.addEventListener("click", (event) => {
           createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
         }
       });
-  }
-
-  if (target.classList.contains("menu-category")) {
     const clickedCategory = target as HTMLElement;
 
     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
@@ -53,16 +50,12 @@ categoriesWrapper.addEventListener("click", (event) => {
 
 const clearCategoriesData = () => {
   const categories = categoriesWrapper.querySelectorAll(".category-wrapper");
-  if (categories) {
-    categories.forEach((category) => category.remove());
-  }
+  categories.forEach((category) => category.remove());
 };
 
 const clearCatalogData = () => {
   const catalogItems = catalogWrapper.querySelectorAll(".card");
-  if (catalogItems) {
-    catalogItems.forEach((item) => item.remove());
-  }
+  catalogItems.forEach((item) => item.remove());
 };
 
 export function renderProductsFromApi() {
@@ -99,12 +92,11 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
 
   childCategories.forEach((childCategory) => {
     if (childCategory.parent) {
-      if (categoryMap[childCategory.parent.id]) {
-        categoryMap[childCategory.parent.id].children.push(childCategory);
-      }
+      categoryMap[childCategory.parent.id]?.children.push(childCategory);
     }
   });
-  for (const categoryData of Object.values(categoryMap)) {
+  const categoryDataValue = Object.values(categoryMap);
+  categoryDataValue.forEach((categoryData) => {
     const categoryWrapper = createElement({ tagName: "div", classNames: ["category-wrapper"] });
     const parentCategoryElement = createElement({ tagName: "span", classNames: ["menu-category", "category-parent"] });
     parentCategoryElement.textContent = categoryData.parent.name.ru;
@@ -121,7 +113,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
 
     categoryWrapper.append(childrenContainer);
     categoriesWrapper.append(categoryWrapper);
-  }
+  });
 }
 
 function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
