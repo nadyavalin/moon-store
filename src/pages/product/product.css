@@ -21,3 +21,8 @@
 .product__discount {
   color: var(--accent-red);
 }
+
+.product__size-item {
+  margin-left: 10px;
+  cursor: pointer;
+}

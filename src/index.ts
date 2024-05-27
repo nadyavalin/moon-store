@@ -13,7 +13,7 @@ import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
-import renderProductContent from "./pages/product/product";
+import { productWrapper } from "./pages/product/product";
 
 document.body.append(header, main, footer);
 
@@ -54,7 +54,7 @@ function navigate() {
         break;
       // TODO сделать правильное перенаправление на соответствующую карточку товара
       case Pages.PRODUCT:
-        contentDiv.append(renderProductContent());
+        contentDiv.append(productWrapper);
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
