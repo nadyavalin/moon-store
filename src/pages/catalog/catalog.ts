@@ -36,6 +36,19 @@ categoriesWrapper.addEventListener("click", (event) => {
         }
       });
   }
+
+  if (target.classList.contains("menu-category")) {
+    const clickedCategory = target as HTMLElement;
+
+    const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+    allCategoryItems.forEach((item) => {
+      if (item !== clickedCategory) {
+        item.classList.remove("active");
+      }
+    });
+
+    clickedCategory.classList.toggle("active");
+  }
 });
 
 const clearCategoriesData = () => {
@@ -68,6 +81,7 @@ export function renderProductsFromApi() {
     }
   });
 }
+
 function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) {
   const categories: Category[] = response.body.results;
   const parentCategories = categories.filter((category) => !category.parent);
@@ -117,19 +131,5 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQue
     catalogWrapper.append(card);
   });
 }
-
-// TODO надо как-то объединить листенеры
-// меню выбора категорий, добавление и удаление класса active
-categoriesWrapper.addEventListener("click", (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
-  allCategoryItems.forEach((item) => {
-    if (item !== target) {
-      item.classList.remove("active");
-    }
-  });
-
-  target.classList.add("active");
-});
 
 catalog.append(catalogWrapper);
