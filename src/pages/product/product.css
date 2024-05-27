@@ -1,0 +1,23 @@
+.product__wrapper {
+  display: flex;
+  gap: 16px;
+}
+
+.product__text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product__img {
+  height: 340px;
+  border-radius: 10px;
+}
+
+.product__price {
+  text-decoration: line-through;
+}
+
+.product__discount {
+  color: var(--accent-red);
+}
