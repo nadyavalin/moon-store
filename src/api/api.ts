@@ -48,3 +48,17 @@ export const updateCustomer = (version: number, actions: CustomerUpdateAction[])
       },
     })
     .execute();
+
+export const changePassword = (id: string, version: number, currentPassword: string, newPassword: string) =>
+  apiRoot
+    .customers()
+    .password()
+    .post({
+      body: {
+        id,
+        version,
+        currentPassword,
+        newPassword,
+      },
+    })
+    .execute();

@@ -1,9 +1,10 @@
 import { Customer, CustomerUpdateAction } from "@commercetools/platform-sdk";
-import { getUserData, updateCustomer } from "../../api/api";
+import { changePassword, getUserData, updateCustomer } from "../../api/api";
 import { createSnackbar } from "../../components/elements";
 import state from "../../store/state";
 import { SnackbarType } from "../../types/types";
 import { setItemToLocalStorage } from "../../utils/utils";
+import { authorizeUserWithToken } from "../loginPage/loginHandler";
 
 function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   if (btn) btn.innerHTML = " ";
@@ -50,9 +51,36 @@ export function editEmail(): void {
 }
 
 export function editPassword(): void {
-  const input = <HTMLElement>document.querySelector(".password__input");
+  const input = <HTMLInputElement>document.querySelector(".password__input");
   const btn = <HTMLElement>document.querySelector(".password__edit-btn");
+  const currentPasswordDiv = <HTMLElement>document.querySelector(".password-current_wrapper");
+  const currentPasswordInput = <HTMLInputElement>document.querySelector(".password-current__input");
+  const currentPassword = currentPasswordInput.value;
+
+  currentPasswordDiv.style.opacity = "1";
   changeStateBtnInput(input, btn);
+  if (!input.className.includes("active-input")) {
+    currentPasswordDiv.style.opacity = "0";
+    getUserData(state.customerId as string).then(({ body }) => {
+      const id = body.id;
+      const version = Number(body.version);
+
+      if (currentPassword !== input.value) {
+        changePassword(id, version, currentPassword, input.value)
+          .then((response) => {
+            if (response.statusCode === 200) {
+              createSnackbar(SnackbarType.success, "Изменения сохранены");
+              authorizeUserWithToken(body.email, input.value);
+            }
+          })
+          .catch((response) => {
+            if (response.statusCode === 400) {
+              createSnackbar(SnackbarType.error, "Текущий пароль не верный");
+            }
+          });
+      }
+    });
+  }
 }
 
 export function editAddress(e: Event): void {
@@ -83,8 +111,13 @@ function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateA
               createSnackbar(SnackbarType.success, "Изменения сохранены");
             }
           })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
+          .catch((response) => {
+            if (response.statusCode === 400) {
+              createSnackbar(SnackbarType.error, "Пользователь с такой почтой существует");
+            }
+            if (response.statusCode === 500) {
+              createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
+            }
           });
       }
     });

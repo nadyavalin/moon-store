@@ -180,7 +180,26 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   passwordEditBtn.addEventListener("click", editPassword);
   passwordDiv.append(passwordHeading, password, passwordEditBtn);
-  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv);
+  const passwordCurrentDiv = createElement({
+    tagName: "div",
+    classNames: ["password-current_wrapper"],
+  });
+  const passwordCurrentHeading = createElement({
+    tagName: "span",
+    classNames: ["password__heading"],
+    textContent: "Текущий пароль",
+  });
+  const passwordCurrent = createElement({
+    tagName: "input",
+    classNames: ["password-current__input", "field", "active-input"],
+    attributes: {
+      name: "password",
+      type: "password",
+      pattern: `${passwordPattern}`,
+    },
+  });
+  passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrent);
+  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv);
   parent.append(iconUser, accountInfo);
 }
 
