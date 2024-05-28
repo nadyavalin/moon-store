@@ -15,6 +15,9 @@ import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 import { productWrapper } from "./pages/product/product";
 
+import { createApiRoot } from "./api/api";
+import { renderProductContent } from "./pages/product/product";
+
 document.body.append(header, main, footer);
 
 function setActiveLink(fragmentId: string) {
@@ -29,12 +32,12 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-function navigate() {
+function renderContent(hash: string) {
   const contentDiv = document.querySelector(".main");
-  const fragmentId = window.location.hash.substring(-1);
+  const [route, ...args] = hash.split("/");
   if (contentDiv) {
     contentDiv.innerHTML = "";
-    switch (fragmentId) {
+    switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
         contentDiv.append(sliderWrapper);
@@ -52,9 +55,10 @@ function navigate() {
         contentDiv.append(catalog);
         renderProductsFromApi();
         break;
-      // TODO сделать правильное перенаправление на соответствующую карточку товара
       case Pages.PRODUCT:
         contentDiv.append(productWrapper);
+        // contentDiv.append(renderProductContent(args[0]));
+
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
@@ -81,10 +85,14 @@ function navigate() {
         break;
     }
   }
-  setActiveLink(fragmentId);
+  setActiveLink(route);
 }
 
-navigate();
+window.addEventListener("hashchange", () => {
+  renderContent(window.location.hash);
+});
 
-window.addEventListener("hashchange", navigate);
-document.addEventListener("DOMContentLoaded", navigate);
+document.addEventListener("DOMContentLoaded", () => {
+  createApiRoot();
+  renderContent(window.location.hash);
+});

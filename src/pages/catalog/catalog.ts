@@ -3,8 +3,17 @@ import { createElement, createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQueryResponse, Category } from "@commercetools/platform-sdk";
+
 import { getProductsByCategory } from "../../api/api";
+
+import {
+  ClientResponse,
+  ProductProjectionPagedQueryResponse,
+  ProductProjection,
+  CategoryPagedQueryResponse,
+  Category,
+} from "@commercetools/platform-sdk";
+import state from "src/store/state";
 import createCard from "../../components/productCard";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
@@ -16,7 +25,7 @@ categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
   if (target.classList.contains("menu-category")) {
     const id = target.getAttribute("data-id") as string;
-    getProductsByCategory(id).then((response) => {
+    getProductsByCategory(id)?.then((response) => {
       if (response.statusCode === 200) {
         clearCatalogData();
         renderCatalogContent(response);
@@ -24,6 +33,7 @@ categoriesWrapper.addEventListener("click", (event) => {
         createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
       }
     });
+
     const clickedCategory = target as HTMLElement;
 
     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
@@ -48,7 +58,7 @@ const clearCatalogData = () => {
 };
 
 export function renderProductsFromApi() {
-  getProducts().then((response) => {
+  getProducts()?.then((response) => {
     if (response.statusCode === 200) {
       clearCatalogData();
       renderCatalogContent(response);
@@ -56,7 +66,7 @@ export function renderProductsFromApi() {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
     }
   });
-  getCategories().then((response) => {
+  getCategories()?.then((response) => {
     if (response.statusCode === 200) {
       clearCategoriesData();
       renderCategories(response);
