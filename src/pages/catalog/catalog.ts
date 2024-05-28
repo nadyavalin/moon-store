@@ -10,7 +10,7 @@ import {
   CategoryPagedQueryResponse,
   Category,
 } from "@commercetools/platform-sdk";
-import { apiRoot } from "../../api/api";
+import state from "src/store/state";
 import createCard from "../../components/productCard";
 
 export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
@@ -22,8 +22,8 @@ categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
   if (target.classList.contains("menu-category")) {
     const id = target.getAttribute("data-id");
-    apiRoot
-      .productProjections()
+    state.apiRoot
+      ?.productProjections()
       .search()
       .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
       .execute()
@@ -59,7 +59,7 @@ const clearCatalogData = () => {
 };
 
 export function renderProductsFromApi() {
-  getProducts().then((response) => {
+  getProducts()?.then((response) => {
     if (response.statusCode === 200) {
       clearCatalogData();
       renderCatalogContent(response);
@@ -67,7 +67,7 @@ export function renderProductsFromApi() {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
     }
   });
-  getCategories().then((response) => {
+  getCategories()?.then((response) => {
     if (response.statusCode === 200) {
       clearCategoriesData();
       renderCategories(response);

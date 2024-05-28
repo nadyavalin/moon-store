@@ -49,7 +49,7 @@ export function formRegistrationHandler(event: Event) {
   }
 
   createCustomer(customer)
-    .then((response) => {
+    ?.then((response) => {
       if (response.statusCode === 201) {
         createSnackbar(SnackbarType.success, `Пользователь ${response.body.customer.firstName} создан`);
         authorizeUserWithToken(<string>formData.get("email"), <string>formData.get("password"));

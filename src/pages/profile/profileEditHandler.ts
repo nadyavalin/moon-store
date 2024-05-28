@@ -11,6 +11,7 @@ function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   if (element.className.includes("active-input")) {
     if (btn) btn.innerHTML = '<i class="fa-solid fa-pen"></i>';
     element.classList.remove("active-input");
+    element.classList.remove("valid");
   } else {
     if (btn) btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i>';
     element.classList.add("active-input");
@@ -100,12 +101,12 @@ export function editAddress(e: Event): void {
 
 function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
   if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string).then(({ body }) => {
+    getUserData(state.customerId as string)?.then(({ body }) => {
       const version = Number(body.version);
       const previousValue = body[fieldName];
       if (previousValue !== input.value) {
         updateCustomer(version, actions)
-          .then((response) => {
+          ?.then((response) => {
             if (response.statusCode === 200) {
               callback?.();
               createSnackbar(SnackbarType.success, "Изменения сохранены");

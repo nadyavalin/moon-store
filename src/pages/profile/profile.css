@@ -91,9 +91,20 @@
   pointer-events: auto;
   border: 1px solid var(--main-light);
 }
+
 .password-current_wrapper,
 .password-new_wrapper {
   opacity: 0;
+}
+
+.error-message {
+  max-width: 350px;
+}
+
+.disabled-icon {
+  color: var(--text-dark);
+  cursor: not-allowed;
+  pointer-events: none;
 }
 @media (max-width: 1023px) {
   .profile-addresses-wrapper {

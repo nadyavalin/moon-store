@@ -1,24 +1,30 @@
-import { Address, AddressDraft, BaseAddress, Customer, CustomerDraft, MyCustomerDraft } from "@commercetools/platform-sdk";
+import { Address, Customer } from "@commercetools/platform-sdk";
 import { getUserData } from "../../api/api";
 import { createElement, createSnackbar } from "../../components/elements";
 import "./profile.css";
 import "../../index.css";
 import {
+  birthdayTitle,
   cityPattern,
   emailPattern,
   emailTitle,
   indexPattern,
   namePattern,
+  nameTitle,
   passwordPattern,
+  passwordTitle,
   streetPattern,
   surnamePattern,
+  surnameTitle,
 } from "../registration/registrationView";
 import { SnackbarType } from "src/types/types";
 import { editAddress, editBirthday, editEmail, editName, editPassword, editSurname } from "./profileEditHandler";
-import state from "src/store/state";
+import state from "../../store/state";
+import addValidationListenersToInput from "../registration/checkValidityForm";
+import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
 export const renderCustomerDataFromApi = () =>
-  getUserData(state.customerId as string).then((response) => {
+  getUserData(state.customerId as string)?.then((response) => {
     if (response.statusCode === 200) {
       const wrapper = document.querySelector(".profile-wrapper");
       if (wrapper) wrapper.innerHTML = "";
@@ -58,6 +64,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "name",
       type: "text",
+      title: nameTitle,
       pattern: `${namePattern}`,
       required: "true",
       value: `${response.firstName}`,
@@ -86,6 +93,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "surname",
       type: "text",
+      title: surnameTitle,
       pattern: `${surnamePattern}`,
       required: "true",
       value: `${response.lastName}`,
@@ -113,6 +121,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "birthday",
       type: "date",
+      title: birthdayTitle,
       required: "true",
       value: `${response.dateOfBirth}`,
     },
@@ -139,6 +148,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "email",
       type: "text",
+      title: emailTitle,
       pattern: `${emailPattern}`,
       required: "true",
       value: `${response.email}`,
@@ -168,6 +178,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     attributes: {
       name: "password",
       type: "password",
+      title: passwordTitle,
       pattern: `${passwordPattern}`,
       value: `${response.password}`,
     },
@@ -179,6 +190,7 @@ function createAccountView(response: Customer, parent: HTMLElement) {
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
   passwordEditBtn.addEventListener("click", editPassword);
+  const blockForPasswordError = createElement({ tagName: "div" });
   passwordDiv.append(passwordHeading, password, passwordEditBtn);
   const passwordCurrentDiv = createElement({
     tagName: "div",
@@ -200,6 +212,13 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   });
   passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrent);
   accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv);
+
+  addValidationListenersToInputProfile(name, surnameDiv, accountInfo, ["pattern", "spaces"], nameEditBtn);
+  addValidationListenersToInputProfile(surname, birthdayDiv, accountInfo, ["pattern", "spaces"], surnameEditBtn);
+  addValidationListenersToInputProfile(birthday, emailDiv, accountInfo, ["date"], birthdayEditBtn);
+  addValidationListenersToInputProfile(email, passwordDiv, accountInfo, ["pattern", "spaces"], emailEditBtn);
+  addValidationListenersToInputProfile(password, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, blockForPasswordError);
   parent.append(iconUser, accountInfo);
 }
 

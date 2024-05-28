@@ -42,10 +42,15 @@ class MyTokenCache implements TokenCache {
 
 const tokenCache = new MyTokenCache();
 
-export function changeAppAfterLogin(userName: string, refreshToken?: string) {
+export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
+    state.refreshToken = refreshToken;
     createSnackbar(SnackbarType.success, "Вы авторизованы");
+    window.location.hash = Pages.MAIN;
+  }
+  if (customerId) {
+    state.customerId = customerId;
   }
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
@@ -91,10 +96,10 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .build();
 
   // Create apiRoot
-  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
+  state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
 
-  apiRoot
-    .me()
+  state.apiRoot
+    ?.me()
     .login()
     .post({
       body: {
@@ -110,8 +115,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
         const userID = response.body.customer.id;
         setItemToLocalStorage("customerId", userID);
         const token = tokenCache.myCache.refreshToken as string;
-        window.location.reload();
-        changeAppAfterLogin(user, token);
+        changeAppAfterLogin(user, token, userID);
       }
     })
     .catch(() => {

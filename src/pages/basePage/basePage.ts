@@ -1,6 +1,7 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
+import { createApiRoot } from "src/api/api";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -33,16 +34,20 @@ export const menuItemLogOut = createElement({ tagName: "button", classNames: ["m
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
+  greeting?.remove();
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("customerId");
-  window.location.reload();
+  state.name = null;
+  state.refreshToken = null;
+  state.customerId = null;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
-  greeting?.remove();
   menuItemLogOut.remove();
   menuItemUserProfile.remove();
+  createApiRoot();
+  window.location.hash = Pages.MAIN;
 });
 
 const liItemHome = createElement({ tagName: "li" });

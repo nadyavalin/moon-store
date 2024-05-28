@@ -1,18 +1,18 @@
 import { createElement } from "src/components/elements";
 
-function patternValidator(inputTag: HTMLInputElement): boolean {
+export function patternValidator(inputTag: HTMLInputElement): boolean {
   const patternReg = new RegExp(inputTag.pattern);
   return patternReg.test(inputTag.value);
 }
 
-function ageValidator(inputTag: HTMLInputElement): boolean {
+export function ageValidator(inputTag: HTMLInputElement): boolean {
   const date = new Date();
   const dateOfBirthday = Date.parse(inputTag.value);
   const minAge = 13;
   return Number(date.setFullYear(date.getFullYear() - minAge)) > dateOfBirthday;
 }
 
-function spacesValidator(inputTag: HTMLInputElement): boolean {
+export function spacesValidator(inputTag: HTMLInputElement): boolean {
   return !/^[ \s]+|[ \s]+$/.test(inputTag.value);
 }
 
@@ -33,21 +33,21 @@ export function checkValidityAllFields() {
   }
 }
 
-function showErrorMessage(inputTag: HTMLInputElement, parent: HTMLElement, nextElem: HTMLElement, errorMessage: HTMLElement) {
+export function showErrorMessage(inputTag: HTMLInputElement, parent: HTMLElement, nextElem: HTMLElement, errorMessage: HTMLElement) {
   errorMessage.classList.remove("hidden");
   inputTag.classList.remove("valid");
   inputTag.classList.add("invalid");
   parent.insertBefore(errorMessage, nextElem);
 }
 
-function removeErrorMessage(inputTag: HTMLInputElement, errorMessage: HTMLElement) {
+export function removeErrorMessage(inputTag: HTMLInputElement, errorMessage: HTMLElement) {
   errorMessage.classList.add("hidden");
   document.querySelector(`.error-${inputTag.name}`)?.remove();
   inputTag.classList.remove("invalid");
   inputTag.classList.add("valid");
 }
 
-const paramsActions: { [key: string]: (inputTag: HTMLInputElement) => boolean } = {
+export const paramsActions: { [key: string]: (inputTag: HTMLInputElement) => boolean } = {
   pattern: patternValidator,
   date: ageValidator,
   spaces: spacesValidator,
