@@ -2,7 +2,7 @@ import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
 import { createElement } from "../../components/elements";
 
-export function renderProductContent() {
+export function renderProductContent(slug: string) {
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const productTextWrapper = createElement({ tagName: "div", classNames: ["product__text-wrapper"] });
   const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: "../../../public/img/img-1.png" } });
