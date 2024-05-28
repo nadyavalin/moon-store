@@ -1,6 +1,7 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
+import { navigate } from "src";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -30,6 +31,15 @@ export const menuItemUserProfile = createElement({
   attributes: { href: Pages.PROFILE },
 });
 export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
+
+function menuClickHandler(event: Event) {
+  event.preventDefault();
+  const href = (event.target as HTMLAnchorElement).pathname.replace("/", "");
+  navigate(href);
+}
+
+userMenu.addEventListener("click", menuClickHandler);
+navMenu.addEventListener("click", menuClickHandler);
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
