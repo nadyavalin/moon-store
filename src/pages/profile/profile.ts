@@ -24,7 +24,7 @@ import addValidationListenersToInput from "../registration/checkValidityForm";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
 export const renderCustomerDataFromApi = () =>
-  getUserData(state.customerId as string).then((response) => {
+  getUserData(state.customerId as string)?.then((response) => {
     if (response.statusCode === 200) {
       const wrapper = document.querySelector(".profile-wrapper");
       if (wrapper) wrapper.innerHTML = "";
