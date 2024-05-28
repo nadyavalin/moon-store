@@ -14,6 +14,7 @@ import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 import renderProductContent from "./pages/product/product";
+import { createApiRoot } from "./api/api";
 
 document.body.append(header, main, footer);
 
@@ -84,7 +85,8 @@ function navigate() {
   setActiveLink(fragmentId);
 }
 
-navigate();
-
 window.addEventListener("hashchange", navigate);
-document.addEventListener("DOMContentLoaded", navigate);
+document.addEventListener("DOMContentLoaded", () => {
+  createApiRoot();
+  navigate();
+});

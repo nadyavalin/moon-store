@@ -115,7 +115,7 @@ function dragSlider() {
 }
 
 export function renderProductsForSliderFromApi() {
-  getProducts().then((response) => {
+  getProducts()?.then((response) => {
     if (response.statusCode === 200) {
       const sliderCards = carousel.querySelectorAll(".card");
       if (sliderCards) {
