@@ -38,13 +38,16 @@ menuItemLogOut.addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("customerId");
-  window.location.hash = Pages.MAIN;
-  createApiRoot();
+  state.name = null;
+  state.refreshToken = null;
+  state.customerId = null;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
   menuItemLogOut.remove();
   menuItemUserProfile.remove();
+  createApiRoot();
+  window.location.hash = Pages.MAIN;
 });
 
 const liItemHome = createElement({ tagName: "li" });
