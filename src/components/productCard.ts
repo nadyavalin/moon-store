@@ -54,7 +54,7 @@ export function createCard(item: ProductProjection) {
 const returnCardData = (card: HTMLLIElement) => {
   card.addEventListener("click", () => {
     const id = card.getAttribute("data-id") as string;
-    getProductDataWithId(id).then((response) => renderProductContent(response));
+    getProductDataWithId(id)?.then((response) => renderProductContent(response));
   });
 };
 

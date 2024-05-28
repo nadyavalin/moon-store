@@ -14,9 +14,7 @@ import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 import { productWrapper } from "./pages/product/product";
-
 import { createApiRoot } from "./api/api";
-import { renderProductContent } from "./pages/product/product";
 
 document.body.append(header, main, footer);
 
@@ -57,8 +55,6 @@ function renderContent(hash: string) {
         break;
       case Pages.PRODUCT:
         contentDiv.append(productWrapper);
-        // contentDiv.append(renderProductContent(args[0]));
-
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
