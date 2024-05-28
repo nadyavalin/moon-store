@@ -1,9 +1,11 @@
 import { Category } from "@commercetools/platform-sdk";
+import { ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
 
 export interface State {
   name?: string | null;
   refreshToken: string | null;
   customerId: string | null;
+  apiRoot?: ByProjectKeyRequestBuilder | null;
 }
 
 export interface Customer {

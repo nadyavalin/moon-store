@@ -13,6 +13,7 @@ import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
+import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
 
 document.body.append(header, main, footer);
@@ -88,5 +89,6 @@ window.addEventListener("hashchange", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  createApiRoot();
   renderContent(window.location.hash);
 });
