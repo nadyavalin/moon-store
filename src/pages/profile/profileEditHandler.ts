@@ -1,7 +1,6 @@
 import { Customer, CustomerUpdateAction } from "@commercetools/platform-sdk";
 import { changePassword, getUserData, updateCustomer } from "../../api/api";
 import { createSnackbar } from "../../components/elements";
-import state from "../../store/state";
 import { SnackbarType } from "../../types/types";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
@@ -57,18 +56,20 @@ export function editPassword(): void {
   const currentPasswordDiv = <HTMLElement>document.querySelector(".password-current_wrapper");
   const currentPasswordInput = <HTMLInputElement>document.querySelector(".password-current__input");
   const currentPassword = currentPasswordInput.value;
-
   currentPasswordDiv.style.opacity = "1";
+  btn.classList.add("disabled-icon");
   changeStateBtnInput(input, btn);
+
   if (!input.className.includes("active-input")) {
+    currentPasswordInput.classList.remove("valid");
     currentPasswordDiv.style.opacity = "0";
-    getUserData(state.customerId as string).then(({ body }) => {
+    getUserData()?.then(({ body }) => {
       const id = body.id;
       const version = Number(body.version);
 
-      if (currentPassword !== input.value) {
+      if (currentPassword.length !== 0 && currentPassword !== input.value) {
         changePassword(id, version, currentPassword, input.value)
-          .then((response) => {
+          ?.then((response) => {
             if (response.statusCode === 200) {
               createSnackbar(SnackbarType.success, "Изменения сохранены");
               authorizeUserWithToken(body.email, input.value);
@@ -76,12 +77,22 @@ export function editPassword(): void {
           })
           .catch((response) => {
             if (response.statusCode === 400) {
-              createSnackbar(SnackbarType.error, "Текущий пароль не верный");
+              createSnackbar(SnackbarType.error, "Текущий пароль неверный");
+              changeStateBtnInputPassword(currentPasswordDiv, btn, input);
             }
           });
+      } else {
+        createSnackbar(SnackbarType.error, "Введите новый пароль и подтвердите текущий");
+        changeStateBtnInputPassword(currentPasswordDiv, btn, input);
       }
     });
   }
+}
+function changeStateBtnInputPassword(currentPasswordDiv: HTMLElement, btn: HTMLElement, input: HTMLInputElement) {
+  currentPasswordDiv.style.opacity = "1";
+  btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i>';
+  btn.classList.add("disabled-icon");
+  input.classList.add("active-input");
 }
 
 export function editAddress(e: Event): void {
@@ -101,7 +112,7 @@ export function editAddress(e: Event): void {
 
 function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
   if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string)?.then(({ body }) => {
+    getUserData()?.then(({ body }) => {
       const version = Number(body.version);
       const previousValue = body[fieldName];
       if (previousValue !== input.value) {

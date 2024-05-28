@@ -92,8 +92,7 @@
   border: 1px solid var(--main-light);
 }
 
-.password-current_wrapper,
-.password-new_wrapper {
+.password-current_wrapper {
   opacity: 0;
 }
 
