@@ -15,9 +15,7 @@ export function createCard(item: ProductProjection) {
 
   const card = createElement({ tagName: "li", classNames: ["card"] });
   card.setAttribute("data-id", `${id}`);
-  // TODO сделать правильное перенаправление
-  // const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: `#${link}` } });
-  const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: Pages.PRODUCT } });
+  const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: `${Pages.PRODUCT}/${link}` } });
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
   const cardTextWrapper = createElement({ tagName: "div", classNames: ["card__text-wrapper"] });
   const cardName = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
