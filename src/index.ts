@@ -29,11 +29,12 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-function renderContent(route: string) {
+function navigate() {
   const contentDiv = document.querySelector(".main");
+  const fragmentId = window.location.hash.substring(-1);
   if (contentDiv) {
     contentDiv.innerHTML = "";
-    switch (route) {
+    switch (fragmentId) {
       case Pages.ROOT:
       case Pages.MAIN:
         contentDiv.append(sliderWrapper);
@@ -79,16 +80,8 @@ function renderContent(route: string) {
         break;
     }
   }
-  setActiveLink(route);
+  setActiveLink(fragmentId);
 }
 
-export const navigate = (route: string) => {
-  window.history.pushState({}, "", route);
-  renderContent(route);
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  // const pathname = window.location.pathname;
-  // renderContent(pathname);
-  renderContent(Pages.ROOT);
-});
+window.addEventListener("hashchange", navigate);
+document.addEventListener("DOMContentLoaded", navigate);
