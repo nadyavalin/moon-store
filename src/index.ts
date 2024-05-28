@@ -35,7 +35,6 @@ function renderContent(route: string) {
     contentDiv.innerHTML = "";
     switch (route) {
       case Pages.ROOT:
-      case Pages.MAIN:
         contentDiv.append(sliderWrapper);
         renderProductsForSliderFromApi();
         break;
@@ -44,7 +43,7 @@ function renderContent(route: string) {
           contentDiv.append(profile);
           renderCustomerDataFromApi();
         } else {
-          window.location.href = Pages.MAIN;
+          navigate(Pages.ROOT);
         }
         break;
       case Pages.CATALOG:
@@ -64,14 +63,14 @@ function renderContent(route: string) {
         if (!localStorage.getItem("refreshToken")) {
           contentDiv.append(renderLoginFormContent());
         } else {
-          window.location.href = Pages.MAIN;
+          navigate(Pages.ROOT);
         }
         break;
       case Pages.REGISTRATION:
         if (!localStorage.getItem("refreshToken")) {
           contentDiv.append(renderRegistrationFormContent());
         } else {
-          window.location.href = Pages.MAIN;
+          navigate(Pages.ROOT);
         }
         break;
       default:
@@ -82,12 +81,21 @@ function renderContent(route: string) {
   setActiveLink(route);
 }
 
+export function linkClickHandler(event: Event) {
+  event.preventDefault();
+  const href = (event.target as HTMLAnchorElement).pathname;
+  navigate(href);
+}
+
 export const navigate = (route: string) => {
-  const validRoute = (Object.values(Pages) as string[]).includes(route) ? route : Pages.ROOT;
-  window.history.pushState({}, "", validRoute);
-  renderContent(validRoute);
+  window.history.pushState({}, "", route);
+  renderContent(route);
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderContent(Pages.ROOT);
+  renderContent(window.location.pathname);
+});
+
+window.addEventListener("popstate", () => {
+  renderContent(window.location.pathname);
 });

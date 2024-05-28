@@ -20,15 +20,14 @@ export interface Customer {
 }
 
 export enum Pages {
-  ROOT = "",
-  MAIN = "main",
-  PROFILE = "profile",
-  CATALOG = "catalog",
-  BASKET = "basket",
-  ABOUT = "about",
-  LOGIN = "login",
-  REGISTRATION = "registration",
-  PRODUCT = "product",
+  ROOT = "/",
+  PROFILE = "/profile",
+  CATALOG = "/catalog",
+  BASKET = "/basket",
+  ABOUT = "/about",
+  LOGIN = "/login",
+  REGISTRATION = "/registration",
+  PRODUCT = "/product",
 }
 
 export enum SnackbarType {

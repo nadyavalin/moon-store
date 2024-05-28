@@ -1,15 +1,15 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
-import { navigate } from "src";
+import { linkClickHandler, navigate } from "src";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
 export const footer = createElement({ tagName: "footer", classNames: ["footer"] });
 
-const logoLink = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.MAIN } });
+const logoLink = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.ROOT } });
 const logo = createElement({ tagName: "img", classNames: ["logo"], attributes: { src: "../../public/img/logo.png", alt: "Logo" } });
-const logoLinkH1 = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.MAIN } });
+const logoLinkH1 = createElement({ tagName: "a", classNames: ["logo-link"], attributes: { href: Pages.ROOT } });
 const h1 = createElement({ tagName: "h1", classNames: ["shop-name"], textContent: "Online Moon Store" });
 export const userMenu = createElement({ tagName: "div", classNames: ["user-menu"] });
 const navMenu = createElement({ tagName: "nav", classNames: ["nav"] });
@@ -32,17 +32,23 @@ export const menuItemUserProfile = createElement({
 });
 export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
 
-function menuClickHandler(event: Event) {
-  event.preventDefault();
-  const href = (event.target as HTMLAnchorElement).pathname.replace("/", "");
-  navigate(href);
-}
+userMenu.addEventListener("click", (event: Event) => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains("menu-item")) {
+    linkClickHandler(event);
+  }
+});
 
-userMenu.addEventListener("click", menuClickHandler);
-navMenu.addEventListener("click", menuClickHandler);
+navMenu.addEventListener("click", (event: Event) => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains("menu-item")) {
+    linkClickHandler(event);
+  }
+});
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
+  navigate(Pages.ROOT);
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("customerId");
@@ -59,7 +65,7 @@ const liItemHome = createElement({ tagName: "li" });
 const liItemCatalog = createElement({ tagName: "li" });
 const litItemBasket = createElement({ tagName: "li" });
 const liItemAboutUs = createElement({ tagName: "li" });
-const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
+const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.ROOT } });
 export const menuItemCatalog = createElement({
   tagName: "a",
   classNames: ["menu-item"],

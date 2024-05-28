@@ -53,7 +53,7 @@ export function formRegistrationHandler(event: Event) {
       if (response.statusCode === 201) {
         createSnackbar(SnackbarType.success, `Пользователь ${response.body.customer.firstName} создан`);
         authorizeUserWithToken(<string>formData.get("email"), <string>formData.get("password"));
-        window.location.href = Pages.MAIN;
+        window.location.href = Pages.ROOT;
       }
     })
     .catch(({ statusCode }) => {

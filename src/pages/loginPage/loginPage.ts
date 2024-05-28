@@ -5,6 +5,7 @@ import { Pages } from "src/types/types";
 import validateListener from "../registration/checkValidityForm";
 import { authorizeUserWithToken, showHidePasswordHandler } from "./loginHandler";
 import { emailPattern, emailTitle, passwordPattern, passwordTitle } from "../registration/registrationView";
+import { navigate } from "src";
 
 function renderLoginFormContent(): HTMLElement {
   const loginFormInner = createElement({ tagName: "div", classNames: ["login-form__inner"] });
@@ -62,6 +63,7 @@ function renderLoginFormContent(): HTMLElement {
 
   loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    navigate(Pages.PROFILE);
     authorizeUserWithToken(emailInput.value, passwordInput.value);
   });
 
