@@ -7,7 +7,6 @@ export function addValidationListenersToInputProfile(
   parent: HTMLElement,
   validateParams: string[],
   btnEdit: HTMLElement,
-
 ) {
   const errorMessage = createElement({ tagName: "div", classNames: [`error-${inputTag.name}`, "error-message"], textContent: inputTag.title });
   inputTag.addEventListener("input", () => {
@@ -19,10 +18,8 @@ export function addValidationListenersToInputProfile(
       removeErrorMessage(inputTag, errorMessage);
       btnEdit.classList.remove("disabled-icon");
     }
-
   });
   inputTag.addEventListener("invalid", (e: Event) => {
     e.preventDefault();
   });
 }
-

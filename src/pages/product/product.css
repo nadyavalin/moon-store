@@ -1,4 +1,5 @@
 .product__wrapper {
+  width: 75%;
   display: flex;
   gap: 16px;
 }
@@ -58,5 +59,29 @@
 @media (hover: hover) {
   .product__size-item:hover {
     background-color: var(--card-hover);
+  }
+}
+
+@media (max-width: 1000px) {
+  .product__wrapper {
+    width: 100%;
+  }
+
+  .product__buy-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 770px) {
+  .product__wrapper {
+    flex-direction: column;
+  }
+
+  .prices__wrapper {
+    justify-content: space-between;
+  }
+
+  .product__buy-button {
+    font-size: 12px;
   }
 }

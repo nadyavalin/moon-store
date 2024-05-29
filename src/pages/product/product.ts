@@ -53,9 +53,9 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   priceWrapper.append(priceText, price);
   discountWrapper.append(discountText, discount);
-  pricesWrapper.append(priceWrapper, discountWrapper);
+  pricesWrapper.append(priceWrapper, discountWrapper, buyButton);
   textWrapper.append(name, description, size, pricesWrapper);
-  productTextButtonWrapper.append(textWrapper, buyButton);
+  productTextButtonWrapper.append(textWrapper);
   productWrapper.append(imageContainer, productTextButtonWrapper);
 
   return productWrapper;
