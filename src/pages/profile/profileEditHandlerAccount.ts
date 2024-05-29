@@ -5,7 +5,7 @@ import state from "../../store/state";
 import { SnackbarType } from "../../types/types";
 import { setItemToLocalStorage } from "../../utils/utils";
 
-function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
+export function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   if (btn) btn.innerHTML = " ";
   if (element.className.includes("active-input")) {
     if (btn) btn.innerHTML = '<i class="fa-solid fa-pen"></i>';
@@ -56,38 +56,24 @@ export function editPassword(): void {
   changeStateBtnInput(input, btn);
 }
 
-export function editAddress(e: Event): void {
-  const target = <HTMLElement>e.target;
-  const btn = <HTMLButtonElement>target.closest(".edit-btn");
-  // const btnID = btn.id;
-  const address = target.closest(".address__data");
-  if (!address) return;
-  const inputArr = Array.from(address.querySelectorAll("input"));
-  const select = <HTMLElement>address?.querySelector("select");
-
-  inputArr.forEach((element: HTMLElement) => {
-    changeStateBtnInput(element);
-  });
-  changeStateBtnInput(select, btn);
-}
-
 function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
-  if (!input.className.includes("active-input")) {
-    getUserData(state.customerId as string)?.then(({ body }) => {
-      const version = Number(body.version);
-      const previousValue = body[fieldName];
-      if (previousValue !== input.value) {
-        updateCustomer(version, actions)
-          ?.then((response) => {
-            if (response.statusCode === 200) {
-              callback?.();
-              createSnackbar(SnackbarType.success, "Изменения сохранены");
-            }
-          })
-          .catch(() => {
-            createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
-          });
-      }
-    });
-  }
+  if (input.className.includes("active-input")) return;
+  getUserData(state.customerId as string)?.then(({ body }) => {
+    const version = Number(body.version);
+    const previousValue = body[fieldName];
+    if (previousValue !== input.value) {
+      updateCustomer(version, actions)
+        ?.then((response) => {
+          if (response.statusCode === 200) {
+            callback?.();
+            createSnackbar(SnackbarType.success, "Изменения сохранены");
+          }
+        })
+        .catch(() => {
+          createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
+        });
+    } else {
+      createSnackbar(SnackbarType.error, "Измените значение");
+    }
+  });
 }

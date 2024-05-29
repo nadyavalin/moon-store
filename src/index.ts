@@ -12,7 +12,7 @@ import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
-import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
+import { profile, renderCustomerDataFromApi } from "./pages/profile/profileView";
 import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
 
