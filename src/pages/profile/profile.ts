@@ -24,7 +24,7 @@ import addValidationListenersToInput from "../registration/checkValidityForm";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
 export const renderCustomerDataFromApi = () =>
-  getUserData(state.customerId as string)?.then((response) => {
+  getUserData()?.then((response) => {
     if (response.statusCode === 200) {
       const wrapper = document.querySelector(".profile-wrapper");
       if (wrapper) wrapper.innerHTML = "";
@@ -192,13 +192,33 @@ function createAccountView(response: Customer, parent: HTMLElement) {
   passwordEditBtn.addEventListener("click", editPassword);
   const blockForPasswordError = createElement({ tagName: "div" });
   passwordDiv.append(passwordHeading, password, passwordEditBtn);
+  const passwordCurrentDiv = createElement({
+    tagName: "div",
+    classNames: ["password-current_wrapper"],
+  });
+  const passwordCurrentHeading = createElement({
+    tagName: "span",
+    classNames: ["password__heading"],
+    textContent: "Текущий пароль",
+  });
+  const passwordCurrent = createElement({
+    tagName: "input",
+    classNames: ["password-current__input", "field", "active-input"],
+    attributes: {
+      name: "password",
+      type: "password",
+      title: passwordTitle,
+      pattern: `${passwordPattern}`,
+    },
+  });
+  passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrent);
   addValidationListenersToInputProfile(name, surnameDiv, accountInfo, ["pattern", "spaces"], nameEditBtn);
   addValidationListenersToInputProfile(surname, birthdayDiv, accountInfo, ["pattern", "spaces"], surnameEditBtn);
   addValidationListenersToInputProfile(birthday, emailDiv, accountInfo, ["date"], birthdayEditBtn);
   addValidationListenersToInputProfile(email, passwordDiv, accountInfo, ["pattern", "spaces"], emailEditBtn);
-  addValidationListenersToInputProfile(password, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
-
-  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, blockForPasswordError);
+  addValidationListenersToInputProfile(password, passwordCurrentDiv, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  addValidationListenersToInputProfile(passwordCurrent, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv, blockForPasswordError);
   parent.append(iconUser, accountInfo);
 }
 

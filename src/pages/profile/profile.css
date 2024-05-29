@@ -91,6 +91,11 @@
   pointer-events: auto;
   border: 1px solid var(--main-light);
 }
+
+.password-current_wrapper {
+  opacity: 0;
+}
+
 .error-message {
   max-width: 350px;
 }
