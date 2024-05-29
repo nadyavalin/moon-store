@@ -96,6 +96,8 @@ export function editPassword(): void {
   const btn = <HTMLElement>document.querySelector(".password__edit-btn");
   const currentPasswordDiv = <HTMLElement>document.querySelector(".password-current_wrapper");
   const currentPasswordInput = <HTMLInputElement>document.querySelector(".password-current__input");
+  const passwordHeading = <HTMLElement>document.querySelector(".password__heading");
+  passwordHeading.textContent = "Новый пароль";
   const currentPassword = currentPasswordInput.value;
   currentPasswordDiv.style.opacity = "1";
   btn.classList.add("disabled-icon");
