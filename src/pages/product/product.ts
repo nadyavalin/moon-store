@@ -1,18 +1,22 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
 import { createElement } from "../../components/elements";
-import { ProductProjection, ClientResponse } from "@commercetools/platform-sdk";
+import { ProductProjectionPagedSearchResponse, ClientResponse } from "@commercetools/platform-sdk";
+import { getProductDataWithSlug } from "src/api/api";
 
-export const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
+const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
 
-export function renderProductContent(response: ClientResponse<ProductProjection>) {
+export function renderProductContent(slug: string) {
+  getProductDataWithSlug(slug)?.then((response) => renderProductPage(response));
+}
+
+const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearchResponse>) => {
   productWrapper.innerHTML = "";
-
-  const cardName = response.body.name.ru;
-  const cardDescription = response.body.description?.ru;
-  const cardPrices = response.body.masterVariant.prices;
-  const images = response.body.masterVariant.images;
-  const productSizes = response.body.variants;
+  const cardName = response.body.results[0].name.ru;
+  const cardDescription = response.body.results[0].description?.ru;
+  const cardPrices = response.body.results[0].masterVariant.prices;
+  const images = response.body.results[0].masterVariant.images;
+  const productSizes = response.body.results[0].variants;
 
   const productTextButtonWrapper = createElement({ tagName: "div", classNames: ["product__text-button-wrapper"] });
   const textWrapper = createElement({ tagName: "div", classNames: ["product__text-wrapper"] });
@@ -59,4 +63,6 @@ export function renderProductContent(response: ClientResponse<ProductProjection>
   textWrapper.append(name, description, size, pricesWrapper);
   productTextButtonWrapper.append(textWrapper, buyButton);
   productWrapper.append(imageContainer, productTextButtonWrapper);
-}
+
+  document.body.querySelector(".main")?.append(productWrapper);
+};

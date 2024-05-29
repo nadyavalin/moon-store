@@ -19,7 +19,12 @@ export const createApiRoot = () => {
   state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 };
 
-export const getProductDataWithId = (id: string) => state.apiRoot?.productProjections().withId({ ID: id }).get().execute();
+export const getProductDataWithSlug = (slug: string) =>
+  state.apiRoot
+    ?.productProjections()
+    .search()
+    .get({ queryArgs: { "filter.query": `slug.ru: "${slug}"` } })
+    .execute();
 
 export const getProductsByCategory = (id: string) =>
   state.apiRoot
