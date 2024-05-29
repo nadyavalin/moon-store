@@ -40,8 +40,6 @@ class MyTokenCache implements TokenCache {
   }
 }
 
-const tokenCache = new MyTokenCache();
-
 export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
@@ -64,6 +62,7 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string, cus
 }
 
 export const authorizeUserWithToken = (email: string, password: string) => {
+  const tokenCache = new MyTokenCache();
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: authHost,
