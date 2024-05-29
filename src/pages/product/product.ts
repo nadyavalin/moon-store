@@ -7,7 +7,7 @@ import { getProductDataWithSlug } from "src/api/api";
 const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
 
 export function renderProductContent(slug: string) {
-  getProductDataWithSlug(slug)?.then((response) => renderProductPage(response));
+  return getProductDataWithSlug(slug)?.then((response) => renderProductPage(response));
 }
 
 const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearchResponse>) => {

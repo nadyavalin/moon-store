@@ -54,7 +54,10 @@ function renderContent(hash: string) {
         renderProductsFromApi();
         break;
       case Pages.PRODUCT:
-        contentDiv.append(renderProductContent(args[0]));
+        const productContent = renderProductContent(args[0]);
+        if (productContent instanceof Node) {
+          contentDiv.append(productContent);
+        }
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
