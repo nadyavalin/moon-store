@@ -28,7 +28,12 @@ export const createCustomer = (requestBody: MyCustomerDraft) =>
     })
     .execute();
 
-export const getUserData = (customerID: string) => state.apiRoot?.customers().withId({ ID: customerID }).get().execute();
+export const getUserData = () =>
+  state.apiRoot
+    ?.customers()
+    .withId({ ID: state.customerId as string })
+    .get()
+    .execute();
 
 export const updateCustomer = (version: number, actions: CustomerUpdateAction[]) =>
   state.apiRoot
@@ -40,6 +45,20 @@ export const updateCustomer = (version: number, actions: CustomerUpdateAction[])
       body: {
         version,
         actions,
+      },
+    })
+    .execute();
+
+export const changePassword = (id: string, version: number, currentPassword: string, newPassword: string) =>
+  state.apiRoot
+    ?.customers()
+    .password()
+    .post({
+      body: {
+        id,
+        version,
+        currentPassword,
+        newPassword,
       },
     })
     .execute();
