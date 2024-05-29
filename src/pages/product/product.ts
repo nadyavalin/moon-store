@@ -1,15 +1,10 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
 import { createElement } from "../../components/elements";
-import { ProductProjectionPagedSearchResponse, ClientResponse } from "@commercetools/platform-sdk";
 import { getProductDataWithSlug } from "src/api/api";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const response = await getProductDataWithSlug(slug);
-  return renderProductPage(response);
-}
-
-const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) => {
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const cardName = response?.body.results[0].name.ru;
   const cardDescription = response?.body.results[0].description?.ru;
@@ -64,4 +59,4 @@ const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearch
   productWrapper.append(imageContainer, productTextButtonWrapper);
 
   return productWrapper;
-};
+}
