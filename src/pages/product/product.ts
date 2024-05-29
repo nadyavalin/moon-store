@@ -4,19 +4,18 @@ import { createElement } from "../../components/elements";
 import { ProductProjectionPagedSearchResponse, ClientResponse } from "@commercetools/platform-sdk";
 import { getProductDataWithSlug } from "src/api/api";
 
-const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
-
-export function renderProductContent(slug: string) {
-  return getProductDataWithSlug(slug)?.then((response) => renderProductPage(response));
+export async function renderProductContent(slug: string): Promise<HTMLElement> {
+  const response = await getProductDataWithSlug(slug);
+  return renderProductPage(response);
 }
 
-const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearchResponse>) => {
-  productWrapper.innerHTML = "";
-  const cardName = response.body.results[0].name.ru;
-  const cardDescription = response.body.results[0].description?.ru;
-  const cardPrices = response.body.results[0].masterVariant.prices;
-  const images = response.body.results[0].masterVariant.images;
-  const productSizes = response.body.results[0].variants;
+const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) => {
+  const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
+  const cardName = response?.body.results[0].name.ru;
+  const cardDescription = response?.body.results[0].description?.ru;
+  const cardPrices = response?.body.results[0].masterVariant.prices;
+  const images = response?.body.results[0].masterVariant.images;
+  const productSizes = response?.body.results[0].variants;
 
   const productTextButtonWrapper = createElement({ tagName: "div", classNames: ["product__text-button-wrapper"] });
   const textWrapper = createElement({ tagName: "div", classNames: ["product__text-wrapper"] });
@@ -52,7 +51,7 @@ const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearch
   const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${images?.[0].url}` } });
   imageContainer.append(image);
 
-  productSizes.forEach((variant) => {
+  productSizes?.forEach((variant) => {
     const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });
     size.append(sizeItem);
   });
@@ -64,5 +63,5 @@ const renderProductPage = (response: ClientResponse<ProductProjectionPagedSearch
   productTextButtonWrapper.append(textWrapper, buyButton);
   productWrapper.append(imageContainer, productTextButtonWrapper);
 
-  document.body.querySelector(".main")?.append(productWrapper);
+  return productWrapper;
 };
