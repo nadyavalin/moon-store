@@ -32,16 +32,22 @@ function updateCustomerHandlerAddress(
   if (select.className.includes("active-input")) return;
   getUserData()
     ?.then(({ body }) => {
-      const version = Number(body.version);
-      updateCustomer(version, actions)?.then((response) => {
+      updateCustomer(body.version, actions)?.then((response) => {
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
-          const addressId = response.body.addresses[response.body.addresses.length - 1].id;
+          let addressId = response.body.addresses[response.body.addresses.length - 1].id;
+
           if (checkbox.checked && addressType === "shipping") {
             updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId }]);
           }
+          if (!checkbox.checked && addressType === "shipping") {
+            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId: undefined }]);
+          }
           if (checkbox.checked && addressType === "billing") {
             updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId }]);
+          }
+          if (!checkbox.checked && addressType === "billing") {
+            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId: undefined }]);
           }
 
           if (isNewAddress && addressType === "shipping") {
