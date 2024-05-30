@@ -23,10 +23,3 @@ export function addValidationListenersToInputProfile(
     e.preventDefault();
   });
 }
-
-
-export function addShippingAddress(){
-
-
-
-}
