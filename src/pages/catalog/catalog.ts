@@ -3,6 +3,9 @@ import { createElement, createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
+
+import { getProductsByCategory } from "../../api/api";
+
 import {
   ClientResponse,
   ProductProjectionPagedQueryResponse,
@@ -21,20 +24,16 @@ catalog.append(categoriesWrapper, catalogWrapper);
 categoriesWrapper.addEventListener("click", (event) => {
   const target = <HTMLElement>event.target;
   if (target.classList.contains("menu-category")) {
-    const id = target.getAttribute("data-id");
-    state.apiRoot
-      ?.productProjections()
-      .search()
-      .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
-      .execute()
-      .then((response) => {
-        if (response.statusCode === 200) {
-          clearCatalogData();
-          renderCatalogContent(response);
-        } else {
-          createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
-        }
-      });
+    const id = target.getAttribute("data-id") as string;
+    getProductsByCategory(id)?.then((response) => {
+      if (response.statusCode === 200) {
+        clearCatalogData();
+        renderCatalogContent(response);
+      } else {
+        createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+      }
+    });
+
     const clickedCategory = target as HTMLElement;
 
     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
