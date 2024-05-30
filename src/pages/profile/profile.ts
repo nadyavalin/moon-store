@@ -19,8 +19,6 @@ import {
 } from "../registration/registrationView";
 import { SnackbarType } from "src/types/types";
 import { editAddress, editBirthday, editEmail, editName, editPassword, editSurname } from "./profileEditHandler";
-import state from "../../store/state";
-import addValidationListenersToInput from "../registration/checkValidityForm";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
 export const renderCustomerDataFromApi = () =>

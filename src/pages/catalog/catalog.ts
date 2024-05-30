@@ -1,87 +1,57 @@
 import "./catalog.css";
-import { createElement, createSnackbar } from "../../components/elements";
-import { SnackbarType } from "../../types/types";
+import { createElement } from "../../components/elements";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
-
 import { getProductsByCategory } from "../../api/api";
-
-import {
-  ClientResponse,
-  ProductProjectionPagedQueryResponse,
-  ProductProjection,
-  CategoryPagedQueryResponse,
-  Category,
-} from "@commercetools/platform-sdk";
-import state from "src/store/state";
+import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import createCard from "../../components/productCard";
 
-export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
-const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
-export const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
-catalog.append(categoriesWrapper, catalogWrapper);
+export async function renderProductsFromApi() {
+  const response = await getProducts();
 
-categoriesWrapper.addEventListener("click", (event) => {
-  const target = <HTMLElement>event.target;
-  if (target.classList.contains("menu-category")) {
-    const id = target.getAttribute("data-id") as string;
-    getProductsByCategory(id)?.then((response) => {
-      if (response.statusCode === 200) {
-        clearCatalogData();
-        renderCatalogContent(response);
-      } else {
-        createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
-      }
-    });
+  const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
+  const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+  renderCatalogContent(response, catalogWrapper);
 
-    const clickedCategory = target as HTMLElement;
+  const categoriesWrapper = await renderCategories();
 
-    const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
-    allCategoryItems.forEach((item) => {
-      if (item !== clickedCategory) {
-        item.classList.remove("active");
-      }
-    });
+  categoriesWrapper.addEventListener("click", async (event) => {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains("menu-category")) {
+      const id = target.getAttribute("data-id") as string;
+      await renderCatalogByCategory(id, catalogWrapper);
 
-    clickedCategory.classList.toggle("active");
-  }
-});
+      const clickedCategory = target as HTMLElement;
+      const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+      allCategoryItems.forEach((item) => {
+        if (item !== clickedCategory) {
+          item.classList.remove("active");
+        }
+      });
 
-const clearCategoriesData = () => {
-  const categories = categoriesWrapper.querySelectorAll(".category-wrapper");
-  categories.forEach((category) => category.remove());
-};
-
-const clearCatalogData = () => {
-  const catalogItems = catalogWrapper.querySelectorAll(".card");
-  catalogItems.forEach((item) => item.remove());
-};
-
-export function renderProductsFromApi() {
-  getProducts()?.then((response) => {
-    if (response.statusCode === 200) {
-      clearCatalogData();
-      renderCatalogContent(response);
-    } else {
-      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
+      clickedCategory.classList.toggle("active");
     }
   });
-  getCategories()?.then((response) => {
-    if (response.statusCode === 200) {
-      clearCategoriesData();
-      renderCategories(response);
-    }
-  });
+
+  catalog.append(categoriesWrapper, catalogWrapper);
+  return catalog;
 }
 
-function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) {
-  const categories: Category[] = response.body.results;
-  const parentCategories = categories.filter((category) => !category.parent);
-  const childCategories = categories.filter((category) => category.parent);
+async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
+  const response = await getProductsByCategory(id);
+  renderCatalogContent(response, catalogWrapper);
+}
+
+async function renderCategories() {
+  const response = await getCategories();
+  const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
+  const categories: Category[] | undefined = response?.body.results;
+  const parentCategories = categories?.filter((category) => !category.parent);
+  const childCategories = categories?.filter((category) => category.parent);
 
   const categoryMap: { [key: string]: CategoryData } = {};
 
-  parentCategories.forEach((parentCategory) => {
+  parentCategories?.forEach((parentCategory) => {
     const parentId = parentCategory.id;
     categoryMap[parentId] = {
       parent: parentCategory,
@@ -89,7 +59,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
     };
   });
 
-  childCategories.forEach((childCategory) => {
+  childCategories?.forEach((childCategory) => {
     if (childCategory.parent) {
       categoryMap[childCategory.parent.id]?.children.push(childCategory);
     }
@@ -113,14 +83,14 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
     categoryWrapper.append(childrenContainer);
     categoriesWrapper.append(categoryWrapper);
   });
+  return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
-  const items = response.body.results;
-  items.forEach((item) => {
+function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
+  catalogWrapper.innerHTML = "";
+  const items = response?.body.results;
+  items?.forEach((item) => {
     const card = createCard(item);
     catalogWrapper.append(card);
   });
 }
-
-catalog.append(catalogWrapper);

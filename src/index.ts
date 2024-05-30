@@ -10,7 +10,7 @@ import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
-import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
+import { renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 import { createApiRoot } from "./api/api";
@@ -42,16 +42,24 @@ async function renderContent(hash: string) {
         renderProductsForSliderFromApi();
         break;
       case Pages.PROFILE:
-        if (localStorage.getItem("refreshToken")) {
-          contentDiv.append(profile);
-          renderCustomerDataFromApi();
-        } else {
-          window.location.href = Pages.MAIN;
+        try {
+          if (localStorage.getItem("refreshToken")) {
+            contentDiv.append(profile);
+            renderCustomerDataFromApi();
+          } else {
+            window.location.href = Pages.LOGIN;
+          }
+        } catch (error) {
+          contentDiv.append("Ошибка! Контент невозможно отобразить.");
         }
         break;
       case Pages.CATALOG:
-        contentDiv.append(catalog);
-        renderProductsFromApi();
+        try {
+          const renderedCatalogContent = await renderProductsFromApi();
+          contentDiv.append(renderedCatalogContent);
+        } catch (error) {
+          contentDiv.append("Ошибка! Контент невозможно отобразить.");
+        }
         break;
       case Pages.PRODUCT:
         try {
