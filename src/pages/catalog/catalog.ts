@@ -40,7 +40,6 @@ export async function renderProductsFromApi() {
 async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
   const response = await getProductsByCategory(id);
   renderCatalogContent(response, catalogWrapper);
-  return catalogWrapper;
 }
 
 async function renderCategories() {
