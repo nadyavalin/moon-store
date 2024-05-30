@@ -1,87 +1,30 @@
 import "./catalog.css";
-import { createElement, createSnackbar } from "../../components/elements";
-import { SnackbarType } from "../../types/types";
+import { createElement } from "../../components/elements";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
-
 import { getProductsByCategory } from "../../api/api";
-
-import {
-  ClientResponse,
-  ProductProjectionPagedQueryResponse,
-  ProductProjection,
-  CategoryPagedQueryResponse,
-  Category,
-} from "@commercetools/platform-sdk";
-import state from "src/store/state";
+import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import createCard from "../../components/productCard";
 
-export const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
-const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
-export const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
-catalog.append(categoriesWrapper, catalogWrapper);
+export async function renderProductsFromApi() {
+  const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
+  const catalogWrapper = await renderCatalogContent();
+  const categoriesWrapper = await renderCategories();
+  catalog.append(categoriesWrapper, catalogWrapper);
 
-categoriesWrapper.addEventListener("click", (event) => {
-  const target = <HTMLElement>event.target;
-  if (target.classList.contains("menu-category")) {
-    const id = target.getAttribute("data-id") as string;
-    getProductsByCategory(id)?.then((response) => {
-      if (response.statusCode === 200) {
-        clearCatalogData();
-        renderCatalogContent(response);
-      } else {
-        createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
-      }
-    });
-
-    const clickedCategory = target as HTMLElement;
-
-    const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
-    allCategoryItems.forEach((item) => {
-      if (item !== clickedCategory) {
-        item.classList.remove("active");
-      }
-    });
-
-    clickedCategory.classList.toggle("active");
-  }
-});
-
-const clearCategoriesData = () => {
-  const categories = categoriesWrapper.querySelectorAll(".category-wrapper");
-  categories.forEach((category) => category.remove());
-};
-
-const clearCatalogData = () => {
-  const catalogItems = catalogWrapper.querySelectorAll(".card");
-  catalogItems.forEach((item) => item.remove());
-};
-
-export function renderProductsFromApi() {
-  getProducts()?.then((response) => {
-    if (response.statusCode === 200) {
-      clearCatalogData();
-      renderCatalogContent(response);
-    } else {
-      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позже.");
-    }
-  });
-  getCategories()?.then((response) => {
-    if (response.statusCode === 200) {
-      clearCategoriesData();
-      renderCategories(response);
-    }
-  });
+  return catalog;
 }
 
-function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) {
-  const categories: Category[] = response.body.results;
-  const parentCategories = categories.filter((category) => !category.parent);
-  const childCategories = categories.filter((category) => category.parent);
+async function renderCategories() {
+  const response = await getCategories();
+  const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
+  const categories: Category[] | undefined = response?.body.results;
+  const parentCategories = categories?.filter((category) => !category.parent);
+  const childCategories = categories?.filter((category) => category.parent);
 
   const categoryMap: { [key: string]: CategoryData } = {};
 
-  parentCategories.forEach((parentCategory) => {
+  parentCategories?.forEach((parentCategory) => {
     const parentId = parentCategory.id;
     categoryMap[parentId] = {
       parent: parentCategory,
@@ -89,7 +32,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
     };
   });
 
-  childCategories.forEach((childCategory) => {
+  childCategories?.forEach((childCategory) => {
     if (childCategory.parent) {
       categoryMap[childCategory.parent.id]?.children.push(childCategory);
     }
@@ -113,14 +56,45 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse>) 
     categoryWrapper.append(childrenContainer);
     categoriesWrapper.append(categoryWrapper);
   });
+
+  // categoriesWrapper.addEventListener("click", (event) => {
+  //   const target = <HTMLElement>event.target;
+  //   if (target.classList.contains("menu-category")) {
+  //     const id = target.getAttribute("data-id") as string;
+  //     renderCatalogByCategory(id);
+
+  //     const clickedCategory = target as HTMLElement;
+  //     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+  //     allCategoryItems.forEach((item) => {
+  //       if (item !== clickedCategory) {
+  //         item.classList.remove("active");
+  //       }
+  //     });
+
+  //     clickedCategory.classList.toggle("active");
+  //   }
+  // });
+  return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse>) {
-  const items = response.body.results;
-  items.forEach((item) => {
+// async function renderCatalogByCategory(id: string) {
+//   const response = await getProductsByCategory(id);
+//   const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+//   const items = response?.body.results;
+//   items?.forEach((item) => {
+//     const card = createCard(item);
+//     catalogWrapper.append(card);
+//   });
+//   return catalogWrapper;
+// }
+
+async function renderCatalogContent() {
+  const response = await getProducts();
+  const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+  const items = response?.body.results;
+  items?.forEach((item) => {
     const card = createCard(item);
     catalogWrapper.append(card);
   });
+  return catalogWrapper;
 }
-
-catalog.append(catalogWrapper);
