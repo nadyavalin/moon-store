@@ -42,11 +42,15 @@ function renderContent(hash: string) {
         renderProductsForSliderFromApi();
         break;
       case Pages.PROFILE:
-        if (localStorage.getItem("refreshToken")) {
-          contentDiv.append(profile);
-          renderCustomerDataFromApi();
-        } else {
-          window.location.href = Pages.MAIN;
+        try {
+          if (localStorage.getItem("refreshToken")) {
+            contentDiv.append(profile);
+            renderCustomerDataFromApi();
+          } else {
+            window.location.href = Pages.LOGIN;
+          }
+        } catch (error) {
+          contentDiv.append("Ошибка! Контент невозможно отобразить.");
         }
         break;
       case Pages.CATALOG:
