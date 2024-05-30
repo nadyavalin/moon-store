@@ -1,8 +1,9 @@
 import { Address, Customer } from "@commercetools/platform-sdk";
-import { createElement } from "../../components/elements";
+import { createElement, createSnackbar } from "../../components/elements";
 import { cityPattern, cityTitle, indexPattern, indexTitle, streetPattern, streetTitle } from "../registration/registrationView";
 import { editAddress, removeAddress } from "./profileEditHandlerAddresses";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
+import { SnackbarType } from "src/types/types";
 
 export function createAddressesView(response: Customer | undefined, parent: HTMLElement) {
   const addressesShippingWrapper = createElement({ tagName: "div", classNames: ["addresses-shipping-wrapper"] });
@@ -21,14 +22,12 @@ export function createAddressesView(response: Customer | undefined, parent: HTML
     classNames: ["add-btn", `address-billing__add-btn`],
     innerHTML: '<i class="fa-solid fa-plus"></i>',
   });
-  let isNewAddress: boolean;
+  let isNewAddress: boolean = false;
   addressesShippingWrapper.append(addressesShippingHeading, addShippingAddressBtn);
   addressesBillingWrapper.append(addressesBillingHeading, addBillingAddressBtn);
   response?.addresses?.forEach((address) => {
-    isNewAddress = false;
     response.shippingAddressIds?.forEach((shippingAddressID) => {
       let isDefaultAddress = false;
-
       if (response.defaultShippingAddressId === shippingAddressID) isDefaultAddress = true;
       if (shippingAddressID === address.id) createAddressView("shipping", addressesShippingWrapper, isDefaultAddress, isNewAddress, address);
     });
@@ -39,12 +38,11 @@ export function createAddressesView(response: Customer | undefined, parent: HTML
       if (billingAddressID === address.id) createAddressView("billing", addressesBillingWrapper, isDefaultAddress, isNewAddress, address);
     });
   });
-  isNewAddress = true;
   addShippingAddressBtn.addEventListener("click", () => {
-    createAddressView("shipping", addressesShippingWrapper, false, isNewAddress, response?.addresses[response?.addresses.length - 1]);
+    createAddressView("shipping", addressesShippingWrapper, false, (isNewAddress = true), response?.addresses[response?.addresses.length - 1]);
   });
   addBillingAddressBtn.addEventListener("click", () => {
-    createAddressView("billing", addressesBillingWrapper, false, isNewAddress, response?.addresses[response?.addresses.length - 1]);
+    createAddressView("billing", addressesBillingWrapper, false, (isNewAddress = true), response?.addresses[response?.addresses.length - 1]);
   });
   parent.append(addressesShippingWrapper, addressesBillingWrapper);
 }
@@ -179,7 +177,7 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
   const checkboxSettingDefaultAddress = createElement({
     tagName: "input",
     classNames: ["setting-default-address-checkbox", `setting-default-address-${addressType}`, "field"],
-    attributes: { name: `setting-default-address-${addressType}`, type: "checkbox", id: `setting-default-address-${addressType}` },
+    attributes: { name: `setting-default-address-${addressType}`, type: "checkbox" },
   });
   const checkboxWrapper = createElement({ tagName: "div", classNames: ["profile__checkbox-wrapper"] });
   const labelSettingDefaultAddress = createElement({
@@ -192,8 +190,18 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
   addValidationListenersToInputProfile(city, streetDiv, addressData, ["pattern", "spaces"], addressEditBtn);
   addValidationListenersToInputProfile(street, indexDiv, addressData, ["pattern", "spaces"], addressEditBtn);
   addValidationListenersToInputProfile(index, checkboxWrapper, addressData, ["pattern", "spaces"], addressEditBtn);
+  checkboxSettingDefaultAddress.addEventListener("change", () => checkDefaultAddress(addressType, checkboxSettingDefaultAddress));
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
   addressData.append(countryDiv, cityDiv, streetDiv, indexDiv, checkboxWrapper);
   addressInfo.append(iconAddress, addressData);
   parent.append(addressInfo);
+}
+
+function checkDefaultAddress(addressType: string, checkboxSettingDefaultAddress: HTMLInputElement) {
+  const arrAddressDefault = Array.from(document.querySelectorAll(`.setting-default-address-${addressType}`));
+  const checked = arrAddressDefault.filter((element) => (element as HTMLInputElement).checked);
+  if (checked.length > 1) {
+    createSnackbar(SnackbarType.error, "Невозможно назначить два адреса по умолчанию");
+    checkboxSettingDefaultAddress.checked = false;
+  }
 }

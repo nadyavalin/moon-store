@@ -8,48 +8,54 @@ export function editAddress(addressDataDiv: HTMLElement, addressType: string, ad
   const btnEditAddress = <HTMLElement>addressDataDiv.querySelector(".edit-btn");
   const inputArr = Array.from(addressDataDiv.querySelectorAll("input"));
   const select = <HTMLElement>addressDataDiv.querySelector("select");
+  const checkbox = <HTMLInputElement>addressDataDiv.querySelector(".setting-default-address-checkbox");
   inputArr.forEach((element: HTMLInputElement) => {
     changeStateBtnInput(element);
   });
   changeStateBtnInput(select, btnEditAddress);
-
   const addressObj = createAddressObject(addressDataDiv);
   if (addressID) {
-    updateCustomerHandlerAddress(select, [{ action: "changeAddress", addressId: addressID, address: addressObj }]);
+    updateCustomerHandlerAddress(select, [{ action: "changeAddress", addressId: addressID, address: addressObj }], checkbox, false, addressType);
   } else {
     const addressObj = createAddressObject(addressDataDiv);
-    updateCustomerHandlerAddress(select, [{ action: "addAddress", address: addressObj }], addressType);
+    updateCustomerHandlerAddress(select, [{ action: "addAddress", address: addressObj }], checkbox, true, addressType);
   }
 }
 
-function updateCustomerHandlerAddress(select: HTMLElement, actions: CustomerUpdateAction[], addressType?: string) {
+function updateCustomerHandlerAddress(
+  select: HTMLElement,
+  actions: CustomerUpdateAction[],
+  checkbox: HTMLInputElement,
+  isNewAddress: boolean,
+  addressType?: string,
+) {
   if (select.className.includes("active-input")) return;
-  // if (!inputArr.every((element: HTMLElement) => (element as HTMLInputElement).value.length !== 0)) {
-  //   createSnackbar(SnackbarType.error, "Введите значения");
-  //   return;
-  // }
-  getUserData()?.then(({ body }) => {
-    const version = Number(body.version);
-    updateCustomer(version, actions)
-      ?.then((response) => {
+  getUserData()
+    ?.then(({ body }) => {
+      const version = Number(body.version);
+      updateCustomer(version, actions)?.then((response) => {
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
-          if (addressType === "shipping") {
-            updateCustomer(version + 1, [
-              { action: "addShippingAddressId", addressId: response.body.addresses[response.body.addresses.length - 1].id },
-            ]);
+          const addressId = response.body.addresses[response.body.addresses.length - 1].id;
+          if (checkbox.checked && addressType === "shipping") {
+            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId }]);
           }
-          if (addressType === "billing") {
-            updateCustomer(version + 1, [
-              { action: "addBillingAddressId", addressId: response.body.addresses[response.body.addresses.length - 1].id },
-            ]);
+          if (checkbox.checked && addressType === "billing") {
+            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId }]);
+          }
+
+          if (isNewAddress && addressType === "shipping") {
+            updateCustomer(response.body.version, [{ action: "addShippingAddressId", addressId }]);
+          }
+          if (isNewAddress && addressType === "billing") {
+            updateCustomer(response.body.version, [{ action: "addBillingAddressId", addressId }]);
           }
         }
-      })
-      .catch(() => {
-        createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
       });
-  });
+    })
+    .catch(() => {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже");
+    });
 }
 
 function createAddressObject(addressDataDiv: Element) {
@@ -57,7 +63,7 @@ function createAddressObject(addressDataDiv: Element) {
   const city = <HTMLInputElement>addressDataDiv.querySelector(`.city__input`);
   const street = <HTMLInputElement>addressDataDiv.querySelector(`.street__input`);
   const index = <HTMLInputElement>addressDataDiv.querySelector(`.index__input`);
-  const checkbox = <HTMLInputElement>addressDataDiv.querySelector(`.setting-default-address-checkbox`);
+
   const addressObj = {
     city: city.value,
     streetName: street.value,
@@ -68,7 +74,6 @@ function createAddressObject(addressDataDiv: Element) {
 }
 
 export function removeAddress(addressDiv: HTMLElement, addressID?: string): void {
-  alert(addressID);
   const addressesShipping = document.querySelectorAll(".address-shipping-info");
   const addressesBilling = document.querySelectorAll(".address-billing-info");
   if (addressesShipping.length === 1 && addressesBilling.length === 1) {

@@ -9,7 +9,6 @@ export function formRegistrationHandler(event: Event) {
   const formData = new FormData(form);
   const checkboxSettingOneAddress = <string>formData.get("setting-one-address");
   const checkboxSettingDefaultAddressShipping = <string>formData.get("setting-default-address-shipping");
-
   const addressShipping = {
     city: <string>formData.get("city-shipping"),
     streetName: <string>formData.get("street-shipping"),
