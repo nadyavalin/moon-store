@@ -30,7 +30,7 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-function renderContent(hash: string) {
+async function renderContent(hash: string) {
   const contentDiv = document.querySelector(".main");
   const [route, ...args] = hash.split("/");
   if (contentDiv) {
@@ -58,7 +58,12 @@ function renderContent(hash: string) {
         renderProductsFromApi();
         break;
       case Pages.PRODUCT:
-        contentDiv.append(renderProductContent(args[0]));
+        try {
+          const renderedProductContent = await renderProductContent(args[0]);
+          contentDiv.append(renderedProductContent);
+        } catch (error) {
+          contentDiv.append("Ошибка! Контент невозможно отобразить.");
+        }
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
