@@ -3,7 +3,7 @@ import { createElement } from "../../components/elements";
 import { getCategories, getProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { getProductsByCategory } from "../../api/api";
-import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQueryResponse, Category } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import createCard from "../../components/productCard";
 
 export async function renderProductsFromApi() {
@@ -11,14 +11,13 @@ export async function renderProductsFromApi() {
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
-  await renderCatalogContent(response, catalogWrapper);
+  renderCatalogContent(response, catalogWrapper);
 
   const categoriesWrapper = await renderCategories();
 
   categoriesWrapper.addEventListener("click", async (event) => {
     const target = <HTMLElement>event.target;
     if (target.classList.contains("menu-category")) {
-      catalogWrapper.innerHTML = "";
       const id = target.getAttribute("data-id") as string;
       await renderCatalogByCategory(id, catalogWrapper);
 
@@ -40,11 +39,7 @@ export async function renderProductsFromApi() {
 
 async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
   const response = await getProductsByCategory(id);
-  const items = response?.body.results;
-  items?.forEach((item) => {
-    const card = createCard(item);
-    catalogWrapper.append(card);
-  });
+  renderCatalogContent(response, catalogWrapper);
   return catalogWrapper;
 }
 
@@ -92,7 +87,8 @@ async function renderCategories() {
   return categoriesWrapper;
 }
 
-async function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
+function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
+  catalogWrapper.innerHTML = "";
   const items = response?.body.results;
   items?.forEach((item) => {
     const card = createCard(item);
