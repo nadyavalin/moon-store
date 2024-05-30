@@ -42,17 +42,23 @@ function updateCustomerHandlerAddress(
           } else {
             addressIDForDefault = undefined;
           }
-          if (addressType === "shipping") {
+          if (isNewAddress && addressType === "shipping") {
             updateCustomer(response.body.version, [
               { action: "addShippingAddressId", addressId },
               { action: "setDefaultShippingAddress", addressId: addressIDForDefault },
             ]);
           }
-          if (addressType === "billing") {
+          if (isNewAddress && addressType === "billing") {
             updateCustomer(response.body.version, [
               { action: "addBillingAddressId", addressId },
               { action: "setDefaultBillingAddress", addressId: addressIDForDefault },
             ]);
+          }
+          if (!isNewAddress && addressType === "shipping") {
+            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId: addressIDForDefault }]);
+          }
+          if (!isNewAddress && addressType === "billing") {
+            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId: addressIDForDefault }]);
           }
         }
       });
