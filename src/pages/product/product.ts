@@ -1,7 +1,7 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
 import { createElement } from "../../components/elements";
-import { getProductDataWithSlug } from "src/api/api";
+import { getProductDataWithSlug } from "../../api/api";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const response = await getProductDataWithSlug(slug);
