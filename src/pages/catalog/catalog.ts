@@ -7,12 +7,45 @@ import { ClientResponse, ProductProjectionPagedQueryResponse, CategoryPagedQuery
 import createCard from "../../components/productCard";
 
 export async function renderProductsFromApi() {
-  const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
-  const catalogWrapper = await renderCatalogContent();
-  const categoriesWrapper = await renderCategories();
-  catalog.append(categoriesWrapper, catalogWrapper);
+  const response = await getProducts();
 
+  const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
+  const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+  await renderCatalogContent(response, catalogWrapper);
+
+  const categoriesWrapper = await renderCategories();
+
+  categoriesWrapper.addEventListener("click", async (event) => {
+    const target = <HTMLElement>event.target;
+    if (target.classList.contains("menu-category")) {
+      catalogWrapper.innerHTML = "";
+      const id = target.getAttribute("data-id") as string;
+      await renderCatalogByCategory(id, catalogWrapper);
+
+      const clickedCategory = target as HTMLElement;
+      const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
+      allCategoryItems.forEach((item) => {
+        if (item !== clickedCategory) {
+          item.classList.remove("active");
+        }
+      });
+
+      clickedCategory.classList.toggle("active");
+    }
+  });
+
+  catalog.append(categoriesWrapper, catalogWrapper);
   return catalog;
+}
+
+async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
+  const response = await getProductsByCategory(id);
+  const items = response?.body.results;
+  items?.forEach((item) => {
+    const card = createCard(item);
+    catalogWrapper.append(card);
+  });
+  return catalogWrapper;
 }
 
 async function renderCategories() {
@@ -56,45 +89,13 @@ async function renderCategories() {
     categoryWrapper.append(childrenContainer);
     categoriesWrapper.append(categoryWrapper);
   });
-
-  // categoriesWrapper.addEventListener("click", (event) => {
-  //   const target = <HTMLElement>event.target;
-  //   if (target.classList.contains("menu-category")) {
-  //     const id = target.getAttribute("data-id") as string;
-  //     renderCatalogByCategory(id);
-
-  //     const clickedCategory = target as HTMLElement;
-  //     const allCategoryItems = Array.from(categoriesWrapper.querySelectorAll(".menu-category")) as HTMLElement[];
-  //     allCategoryItems.forEach((item) => {
-  //       if (item !== clickedCategory) {
-  //         item.classList.remove("active");
-  //       }
-  //     });
-
-  //     clickedCategory.classList.toggle("active");
-  //   }
-  // });
   return categoriesWrapper;
 }
 
-// async function renderCatalogByCategory(id: string) {
-//   const response = await getProductsByCategory(id);
-//   const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
-//   const items = response?.body.results;
-//   items?.forEach((item) => {
-//     const card = createCard(item);
-//     catalogWrapper.append(card);
-//   });
-//   return catalogWrapper;
-// }
-
-async function renderCatalogContent() {
-  const response = await getProducts();
-  const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+async function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
   const items = response?.body.results;
   items?.forEach((item) => {
     const card = createCard(item);
     catalogWrapper.append(card);
   });
-  return catalogWrapper;
 }
