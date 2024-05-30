@@ -35,26 +35,24 @@ function updateCustomerHandlerAddress(
       updateCustomer(body.version, actions)?.then((response) => {
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
-          let addressId = response.body.addresses[response.body.addresses.length - 1].id;
-
-          if (checkbox.checked && addressType === "shipping") {
-            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId }]);
+          const addressId = response.body.addresses[response.body.addresses.length - 1].id;
+          let addressIDForDefault;
+          if (checkbox.checked) {
+            addressIDForDefault = addressId;
+          } else {
+            addressIDForDefault = undefined;
           }
-          if (!checkbox.checked && addressType === "shipping") {
-            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId: undefined }]);
+          if (addressType === "shipping") {
+            updateCustomer(response.body.version, [
+              { action: "addShippingAddressId", addressId },
+              { action: "setDefaultShippingAddress", addressId: addressIDForDefault },
+            ]);
           }
-          if (checkbox.checked && addressType === "billing") {
-            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId }]);
-          }
-          if (!checkbox.checked && addressType === "billing") {
-            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId: undefined }]);
-          }
-
-          if (isNewAddress && addressType === "shipping") {
-            updateCustomer(response.body.version, [{ action: "addShippingAddressId", addressId }]);
-          }
-          if (isNewAddress && addressType === "billing") {
-            updateCustomer(response.body.version, [{ action: "addBillingAddressId", addressId }]);
+          if (addressType === "billing") {
+            updateCustomer(response.body.version, [
+              { action: "addBillingAddressId", addressId },
+              { action: "setDefaultBillingAddress", addressId: addressIDForDefault },
+            ]);
           }
         }
       });
