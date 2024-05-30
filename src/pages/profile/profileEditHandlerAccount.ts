@@ -18,51 +18,28 @@ export function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   }
 }
 
-export function editName(): void {
-  const input = <HTMLInputElement>document.querySelector(".name__input");
-  const btn = <HTMLElement>document.querySelector(".name__edit-btn");
-  changeStateBtnInput(input, btn);
-  updateCustomerHandler(input, [{ action: "setFirstName", firstName: input.value }], "firstName", function changeGreeting() {
+export function editName(nameInput: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(nameInput, btn);
+  updateCustomerHandler(nameInput, [{ action: "setFirstName", firstName: nameInput.value }], "firstName", function changeGreeting() {
     const nameInGreeting = document.querySelector(".user-greeting__link");
-    if (nameInGreeting) nameInGreeting.textContent = input.value;
-    setItemToLocalStorage("user", input.value);
+    if (nameInGreeting) nameInGreeting.textContent = nameInput.value;
+    setItemToLocalStorage("user", nameInput.value);
   });
 }
 
-export function editSurname(): void {
-  const input = <HTMLInputElement>document.querySelector(".surname__input");
-  const btn = <HTMLElement>document.querySelector(".surname__edit-btn");
-  changeStateBtnInput(input, btn);
-  updateCustomerHandler(input, [{ action: "setLastName", lastName: input.value }], "lastName");
+export function editSurname(surnameInput: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(surnameInput, btn);
+  updateCustomerHandler(surnameInput, [{ action: "setLastName", lastName: surnameInput.value }], "lastName");
 }
 
-export function editBirthday(): void {
-  const input = <HTMLInputElement>document.querySelector(".birthday__input");
-  const btn = <HTMLElement>document.querySelector(".birthday__edit-btn");
-  changeStateBtnInput(input, btn);
-  updateCustomerHandler(input, [{ action: "setDateOfBirth", dateOfBirth: input.value }], "dateOfBirth");
+export function editBirthday(birthdayInput: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(birthdayInput, btn);
+  updateCustomerHandler(birthdayInput, [{ action: "setDateOfBirth", dateOfBirth: birthdayInput.value }], "dateOfBirth");
 }
 
-export function editEmail(): void {
-  const input = <HTMLInputElement>document.querySelector(".email__input");
-  const btn = <HTMLElement>document.querySelector(".email__edit-btn");
-  changeStateBtnInput(input, btn);
-  updateCustomerHandler(input, [{ action: "changeEmail", email: input.value }], "email");
-}
-
-export function editAddress(e: Event): void {
-  const target = <HTMLElement>e.target;
-  const btn = <HTMLButtonElement>target.closest(".edit-btn");
-  // const btnID = btn.id;
-  const address = target.closest(".address__data");
-  if (!address) return;
-  const inputArr = Array.from(address.querySelectorAll("input"));
-  const select = <HTMLElement>address?.querySelector("select");
-
-  inputArr.forEach((element: HTMLElement) => {
-    changeStateBtnInput(element);
-  });
-  changeStateBtnInput(select, btn);
+export function editEmail(emailInput: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(emailInput, btn);
+  updateCustomerHandler(emailInput, [{ action: "changeEmail", email: emailInput.value }], "email");
 }
 
 function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
@@ -91,48 +68,46 @@ function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateA
   }
 }
 
-export function editPassword(): void {
-  const input = <HTMLInputElement>document.querySelector(".password__input");
-  const btn = <HTMLElement>document.querySelector(".password__edit-btn");
-  const currentPasswordDiv = <HTMLElement>document.querySelector(".password-current_wrapper");
-  const currentPasswordInput = <HTMLInputElement>document.querySelector(".password-current__input");
-  const passwordHeading = <HTMLElement>document.querySelector(".password__heading");
-  passwordHeading.textContent = "Новый пароль";
-  const currentPassword = currentPasswordInput.value;
-  currentPasswordDiv.style.opacity = "1";
-  btn.classList.add("disabled-icon");
-  changeStateBtnInput(input, btn);
-
-  if (input.className.includes("active-input")) return;
-  currentPasswordInput.classList.remove("valid");
-  currentPasswordDiv.style.opacity = "0";
+export function editPassword(
+  passwordCurrentInput: HTMLInputElement,
+  passwordCurrentDiv: HTMLElement,
+  newPasswordInput: HTMLInputElement,
+  btn: HTMLElement,
+): void {
+  changeStateBtnInput(newPasswordInput, btn);
+  if (newPasswordInput.className.includes("active-input")) return;
+  passwordCurrentInput.classList.remove("valid");
   getUserData()?.then(({ body }) => {
     const id = body.id;
     const version = Number(body.version);
-    if (currentPassword.length !== 0 && currentPassword !== input.value) {
-      changePassword(id, version, currentPassword, input.value)
+    if (passwordCurrentInput.value.length !== 0 && passwordCurrentInput.value !== newPasswordInput.value) {
+      changePassword(id, version, passwordCurrentInput.value, newPasswordInput.value)
         ?.then((response) => {
           if (response.statusCode === 200) {
             createSnackbar(SnackbarType.success, "Изменения сохранены");
-            authorizeUserWithToken(body.email, input.value);
+            authorizeUserWithToken(body.email, newPasswordInput.value);
           }
         })
         .catch((response) => {
           if (response.statusCode === 400) {
             createSnackbar(SnackbarType.error, "Текущий пароль неверный");
-            changeStateBtnInputAfterWrongPassword(currentPasswordDiv, btn, input);
+            changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, btn, newPasswordInput);
           }
         });
     } else {
-      if (currentPassword.length === 0) {
-        createSnackbar(SnackbarType.error, "Введите текущий пароль");
-      }
-      if (currentPassword === input.value) {
-        createSnackbar(SnackbarType.error, "Введите отличные друг от друга пароли");
-      }
+      showCustomErrorPassword(passwordCurrentInput, newPasswordInput);
+      changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, btn, newPasswordInput);
     }
-    changeStateBtnInputAfterWrongPassword(currentPasswordDiv, btn, input);
   });
+}
+
+function showCustomErrorPassword(passwordCurrentInput: HTMLInputElement, newPasswordInput: HTMLInputElement) {
+  if (passwordCurrentInput.value.length === 0) {
+    createSnackbar(SnackbarType.error, "Введите текущий пароль");
+  }
+  if (passwordCurrentInput.value === newPasswordInput.value) {
+    createSnackbar(SnackbarType.error, "Введите отличные друг от друга пароли");
+  }
 }
 
 function changeStateBtnInputAfterWrongPassword(currentPasswordDiv: HTMLElement, btn: HTMLElement, input: HTMLInputElement) {

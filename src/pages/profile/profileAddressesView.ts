@@ -4,7 +4,7 @@ import { cityPattern, cityTitle, indexPattern, indexTitle, streetPattern, street
 import { editAddress, removeAddress } from "./profileEditHandlerAddresses";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
-export function createAddressesView(response: Customer, parent: HTMLElement) {
+export function createAddressesView(response: Customer | undefined, parent: HTMLElement) {
   const addressesShippingWrapper = createElement({ tagName: "div", classNames: ["addresses-shipping-wrapper"] });
   const addressesBillingWrapper = createElement({ tagName: "div", classNames: ["addresses-billing-wrapper"] });
   const addressesShippingHeading = createElement({ tagName: "div", classNames: [`addresses-shipping__heading`], textContent: "Адреса для доставки" });
@@ -21,31 +21,35 @@ export function createAddressesView(response: Customer, parent: HTMLElement) {
     classNames: ["add-btn", `address-billing__add-btn`],
     innerHTML: '<i class="fa-solid fa-plus"></i>',
   });
+  let isNewAddress: boolean;
   addressesShippingWrapper.append(addressesShippingHeading, addShippingAddressBtn);
   addressesBillingWrapper.append(addressesBillingHeading, addBillingAddressBtn);
-  response.addresses?.forEach((address) => {
+  response?.addresses?.forEach((address) => {
+    isNewAddress = false;
     response.shippingAddressIds?.forEach((shippingAddressID) => {
       let isDefaultAddress = false;
+
       if (response.defaultShippingAddressId === shippingAddressID) isDefaultAddress = true;
-      if (shippingAddressID === address.id) createAddressView("shipping", addressesShippingWrapper, isDefaultAddress, address);
+      if (shippingAddressID === address.id) createAddressView("shipping", addressesShippingWrapper, isDefaultAddress, isNewAddress, address);
     });
 
     response.billingAddressIds?.forEach((billingAddressID) => {
       let isDefaultAddress = false;
       if (response.defaultBillingAddressId === billingAddressID) isDefaultAddress = true;
-      if (billingAddressID === address.id) createAddressView("billing", addressesBillingWrapper, isDefaultAddress, address);
+      if (billingAddressID === address.id) createAddressView("billing", addressesBillingWrapper, isDefaultAddress, isNewAddress, address);
     });
   });
+  isNewAddress = true;
   addShippingAddressBtn.addEventListener("click", () => {
-    createAddressView("shipping", addressesShippingWrapper, false);
+    createAddressView("shipping", addressesShippingWrapper, false, isNewAddress, response?.addresses[response?.addresses.length - 1]);
   });
   addBillingAddressBtn.addEventListener("click", () => {
-    createAddressView("billing", addressesBillingWrapper, false);
+    createAddressView("billing", addressesBillingWrapper, false, isNewAddress, response?.addresses[response?.addresses.length - 1]);
   });
   parent.append(addressesShippingWrapper, addressesBillingWrapper);
 }
 
-function createAddressView(addressType: string, parent: HTMLElement, isDefaultAddress: boolean, address?: Address) {
+function createAddressView(addressType: string, parent: HTMLElement, isDefaultAddress: boolean, isNewAddress: boolean, address?: Address) {
   const addressInfo = createElement({ tagName: "div", classNames: [`address-${addressType}-info`] });
   const iconAddress = createElement({
     tagName: "div",
@@ -58,12 +62,11 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     classNames: ["edit-btn", `address-${addressType}__edit-btn`],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  if (address) addressData.classList.add(`${address.id}`);
-  if (!address) addressData.classList.add(`new-address`);
+  if (!isNewAddress) addressData.classList.add(`${address?.id}`);
 
   addressEditBtn.addEventListener("click", () => {
-    if (address && address.id) editAddress(addressType, address.id);
-    if (!address) editAddress(addressType);
+    if (!isNewAddress) editAddress(addressData, addressType, address?.id);
+    if (isNewAddress) editAddress(addressData, addressType);
   });
   const addressRemoveBtn = createElement({
     tagName: "div",
@@ -71,7 +74,8 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     innerHTML: '<i class="fa-solid fa-trash"></i>',
   });
   addressRemoveBtn.addEventListener("click", () => {
-    removeAddress(addressInfo, address?.id);
+    if (!isNewAddress) removeAddress(addressInfo, address?.id);
+    if (isNewAddress) removeAddress(addressInfo);
   });
 
   const countryDiv = createElement({
@@ -120,9 +124,10 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
       pattern: cityPattern,
       title: cityTitle,
       required: "true",
+      value: <string>address?.city,
     },
   });
-  if (address) city.value = <string>address.city;
+
   cityDiv.append(cityHeading, city);
   const streetDiv = createElement({
     tagName: "div",
@@ -142,9 +147,10 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
       pattern: streetPattern,
       title: streetTitle,
       required: "true",
+      value: <string>address?.streetName,
     },
   });
-  if (address) street.value = <string>address.streetName;
+
   streetDiv.append(streetHeading, street);
 
   const indexDiv = createElement({
@@ -165,9 +171,10 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
       pattern: indexPattern,
       title: indexTitle,
       required: "true",
+      value: <string>address?.postalCode,
     },
   });
-  if (address) index.value = <string>address.postalCode;
+
   indexDiv.append(indexHeading, index);
   const checkboxSettingDefaultAddress = createElement({
     tagName: "input",

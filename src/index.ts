@@ -12,7 +12,7 @@ import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { catalog, renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
-import { profile, renderCustomerDataFromApi } from "./pages/profile/profileView";
+import { renderProfileContent } from "./pages/profile/profileView";
 import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
 
@@ -30,7 +30,7 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-function renderContent(hash: string) {
+async function renderContent(hash: string) {
   const contentDiv = document.querySelector(".main");
   const [route, ...args] = hash.split("/");
   if (contentDiv) {
@@ -43,8 +43,7 @@ function renderContent(hash: string) {
         break;
       case Pages.PROFILE:
         if (localStorage.getItem("refreshToken")) {
-          contentDiv.append(profile);
-          renderCustomerDataFromApi();
+          contentDiv.append(await renderProfileContent());
         } else {
           window.location.href = Pages.MAIN;
         }

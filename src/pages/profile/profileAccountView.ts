@@ -16,7 +16,7 @@ import {
 import { editBirthday, editEmail, editName, editPassword, editSurname } from "./profileEditHandlerAccount";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
-export function createAccountView(response: Customer, parent: HTMLElement) {
+export function createAccountView(response: Customer | undefined, parent: HTMLElement) {
   const iconUser = createElement({ tagName: "div", classNames: ["profile-account__user-icon"], innerHTML: '<i class="fa-regular fa-user"></i>' });
   const accountInfo = createElement({ tagName: "div", classNames: ["profile-account__data"] });
 
@@ -38,7 +38,7 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
       title: nameTitle,
       pattern: `${namePattern}`,
       required: "true",
-      value: `${response.firstName}`,
+      value: `${response?.firstName}`,
     },
   });
   const nameEditBtn = createElement({
@@ -46,7 +46,9 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
     classNames: ["edit-btn", "name__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  nameEditBtn.addEventListener("click", editName);
+  nameEditBtn.addEventListener("click", () => {
+    editName(name, nameEditBtn);
+  });
   nameDiv.append(nameHeading, name, nameEditBtn);
 
   const surnameDiv = createElement({
@@ -67,7 +69,7 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
       title: surnameTitle,
       pattern: `${surnamePattern}`,
       required: "true",
-      value: `${response.lastName}`,
+      value: `${response?.lastName}`,
     },
   });
   const surnameEditBtn = createElement({
@@ -75,7 +77,9 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
     classNames: ["edit-btn", "surname__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  surnameEditBtn.addEventListener("click", editSurname);
+  surnameEditBtn.addEventListener("click", () => {
+    editSurname(surname, surnameEditBtn);
+  });
   surnameDiv.append(surnameHeading, surname, surnameEditBtn);
   const birthdayDiv = createElement({
     tagName: "div",
@@ -94,7 +98,7 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
       type: "date",
       title: birthdayTitle,
       required: "true",
-      value: `${response.dateOfBirth}`,
+      value: `${response?.dateOfBirth}`,
     },
   });
   const birthdayEditBtn = createElement({
@@ -102,7 +106,9 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
     classNames: ["edit-btn", "birthday__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  birthdayEditBtn.addEventListener("click", editBirthday);
+  birthdayEditBtn.addEventListener("click", () => {
+    editBirthday(birthday, birthdayEditBtn);
+  });
   birthdayDiv.append(birthdayHeading, birthday, birthdayEditBtn);
   const emailDiv = createElement({
     tagName: "div",
@@ -122,7 +128,7 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
       title: emailTitle,
       pattern: `${emailPattern}`,
       required: "true",
-      value: `${response.email}`,
+      value: `${response?.email}`,
     },
   });
 
@@ -131,7 +137,9 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
     classNames: ["edit-btn", "email__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  emailEditBtn.addEventListener("click", editEmail);
+  emailEditBtn.addEventListener("click", () => {
+    editEmail(email, emailEditBtn);
+  });
   emailDiv.append(emailHeading, email, emailEditBtn);
 
   const passwordDiv = createElement({
@@ -151,7 +159,7 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
       type: "password",
       title: passwordTitle,
       pattern: `${passwordPattern}`,
-      value: `${response.password}`,
+      value: `${response?.password}`,
     },
   });
 
@@ -160,15 +168,43 @@ export function createAccountView(response: Customer, parent: HTMLElement) {
     classNames: ["edit-btn", "password__edit-btn"],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  passwordEditBtn.addEventListener("click", editPassword);
+
+  const passwordCurrentDiv = createElement({
+    tagName: "div",
+    classNames: ["password-current_wrapper"],
+  });
+  const passwordCurrentHeading = createElement({
+    tagName: "span",
+    classNames: ["password__heading"],
+    textContent: "Текущий пароль",
+  });
+  const passwordCurrent = createElement({
+    tagName: "input",
+    classNames: ["password-current__input", "field", "active-input"],
+    attributes: {
+      name: "password",
+      type: "password",
+      title: passwordTitle,
+      pattern: `${passwordPattern}`,
+    },
+  });
+
+  passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrent);
+  passwordEditBtn.addEventListener("click", () => {
+    editPassword(passwordCurrent, passwordCurrentDiv, password, passwordEditBtn);
+    passwordCurrentDiv.style.opacity = "1";
+    passwordHeading.textContent = "Новый пароль";
+    passwordEditBtn.classList.add("disabled-icon");
+  });
   const blockForPasswordError = createElement({ tagName: "div" });
+
   passwordDiv.append(passwordHeading, password, passwordEditBtn);
   addValidationListenersToInputProfile(name, surnameDiv, accountInfo, ["pattern", "spaces"], nameEditBtn);
   addValidationListenersToInputProfile(surname, birthdayDiv, accountInfo, ["pattern", "spaces"], surnameEditBtn);
   addValidationListenersToInputProfile(birthday, emailDiv, accountInfo, ["date"], birthdayEditBtn);
   addValidationListenersToInputProfile(email, passwordDiv, accountInfo, ["pattern", "spaces"], emailEditBtn);
-  addValidationListenersToInputProfile(password, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
-
-  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, blockForPasswordError);
+  addValidationListenersToInputProfile(password, passwordCurrentDiv, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  addValidationListenersToInputProfile(passwordCurrent, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv, blockForPasswordError);
   parent.append(iconUser, accountInfo);
 }
