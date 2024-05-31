@@ -29,6 +29,15 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
+const renderPageContent = async (renderFunc: () => Promise<any>) => {
+  const contentDiv = document.querySelector(".main");
+  try {
+    contentDiv?.append(await renderFunc());
+  } catch (error) {
+    contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+  }
+};
+
 async function renderContent(hash: string) {
   const contentDiv = document.querySelector(".main");
   const [route, ...args] = hash.split("/");
@@ -37,39 +46,20 @@ async function renderContent(hash: string) {
     switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
-        try {
-          const renderedMainPageContent = await getMainPageContent();
-          contentDiv.append(renderedMainPageContent);
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
-        }
+        await renderPageContent(getMainPageContent);
         break;
       case Pages.PROFILE:
-        try {
-          if (localStorage.getItem("refreshToken")) {
-            contentDiv.append(await renderProfileContent());
-          } else {
-            window.location.href = Pages.LOGIN;
-          }
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
+        if (localStorage.getItem("refreshToken")) {
+          await renderPageContent(renderProfileContent);
+        } else {
+          window.location.href = Pages.LOGIN;
         }
         break;
       case Pages.CATALOG:
-        try {
-          const renderedCatalogContent = await renderProductsFromApi();
-          contentDiv.append(renderedCatalogContent);
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
-        }
+        await renderPageContent(renderProductsFromApi);
         break;
       case Pages.PRODUCT:
-        try {
-          const renderedProductContent = await renderProductContent(args[0]);
-          contentDiv.append(renderedProductContent);
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
-        }
+        await renderPageContent(() => renderProductContent(args[0]));
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
