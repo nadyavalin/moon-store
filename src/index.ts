@@ -12,7 +12,7 @@ import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { renderProductsFromApi } from "./pages/catalog/catalog";
 import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
-import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
+import { renderProfileContent } from "./pages/profile/profileView";
 import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
 
@@ -44,8 +44,7 @@ async function renderContent(hash: string) {
       case Pages.PROFILE:
         try {
           if (localStorage.getItem("refreshToken")) {
-            contentDiv.append(profile);
-            renderCustomerDataFromApi();
+            contentDiv.append(await renderProfileContent());
           } else {
             window.location.href = Pages.LOGIN;
           }

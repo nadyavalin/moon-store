@@ -6,7 +6,9 @@
   margin: 20px;
   max-width: 1000px;
 }
-
+.profile-wrapper h2 {
+  margin: 0;
+}
 .addresses-shipping-wrapper,
 .addresses-billing-wrapper {
   display: flex;
@@ -15,8 +17,8 @@
   gap: 20px;
 }
 .profile-account-wrapper,
-.addresses-shipping-info,
-.addresses-billing-info {
+.address-shipping-info,
+.address-billing-info {
   background-color: var(--dark-grey);
   padding: 0 40px 40px 40px;
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
@@ -74,16 +76,27 @@
   padding: 0;
 }
 
-.edit-btn {
+.edit-btn,
+.remove-btn,
+.add-btn {
   font-size: 0.6em;
   border: none;
   color: var(--accent-blue);
   cursor: pointer;
-  align-self: flex-start;
   margin-top: 10px;
   width: 20px;
 }
-.edit-btn:hover {
+.edit-btn,
+.remove-btn {
+  align-self: flex-start;
+}
+.add-btn {
+  margin-top: 0;
+}
+
+.edit-btn:hover,
+.remove-btn:hover,
+.add-btn:hover {
   color: var(--blue-hover);
 }
 
@@ -110,16 +123,16 @@
     flex-direction: column;
   }
   .profile-account-wrapper,
-  .addresses-shipping-info,
-  .addresses-billing-info {
+  .address-shipping-info,
+  .address-billing-info {
     flex-direction: column;
   }
 }
 
 @media (max-width: 450px) {
   .profile-account-wrapper,
-  .addresses-shipping-info,
-  .addresses-billing-info {
+  .address-shipping-info,
+  .address-billing-info {
     padding: 0 15px 15px 15px;
   }
 }

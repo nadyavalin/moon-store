@@ -9,7 +9,6 @@ export function formRegistrationHandler(event: Event) {
   const formData = new FormData(form);
   const checkboxSettingOneAddress = <string>formData.get("setting-one-address");
   const checkboxSettingDefaultAddressShipping = <string>formData.get("setting-default-address-shipping");
-
   const addressShipping = {
     city: <string>formData.get("city-shipping"),
     streetName: <string>formData.get("street-shipping"),
@@ -30,9 +29,11 @@ export function formRegistrationHandler(event: Event) {
   if (checkboxSettingDefaultAddressShipping) customer.defaultShippingAddress = 0;
 
   if (!checkboxSettingOneAddress) {
-    customer.billingAddresses = [0];
+    const addressBilling = addressShipping;
+    customer.addresses.push(addressBilling);
+    customer.billingAddresses = [1];
     if (checkboxSettingDefaultAddressShipping) {
-      customer.defaultBillingAddress = 0;
+      customer.defaultBillingAddress = 1;
     }
   }
   if (checkboxSettingOneAddress) {
