@@ -11,7 +11,7 @@ import { renderRegistrationFormContent } from "./pages/registration/registration
 import { render404PageContent } from "./pages/404/404";
 import { Pages } from "./types/types";
 import { renderProductsFromApi } from "./pages/catalog/catalog";
-import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
+import { getMainPageContent } from "./pages/main/main";
 import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
 import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
@@ -38,8 +38,12 @@ async function renderContent(hash: string) {
     switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
-        contentDiv.append(sliderWrapper);
-        renderProductsForSliderFromApi();
+        try {
+          const renderedMainPageContent = await getMainPageContent();
+          contentDiv.append(renderedMainPageContent);
+        } catch (error) {
+          contentDiv.append("Ошибка! Контент невозможно отобразить.");
+        }
         break;
       case Pages.PROFILE:
         try {
