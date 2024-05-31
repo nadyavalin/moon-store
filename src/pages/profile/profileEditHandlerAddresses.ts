@@ -10,7 +10,7 @@ export function editAddress({
   addressEditBtn,
 }: {
   addressDataDiv: HTMLElement;
-  addressType: string;
+  addressType: AddressType;
   addressEditBtn: HTMLElement;
 }): void {
   const inputArr = Array.from(addressDataDiv.querySelectorAll("input"));
@@ -49,7 +49,7 @@ function updateCustomerHandlerAddress({
   select: HTMLElement;
   actions: CustomerUpdateAction[];
   isNewAddress: boolean;
-  addressType: string;
+  addressType: AddressType;
   addressDataDiv: HTMLElement;
 }) {
   if (select.className.includes("active-input")) return;

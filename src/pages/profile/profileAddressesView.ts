@@ -64,7 +64,7 @@ export function createAddressesView(parent: HTMLElement, response?: Customer) {
   parent.append(addressesShippingWrapper, addressesBillingWrapper);
 }
 
-function createAddressView(addressType: string, parent: HTMLElement, isDefaultAddress: boolean, isNewAddress: boolean, address?: Address) {
+function createAddressView(addressType: AddressType, parent: HTMLElement, isDefaultAddress: boolean, isNewAddress: boolean, address?: Address) {
   const addressInfo = createElement({ tagName: "div", classNames: [`address-${addressType}-info`] });
   const iconAddress = createElement({
     tagName: "div",
@@ -230,7 +230,7 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
   parent.append(addressInfo);
 }
 
-function checkDefaultAddress(addressType: string, checkboxSettingDefaultAddress: HTMLInputElement) {
+function checkDefaultAddress(addressType: AddressType, checkboxSettingDefaultAddress: HTMLInputElement) {
   const arrAddressDefault = Array.from(document.querySelectorAll(`.setting-default-address-${addressType}`));
   const checked = arrAddressDefault.filter((element) => (element as HTMLInputElement).checked);
   if (checked.length > 1) {
