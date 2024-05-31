@@ -65,7 +65,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
       moveSlider(swiperLine, ".product__img", direction);
     }
   });
-  cycleSlider(swiperLine, ".product__img");
+
   const slideCount = swiperLine.childElementCount;
   if (slideCount === 1) {
     arrowButtonLeft.classList.add("disabled");
@@ -74,6 +74,8 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     arrowButtonLeft.classList.remove("disabled");
     arrowButtonRight.classList.remove("disabled");
   }
+  cycleSlider(swiperLine, ".product__img");
+  // Swiper
 
   productSizes?.forEach((variant) => {
     const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });

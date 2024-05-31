@@ -42,6 +42,7 @@ export function createSlider(response: ClientResponse<ProductProjectionPagedQuer
       moveSlider();
     }, 3000);
   };
+
   sliderWrapper.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
