@@ -178,7 +178,7 @@ export function createAccountView(parent: HTMLElement, response?: Customer) {
     classNames: ["password__heading"],
     textContent: "Текущий пароль",
   });
-  const passwordCurrent = createElement({
+  const passwordCurrentInput = createElement({
     tagName: "input",
     classNames: ["password-current__input", "field", "active-input"],
     attributes: {
@@ -189,9 +189,9 @@ export function createAccountView(parent: HTMLElement, response?: Customer) {
     },
   });
 
-  passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrent);
+  passwordCurrentDiv.append(passwordCurrentHeading, passwordCurrentInput);
   passwordEditBtn.addEventListener("click", () => {
-    editPassword(passwordCurrent, passwordCurrentDiv, password, passwordEditBtn);
+    editPassword({ passwordCurrentInput, passwordCurrentDiv, newPasswordInput: password, passwordEditBtn });
     passwordCurrentDiv.style.opacity = "1";
     passwordHeading.textContent = "Новый пароль";
     passwordEditBtn.classList.add("disabled-icon");
@@ -204,7 +204,7 @@ export function createAccountView(parent: HTMLElement, response?: Customer) {
   addValidationListenersToInputProfile(birthday, emailDiv, accountInfo, ["date"], birthdayEditBtn);
   addValidationListenersToInputProfile(email, passwordDiv, accountInfo, ["pattern", "spaces"], emailEditBtn);
   addValidationListenersToInputProfile(password, passwordCurrentDiv, accountInfo, ["pattern", "spaces"], passwordEditBtn);
-  addValidationListenersToInputProfile(passwordCurrent, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  addValidationListenersToInputProfile(passwordCurrentInput, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
   accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv, blockForPasswordError);
   parent.append(iconUser, accountInfo);
 }

@@ -4,42 +4,54 @@ import { createSnackbar } from "../../components/elements";
 import { AddressType, SnackbarType } from "../../types/types";
 import { changeStateBtnInput } from "./profileEditHandlerAccount";
 
-export function editAddress(addressDataDiv: HTMLElement, addressType: string, addressId?: string): void {
-  alert(addressId);
-  const btnEditAddress = <HTMLElement>addressDataDiv.querySelector(".edit-btn");
+export function editAddress({
+  addressDataDiv,
+  addressType,
+  addressEditBtn,
+}: {
+  addressDataDiv: HTMLElement;
+  addressType: string;
+  addressEditBtn: HTMLElement;
+}): void {
   const inputArr = Array.from(addressDataDiv.querySelectorAll("input"));
   const select = <HTMLElement>addressDataDiv.querySelector("select");
-  const checkbox = <HTMLInputElement>addressDataDiv.querySelector(".setting-default-address-checkbox");
   inputArr.forEach((element: HTMLInputElement) => {
     changeStateBtnInput(element);
   });
-  changeStateBtnInput(select, btnEditAddress);
+  changeStateBtnInput(select, addressEditBtn);
   const addressObj = createAddressObject(addressDataDiv);
-  if (addressId) {
-    updateCustomerHandlerAddress(
+  if (addressDataDiv.id) {
+    updateCustomerHandlerAddress({
       select,
-      [{ action: "changeAddress", addressId, address: addressObj }],
-      checkbox,
-      false,
+      actions: [{ action: "changeAddress", addressId: addressDataDiv.id, address: addressObj }],
+      isNewAddress: false,
       addressType,
       addressDataDiv,
-      addressId,
-    );
+    });
   } else {
-    const addressObj = createAddressObject(addressDataDiv);
-    updateCustomerHandlerAddress(select, [{ action: "addAddress", address: addressObj }], checkbox, true, addressType, addressDataDiv);
+    updateCustomerHandlerAddress({
+      select,
+      actions: [{ action: "addAddress", address: addressObj }],
+      isNewAddress: true,
+      addressType,
+      addressDataDiv,
+    });
   }
 }
 
-function updateCustomerHandlerAddress(
-  select: HTMLElement,
-  actions: CustomerUpdateAction[],
-  checkbox: HTMLInputElement,
-  isNewAddress: boolean,
-  addressType: string,
-  addressDataDiv: HTMLElement,
-  addressId?: string,
-) {
+function updateCustomerHandlerAddress({
+  select,
+  actions,
+  isNewAddress,
+  addressType,
+  addressDataDiv,
+}: {
+  select: HTMLElement;
+  actions: CustomerUpdateAction[];
+  isNewAddress: boolean;
+  addressType: string;
+  addressDataDiv: HTMLElement;
+}) {
   if (select.className.includes("active-input")) return;
   getUserData()
     ?.then(({ body }) => {
@@ -47,12 +59,13 @@ function updateCustomerHandlerAddress(
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
           const addressIdNew = response.body.addresses[response.body.addresses.length - 1].id;
+          const checkbox = <HTMLInputElement>addressDataDiv.querySelector(".setting-default-address-checkbox");
           let addressIDForDefault;
           if (isNewAddress) {
             addressDataDiv.id = `${addressIdNew}`;
             addressIDForDefault = checkbox.checked ? addressIdNew : undefined;
           }
-          if (!isNewAddress) addressIDForDefault = checkbox.checked ? addressId : undefined;
+          if (!isNewAddress) addressIDForDefault = checkbox.checked ? addressDataDiv.id : undefined;
           const actions: CustomerUpdateAction[] = [
             {
               action: addressType === AddressType.shipping ? "setDefaultShippingAddress" : "setDefaultBillingAddress",

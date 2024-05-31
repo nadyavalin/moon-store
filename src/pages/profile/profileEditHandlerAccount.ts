@@ -18,31 +18,46 @@ export function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
   }
 }
 
-export function editName(nameInput: HTMLInputElement, btn: HTMLElement): void {
-  changeStateBtnInput(nameInput, btn);
-  updateCustomerHandler(nameInput, [{ action: "setFirstName", firstName: nameInput.value }], "firstName", function changeGreeting() {
-    const nameInGreeting = document.querySelector(".user-greeting__link");
-    if (nameInGreeting) nameInGreeting.textContent = nameInput.value;
-    setItemToLocalStorage("user", nameInput.value);
+export function editName(input: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(input, btn);
+  updateCustomerHandler({
+    input,
+    actions: [{ action: "setFirstName", firstName: input.value }],
+    fieldName: "firstName",
+    callback: function changeGreeting() {
+      const nameInGreeting = document.querySelector(".user-greeting__link");
+      if (nameInGreeting) nameInGreeting.textContent = input.value;
+      setItemToLocalStorage("user", input.value);
+    },
   });
 }
 
-export function editSurname(surnameInput: HTMLInputElement, btn: HTMLElement): void {
-  changeStateBtnInput(surnameInput, btn);
-  updateCustomerHandler(surnameInput, [{ action: "setLastName", lastName: surnameInput.value }], "lastName");
+export function editSurname(input: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(input, btn);
+  updateCustomerHandler({ input, actions: [{ action: "setLastName", lastName: input.value }], fieldName: "lastName" });
 }
 
-export function editBirthday(birthdayInput: HTMLInputElement, btn: HTMLElement): void {
-  changeStateBtnInput(birthdayInput, btn);
-  updateCustomerHandler(birthdayInput, [{ action: "setDateOfBirth", dateOfBirth: birthdayInput.value }], "dateOfBirth");
+export function editBirthday(input: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(input, btn);
+  updateCustomerHandler({ input, actions: [{ action: "setDateOfBirth", dateOfBirth: input.value }], fieldName: "dateOfBirth" });
 }
 
-export function editEmail(emailInput: HTMLInputElement, btn: HTMLElement): void {
-  changeStateBtnInput(emailInput, btn);
-  updateCustomerHandler(emailInput, [{ action: "changeEmail", email: emailInput.value }], "email");
+export function editEmail(input: HTMLInputElement, btn: HTMLElement): void {
+  changeStateBtnInput(input, btn);
+  updateCustomerHandler({ input, actions: [{ action: "changeEmail", email: input.value }], fieldName: "email" });
 }
 
-function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
+function updateCustomerHandler({
+  input,
+  actions,
+  fieldName,
+  callback,
+}: {
+  input: HTMLInputElement;
+  actions: CustomerUpdateAction[];
+  fieldName: keyof Customer;
+  callback?: () => void;
+}): void {
   if (!input.className.includes("active-input")) {
     getUserData()?.then(({ body }) => {
       const version = body.version;
@@ -68,13 +83,18 @@ function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateA
   }
 }
 
-export function editPassword(
-  passwordCurrentInput: HTMLInputElement,
-  passwordCurrentDiv: HTMLElement,
-  newPasswordInput: HTMLInputElement,
-  btn: HTMLElement,
-): void {
-  changeStateBtnInput(newPasswordInput, btn);
+export function editPassword({
+  passwordCurrentInput,
+  passwordCurrentDiv,
+  newPasswordInput,
+  passwordEditBtn,
+}: {
+  passwordCurrentInput: HTMLInputElement;
+  passwordCurrentDiv: HTMLElement;
+  newPasswordInput: HTMLInputElement;
+  passwordEditBtn: HTMLElement;
+}): void {
+  changeStateBtnInput(newPasswordInput, passwordEditBtn);
   if (newPasswordInput.className.includes("active-input")) return;
   passwordCurrentInput.classList.remove("valid");
   getUserData()?.then(({ body }) => {
@@ -91,12 +111,12 @@ export function editPassword(
         .catch((response) => {
           if (response.statusCode === 400) {
             createSnackbar(SnackbarType.error, "Текущий пароль неверный");
-            changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, btn, newPasswordInput);
+            changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, passwordEditBtn, newPasswordInput);
           }
         });
     } else {
       showCustomErrorPassword(passwordCurrentInput, newPasswordInput);
-      changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, btn, newPasswordInput);
+      changeStateBtnInputAfterWrongPassword(passwordCurrentDiv, passwordEditBtn, newPasswordInput);
     }
   });
 }

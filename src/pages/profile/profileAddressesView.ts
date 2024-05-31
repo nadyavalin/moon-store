@@ -3,7 +3,7 @@ import { createElement, createSnackbar } from "../../components/elements";
 import { cityPattern, cityTitle, indexPattern, indexTitle, streetPattern, streetTitle } from "../registration/registrationView";
 import { editAddress, removeAddress } from "./profileEditHandlerAddresses";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
-import { AddressType, SnackbarType } from "src/types/types";
+import { AddressType, SnackbarType } from "../../types/types";
 
 export function createAddressesView(parent: HTMLElement, response?: Customer) {
   const addressesShippingWrapper = createElement({ tagName: "div", classNames: ["addresses-shipping-wrapper"] });
@@ -71,16 +71,16 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     classNames: [`address-${addressType}__address-icon`],
     innerHTML: '<i class="fa-solid fa-truck-fast"></i>',
   });
-  const addressData = createElement({ tagName: "div", classNames: [`address__data`] });
+  const addressDataDiv = createElement({ tagName: "div", classNames: [`address__data`] });
   const addressEditBtn = createElement({
     tagName: "div",
     classNames: ["edit-btn", `address-${addressType}__edit-btn`],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  if (!isNewAddress) addressData.id = `${address?.id}`;
+  if (!isNewAddress) addressDataDiv.id = `${address?.id}`;
 
   addressEditBtn.addEventListener("click", () => {
-    editAddress(addressData, addressType, !addressData.id ? undefined : addressData.id);
+    editAddress({ addressDataDiv, addressType, addressEditBtn });
   });
   const addressRemoveBtn = createElement({
     tagName: "div",
@@ -202,13 +202,13 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     textContent: "Адрес по умолчанию",
   });
   if (isDefaultAddress) checkboxSettingDefaultAddress.setAttribute("checked", "true");
-  addValidationListenersToInputProfile(city, streetDiv, addressData, ["pattern", "spaces"], addressEditBtn);
-  addValidationListenersToInputProfile(street, indexDiv, addressData, ["pattern", "spaces"], addressEditBtn);
-  addValidationListenersToInputProfile(index, checkboxWrapper, addressData, ["pattern", "spaces"], addressEditBtn);
+  addValidationListenersToInputProfile(city, streetDiv, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
+  addValidationListenersToInputProfile(street, indexDiv, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
+  addValidationListenersToInputProfile(index, checkboxWrapper, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
   checkboxSettingDefaultAddress.addEventListener("change", () => checkDefaultAddress(addressType, checkboxSettingDefaultAddress));
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
-  addressData.append(countryDiv, cityDiv, streetDiv, indexDiv, checkboxWrapper);
-  addressInfo.append(iconAddress, addressData);
+  addressDataDiv.append(countryDiv, cityDiv, streetDiv, indexDiv, checkboxWrapper);
+  addressInfo.append(iconAddress, addressDataDiv);
   parent.append(addressInfo);
 }
 
