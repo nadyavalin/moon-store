@@ -4,8 +4,16 @@ import { createElement, createSvgElement } from "../../components/elements";
 import { getProductDataWithSlug } from "../../api/api";
 import { arrowLeft, arrowRight } from "../../components/svg";
 import { cycleSlider, moveSlider } from "../../components/slider";
+import { createModalImage } from "./modal/modal";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
+  const contentDiv = document.querySelector(".main");
+  try {
+    const modal = await createModalImage(slug);
+    contentDiv?.append(modal);
+  } catch (error) {
+    contentDiv?.append("Ошибка! Изображение невозможно отобразить.");
+  }
   const response = await getProductDataWithSlug(slug);
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const cardName = response?.body.results[0].name.ru;
@@ -38,7 +46,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button"], textContent: "Добавить в корзину" });
 
-  // Swiper
+  // Swiper code begin
   const swiperWrapper = createElement({ tagName: "div", classNames: ["swiper__wrapper"] });
   const swiperLine = createElement({ tagName: "ul", classNames: ["swiper__line"] });
   const arrowButtonLeft = createSvgElement(arrowLeft, "swiper__arrow");
@@ -48,12 +56,9 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   images?.forEach((img) => {
     const swiperCard = createElement({ tagName: "li", classNames: ["swiper-card"] });
-    const imageLinkWrapper = createElement({ tagName: "a", classNames: ["image__link"], attributes: { href: `#` } });
-    const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}` } });
-    swiperCard.append(imageLinkWrapper);
+    const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}`, alt: "" } });
     swiperLine.append(swiperCard);
-    swiperCard.append(imageLinkWrapper);
-    imageLinkWrapper.append(image);
+    swiperCard.append(image);
   });
 
   swiperWrapper.append(arrowButtonLeft, swiperLine, arrowButtonRight);
@@ -63,6 +68,10 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     if (target.classList.contains("swiper__arrow") || target.closest(".swiper__arrow")) {
       const direction = target.id;
       moveSlider(swiperLine, ".product__img", direction);
+    }
+    if (target.classList.contains("product__img") || target.closest(".product__img")) {
+      const modalBack = document.querySelector(".modal-back");
+      modalBack?.classList.remove("hidden");
     }
   });
 
@@ -75,7 +84,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     arrowButtonRight.classList.remove("disabled");
   }
   cycleSlider(swiperLine, ".product__img");
-  // Swiper
+  // Swiper code end
 
   productSizes?.forEach((variant) => {
     const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });
