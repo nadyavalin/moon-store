@@ -1,20 +1,19 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
-import "./api/api";
 
+import { Pages } from "./types/types";
+import { createApiRoot } from "./api/api";
+import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
-import renderLoginFormContent from "./pages/loginPage/loginPage";
-import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
-import { Pages } from "./types/types";
 import { renderProductsFromApi } from "./pages/catalog/catalog";
-import { getMainPageContent } from "./pages/main/main";
-import { profile, renderCustomerDataFromApi } from "./pages/profile/profile";
-import { createApiRoot } from "./api/api";
+import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
+import { renderRegistrationFormContent } from "./pages/registration/registrationView";
+import renderLoginFormContent from "./pages/loginPage/loginPage";
 
 document.body.append(header, main, footer);
 
@@ -48,8 +47,7 @@ async function renderContent(hash: string) {
       case Pages.PROFILE:
         try {
           if (localStorage.getItem("refreshToken")) {
-            contentDiv.append(profile);
-            renderCustomerDataFromApi();
+            contentDiv.append(await renderProfileContent());
           } else {
             window.location.href = Pages.LOGIN;
           }
