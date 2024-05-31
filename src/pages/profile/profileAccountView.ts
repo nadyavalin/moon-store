@@ -16,7 +16,7 @@ import {
 import { editBirthday, editEmail, editName, editPassword, editSurname } from "./profileEditHandlerAccount";
 import { addValidationListenersToInputProfile } from "./checkValidityProfile";
 
-export function createAccountView(response: Customer | undefined, parent: HTMLElement) {
+export function createAccountView(parent: HTMLElement, response?: Customer) {
   const iconUser = createElement({ tagName: "div", classNames: ["profile-account__user-icon"], innerHTML: '<i class="fa-regular fa-user"></i>' });
   const accountInfo = createElement({ tagName: "div", classNames: ["profile-account__data"] });
 

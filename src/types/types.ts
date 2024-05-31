@@ -42,3 +42,8 @@ export type CategoryData = {
   parent: Category;
   children: Category[];
 };
+
+export enum AddressType {
+  shipping = "shipping",
+  billing = "billing",
+}

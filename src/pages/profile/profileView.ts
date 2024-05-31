@@ -11,8 +11,8 @@ export async function renderProfileContent(): Promise<HTMLElement> {
   const titleMain = createElement({ tagName: "h2", classNames: ["profile__heading"], textContent: "Профиль пользователя" });
   const accountWrapper = createElement({ tagName: "div", classNames: ["profile-account-wrapper"] });
   const addressesWrapper = createElement({ tagName: "div", classNames: ["profile-addresses-wrapper"] });
-  createAccountView(response?.body, accountWrapper);
-  createAddressesView(response?.body, addressesWrapper);
+  createAccountView(accountWrapper, response?.body);
+  createAddressesView(addressesWrapper, response?.body);
   profile.append(titleMain, accountWrapper, addressesWrapper);
   return profile;
 }

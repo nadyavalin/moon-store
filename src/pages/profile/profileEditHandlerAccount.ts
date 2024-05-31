@@ -45,7 +45,7 @@ export function editEmail(emailInput: HTMLInputElement, btn: HTMLElement): void 
 function updateCustomerHandler(input: HTMLInputElement, actions: CustomerUpdateAction[], fieldName: keyof Customer, callback?: () => void) {
   if (!input.className.includes("active-input")) {
     getUserData()?.then(({ body }) => {
-      const version = Number(body.version);
+      const version = body.version;
       const previousValue = body[fieldName];
       if (previousValue !== input.value) {
         updateCustomer(version, actions)

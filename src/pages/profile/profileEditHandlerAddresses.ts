@@ -1,7 +1,7 @@
 import { CustomerUpdateAction } from "@commercetools/platform-sdk";
 import { getUserData, updateCustomer } from "../../api/api";
 import { createSnackbar } from "../../components/elements";
-import { SnackbarType } from "../../types/types";
+import { AddressType, SnackbarType } from "../../types/types";
 import { changeStateBtnInput } from "./profileEditHandlerAccount";
 
 export function editAddress(addressDataDiv: HTMLElement, addressType: string, addressID?: string): void {
@@ -36,30 +36,17 @@ function updateCustomerHandlerAddress(
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
           const addressId = response.body.addresses[response.body.addresses.length - 1].id;
-          let addressIDForDefault;
-          if (checkbox.checked) {
-            addressIDForDefault = addressId;
-          } else {
-            addressIDForDefault = undefined;
+          const addressIDForDefault = checkbox.checked ? addressId : undefined;
+          const actions: CustomerUpdateAction[] = [
+            {
+              action: addressType === AddressType.shipping ? "setDefaultShippingAddress" : "setDefaultBillingAddress",
+              addressId: addressIDForDefault,
+            },
+          ];
+          if (isNewAddress) {
+            actions.push({ action: addressType === AddressType.shipping ? "addShippingAddressId" : "addBillingAddressId", addressId });
           }
-          if (isNewAddress && addressType === "shipping") {
-            updateCustomer(response.body.version, [
-              { action: "addShippingAddressId", addressId },
-              { action: "setDefaultShippingAddress", addressId: addressIDForDefault },
-            ]);
-          }
-          if (isNewAddress && addressType === "billing") {
-            updateCustomer(response.body.version, [
-              { action: "addBillingAddressId", addressId },
-              { action: "setDefaultBillingAddress", addressId: addressIDForDefault },
-            ]);
-          }
-          if (!isNewAddress && addressType === "shipping") {
-            updateCustomer(response.body.version, [{ action: "setDefaultShippingAddress", addressId: addressIDForDefault }]);
-          }
-          if (!isNewAddress && addressType === "billing") {
-            updateCustomer(response.body.version, [{ action: "setDefaultBillingAddress", addressId: addressIDForDefault }]);
-          }
+          updateCustomer(response.body.version, actions);
         }
       });
     })
@@ -95,7 +82,7 @@ export function removeAddress(addressDiv: HTMLElement, addressID?: string): void
     return;
   }
   getUserData()?.then(({ body }) => {
-    const version = Number(body.version);
+    const version = body.version;
     updateCustomer(version, [{ action: "removeAddress", addressId: addressID }])
       ?.then((response) => {
         if (response.statusCode === 200) {
