@@ -8,8 +8,8 @@ import { AddressType, SnackbarType } from "src/types/types";
 export function createAddressesView(parent: HTMLElement, response?: Customer) {
   const addressesShippingWrapper = createElement({ tagName: "div", classNames: ["addresses-shipping-wrapper"] });
   const addressesBillingWrapper = createElement({ tagName: "div", classNames: ["addresses-billing-wrapper"] });
-  const addressesShippingHeading = createElement({ tagName: "div", classNames: [`addresses-shipping__heading`], textContent: "Адреса для доставки" });
-  const addressesBillingHeading = createElement({ tagName: "div", classNames: [`addresses-billing__heading`], textContent: "Адреса для счетов" });
+  const addressesShippingHeading = createElement({ tagName: "h3", classNames: [`addresses-shipping__heading`], textContent: "Адреса для доставки" });
+  const addressesBillingHeading = createElement({ tagName: "h3", classNames: [`addresses-billing__heading`], textContent: "Адреса для счетов" });
 
   const addShippingAddressBtn = createElement({
     tagName: "div",
@@ -77,10 +77,10 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     classNames: ["edit-btn", `address-${addressType}__edit-btn`],
     innerHTML: '<i class="fa-solid fa-pen"></i>',
   });
-  if (!isNewAddress) addressData.classList.add(`${address?.id}`);
+  if (!isNewAddress) addressData.id = `${address?.id}`;
 
   addressEditBtn.addEventListener("click", () => {
-    editAddress(addressData, addressType, isNewAddress ? undefined : address?.id);
+    editAddress(addressData, addressType, !addressData.id ? undefined : addressData.id);
   });
   const addressRemoveBtn = createElement({
     tagName: "div",

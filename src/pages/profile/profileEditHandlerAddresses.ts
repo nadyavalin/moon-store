@@ -4,7 +4,8 @@ import { createSnackbar } from "../../components/elements";
 import { AddressType, SnackbarType } from "../../types/types";
 import { changeStateBtnInput } from "./profileEditHandlerAccount";
 
-export function editAddress(addressDataDiv: HTMLElement, addressType: string, addressID?: string): void {
+export function editAddress(addressDataDiv: HTMLElement, addressType: string, addressId?: string): void {
+  alert(addressId);
   const btnEditAddress = <HTMLElement>addressDataDiv.querySelector(".edit-btn");
   const inputArr = Array.from(addressDataDiv.querySelectorAll("input"));
   const select = <HTMLElement>addressDataDiv.querySelector("select");
@@ -14,11 +15,19 @@ export function editAddress(addressDataDiv: HTMLElement, addressType: string, ad
   });
   changeStateBtnInput(select, btnEditAddress);
   const addressObj = createAddressObject(addressDataDiv);
-  if (addressID) {
-    updateCustomerHandlerAddress(select, [{ action: "changeAddress", addressId: addressID, address: addressObj }], checkbox, false, addressType);
+  if (addressId) {
+    updateCustomerHandlerAddress(
+      select,
+      [{ action: "changeAddress", addressId, address: addressObj }],
+      checkbox,
+      false,
+      addressType,
+      addressDataDiv,
+      addressId,
+    );
   } else {
     const addressObj = createAddressObject(addressDataDiv);
-    updateCustomerHandlerAddress(select, [{ action: "addAddress", address: addressObj }], checkbox, true, addressType);
+    updateCustomerHandlerAddress(select, [{ action: "addAddress", address: addressObj }], checkbox, true, addressType, addressDataDiv);
   }
 }
 
@@ -27,7 +36,9 @@ function updateCustomerHandlerAddress(
   actions: CustomerUpdateAction[],
   checkbox: HTMLInputElement,
   isNewAddress: boolean,
-  addressType?: string,
+  addressType: string,
+  addressDataDiv: HTMLElement,
+  addressId?: string,
 ) {
   if (select.className.includes("active-input")) return;
   getUserData()
@@ -35,8 +46,13 @@ function updateCustomerHandlerAddress(
       updateCustomer(body.version, actions)?.then((response) => {
         if (response.statusCode === 200) {
           createSnackbar(SnackbarType.success, "Изменения сохранены");
-          const addressId = response.body.addresses[response.body.addresses.length - 1].id;
-          const addressIDForDefault = checkbox.checked ? addressId : undefined;
+          const addressIdNew = response.body.addresses[response.body.addresses.length - 1].id;
+          let addressIDForDefault;
+          if (isNewAddress) {
+            addressDataDiv.id = `${addressIdNew}`;
+            addressIDForDefault = checkbox.checked ? addressIdNew : undefined;
+          }
+          if (!isNewAddress) addressIDForDefault = checkbox.checked ? addressId : undefined;
           const actions: CustomerUpdateAction[] = [
             {
               action: addressType === AddressType.shipping ? "setDefaultShippingAddress" : "setDefaultBillingAddress",
@@ -44,7 +60,7 @@ function updateCustomerHandlerAddress(
             },
           ];
           if (isNewAddress) {
-            actions.push({ action: addressType === AddressType.shipping ? "addShippingAddressId" : "addBillingAddressId", addressId });
+            actions.push({ action: addressType === AddressType.shipping ? "addShippingAddressId" : "addBillingAddressId", addressId: addressIdNew });
           }
           updateCustomer(response.body.version, actions);
         }
@@ -79,6 +95,7 @@ export function removeAddress(addressDiv: HTMLElement, addressID?: string): void
   }
   if (!addressID) {
     addressDiv.remove();
+    createSnackbar(SnackbarType.success, "Адрес удален");
     return;
   }
   getUserData()?.then(({ body }) => {
