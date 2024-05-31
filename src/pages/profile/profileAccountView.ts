@@ -199,12 +199,42 @@ export function createAccountView(parent: HTMLElement, response?: Customer) {
   const blockForPasswordError = createElement({ tagName: "div" });
 
   passwordDiv.append(passwordHeading, password, passwordEditBtn);
-  addValidationListenersToInputProfile(name, surnameDiv, accountInfo, ["pattern", "spaces"], nameEditBtn);
-  addValidationListenersToInputProfile(surname, birthdayDiv, accountInfo, ["pattern", "spaces"], surnameEditBtn);
-  addValidationListenersToInputProfile(birthday, emailDiv, accountInfo, ["date"], birthdayEditBtn);
-  addValidationListenersToInputProfile(email, passwordDiv, accountInfo, ["pattern", "spaces"], emailEditBtn);
-  addValidationListenersToInputProfile(password, passwordCurrentDiv, accountInfo, ["pattern", "spaces"], passwordEditBtn);
-  addValidationListenersToInputProfile(passwordCurrentInput, blockForPasswordError, accountInfo, ["pattern", "spaces"], passwordEditBtn);
+  addValidationListenersToInputProfile({
+    input: name,
+    nextElem: surnameDiv,
+    parent: accountInfo,
+    validateParams: ["pattern", "spaces"],
+    btn: nameEditBtn,
+  });
+  addValidationListenersToInputProfile({
+    input: surname,
+    nextElem: birthdayDiv,
+    parent: accountInfo,
+    validateParams: ["pattern", "spaces"],
+    btn: surnameEditBtn,
+  });
+  addValidationListenersToInputProfile({ input: birthday, nextElem: emailDiv, parent: accountInfo, validateParams: ["date"], btn: birthdayEditBtn });
+  addValidationListenersToInputProfile({
+    input: email,
+    nextElem: passwordDiv,
+    parent: accountInfo,
+    validateParams: ["pattern", "spaces"],
+    btn: emailEditBtn,
+  });
+  addValidationListenersToInputProfile({
+    input: password,
+    nextElem: passwordCurrentDiv,
+    parent: accountInfo,
+    validateParams: ["pattern", "spaces"],
+    btn: passwordEditBtn,
+  });
+  addValidationListenersToInputProfile({
+    input: passwordCurrentInput,
+    nextElem: blockForPasswordError,
+    parent: accountInfo,
+    validateParams: ["pattern", "spaces"],
+    btn: passwordEditBtn,
+  });
   accountInfo.append(nameDiv, surnameDiv, birthdayDiv, emailDiv, passwordDiv, passwordCurrentDiv, blockForPasswordError);
   parent.append(iconUser, accountInfo);
 }

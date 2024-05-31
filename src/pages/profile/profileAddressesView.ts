@@ -202,9 +202,27 @@ function createAddressView(addressType: string, parent: HTMLElement, isDefaultAd
     textContent: "Адрес по умолчанию",
   });
   if (isDefaultAddress) checkboxSettingDefaultAddress.setAttribute("checked", "true");
-  addValidationListenersToInputProfile(city, streetDiv, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
-  addValidationListenersToInputProfile(street, indexDiv, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
-  addValidationListenersToInputProfile(index, checkboxWrapper, addressDataDiv, ["pattern", "spaces"], addressEditBtn);
+  addValidationListenersToInputProfile({
+    input: city,
+    nextElem: streetDiv,
+    parent: addressDataDiv,
+    validateParams: ["pattern", "spaces"],
+    btn: addressEditBtn,
+  });
+  addValidationListenersToInputProfile({
+    input: street,
+    nextElem: indexDiv,
+    parent: addressDataDiv,
+    validateParams: ["pattern", "spaces"],
+    btn: addressEditBtn,
+  });
+  addValidationListenersToInputProfile({
+    input: index,
+    nextElem: checkboxWrapper,
+    parent: addressDataDiv,
+    validateParams: ["pattern", "spaces"],
+    btn: addressEditBtn,
+  });
   checkboxSettingDefaultAddress.addEventListener("change", () => checkDefaultAddress(addressType, checkboxSettingDefaultAddress));
   checkboxWrapper.append(checkboxSettingDefaultAddress, labelSettingDefaultAddress);
   addressDataDiv.append(countryDiv, cityDiv, streetDiv, indexDiv, checkboxWrapper);
