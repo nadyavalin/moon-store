@@ -56,9 +56,62 @@
   cursor: pointer;
 }
 
+.swiper__wrapper {
+  position: relative;
+  max-width: 340px;
+  width: 90%;
+}
+
+.swiper__line {
+  display: grid;
+  grid-auto-flow: column;
+  overflow: hidden;
+}
+
+.swiper__arrow {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  border: 2px var(--main-light) solid;
+  border-radius: 50%;
+  padding: 6px;
+  transition: background-color 1s ease;
+  cursor: pointer;
+  top: 370px;
+  transform: translateY(-50%);
+  box-shadow: 0 3px 30px rgba(246, 244, 213, 1);
+}
+
+.swiper__arrow:first-child {
+  left: 0;
+}
+
+.swiper__arrow:last-child {
+  right: 0;
+}
+
+.swiper__arrow path {
+  stroke: var(--main-light);
+  stroke-width: 2;
+}
+
+.swiper__arrow.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
 @media (hover: hover) {
   .product__size-item:hover {
     background-color: var(--card-hover);
+  }
+
+  .swiper__arrow:hover {
+    background-color: var(--main-light);
+    opacity: 80%;
+  }
+
+  .swiper__arrow:hover path {
+    stroke: var(--dark-grey);
   }
 }
 

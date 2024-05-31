@@ -1,7 +1,9 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
-import { createElement } from "../../components/elements";
+import { createElement, createSvgElement } from "../../components/elements";
 import { getProductDataWithSlug } from "../../api/api";
+import { arrowLeft, arrowRight } from "../../components/svg";
+import { cycleSlider, moveSlider } from "../../components/slider";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const response = await getProductDataWithSlug(slug);
@@ -14,7 +16,6 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   const productTextButtonWrapper = createElement({ tagName: "div", classNames: ["product__text-button-wrapper"] });
   const textWrapper = createElement({ tagName: "div", classNames: ["product__text-wrapper"] });
-  const imageContainer = createElement({ tagName: "a", classNames: ["image__link"], attributes: { href: `#` } });
   const name = createElement({ tagName: "p", classNames: ["product__name"], innerHTML: `<b>Название:</b> ${cardName}` });
   const description = createElement({ tagName: "p", classNames: ["product__description"], innerHTML: `<b>Описание:</b> ${cardDescription}` });
   const size = createElement({ tagName: "div", classNames: ["product__size"], innerHTML: "<b>Размеры:</b> " });
@@ -37,14 +38,42 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button"], textContent: "Добавить в корзину" });
 
-  // TODO Use this code in product slider
-  // images?.forEach((img) => {
-  //   const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}` } });
-  //   imageContainer.append(image);
-  // });
+  // Swiper
+  const swiperWrapper = createElement({ tagName: "div", classNames: ["swiper__wrapper"] });
+  const swiperLine = createElement({ tagName: "ul", classNames: ["swiper__line"] });
+  const arrowButtonLeft = createSvgElement(arrowLeft, "swiper__arrow");
+  const arrowButtonRight = createSvgElement(arrowRight, "swiper__arrow");
+  arrowButtonLeft.id = "left";
+  arrowButtonRight.id = "right";
 
-  const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${images?.[0].url}` } });
-  imageContainer.append(image);
+  images?.forEach((img) => {
+    const swiperCard = createElement({ tagName: "li", classNames: ["swiper-card"] });
+    const imageLinkWrapper = createElement({ tagName: "a", classNames: ["image__link"], attributes: { href: `#` } });
+    const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}` } });
+    swiperCard.append(imageLinkWrapper);
+    swiperLine.append(swiperCard);
+    swiperCard.append(imageLinkWrapper);
+    imageLinkWrapper.append(image);
+  });
+
+  swiperWrapper.append(arrowButtonLeft, swiperLine, arrowButtonRight);
+
+  swiperWrapper.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains("swiper__arrow") || target.closest(".swiper__arrow")) {
+      const direction = target.id;
+      moveSlider(swiperLine, ".product__img", direction);
+    }
+  });
+  cycleSlider(swiperLine, ".product__img");
+  const slideCount = swiperLine.childElementCount;
+  if (slideCount === 1) {
+    arrowButtonLeft.classList.add("disabled");
+    arrowButtonRight.classList.add("disabled");
+  } else {
+    arrowButtonLeft.classList.remove("disabled");
+    arrowButtonRight.classList.remove("disabled");
+  }
 
   productSizes?.forEach((variant) => {
     const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });
@@ -56,7 +85,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   pricesWrapper.append(priceWrapper, discountWrapper, buyButton);
   textWrapper.append(name, description, size, pricesWrapper);
   productTextButtonWrapper.append(textWrapper);
-  productWrapper.append(imageContainer, productTextButtonWrapper);
+  productWrapper.append(swiperWrapper, productTextButtonWrapper);
 
   return productWrapper;
 }
