@@ -32,14 +32,24 @@
 .cross {
   position: absolute;
   top: 16px;
-  right: -50px;
+  right: -40px;
   cursor: pointer;
   width: 30px;
   height: 30px;
 }
 
-.product__img_big {
-  width: 600px;
-  height: 600px;
+.modal-slider {
+  position: none;
+  width: auto;
+  max-width: 600px;
+}
+
+.modal-slider .slider__carousel {
+  overflow: hidden;
+}
+
+.modal-slider .slide__img {
+  width: 580px;
+  height: 580px;
   border-radius: 10px;
 }

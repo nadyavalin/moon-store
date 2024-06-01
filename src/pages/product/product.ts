@@ -12,7 +12,6 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const cardName = response?.body.results[0].name.ru;
   const cardDescription = response?.body.results[0].description?.ru;
   const cardPrices = response?.body.results[0].masterVariant.prices;
-  const images = response?.body.results[0].masterVariant.images;
   const productSizes = response?.body.results[0].variants;
 
   const productTextButtonWrapper = createElement({ tagName: "div", classNames: ["product__text-button-wrapper"] });
@@ -38,13 +37,6 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   });
 
   const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button"], textContent: "Добавить в корзину" });
-
-  images?.forEach((img) => {
-    const swiperCard = createElement({ tagName: "li", classNames: ["swiper-card"] });
-    const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}`, alt: "" } });
-    swiperCard.append(image);
-    return swiperCard;
-  });
 
   const productSlider = createSlider({
     className: "product-slider",
@@ -72,11 +64,11 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   return productWrapper;
 }
 
-function createSliderImages(items: ProductProjection[]) {
+export function createSliderImages(items: ProductProjection[]) {
   return (items[0].masterVariant.images || []).map(({ url }) => {
-    const swiperCard = createElement({ tagName: "li", classNames: ["slide"] });
+    const sliderCard = createElement({ tagName: "li", classNames: ["slide"] });
     const image = createElement({ tagName: "img", classNames: ["slide__img"], attributes: { src: url, alt: "Фото товара" } });
-    swiperCard.append(image);
-    return swiperCard;
+    sliderCard.append(image);
+    return sliderCard;
   });
 }
