@@ -64,16 +64,16 @@ export const menuItemCatalog = createElement({
   attributes: { href: Pages.CATALOG },
 });
 
-// очистка и возврат каталога после выбора категории
-menuItemCatalog.addEventListener("click", () => {
-  main.innerHTML = "";
-  renderPageContent(renderProductsFromApi);
-  main.append();
-  const allCategoryItems = Array.from(main.querySelectorAll(".menu-category")) as HTMLElement[];
-  allCategoryItems.forEach((item) => {
-    item.classList.remove("active");
-  });
-});
+// TODO вариант исправления бага рендеринга каталога после выбора категории
+// menuItemCatalog.addEventListener("click", () => {
+//   main.innerHTML = "";
+//   renderPageContent(renderProductsFromApi);
+//   main.append();
+//   const allCategoryItems = Array.from(main.querySelectorAll(".menu-category")) as HTMLElement[];
+//   allCategoryItems.forEach((item) => {
+//     item.classList.remove("active");
+//   });
+// });
 
 const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
