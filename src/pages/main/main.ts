@@ -1,8 +1,17 @@
+import "./main.css";
+import createCard from "../../components/productCard";
 import { getProducts } from "../../api/api";
-import { createSlider } from "./slider";
+import { createSlider } from "../../components/slider/slider";
 
 export async function getMainPageContent() {
-  const products = await getProducts();
-  const slider = createSlider(products);
+  const response = await getProducts();
+  const slider = createSlider({
+    className: "main-slider",
+    isAutoPlay: true,
+    response,
+    createSlides: (items) => items.map((item) => createCard(item)),
+  });
   return slider;
 }
+
+export default getMainPageContent();

@@ -1,4 +1,4 @@
-import { Category } from "@commercetools/platform-sdk";
+import { Category, ProductProjection } from "@commercetools/platform-sdk";
 import { ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
 import { ClientResponse, ProductProjectionPagedQueryResponse } from "@commercetools/platform-sdk";
 
@@ -22,9 +22,13 @@ export interface Customer {
   defaultBillingAddress?: number;
 }
 
-export interface Slider {
+export interface SliderProps {
+  className: string;
+  isAutoPlay?: boolean;
+  isDraggable?: boolean;
   response?: ClientResponse<ProductProjectionPagedQueryResponse>;
-  classNames: string;
+  createSlides: (items: ProductProjection[]) => HTMLLIElement[];
+  onSlideClick?: () => void;
 }
 
 export enum Pages {

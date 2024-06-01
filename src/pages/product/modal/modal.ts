@@ -6,7 +6,7 @@ import { cross } from "../../../components/svg";
 export async function createModalImage(slug: string) {
   const response = await getProductDataWithSlug(slug);
   const images = response?.body.results[0].masterVariant.images;
-  const modalBack = createElement({ tagName: "div", classNames: ["modal-back", "hidden"] });
+  const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
   const modal = createElement({ tagName: "div", classNames: ["modal"] });
   const closeButton = createElement({ tagName: "div", classNames: ["close-button"] });
   const crossSvg = createSvgElement(cross, "cross");
@@ -15,12 +15,13 @@ export async function createModalImage(slug: string) {
     const bitImage = createElement({ tagName: "img", classNames: ["product__img_big"], attributes: { src: `${img.url}`, alt: "" } });
     bigImageWrapper.append(bitImage);
   });
-  closeButton.append(crossSvg, bigImageWrapper);
-  modal.append(closeButton);
+  closeButton.append(crossSvg);
+  modal.append(bigImageWrapper, closeButton);
   modalBack.append(modal);
 
-  crossSvg.addEventListener("click", () => {
-    modalBack.classList.add("hidden");
+  closeButton.addEventListener("click", () => {
+    modalBack.remove();
   });
+
   return modalBack;
 }

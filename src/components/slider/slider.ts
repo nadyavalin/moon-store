@@ -1,26 +1,24 @@
 import "./slider.css";
-import { createCard } from "../../components/productCard";
-import { arrowLeft, arrowRight } from "../../components/svg";
-import { createElement, createSvgElement } from "../../components/elements";
-import { ClientResponse, ProductProjectionPagedQueryResponse } from "@commercetools/platform-sdk";
+import { arrowLeft, arrowRight } from "../svg";
+import { createElement, createSvgElement } from "../elements";
+import { SliderProps } from "../../types/types";
 
-export function createSlider(response?: ClientResponse<ProductProjectionPagedQueryResponse>) {
-  const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper"] });
+export function createSlider({ response, isAutoPlay = false, isDraggable = false, className, createSlides, onSlideClick }: SliderProps) {
+  const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper", className] });
   const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 
   const items = response?.body.results;
-  items?.forEach((item) => {
-    const card = createCard(item);
-    carousel.append(card);
-  });
+  carousel.append(...createSlides(items || []));
 
   const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow");
   const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
   arrowLeftElement.id = "left";
   arrowRightElement.id = "right";
+  arrowLeftElement.classList.toggle("disabled", carousel.childElementCount === 1);
+  arrowRightElement.classList.toggle("disabled", carousel.childElementCount === 1);
 
   function moveSlider(direction = "right") {
-    const cardImg = carousel.querySelector(".card__img") as HTMLElement;
+    const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
       if (direction === "left") {
@@ -48,18 +46,26 @@ export function createSlider(response?: ClientResponse<ProductProjectionPagedQue
       const direction = target.id;
       moveSlider(direction);
 
-      clearInterval(autoPlayInterval);
-      clearTimeout(waitTimeout);
-      waitTimeout = setTimeout(() => {
-        autoPlay();
-      }, 5000);
+      if (isAutoPlay) {
+        clearInterval(autoPlayInterval);
+        clearTimeout(waitTimeout);
+        waitTimeout = setTimeout(() => {
+          autoPlay();
+        }, 5000);
+      }
+    }
+
+    if (target.classList.contains("slide__img") || target.closest(".slide__img")) {
+      onSlideClick?.();
     }
   });
 
-  autoPlay();
+  if (isAutoPlay) {
+    autoPlay();
+  }
 
   function cycleSlider() {
-    const cardImg = carousel.querySelector("card__img") as HTMLElement;
+    const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
       const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
@@ -125,7 +131,9 @@ export function createSlider(response?: ClientResponse<ProductProjectionPagedQue
   sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
 
   cycleSlider();
-  dragSlider();
+  if (isDraggable) {
+    dragSlider();
+  }
 
   return sliderWrapper;
 }

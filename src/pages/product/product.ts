@@ -1,19 +1,12 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
-import { createElement, createSvgElement } from "../../components/elements";
+import { createElement } from "../../components/elements";
 import { getProductDataWithSlug } from "../../api/api";
-import { arrowLeft, arrowRight } from "../../components/svg";
-import { cycleSlider, moveSlider } from "../../components/slider";
 import { createModalImage } from "./modal/modal";
+import { createSlider } from "../../components/slider/slider";
+import { ProductProjection } from "@commercetools/platform-sdk";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
-  const contentDiv = document.querySelector(".main");
-  try {
-    const modal = await createModalImage(slug);
-    contentDiv?.append(modal);
-  } catch (error) {
-    contentDiv?.append("Ошибка! Изображение невозможно отобразить.");
-  }
   const response = await getProductDataWithSlug(slug);
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const cardName = response?.body.results[0].name.ru;
@@ -46,45 +39,23 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 
   const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button"], textContent: "Добавить в корзину" });
 
-  // Swiper code begin
-  const swiperWrapper = createElement({ tagName: "div", classNames: ["swiper__wrapper"] });
-  const swiperLine = createElement({ tagName: "ul", classNames: ["swiper__line"] });
-  const arrowButtonLeft = createSvgElement(arrowLeft, "swiper__arrow");
-  const arrowButtonRight = createSvgElement(arrowRight, "swiper__arrow");
-  arrowButtonLeft.id = "left";
-  arrowButtonRight.id = "right";
-
   images?.forEach((img) => {
     const swiperCard = createElement({ tagName: "li", classNames: ["swiper-card"] });
     const image = createElement({ tagName: "img", classNames: ["product__img"], attributes: { src: `${img.url}`, alt: "" } });
-    swiperLine.append(swiperCard);
     swiperCard.append(image);
+    return swiperCard;
   });
 
-  swiperWrapper.append(arrowButtonLeft, swiperLine, arrowButtonRight);
-
-  swiperWrapper.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains("swiper__arrow") || target.closest(".swiper__arrow")) {
-      const direction = target.id;
-      moveSlider(swiperLine, ".product__img", direction);
-    }
-    if (target.classList.contains("product__img") || target.closest(".product__img")) {
-      const modalBack = document.querySelector(".modal-back");
-      modalBack?.classList.remove("hidden");
-    }
+  const productSlider = createSlider({
+    className: "product-slider",
+    isAutoPlay: false,
+    response,
+    createSlides: createSliderImages,
+    onSlideClick: async () => {
+      const modal = await createModalImage(slug);
+      productWrapper.append(modal);
+    },
   });
-
-  const slideCount = swiperLine.childElementCount;
-  if (slideCount === 1) {
-    arrowButtonLeft.classList.add("disabled");
-    arrowButtonRight.classList.add("disabled");
-  } else {
-    arrowButtonLeft.classList.remove("disabled");
-    arrowButtonRight.classList.remove("disabled");
-  }
-  cycleSlider(swiperLine, ".product__img");
-  // Swiper code end
 
   productSizes?.forEach((variant) => {
     const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });
@@ -96,7 +67,16 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   pricesWrapper.append(priceWrapper, discountWrapper, buyButton);
   textWrapper.append(name, description, size, pricesWrapper);
   productTextButtonWrapper.append(textWrapper);
-  productWrapper.append(swiperWrapper, productTextButtonWrapper);
+  productWrapper.append(productSlider, productTextButtonWrapper);
 
   return productWrapper;
+}
+
+function createSliderImages(items: ProductProjection[]) {
+  return (items[0].masterVariant.images || []).map(({ url }) => {
+    const swiperCard = createElement({ tagName: "li", classNames: ["slide"] });
+    const image = createElement({ tagName: "img", classNames: ["slide__img"], attributes: { src: url, alt: "Фото товара" } });
+    swiperCard.append(image);
+    return swiperCard;
+  });
 }
