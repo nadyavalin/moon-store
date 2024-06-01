@@ -78,3 +78,10 @@ export const changePassword = (id: string, version: number, currentPassword: str
       },
     })
     .execute();
+
+export const searchProducts = (search: string) =>
+  state.apiRoot
+    ?.productProjections()
+    .search()
+    .get({ queryArgs: { "filter.query": `searchKeywords.ru: "${search}"` } })
+    .execute();
