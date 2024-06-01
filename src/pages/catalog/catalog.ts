@@ -29,7 +29,7 @@ export async function renderProductsFromApi() {
         }
       });
 
-      clickedCategory.classList.toggle("active");
+      clickedCategory.classList.add("active");
     }
   });
 

@@ -24,6 +24,7 @@ export interface Customer {
 
 export interface Slider {
   response?: ClientResponse<ProductProjectionPagedQueryResponse>;
+  classNames: string;
 }
 
 export enum Pages {

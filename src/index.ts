@@ -29,7 +29,7 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
-const renderPageContent = async (renderFunc: () => Promise<any>) => {
+export const renderPageContent = async (renderFunc: () => Promise<any>) => {
   const contentDiv = document.querySelector(".main");
   try {
     contentDiv?.append(await renderFunc());
