@@ -1,12 +1,11 @@
 import "./modal.css";
 import { createElement, createSvgElement } from "../../../components/elements";
 import { createSlider } from "../../../components/slider/slider";
-import { getProductDataWithSlug } from "../../../api/api";
 import { cross } from "../../../components/svg";
 import { createSliderImages } from "../product";
+import { ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
 
-export async function createModalImage(slug: string) {
-  const response = await getProductDataWithSlug(slug);
+export function createModalImage(response?: ClientResponse<ProductProjectionPagedSearchResponse>) {
   const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
   const modal = createElement({ tagName: "div", classNames: ["modal"] });
   const closeButton = createElement({ tagName: "div", classNames: ["close-button"] });

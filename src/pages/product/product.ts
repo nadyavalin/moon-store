@@ -44,7 +44,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     response,
     createSlides: createSliderImages,
     onSlideClick: async () => {
-      const modal = await createModalImage(slug);
+      const modal = await createModalImage(response);
       productWrapper.append(modal);
     },
   });
