@@ -1,5 +1,6 @@
 import { Category } from "@commercetools/platform-sdk";
 import { ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedQueryResponse } from "@commercetools/platform-sdk";
 
 export interface State {
   name?: string | null;
@@ -19,6 +20,10 @@ export interface Customer {
   billingAddresses?: [number];
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
+}
+
+export interface Slider {
+  response?: ClientResponse<ProductProjectionPagedQueryResponse>;
 }
 
 export enum Pages {
