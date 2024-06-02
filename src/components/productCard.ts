@@ -1,5 +1,4 @@
 import "./productCard.css";
-
 import { createElement } from "./elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../utils/utils";
@@ -44,7 +43,6 @@ export function createCard(item: ProductProjection) {
   });
 
   cardPrices.append(price, discount);
-
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
   cardLink.append(cardTextWrapper, cardBottom);

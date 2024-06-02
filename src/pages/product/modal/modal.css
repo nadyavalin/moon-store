@@ -17,8 +17,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10000;
-  width: 600px;
-  height: 600px;
+  max-width: 600px;
+  max-height: 600px;
   background-color: var(--back-modal-image);
   padding: 10px 10px;
   border-radius: 10px;
@@ -41,7 +41,7 @@
 .modal-slider {
   position: none;
   width: auto;
-  max-width: 600px;
+  width: 100%;
 }
 
 .modal-slider .slider__carousel {
@@ -49,7 +49,60 @@
 }
 
 .modal-slider .slide__img {
-  width: 580px;
+  min-width: 95%;
   height: 580px;
   border-radius: 10px;
+}
+
+@media (max-width: 1000px) {
+  .modal {
+    width: 500px;
+    height: 500px;
+  }
+
+  .modal-slider {
+    max-width: 500px;
+  }
+
+  .modal-slider .slide__img {
+    max-width: 490px;
+    max-height: 480px;
+  }
+}
+
+@media (max-width: 770px) {
+  .modal {
+    width: 450px;
+    height: 450px;
+  }
+
+  .modal-slider {
+    max-width: 450px;
+  }
+
+  .modal-slider .slide__img {
+    max-width: 440px;
+    max-height: 430px;
+  }
+}
+
+@media (max-width: 550px) {
+  .modal {
+    width: 325px;
+    height: 325px;
+  }
+
+  .modal-slider {
+    max-width: 325px;
+  }
+
+  .modal-slider .slide__img {
+    max-width: 315px;
+    max-height: 305px;
+  }
+
+  .cross {
+    top: -25px;
+    right: -10px;
+  }
 }
