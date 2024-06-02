@@ -1,6 +1,5 @@
 .slider__wrapper {
   position: relative;
-  max-width: 1100px;
   width: 90%;
   scroll-behavior: smooth;
 }
@@ -8,18 +7,6 @@
 .slider__carousel {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100% / 3 - 12px));
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: 0;
-}
-
-.slider__carousel.dragging .card__wrapper {
-  cursor: grab;
-  user-select: none;
-  scroll-behavior: smooth;
 }
 
 .slider__carousel::-webkit-scrollbar {
@@ -58,6 +45,11 @@
   transition: stroke 1s ease;
 }
 
+.card__arrow.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
 @media (hover: hover) {
   .card__arrow:hover {
     background-color: var(--main-light);
@@ -70,17 +62,5 @@
 
   .card__button:hover {
     background-color: var(--accent-red);
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .slider__carousel {
-    grid-auto-columns: calc((100% / 2 - 9px));
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .slider__carousel {
-    grid-auto-columns: 100%;
   }
 }
