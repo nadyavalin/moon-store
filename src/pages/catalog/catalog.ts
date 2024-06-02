@@ -1,8 +1,7 @@
 import "./catalog.css";
 import { createElement } from "../../components/elements";
-import { getCategories, getProducts, searchProducts } from "../../api/api";
+import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { getProductsByCategory } from "../../api/api";
 import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard";
 
@@ -44,7 +43,7 @@ export async function renderProductsFromApi() {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLButtonElement>event.target;
     if (target.classList.contains("search-button")) {
-      const response = await searchProducts(input.value);
+      const response = await getProducts({ "text.ru": `${input.value}` });
       renderCatalogContent(response, catalogMain);
     }
   });
@@ -67,7 +66,7 @@ function renderSearchPanel() {
 }
 
 async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
-  const response = await getProductsByCategory(id);
+  const response = await getProducts({ "filter.query": `categories.id:"${id}"` });
   renderCatalogContent(response, catalogWrapper);
 }
 

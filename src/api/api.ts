@@ -1,6 +1,6 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 
-import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction } from "@commercetools/platform-sdk";
+import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
@@ -19,25 +19,13 @@ export const createApiRoot = () => {
   state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
 };
 
-export const getProductDataWithSlug = (slug: string) =>
+export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
   state.apiRoot
     ?.productProjections()
     .search()
-    .get({ queryArgs: { "filter.query": `slug.ru: "${slug}"` } })
+    .get({ queryArgs: { limit: 50, ...queryArgs } })
     .execute();
 
-export const getProductsByCategory = (id: string) =>
-  state.apiRoot
-    ?.productProjections()
-    .search()
-    .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
-    .execute();
-
-export const getProducts = () =>
-  state.apiRoot
-    ?.productProjections()
-    .get({ queryArgs: { limit: 50 } })
-    .execute();
 export const getCategories = () => state.apiRoot?.categories().get().execute();
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   state.apiRoot
@@ -79,18 +67,6 @@ export const changePassword = (id: string, version: number, currentPassword: str
         version,
         currentPassword,
         newPassword,
-      },
-    })
-    .execute();
-
-export const searchProducts = (search: string) =>
-  state.apiRoot
-    ?.productProjections()
-    .search()
-    .get({
-      queryArgs: {
-        "text.ru": `${search}`,
-        fuzzy: true,
       },
     })
     .execute();
