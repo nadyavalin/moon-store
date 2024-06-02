@@ -4,6 +4,8 @@ import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard";
+import { createSvgElement } from "../../components/elements";
+import { cross } from "../../components/svg";
 
 export async function renderProductsFromApi() {
   const response = await getProducts();
@@ -41,7 +43,7 @@ export async function renderProductsFromApi() {
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
-    const target = <HTMLButtonElement>event.target;
+    const target = <HTMLElement>event.target;
     if (target.classList.contains("search-button")) {
       const response = await getProducts({ "text.ru": `${input.value}` });
       renderCatalogContent(response, catalogMain);
@@ -58,10 +60,16 @@ export async function renderProductsFromApi() {
 function renderSearchPanel() {
   const searchPanel = createElement({ tagName: "div", classNames: ["search-panel"] });
   const searchPanelInner = createElement({ tagName: "div", classNames: ["search-panel__inner"] });
+  const clearBtn = createSvgElement(cross, "clear-btn", { viewBox: "0 0 19 19" });
+  const inputWrapper = createElement({ tagName: "div", classNames: ["search-input__wrapper"] });
   const input = createElement({ tagName: "input", classNames: ["search-input"], attributes: { placeholder: "Введите слово..." } });
-  const button = createElement({ tagName: "button", classNames: ["search-button"], textContent: "Поиск" });
-  searchPanelInner.append(input, button);
+  const searchBtn = createElement({ tagName: "button", classNames: ["search-button"], textContent: "Поиск" });
+  inputWrapper.append(input, clearBtn);
+  searchPanelInner.append(inputWrapper, searchBtn);
   searchPanel.append(searchPanelInner);
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+  });
   return searchPanel;
 }
 
