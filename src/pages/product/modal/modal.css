@@ -30,7 +30,10 @@
   height: 22px;
   display: flex;
   align-items: center;
-  transition: stroke 0.3s ease;
+}
+
+.cross path {
+  transition: stroke 0.5s ease;
 }
 
 .modal-slider {
@@ -49,8 +52,8 @@
 }
 
 @media (hover: hover) {
-  .cross:hover svg g path {
-    stroke: red;
+  .cross:hover g path {
+    stroke: var(--accent-blue);
   }
 }
 
