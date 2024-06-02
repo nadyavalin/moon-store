@@ -10,20 +10,21 @@ export async function renderProductsFromApi() {
   const response = await getProducts();
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
-  const catalogWrapper = createElement({ tagName: "ul", classNames: ["catalog-wrapper"] });
+  const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
-  renderCatalogContent(response, catalogWrapper);
-  const searchField = renderSearchField();
+  const searchPanel = renderSearchPanel();
+  renderCatalogContent(response, catalogMain);
   const categories = await renderCategories();
 
   categories.addEventListener("click", async (event) => {
     const target = <HTMLElement>event.target;
     if (target.classList.contains("menu-category")) {
       const id = target.getAttribute("data-id") as string;
-      await renderCatalogByCategory(id, catalogWrapper);
+      await renderCatalogByCategory(id, catalogMain);
     }
     if (target.classList.contains("catalog-caregory")) {
-      renderCatalogContent(response, catalogWrapper);
+      renderCatalogContent(response, catalogMain);
     }
     if (target.classList.contains("menu-category__item")) {
       const clickedCategory = target as HTMLElement;
@@ -38,26 +39,30 @@ export async function renderProductsFromApi() {
     }
   });
 
-  searchField.addEventListener("click", async (event) => {
-    const input = <HTMLInputElement>searchField.querySelector(".side-input");
+  searchPanel.addEventListener("click", async (event) => {
+    const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLButtonElement>event.target;
-    if (target.classList.contains("side-button")) {
+    if (target.classList.contains("search-button")) {
       const response = await searchProducts(input.value);
-      renderCatalogContent(response, catalogWrapper);
+      renderCatalogContent(response, catalogMain);
     }
   });
 
-  sidePanel.append(searchField, categories);
-  catalog.append(sidePanel, catalogWrapper);
+  sidePanel.append(categories);
+  catalogWrapper.append(sidePanel, catalogMain);
+  catalog.append(searchPanel, catalogWrapper);
+
   return catalog;
 }
 
-function renderSearchField() {
-  const sidePanelWrapper = createElement({ tagName: "div", classNames: ["catalog-side__wrapper"] });
-  const input = createElement({ tagName: "input", classNames: ["side-input"], attributes: { placeholder: "Введите слово..." } });
-  const button = createElement({ tagName: "button", classNames: ["side-button"], textContent: "Поиск" });
-  sidePanelWrapper.append(input, button);
-  return sidePanelWrapper;
+function renderSearchPanel() {
+  const searchPanel = createElement({ tagName: "div", classNames: ["search-panel"] });
+  const searchPanelInner = createElement({ tagName: "div", classNames: ["search-panel__inner"] });
+  const input = createElement({ tagName: "input", classNames: ["search-input"], attributes: { placeholder: "Введите слово..." } });
+  const button = createElement({ tagName: "button", classNames: ["search-button"], textContent: "Поиск" });
+  searchPanelInner.append(input, button);
+  searchPanel.append(searchPanelInner);
+  return searchPanel;
 }
 
 async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
