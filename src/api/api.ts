@@ -83,5 +83,10 @@ export const searchProducts = (search: string) =>
   state.apiRoot
     ?.productProjections()
     .search()
-    .get({ queryArgs: { "filter.query": `searchKeywords.ru: "${search}"` } })
+    .get({
+      queryArgs: {
+        "text.ru": `${search}`,
+        fuzzy: true,
+      },
+    })
     .execute();

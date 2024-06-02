@@ -37,6 +37,10 @@
   gap: 10px;
 }
 
+.catalog-caregory {
+  font-size: 18px;
+}
+
 .category-parent,
 .category-child,
 .catalog-caregory {
@@ -44,7 +48,8 @@
   transition: color 0.5s ease;
 }
 
-.category-parent {
+.category-parent,
+.catalog-caregory {
   font-weight: 600;
 }
 

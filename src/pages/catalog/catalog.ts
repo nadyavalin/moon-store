@@ -42,18 +42,14 @@ export async function renderProductsFromApi() {
     const input = <HTMLInputElement>searchField.querySelector(".side-input");
     const target = <HTMLButtonElement>event.target;
     if (target.classList.contains("side-button")) {
-      await renderSearchProducts(input.value);
+      const response = await searchProducts(input.value);
+      renderCatalogContent(response, catalogWrapper);
     }
   });
 
   sidePanel.append(searchField, categories);
   catalog.append(sidePanel, catalogWrapper);
   return catalog;
-}
-
-async function renderSearchProducts(search: string) {
-  const response = await searchProducts(search);
-  console.log(response);
 }
 
 function renderSearchField() {
