@@ -131,7 +131,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
 
-  cycleSlider(45);
+  cycleSlider(1);
   if (isDraggable) {
     dragSlider();
   }
