@@ -82,6 +82,10 @@
 }
 
 @media (max-width: 700px) {
+  .card__description {
+    -webkit-line-clamp: 3;
+  }
+
   .categories-wrapper {
     padding: 5px;
   }
@@ -92,15 +96,28 @@
 }
 
 @media (max-width: 450px) {
+  .catalog {
+    gap: 10px;
+  }
+
   .card__name,
   .card__description,
   .card__button,
   .category-parent {
     font-size: 14px;
+    -webkit-line-clamp: 2;
   }
 
   .category-child {
     font-size: 12px;
+  }
+
+  .category-wrapper {
+    flex-direction: column;
+  }
+
+  .categories-wrapper {
+    align-items: flex-start;
   }
 }
 

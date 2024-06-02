@@ -35,10 +35,15 @@ export function createElement<T extends keyof HTMLElementTagNameMap>({
   return element;
 }
 
-export function createSvgElement(svgString: string, className?: string) {
+export function createSvgElement(svgString: string, className?: string, attributes?: Record<string, string>) {
   const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svgElement.innerHTML = svgString;
   if (className) svgElement.classList.add(className);
+  if (attributes) {
+    Object.entries(attributes).forEach(([key, value]) => {
+      svgElement.setAttribute(key, value);
+    });
+  }
   return svgElement;
 }
 

@@ -1,5 +1,4 @@
 import "./productCard.css";
-
 import { createElement } from "./elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../utils/utils";
@@ -13,7 +12,7 @@ export function createCard(item: ProductProjection) {
   const link = item.slug.ru;
   const id = item.id;
 
-  const card = createElement({ tagName: "li", classNames: ["card"] });
+  const card = createElement({ tagName: "li", classNames: ["slide", "card"] });
   card.setAttribute("data-id", `${id}`);
   const cardLink = createElement({ tagName: "a", classNames: ["card-link"], attributes: { href: `${Pages.PRODUCT}/${link}` } });
   const cardBottom = createElement({ tagName: "div", classNames: ["card__bottom-wrapper"] });
@@ -23,7 +22,11 @@ export function createCard(item: ProductProjection) {
   const cardPrices = createElement({ tagName: "div", classNames: ["card__prices"] });
   const cardButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Добавить в корзину" });
 
-  const cardImage = createElement({ tagName: "img", classNames: ["card__img"], attributes: { src: `${images?.[0].url}`, alt: "Photo" } });
+  const cardImage = createElement({
+    tagName: "img",
+    classNames: ["slide__img", "card__img"],
+    attributes: { src: `${images?.[0].url}`, alt: "Фото товара" },
+  });
   cardImage.setAttribute("draggable", "false");
   card.append(cardLink);
   cardLink.append(cardImage);
@@ -40,7 +43,6 @@ export function createCard(item: ProductProjection) {
   });
 
   cardPrices.append(price, discount);
-
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
   cardLink.append(cardTextWrapper, cardBottom);

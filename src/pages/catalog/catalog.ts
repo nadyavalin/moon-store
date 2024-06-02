@@ -4,7 +4,7 @@ import { getCategories, getProducts, searchProducts } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { getProductsByCategory } from "../../api/api";
 import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
-import createCard from "../../components/productCard";
+import { createCard } from "../../components/productCard";
 
 export async function renderProductsFromApi() {
   const response = await getProducts();
@@ -36,7 +36,7 @@ export async function renderProductsFromApi() {
         }
       });
 
-      clickedCategory.classList.toggle("active");
+      clickedCategory.classList.add("active");
     }
   });
 
