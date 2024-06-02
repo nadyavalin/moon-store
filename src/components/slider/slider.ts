@@ -51,7 +51,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
         clearTimeout(waitTimeout);
         waitTimeout = setTimeout(() => {
           autoPlay();
-        }, 5000);
+        }, 2000);
       }
     }
 
@@ -64,25 +64,26 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
     autoPlay();
   }
 
-  function cycleSlider() {
+  function cycleSlider(index: number) {
     const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
-      const firstCardWidth = cardImg.offsetWidth;
-      const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
-      const carouselChildren = Array.from(carousel.children);
+      const carouselChildren = Array.from(carousel.children) as HTMLElement[];
+      const totalSlides = carouselChildren.length;
 
-      const timesToAdd = 50;
-      for (let i = 0; i < timesToAdd; i++) {
-        carouselChildren
-          .slice(-cardPerView)
-          .reverse()
-          .forEach((card) => {
-            carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
-          });
+      let activeImageIndex = 0;
 
-        carouselChildren.slice(0, cardPerView).forEach((card) => {
-          carousel.insertAdjacentHTML("beforeend", card.outerHTML);
-        });
+      if (index > totalSlides) {
+        activeImageIndex = index % totalSlides;
+      } else if (index < 0) {
+        activeImageIndex = totalSlides + index;
+      } else {
+        activeImageIndex = index;
+      }
+
+      for (let i = 0; i < totalSlides; i++) {
+        if (i !== activeImageIndex) {
+          carousel.appendChild(carouselChildren[i].cloneNode(true));
+        }
       }
     }
   }
@@ -130,7 +131,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
 
-  cycleSlider();
+  cycleSlider(45);
   if (isDraggable) {
     dragSlider();
   }
