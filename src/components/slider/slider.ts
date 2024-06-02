@@ -21,7 +21,6 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
     const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
-      console.log(firstCardWidth);
       if (direction === "left") {
         carousel.scrollLeft += -firstCardWidth;
       } else {

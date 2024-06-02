@@ -49,7 +49,7 @@
 }
 
 .modal-slider .slide__img {
-  min-width: 95%;
+  width: 580px;
   height: 580px;
   border-radius: 10px;
 }
@@ -61,12 +61,12 @@
   }
 
   .modal-slider {
-    max-width: 500px;
+    width: 480px;
   }
 
   .modal-slider .slide__img {
-    max-width: 490px;
-    max-height: 480px;
+    width: 480px;
+    height: 480px;
   }
 }
 
@@ -77,12 +77,12 @@
   }
 
   .modal-slider {
-    max-width: 450px;
+    width: 430px;
   }
 
   .modal-slider .slide__img {
-    max-width: 440px;
-    max-height: 430px;
+    width: 430px;
+    height: 430px;
   }
 }
 
@@ -93,12 +93,12 @@
   }
 
   .modal-slider {
-    max-width: 325px;
+    width: 305px;
   }
 
   .modal-slider .slide__img {
-    max-width: 315px;
-    max-height: 305px;
+    width: 305px;
+    height: 305px;
   }
 
   .cross {
