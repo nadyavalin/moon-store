@@ -11,6 +11,7 @@ export async function renderProductsFromApi() {
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
   const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
@@ -48,7 +49,7 @@ export async function renderProductsFromApi() {
     }
   });
 
-  sidePanel.append(categories);
+  sidePanel.append(filterWrapper, categories);
   catalogWrapper.append(sidePanel, catalogMain);
   catalog.append(searchPanel, catalogWrapper);
 
