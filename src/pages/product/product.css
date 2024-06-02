@@ -116,17 +116,13 @@
   .product-slider .slide__img {
     height: 310px;
     width: 310px;
-    border-radius: 8px;
-    cursor: pointer;
   }
 
   .product-slider .card__arrow:first-child {
     top: 340px;
-    left: 0;
   }
 
   .product-slider .card__arrow:last-child {
     top: 340px;
-    right: 0;
   }
 }

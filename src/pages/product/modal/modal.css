@@ -2,11 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   background-color: var(--back-modal);
   z-index: 9999;
 }
@@ -20,27 +17,24 @@
   max-width: 600px;
   max-height: 600px;
   background-color: var(--back-modal-image);
-  padding: 10px 10px;
+  padding: 10px;
   border-radius: 10px;
-}
-
-.hidden {
-  visibility: hidden;
-  opacity: 0px;
 }
 
 .cross {
   position: absolute;
-  top: 16px;
-  right: -40px;
+  top: 5px;
+  right: -30px;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  transition: stroke 0.3s ease;
 }
 
 .modal-slider {
   position: none;
-  width: auto;
   width: 100%;
 }
 
@@ -52,6 +46,12 @@
   width: 580px;
   height: 580px;
   border-radius: 10px;
+}
+
+@media (hover: hover) {
+  .cross:hover svg g path {
+    stroke: red;
+  }
 }
 
 @media (max-width: 1000px) {
@@ -102,7 +102,7 @@
   }
 
   .cross {
-    top: -25px;
-    right: -10px;
+    top: -28px;
+    right: 0;
   }
 }

@@ -10,8 +10,8 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
   const items = response?.body.results;
   carousel.append(...createSlides(items || []));
 
-  const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow");
-  const arrowRightElement = createSvgElement(arrowRight, "card__arrow");
+  const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow", { width: "24px", height: "24px", viewBox: "0 0 24 24", fill: "none" });
+  const arrowRightElement = createSvgElement(arrowRight, "card__arrow", { width: "24px", height: "24px", viewBox: "0 0 24 24", fill: "none" });
   arrowLeftElement.id = "left";
   arrowRightElement.id = "right";
   arrowLeftElement.classList.toggle("disabled", carousel.childElementCount === 1);

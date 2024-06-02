@@ -8,8 +8,7 @@ import { ClientResponse, ProductProjectionPagedSearchResponse } from "@commercet
 export function createModalImage(response?: ClientResponse<ProductProjectionPagedSearchResponse>) {
   const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
   const modal = createElement({ tagName: "div", classNames: ["modal"] });
-  const closeButton = createElement({ tagName: "div", classNames: ["close-button"] });
-  const crossSvg = createSvgElement(cross, "cross");
+  const closeButton = createSvgElement(cross, "cross", { width: "22px", height: "22px", viewBox: "0 0 19 19", fill: "none" });
 
   const modalSlider = createSlider({
     className: "modal-slider",
@@ -18,7 +17,6 @@ export function createModalImage(response?: ClientResponse<ProductProjectionPage
     createSlides: createSliderImages,
   });
 
-  closeButton.append(crossSvg);
   modal.append(modalSlider, closeButton);
   modalBack.append(modal);
 
