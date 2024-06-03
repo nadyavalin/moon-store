@@ -1,20 +1,21 @@
 import { correctFactorForPrices } from "src/api/constants";
 import { getProductsByFilter } from "../../api/api";
-import createCard from "../productCard";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "src/types/types";
+import createCard from "../productCard/productCard";
 
 export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement) {
-  const requestSize = sizeFilterHandler(filterWrapperSize);
+  let request: string[] = [];
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
   const categoryID = catalogMain.getAttribute("data-id");
-
-  let request: string[] = [];
+  const searchInput = <HTMLInputElement>document.querySelector(".search-input");
+  if (searchInput.value) request.push(`"text.ru": ${searchInput.value}`);
   if (categoryID) request.push(`categories.id:"${categoryID}"`);
   if (inputValuePriceFrom || inputValuePriceTo) {
     const requestPrice = <string>priceFilterHandler(inputValuePriceFrom, inputValuePriceTo);
     request.push(requestPrice);
   }
+  const requestSize = sizeFilterHandler(filterWrapperSize);
   if (requestSize) request.push(requestSize);
   getProductsByFilter(request)?.then((response) => {
     if (!catalogMain) return;
