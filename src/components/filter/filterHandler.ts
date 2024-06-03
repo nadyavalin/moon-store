@@ -1,7 +1,7 @@
-import { correctFactorForPrices } from "src/api/constants";
+import { correctFactorForPrices } from "../../api/constants";
 import { getProductsByFilter } from "../../api/api";
 import { createSnackbar } from "../elements";
-import { SnackbarType } from "src/types/types";
+import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
 
 export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement) {

@@ -5,12 +5,17 @@ import { filterHandler, resetFilter } from "./filterHandler";
 
 const createFilterView = () => {
   const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter__buttons-wrapper"] });
-  const filterButton = createElement({ tagName: "div", classNames: ["filter-button"], attributes: { title: "Фильтровать" } });
-  const svgFilter = createSvgElement(filterIcon, "filter-icon");
-  filterButton.append(svgFilter);
-  const sortButton = createElement({ tagName: "div", classNames: ["sort-button"], attributes: { title: "Сортировать" } });
-  const svgSort = createSvgElement(sortIcon, "sort-icon");
-  sortButton.append(svgSort);
+  const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "30", height: "30", viewBox: "0 0 48 48" });
+  const sortButton = createSvgElement(sortIcon, "sort-icon", {
+    width: "30",
+    height: "30",
+    viewBox: "0 0 24 24",
+    "stroke-width": "2",
+    stroke: "currentColor",
+    fill: "none",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round",
+  });
   filterButtonsWrapper.append(filterButton, sortButton);
   const filterWrapper = createFilterSidebarView();
   filterButton.addEventListener("click", () => {

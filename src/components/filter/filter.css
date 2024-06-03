@@ -63,9 +63,8 @@ svg.filter-icon {
   cursor: pointer;
 }
 
-svg.sort-icon:hover,
-svg.filter-icon:hover {
-  fill: var(--text-light);
+svg.sort-icon {
+  fill: none;
 }
 
 @keyframes sidebarAnimation {
