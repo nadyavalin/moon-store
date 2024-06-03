@@ -36,8 +36,11 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   const catalogMain = renderCatalogContent(productResponse, catalogList);
   const categories = renderCategories(response);
 
+  // TODO перестал работать код, нужно восстановить
+  // TODO после клика рендерятся товары (страница обновляется) и класс active сразу слетает
+  // TODO если еще раз нажать на ту же категорию, то класс навешивается и снимается
   // categories.addEventListener("click", (event) => {
-  //   const target = <HTMLElement>event.target;
+  //   const target = event.target as HTMLElement;
   //   const clickedCategory = target as HTMLElement;
   //   const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
   //   allCategoryItems.forEach((item) => {
