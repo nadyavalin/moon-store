@@ -43,8 +43,8 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     isAutoPlay: false,
     response,
     createSlides: createSliderImages,
-    onSlideClick: async () => {
-      const modal = await createModalImage(response);
+    onSlideClick: () => {
+      const modal = createModalImage(response);
       productWrapper.append(modal);
     },
   });
