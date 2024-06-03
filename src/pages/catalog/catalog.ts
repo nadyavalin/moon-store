@@ -6,6 +6,9 @@ import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
+
+import createFilterView from "src/components/filter/filterView";
+
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
 
@@ -14,7 +17,7 @@ export async function renderProductsFromApi() {
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
-  const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
+  const filterWrapper = createFilterView();
   const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
@@ -25,6 +28,7 @@ export async function renderProductsFromApi() {
     const target = <HTMLElement>event.target;
     if (target.classList.contains("menu-category")) {
       const id = target.getAttribute("data-id") as string;
+      catalogMain.setAttribute("data-id", id);
       await renderCatalogByCategory(id, catalogMain);
     }
     if (target.classList.contains("catalog-caregory")) {
