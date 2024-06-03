@@ -18,7 +18,7 @@
 .categories-wrapper {
   padding: 20px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   gap: 20px;
   flex-shrink: 0;
@@ -32,6 +32,7 @@
 
 .category-wrapper {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
@@ -59,66 +60,6 @@
 
 .category-child::before {
   content: "\27A0";
-}
-
-@media (hover: hover) {
-  .category-parent:hover,
-  .category-child:hover,
-  .catalog-caregory:hover {
-    color: var(--accent-blue);
-  }
-}
-
-@media (max-width: 1050px) {
-  .catalog-main {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .catalog-main {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 700px) {
-  .card__description {
-    -webkit-line-clamp: 3;
-  }
-
-  .categories-wrapper {
-    padding: 5px;
-  }
-
-  .catalog-main {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-@media (max-width: 450px) {
-  .catalog {
-    gap: 10px;
-  }
-
-  .card__name,
-  .card__description,
-  .card__button,
-  .category-parent {
-    font-size: 14px;
-    -webkit-line-clamp: 2;
-  }
-
-  .category-child {
-    font-size: 12px;
-  }
-
-  .category-wrapper {
-    flex-direction: column;
-  }
-
-  .categories-wrapper {
-    align-items: flex-start;
-  }
 }
 
 .catalog-side__wrapper {
@@ -176,5 +117,73 @@
 @media (hover: hover) {
   .clear-btn:hover g path {
     stroke: var(--accent-blue);
+  }
+}
+
+@media (hover: hover) {
+  .category-parent:hover,
+  .category-child:hover,
+  .catalog-caregory:hover {
+    color: var(--accent-blue);
+  }
+}
+
+@media (max-width: 1050px) {
+  .catalog-main {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .catalog-main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .search-panel__inner {
+    width: 70%;
+  }
+}
+
+@media (max-width: 550px) {
+  .card__description {
+    -webkit-line-clamp: 3;
+  }
+
+  .categories-wrapper {
+    padding: 5px;
+  }
+
+  .catalog-main {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .search-panel__inner {
+    width: 90%;
+  }
+}
+
+@media (max-width: 450px) {
+  .catalog {
+    gap: 10px;
+  }
+
+  .card__name,
+  .card__description,
+  .card__button,
+  .category-parent {
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+  }
+
+  .category-child {
+    font-size: 12px;
+  }
+
+  .categories-wrapper {
+    align-items: flex-start;
+  }
+
+  .search-panel__inner {
+    width: 100%;
   }
 }
