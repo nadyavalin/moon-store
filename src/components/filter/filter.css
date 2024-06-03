@@ -1,0 +1,77 @@
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 15px;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 320px;
+  padding: 20px;
+  background-color: var(--dark-grey);
+  z-index: 50;
+}
+
+.filter__buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.filter__heading {
+  margin: 20px 0;
+  padding: 10px;
+  border-bottom: 1px solid var(--main-light);
+}
+.price,
+.size {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+.filter-wrapper input {
+  width: 80px;
+  height: 30px;
+  margin-top: 0;
+}
+.filter-wrapper label {
+  padding-top: 7px;
+  cursor: pointer;
+}
+.price__heading,
+.size__heading {
+  align-self: flex-start;
+}
+
+.filter__buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+svg.sort-icon,
+svg.filter-icon {
+  width: 30px;
+  height: 30px;
+  fill: var(--main-light);
+  cursor: pointer;
+}
+
+svg.sort-icon {
+  fill: none;
+}
+
+@keyframes sidebarAnimation {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translate(0);
+  }
+}

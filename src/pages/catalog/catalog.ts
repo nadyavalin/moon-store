@@ -6,6 +6,9 @@ import { ClientResponse, ProductProjectionPagedSearchResponse, Category, Categor
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
+
+import createFilterView from "src/components/filter/filterView";
+
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
@@ -20,7 +23,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
-  const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
+  const filterWrapper = createFilterView();
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
