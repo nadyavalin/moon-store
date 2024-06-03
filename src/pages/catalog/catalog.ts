@@ -8,10 +8,10 @@ import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
+import { Pages } from "../../types/types";
 
 export async function renderProductsFromApi() {
   const response = await getProducts();
-
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
@@ -19,28 +19,23 @@ export async function renderProductsFromApi() {
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
   renderCatalogContent(response, catalogMain);
-  const categories = await renderCategories();
 
+  const categories = await renderCategories();
   categories.addEventListener("click", async (event) => {
     const target = <HTMLElement>event.target;
     if (target.classList.contains("menu-category")) {
       const id = target.getAttribute("data-id") as string;
       await renderCatalogByCategory(id, catalogMain);
     }
-    if (target.classList.contains("catalog-caregory")) {
-      renderCatalogContent(response, catalogMain);
-    }
-    if (target.classList.contains("menu-category__item")) {
-      const clickedCategory = target as HTMLElement;
-      const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category__item")) as HTMLElement[];
-      allCategoryItems.forEach((item) => {
-        if (item !== clickedCategory) {
-          item.classList.remove("active");
-        }
-      });
+    const clickedCategory = target as HTMLElement;
+    const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
+    allCategoryItems.forEach((item) => {
+      if (item !== clickedCategory) {
+        item.classList.remove("active");
+      }
+    });
 
-      clickedCategory.classList.add("active");
-    }
+    clickedCategory.classList.add("active");
   });
 
   searchPanel.addEventListener("click", async (event) => {
@@ -83,8 +78,6 @@ async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElem
 async function renderCategories() {
   const response = await getCategories();
   const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
-  const subCategories = createElement({ tagName: "div", classNames: ["subcategories-wrapper"] });
-  const catalogCategory = createElement({ tagName: "div", classNames: ["catalog-caregory", "menu-category__item"], textContent: "Каталог" });
   const categories: Category[] | undefined = response?.body.results;
   const parentCategories = categories?.filter((category) => !category.parent);
   const childCategories = categories?.filter((category) => category.parent);
@@ -107,23 +100,31 @@ async function renderCategories() {
   const categoryDataValue = Object.values(categoryMap);
   categoryDataValue.forEach((categoryData) => {
     const categoryWrapper = createElement({ tagName: "div", classNames: ["category-wrapper"] });
-    const parentCategoryElement = createElement({ tagName: "span", classNames: ["menu-category__item", "menu-category", "category-parent"] });
+    const parentCategoryElement = createElement({
+      tagName: "a",
+      classNames: ["menu-category", "category-parent"],
+      attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}` },
+    });
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
     categoryWrapper.append(parentCategoryElement);
     const childrenContainer = createElement({ tagName: "div", classNames: ["child-categories-wrapper"] });
 
     categoryData.children.forEach((childCategory) => {
-      const childCategoryElement = createElement({ tagName: "span", classNames: ["menu-category__item", "menu-category", "category-child"] });
+      const childCategoryElement = createElement({
+        tagName: "a",
+        classNames: ["menu-category", "category-child"],
+        attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}/${childCategory.slug.ru}` },
+      });
       childCategoryElement.textContent = childCategory.name.ru;
       childCategoryElement.setAttribute("data-id", `${childCategory.id}`);
       childrenContainer.append(childCategoryElement);
     });
 
     categoryWrapper.append(childrenContainer);
-    subCategories.append(categoryWrapper);
+    categoriesWrapper.append(categoryWrapper);
   });
-  categoriesWrapper.append(catalogCategory, subCategories);
+
   return categoriesWrapper;
 }
 

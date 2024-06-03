@@ -42,19 +42,23 @@
   gap: 10px;
 }
 
-.catalog-caregory {
+.catalog-category {
   font-size: 18px;
 }
 
+/* .child-categories-wrapper {
+  display: none;
+} */
+
 .category-parent,
 .category-child,
-.catalog-caregory {
+.catalog-category {
   cursor: pointer;
   transition: color 0.5s ease;
 }
 
 .category-parent,
-.catalog-caregory {
+.catalog-category {
   font-weight: 600;
 }
 
@@ -123,7 +127,7 @@
 @media (hover: hover) {
   .category-parent:hover,
   .category-child:hover,
-  .catalog-caregory:hover {
+  .catalog-category:hover {
     color: var(--accent-blue);
   }
 }
