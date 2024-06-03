@@ -1,11 +1,4 @@
-export const arrowLeft = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-<path d="M18.5 12H6M6 12L12 6M6 12L12 18" stroke-linecap="round" stroke-linejoin="round" />
-</svg>`;
-
-export const arrowRight = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-<path d="M6 12H18.5M18.5 12L12.5 6M18.5 12L12.5 18" stroke-linecap="round"
-    stroke-linejoin="round" />
-</svg>`;
+export const arrowLeft = `<path d="M18.5 12H6M6 12L12 6M6 12L12 18" stroke-linecap="round" stroke-linejoin="round" />`;
 
 export const filterIcon = `<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" width="30" height="30" viewBox="0 0 48 48"><title/>
 <path d="M47,12a2,2,0,0,0-2-2H24a2,2,0,0,0,0,4H45A2,2,0,0,0,47,12Z"/>
@@ -20,3 +13,10 @@ export const sortIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="icon ico
 <path d="M3 9l4-4l4 4m-4 -4v14"/>
 <path d="M21 15l-4 4l-4-4m4 4v-14"/>
 </svg>`;
+
+export const arrowRight = `<path d="M6 12H18.5M18.5 12L12.5 6M18.5 12L12.5 18" stroke-linecap="round" stroke-linejoin="round" />`;
+
+export const cross = `<g id="close_btn">
+<path id="Line 5" d="M2 16.8507L17 2.00003" stroke="#f6f4d5" stroke-width="3"/>
+<path id="Line 6" d="M2 2.14926L17 17" stroke="#f6f4d5" stroke-width="3"/>
+</g>`;

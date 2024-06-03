@@ -1,21 +1,19 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
-import "./api/api";
 
+import { Pages } from "./types/types";
+import { createApiRoot } from "./api/api";
+import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
-import renderLoginFormContent from "./pages/loginPage/loginPage";
-import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
-import { Pages } from "./types/types";
 import { renderProductsFromApi } from "./pages/catalog/catalog";
-import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main";
 import { renderProfileContent } from "./pages/profile/profileView";
-import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
-import createFilterView, { filters } from "./components/filter/filterView";
+import { renderRegistrationFormContent } from "./pages/registration/registrationView";
+import renderLoginFormContent from "./pages/loginPage/loginPage";
 
 document.body.append(header, main, footer);
 
@@ -31,6 +29,15 @@ function setActiveLink(fragmentId: string) {
   }
 }
 
+export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) => {
+  const contentDiv = document.querySelector(".main");
+  try {
+    contentDiv?.append(await renderFunc());
+  } catch (error) {
+    contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+  }
+};
+
 async function renderContent(hash: string) {
   const contentDiv = document.querySelector(".main");
   const [route, ...args] = hash.split("/");
@@ -39,36 +46,20 @@ async function renderContent(hash: string) {
     switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
-        contentDiv.append(sliderWrapper);
-        renderProductsForSliderFromApi();
+        await renderPageContent(getMainPageContent);
         break;
       case Pages.PROFILE:
-        try {
-          if (localStorage.getItem("refreshToken")) {
-            contentDiv.append(await renderProfileContent());
-          } else {
-            window.location.href = Pages.LOGIN;
-          }
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
+        if (localStorage.getItem("refreshToken")) {
+          await renderPageContent(renderProfileContent);
+        } else {
+          window.location.href = Pages.LOGIN;
         }
         break;
       case Pages.CATALOG:
-        try {
-          const renderedCatalogContent = await renderProductsFromApi();
-          const renderedFilter = createFilterView(filters.sizes.clothes);
-          contentDiv.append(renderedFilter, renderedCatalogContent);
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
-        }
+        await renderPageContent(renderProductsFromApi);
         break;
       case Pages.PRODUCT:
-        try {
-          const renderedProductContent = await renderProductContent(args[0]);
-          contentDiv.append(renderedProductContent);
-        } catch (error) {
-          contentDiv.append("Ошибка! Контент невозможно отобразить.");
-        }
+        await renderPageContent(() => renderProductContent(args[0]));
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();

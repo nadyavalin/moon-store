@@ -50,8 +50,8 @@ function createFilterSidebarView(sizeParam: string[]) {
   filterWrapperPrice.append(filterPriceFrom, filterCountHyphen, filterPriceTo);
 
   sizeParam.forEach((element) => {
-    const size = createElement({ tagName: "label", classNames: ["size__label"], attributes: { for: `size-${element}` }, textContent: element });
-    const checkbox = createElement({ tagName: "input", classNames: ["product__size-item"], attributes: { type: "checkbox", id: `size-${element}` } });
+    const size = createElement({ tagName: "label", classNames: ["size__label"], attributes: { for: `${element}` }, textContent: element });
+    const checkbox = createElement({ tagName: "input", classNames: ["product__size-item"], attributes: { type: "checkbox", id: `${element}` } });
     filterWrapperSize.append(checkbox, size);
   });
   const buttonsWrapper = createElement({ tagName: "div", classNames: ["filter__buttons-wrapper"] });
