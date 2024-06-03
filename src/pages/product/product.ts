@@ -1,13 +1,13 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
 import { createElement } from "../../components/elements";
-import { getProductDataWithSlug } from "../../api/api";
+import { getProducts } from "../../api/api";
 import { createModalImage } from "./modal/modal";
 import { createSlider } from "../../components/slider/slider";
 import { ProductProjection } from "@commercetools/platform-sdk";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
-  const response = await getProductDataWithSlug(slug);
+  const response = await getProducts({ "filter.query": `slug.ru: "${slug}"` });
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const cardName = response?.body.results[0].name.ru;
   const cardDescription = response?.body.results[0].description?.ru;

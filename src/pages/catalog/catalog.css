@@ -1,10 +1,14 @@
 .catalog {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
 }
 
 .catalog-wrapper {
+  display: flex;
+}
+
+.catalog-main {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
@@ -14,10 +18,16 @@
 .categories-wrapper {
   padding: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 20px;
   flex-shrink: 0;
+}
+
+.subcategories-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .category-wrapper {
@@ -31,13 +41,19 @@
   gap: 10px;
 }
 
+.catalog-caregory {
+  font-size: 18px;
+}
+
 .category-parent,
-.category-child {
+.category-child,
+.catalog-caregory {
   cursor: pointer;
   transition: color 0.5s ease;
 }
 
-.category-parent {
+.category-parent,
+.catalog-caregory {
   font-weight: 600;
 }
 
@@ -47,19 +63,20 @@
 
 @media (hover: hover) {
   .category-parent:hover,
-  .category-child:hover {
+  .category-child:hover,
+  .catalog-caregory:hover {
     color: var(--accent-blue);
   }
 }
 
 @media (max-width: 1050px) {
-  .catalog-wrapper {
+  .catalog-main {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 900px) {
-  .catalog-wrapper {
+  .catalog-main {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -73,7 +90,7 @@
     padding: 5px;
   }
 
-  .catalog-wrapper {
+  .catalog-main {
     grid-template-columns: repeat(1, 1fr);
   }
 }
@@ -101,5 +118,63 @@
 
   .categories-wrapper {
     align-items: flex-start;
+  }
+}
+
+.catalog-side__wrapper {
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.search-panel__inner {
+  display: flex;
+  padding: 20px;
+  width: 60%;
+  align-items: center;
+  gap: 10px;
+  margin: auto;
+}
+
+.search-input__wrapper {
+  position: relative;
+  width: 90%;
+}
+
+.search-input {
+  padding: 5px;
+  margin: 0;
+}
+
+.search-button {
+  width: 20%;
+  padding: 5px;
+  height: 30px;
+}
+
+.clear-btn {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.clear-btn path {
+  stroke: var(--card-hover);
+}
+
+.clear-btn path {
+  transition: stroke 0.5s ease;
+}
+
+@media (hover: hover) {
+  .clear-btn:hover g path {
+    stroke: var(--accent-blue);
   }
 }
