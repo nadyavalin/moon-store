@@ -2,7 +2,7 @@ import "./catalog.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
@@ -10,40 +10,48 @@ import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
 
-export async function renderProductsFromApi() {
-  const response = await getProducts();
+export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
+  const slug = args[args.length - 1];
+  const response = await getCategories();
+  const results = response?.body.results;
+  const category = results?.find((category) => category.slug.ru === slug);
+  const id = category?.id;
+
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
-  const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
-  renderCatalogContent(response, catalogMain);
 
-  const categories = await renderCategories();
-  categories.addEventListener("click", async (event) => {
-    const target = <HTMLElement>event.target;
-    if (target.classList.contains("menu-category")) {
-      const id = target.getAttribute("data-id") as string;
-      await renderCatalogByCategory(id, catalogMain);
-    }
-    const clickedCategory = target as HTMLElement;
-    const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
-    allCategoryItems.forEach((item) => {
-      if (item !== clickedCategory) {
-        item.classList.remove("active");
-      }
-    });
+  let productResponse;
+  if (id) {
+    productResponse = await getProducts({ "filter.query": `categories.id:"${id}"` });
+  } else {
+    productResponse = await getProducts();
+  }
+  const catalogMain = await renderCatalogContent(productResponse);
 
-    clickedCategory.classList.add("active");
-  });
+  const categories = await renderCategories(response);
+
+  // categories.addEventListener("click", (event) => {
+  //   const target = <HTMLElement>event.target;
+  //   const clickedCategory = target as HTMLElement;
+  //   const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
+  //   allCategoryItems.forEach((item) => {
+  //     if (item !== clickedCategory) {
+  //       item.classList.remove("active");
+  //     }
+  //   });
+
+  //   clickedCategory.classList.add("active");
+  // });
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
     if (target.classList.contains("search-button")) {
-      const response = await getProducts({ "text.ru": `${input.value}` });
-      renderCatalogContent(response, catalogMain);
+      productResponse = await getProducts({ "text.ru": `${input.value}` });
+      renderCatalogContent(productResponse);
     }
   });
 
@@ -70,13 +78,7 @@ function renderSearchPanel() {
   return searchPanel;
 }
 
-async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
-  const response = await getProducts({ "filter.query": `categories.id:"${id}"` });
-  renderCatalogContent(response, catalogWrapper);
-}
-
-async function renderCategories() {
-  const response = await getCategories();
+async function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined) {
   const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
   const categories: Category[] | undefined = response?.body.results;
   const parentCategories = categories?.filter((category) => !category.parent);
@@ -128,15 +130,17 @@ async function renderCategories() {
   return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
+async function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) {
+  const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const items = response?.body.results;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
   } else {
-    catalogWrapper.innerHTML = "";
+    catalogMain.innerHTML = "";
     items?.forEach((item) => {
       const card = createCard(item);
-      catalogWrapper.append(card);
+      catalogMain.append(card);
     });
   }
+  return catalogMain;
 }
