@@ -7,7 +7,7 @@ import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 
-import createFilterView, { filters } from "src/components/filter/filterView";
+import createFilterView from "src/components/filter/filterView";
 
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
@@ -17,7 +17,7 @@ export async function renderProductsFromApi() {
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
-  const filterWrapper = createFilterView(filters.sizes.clothes);
+  const filterWrapper = createFilterView();
   const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
