@@ -18,13 +18,14 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
   arrowRightElement.classList.toggle("disabled", carousel.childElementCount === 1);
 
   function moveSlider(direction = "right") {
+    const carouselScrollLeftMax = carousel.scrollWidth - carousel.clientWidth;
     const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
       if (direction === "left") {
-        carousel.scrollLeft += -firstCardWidth;
+        carousel.scrollLeft = carousel.scrollLeft < firstCardWidth ? carouselScrollLeftMax : carousel.scrollLeft - firstCardWidth;
       } else {
-        carousel.scrollLeft += firstCardWidth;
+        carousel.scrollLeft = carousel.scrollLeft + firstCardWidth > carouselScrollLeftMax ? 0 : carousel.scrollLeft + firstCardWidth;
       }
     }
   }
@@ -43,7 +44,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
   sliderWrapper.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
-      const direction = target.id;
+      const direction = target.id || target.closest(".card__arrow")?.id;
       moveSlider(direction);
 
       if (isAutoPlay) {
@@ -51,7 +52,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
         clearTimeout(waitTimeout);
         waitTimeout = setTimeout(() => {
           autoPlay();
-        }, 5000);
+        }, 2000);
       }
     }
 
@@ -62,29 +63,6 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   if (isAutoPlay) {
     autoPlay();
-  }
-
-  function cycleSlider() {
-    const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
-    if (cardImg) {
-      const firstCardWidth = cardImg.offsetWidth;
-      const cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
-      const carouselChildren = Array.from(carousel.children);
-
-      const timesToAdd = 50;
-      for (let i = 0; i < timesToAdd; i++) {
-        carouselChildren
-          .slice(-cardPerView)
-          .reverse()
-          .forEach((card) => {
-            carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
-          });
-
-        carouselChildren.slice(0, cardPerView).forEach((card) => {
-          carousel.insertAdjacentHTML("beforeend", card.outerHTML);
-        });
-      }
-    }
   }
 
   function dragSlider() {
@@ -130,7 +108,6 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
 
-  cycleSlider();
   if (isDraggable) {
     dragSlider();
   }
