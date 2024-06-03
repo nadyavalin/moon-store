@@ -3,7 +3,7 @@ import { arrowLeft, arrowRight } from "../svg";
 import { createElement, createSvgElement } from "../elements";
 import { SliderProps } from "../../types/types";
 
-export function createSlider({ response, isAutoPlay = false, isDraggable = false, className, createSlides, onSlideClick }: SliderProps) {
+export function createSlider({ response, isAutoPlay = false, isDraggable = true, className, createSlides, onSlideClick }: SliderProps) {
   const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper", className] });
   const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 
@@ -43,7 +43,7 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
   sliderWrapper.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.classList.contains("card__arrow") || target.closest(".card__arrow")) {
-      const direction = target.id;
+      const direction = target.id || target.closest(".card__arrow")?.id;
       moveSlider(direction);
 
       if (isAutoPlay) {
@@ -62,30 +62,6 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   if (isAutoPlay) {
     autoPlay();
-  }
-
-  function cycleSlider(index: number) {
-    const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
-    if (cardImg) {
-      const carouselChildren = Array.from(carousel.children) as HTMLElement[];
-      const totalSlides = carouselChildren.length;
-
-      let activeImageIndex = 0;
-
-      if (index > totalSlides) {
-        activeImageIndex = index % totalSlides;
-      } else if (index < 0) {
-        activeImageIndex = totalSlides + index;
-      } else {
-        activeImageIndex = index;
-      }
-
-      for (let i = 0; i < totalSlides; i++) {
-        if (i !== activeImageIndex) {
-          carousel.appendChild(carouselChildren[i].cloneNode(true));
-        }
-      }
-    }
   }
 
   function dragSlider() {
@@ -131,7 +107,6 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
 
   sliderWrapper.append(arrowLeftElement, carousel, arrowRightElement);
 
-  cycleSlider(1);
   if (isDraggable) {
     dragSlider();
   }

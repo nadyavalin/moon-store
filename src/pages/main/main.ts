@@ -13,5 +13,3 @@ export async function getMainPageContent() {
   });
   return slider;
 }
-
-export default getMainPageContent();
