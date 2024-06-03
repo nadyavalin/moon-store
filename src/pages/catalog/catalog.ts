@@ -6,7 +6,11 @@ import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
+
 import createFilterView, { filters } from "src/components/filter/filterView";
+
+import { createSnackbar } from "../../components/elements";
+import { SnackbarType } from "../../types/types";
 
 export async function renderProductsFromApi() {
   const response = await getProducts();
@@ -128,10 +132,14 @@ async function renderCategories() {
 }
 
 function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
-  catalogWrapper.innerHTML = "";
   const items = response?.body.results;
-  items?.forEach((item) => {
-    const card = createCard(item);
-    catalogWrapper.append(card);
-  });
+  if (items?.length === 0) {
+    createSnackbar(SnackbarType.error, "Товары отсутствуют");
+  } else {
+    catalogWrapper.innerHTML = "";
+    items?.forEach((item) => {
+      const card = createCard(item);
+      catalogWrapper.append(card);
+    });
+  }
 }
