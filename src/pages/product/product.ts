@@ -50,8 +50,11 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   });
 
   productSizes?.forEach((variant) => {
-    const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${variant.sku?.slice(-1)}` });
-    size.append(sizeItem);
+    if (variant.attributes) {
+      const sizeVariant = variant.attributes[0].value[0].key;
+      const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${sizeVariant}` });
+      size.append(sizeItem);
+    }
   });
 
   priceWrapper.append(priceText, price);
