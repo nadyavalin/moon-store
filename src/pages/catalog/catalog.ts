@@ -2,7 +2,7 @@ import "./catalog.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
@@ -11,48 +11,54 @@ import createFilterView from "src/components/filter/filterView";
 
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
+import { Pages } from "../../types/types";
 
-export async function renderProductsFromApi() {
-  const response = await getProducts();
+export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
+  const slug = args[args.length - 1];
+  const response = await getCategories();
+  const results = response?.body.results;
+  const category = results?.find((category) => category.slug.ru === slug);
+  const id = category?.id;
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const filterWrapper = createFilterView();
-  const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
-  renderCatalogContent(response, catalogMain);
-  const categories = await renderCategories();
 
-  categories.addEventListener("click", async (event) => {
-    const target = <HTMLElement>event.target;
-    if (target.classList.contains("menu-category")) {
-      const id = target.getAttribute("data-id") as string;
-      catalogMain.setAttribute("data-id", id);
-      await renderCatalogByCategory(id, catalogMain);
-    }
-    if (target.classList.contains("catalog-caregory")) {
-      renderCatalogContent(response, catalogMain);
-    }
-    if (target.classList.contains("menu-category__item")) {
-      const clickedCategory = target as HTMLElement;
-      const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category__item")) as HTMLElement[];
-      allCategoryItems.forEach((item) => {
-        if (item !== clickedCategory) {
-          item.classList.remove("active");
-        }
-      });
+  const queryArgs: Record<string, QueryParam> = {};
+  if (id) {
+    queryArgs["filter.query"] = `categories.id:"${id}"`;
+  }
+  const productResponse = await getProducts(queryArgs);
 
-      clickedCategory.classList.add("active");
-    }
-  });
+  const catalogMain = renderCatalogContent(productResponse, catalogList);
+  const categories = renderCategories(response);
+
+  // TODO перестал работать код, нужно восстановить
+  // TODO после клика рендерятся товары (страница обновляется) и класс active сразу слетает
+  // TODO если еще раз нажать на ту же категорию, то класс навешивается и снимается
+  // categories.addEventListener("click", (event) => {
+  //   const target = event.target as HTMLElement;
+  //   const clickedCategory = target as HTMLElement;
+  //   const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
+  //   allCategoryItems.forEach((item) => {
+  //     if (item !== clickedCategory) {
+  //       item.classList.remove("active");
+  //     }
+  //   });
+
+  //   clickedCategory.classList.add("active");
+  // });
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
     if (target.classList.contains("search-button")) {
-      const response = await getProducts({ "text.ru": `${input.value}` });
-      renderCatalogContent(response, catalogMain);
+      queryArgs["text.ru"] = `${input.value}`;
+      const productResponse = await getProducts(queryArgs);
+      renderCatalogContent(productResponse, catalogList);
     }
   });
 
@@ -79,16 +85,8 @@ function renderSearchPanel() {
   return searchPanel;
 }
 
-async function renderCatalogByCategory(id: string, catalogWrapper: HTMLUListElement) {
-  const response = await getProducts({ "filter.query": `categories.id:"${id}"` });
-  renderCatalogContent(response, catalogWrapper);
-}
-
-async function renderCategories() {
-  const response = await getCategories();
+function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined) {
   const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
-  const subCategories = createElement({ tagName: "div", classNames: ["subcategories-wrapper"] });
-  const catalogCategory = createElement({ tagName: "div", classNames: ["catalog-caregory", "menu-category__item"], textContent: "Каталог" });
   const categories: Category[] | undefined = response?.body.results;
   const parentCategories = categories?.filter((category) => !category.parent);
   const childCategories = categories?.filter((category) => category.parent);
@@ -111,35 +109,44 @@ async function renderCategories() {
   const categoryDataValue = Object.values(categoryMap);
   categoryDataValue.forEach((categoryData) => {
     const categoryWrapper = createElement({ tagName: "div", classNames: ["category-wrapper"] });
-    const parentCategoryElement = createElement({ tagName: "span", classNames: ["menu-category__item", "menu-category", "category-parent"] });
+    const parentCategoryElement = createElement({
+      tagName: "a",
+      classNames: ["menu-category", "category-parent"],
+      attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}` },
+    });
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
     categoryWrapper.append(parentCategoryElement);
     const childrenContainer = createElement({ tagName: "div", classNames: ["child-categories-wrapper"] });
 
     categoryData.children.forEach((childCategory) => {
-      const childCategoryElement = createElement({ tagName: "span", classNames: ["menu-category__item", "menu-category", "category-child"] });
+      const childCategoryElement = createElement({
+        tagName: "a",
+        classNames: ["menu-category", "category-child"],
+        attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}/${childCategory.slug.ru}` },
+      });
       childCategoryElement.textContent = childCategory.name.ru;
       childCategoryElement.setAttribute("data-id", `${childCategory.id}`);
       childrenContainer.append(childCategoryElement);
     });
 
     categoryWrapper.append(childrenContainer);
-    subCategories.append(categoryWrapper);
+    categoriesWrapper.append(categoryWrapper);
   });
-  categoriesWrapper.append(catalogCategory, subCategories);
+
   return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedQueryResponse> | undefined, catalogWrapper: HTMLUListElement) {
+function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
   const items = response?.body.results;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
   } else {
-    catalogWrapper.innerHTML = "";
+    catalogList.innerHTML = "";
     items?.forEach((item) => {
       const card = createCard(item);
-      catalogWrapper.append(card);
+      catalogList.append(card);
     });
   }
+  return catalogList;
 }

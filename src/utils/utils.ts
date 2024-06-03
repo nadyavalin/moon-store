@@ -1,4 +1,4 @@
-import { correctFactorForPrices } from "src/api/constants";
+import { correctFactorForPrices } from "../api/constants";
 
 export class PriceFormatter {
   static format(amount = 0) {

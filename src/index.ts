@@ -56,7 +56,7 @@ async function renderContent(hash: string) {
         }
         break;
       case Pages.CATALOG:
-        await renderPageContent(renderProductsFromApi);
+        await renderPageContent(() => renderProductsFromApi(args));
         break;
       case Pages.PRODUCT:
         await renderPageContent(() => renderProductContent(args[0]));
