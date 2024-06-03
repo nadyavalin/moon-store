@@ -1,10 +1,12 @@
+import { correctFactorForPrices } from "src/api/constants";
+
 export class PriceFormatter {
   static format(amount = 0) {
     return new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB", minimumFractionDigits: 0 }).format(amount);
   }
 
   static formatCents(amount = 0) {
-    return PriceFormatter.format(amount / 100);
+    return PriceFormatter.format(amount / correctFactorForPrices);
   }
 }
 

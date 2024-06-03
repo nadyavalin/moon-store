@@ -15,6 +15,7 @@ import { sliderWrapper, renderProductsForSliderFromApi } from "./pages/main/main
 import { renderProfileContent } from "./pages/profile/profileView";
 import { createApiRoot } from "./api/api";
 import { renderProductContent } from "./pages/product/product";
+import createFilterView, { filters } from "./components/filter/filterView";
 
 document.body.append(header, main, footer);
 
@@ -55,7 +56,8 @@ async function renderContent(hash: string) {
       case Pages.CATALOG:
         try {
           const renderedCatalogContent = await renderProductsFromApi();
-          contentDiv.append(renderedCatalogContent);
+          const renderedFilter = createFilterView(filters.sizes.clothes);
+          contentDiv.append(renderedFilter, renderedCatalogContent);
         } catch (error) {
           contentDiv.append("Ошибка! Контент невозможно отобразить.");
         }

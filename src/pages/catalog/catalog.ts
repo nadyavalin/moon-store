@@ -19,6 +19,7 @@ export async function renderProductsFromApi() {
     const target = <HTMLElement>event.target;
     if (target.classList.contains("menu-category")) {
       const id = target.getAttribute("data-id") as string;
+      catalogWrapper.setAttribute("data-id", id);
       await renderCatalogByCategory(id, catalogWrapper);
 
       const clickedCategory = target as HTMLElement;
@@ -34,6 +35,7 @@ export async function renderProductsFromApi() {
   });
 
   catalog.append(categoriesWrapper, catalogWrapper);
+
   return catalog;
 }
 

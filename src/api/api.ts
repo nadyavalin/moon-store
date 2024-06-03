@@ -33,7 +33,18 @@ export const getProductsByCategory = (id: string) =>
     .get({ queryArgs: { "filter.query": `categories.id:"${id}"` } })
     .execute();
 
-export const getProducts = () => state.apiRoot?.productProjections().get().execute();
+export const getProductsByFilter = (query: string[]) =>
+  state.apiRoot
+    ?.productProjections()
+    .search()
+    .get({ queryArgs: { "filter.query": query } })
+    .execute();
+
+export const getProducts = () =>
+  state.apiRoot
+    ?.productProjections()
+    .get({ queryArgs: { limit: 50 } })
+    .execute();
 export const getCategories = () => state.apiRoot?.categories().get().execute();
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   state.apiRoot
