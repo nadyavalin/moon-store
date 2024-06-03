@@ -2,7 +2,7 @@ import "./catalog.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
@@ -19,19 +19,19 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
-  let productResponse;
+  const queryArgs: Record<string, QueryParam> = {};
   if (id) {
-    productResponse = await getProducts({ "filter.query": `categories.id:"${id}"` });
-  } else {
-    productResponse = await getProducts();
+    queryArgs["filter.query"] = `categories.id:"${id}"`;
   }
-  const catalogMain = await renderCatalogContent(productResponse);
+  const productResponse = await getProducts(queryArgs);
 
-  const categories = await renderCategories(response);
+  const catalogMain = renderCatalogContent(productResponse, catalogList);
+  const categories = renderCategories(response);
 
   // categories.addEventListener("click", (event) => {
   //   const target = <HTMLElement>event.target;
@@ -50,8 +50,9 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
     if (target.classList.contains("search-button")) {
-      productResponse = await getProducts({ "text.ru": `${input.value}` });
-      renderCatalogContent(productResponse);
+      queryArgs["text.ru"] = `${input.value}`;
+      const productResponse = await getProducts(queryArgs);
+      renderCatalogContent(productResponse, catalogList);
     }
   });
 
@@ -78,7 +79,7 @@ function renderSearchPanel() {
   return searchPanel;
 }
 
-async function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined) {
+function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined) {
   const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
   const categories: Category[] | undefined = response?.body.results;
   const parentCategories = categories?.filter((category) => !category.parent);
@@ -130,17 +131,16 @@ async function renderCategories(response: ClientResponse<CategoryPagedQueryRespo
   return categoriesWrapper;
 }
 
-async function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) {
-  const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
+function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
   const items = response?.body.results;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
   } else {
-    catalogMain.innerHTML = "";
+    catalogList.innerHTML = "";
     items?.forEach((item) => {
       const card = createCard(item);
-      catalogMain.append(card);
+      catalogList.append(card);
     });
   }
-  return catalogMain;
+  return catalogList;
 }
