@@ -1,5 +1,5 @@
 import "./main.css";
-import createCard from "../../components/productCard";
+import createCard from "../../components/productCard/productCard";
 import { getProducts } from "../../api/api";
 import { createSlider } from "../../components/slider/slider";
 

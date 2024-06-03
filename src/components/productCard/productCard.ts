@@ -1,8 +1,8 @@
 import "./productCard.css";
-import { createElement } from "./elements";
+import { createElement } from "../elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
-import { PriceFormatter } from "../utils/utils";
-import { Pages } from "../types/types";
+import { PriceFormatter } from "../../utils/utils";
+import { Pages } from "../../types/types";
 
 export function createCard(item: ProductProjection) {
   const name = item.name.ru;

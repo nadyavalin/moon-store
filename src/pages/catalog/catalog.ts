@@ -3,7 +3,7 @@ import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { ClientResponse, ProductProjectionPagedQueryResponse, Category } from "@commercetools/platform-sdk";
-import { createCard } from "../../components/productCard";
+import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 

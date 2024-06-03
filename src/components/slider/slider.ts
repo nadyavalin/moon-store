@@ -3,7 +3,7 @@ import { arrowLeft, arrowRight } from "../svg";
 import { createElement, createSvgElement } from "../elements";
 import { SliderProps } from "../../types/types";
 
-export function createSlider({ response, isAutoPlay = false, isDraggable = true, className, createSlides, onSlideClick }: SliderProps) {
+export function createSlider({ response, isAutoPlay = false, isDraggable = false, className, createSlides, onSlideClick }: SliderProps) {
   const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper", className] });
   const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 
@@ -18,13 +18,14 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = true,
   arrowRightElement.classList.toggle("disabled", carousel.childElementCount === 1);
 
   function moveSlider(direction = "right") {
+    const carouselScrollLeftMax = carousel.scrollWidth - carousel.clientWidth;
     const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
       if (direction === "left") {
-        carousel.scrollLeft += -firstCardWidth;
+        carousel.scrollLeft = carousel.scrollLeft < firstCardWidth ? carouselScrollLeftMax : carousel.scrollLeft - firstCardWidth;
       } else {
-        carousel.scrollLeft += firstCardWidth;
+        carousel.scrollLeft = carousel.scrollLeft + firstCardWidth > carouselScrollLeftMax ? 0 : carousel.scrollLeft + firstCardWidth;
       }
     }
   }
