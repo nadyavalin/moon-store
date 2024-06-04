@@ -7,17 +7,16 @@ import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 
-import createFilterView from "src/components/filter/filterView";
-
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
+import createFilterSortButtons from "../../components/filter/filterView";
 
 export async function renderProductsFromApi() {
   const response = await getProducts();
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
-  const filterWrapper = createFilterView();
+  const filterSortButtons = createFilterSortButtons();
   const catalogMain = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
@@ -56,7 +55,7 @@ export async function renderProductsFromApi() {
     }
   });
 
-  sidePanel.append(filterWrapper, categories);
+  sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMain);
   catalog.append(searchPanel, catalogWrapper);
 

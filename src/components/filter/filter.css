@@ -1,4 +1,5 @@
-.filter-wrapper {
+.filter-wrapper,
+.sort-wrapper {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -14,15 +15,17 @@
   z-index: 50;
 }
 
-.filter__buttons-wrapper {
+.filter-sort__buttons-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: end;
+  gap: 10px;
   margin-right: 20px;
   margin-bottom: 20px;
 }
 
-.filter__heading {
+.filter__heading,
+.sort__heading {
   margin: 20px 0;
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
@@ -40,7 +43,8 @@
   height: 30px;
   margin-top: 0;
 }
-.filter-wrapper label {
+.filter-wrapper label,
+.sort-wrapper label {
   padding-top: 7px;
   cursor: pointer;
 }
@@ -49,7 +53,9 @@
   align-self: flex-start;
 }
 
-.filter__buttons-wrapper {
+.filter__buttons-wrapper,
+.sort__buttons-wrapper {
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -74,4 +80,11 @@ svg.sort-icon {
   100% {
     transform: translate(0);
   }
+}
+
+.sort__price-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
 }

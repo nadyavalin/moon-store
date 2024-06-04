@@ -1,10 +1,10 @@
 import { createElement, createSvgElement } from "../elements";
 import { filterIcon, sortIcon } from "../svg";
 import "./filter.css";
-import { filterHandler, resetFilter } from "./filterHandler";
+import { filterHandler, resetFilter, resetSort, sortHandler } from "./filterHandler";
 
-const createFilterView = () => {
-  const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter__buttons-wrapper"] });
+const createFilterSortButtons = () => {
+  const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter-sort__buttons-wrapper"] });
   const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "30", height: "30", viewBox: "0 0 48 48" });
   const sortButton = createSvgElement(sortIcon, "sort-icon", {
     width: "30",
@@ -17,8 +17,9 @@ const createFilterView = () => {
     "stroke-linejoin": "round",
   });
   filterButtonsWrapper.append(filterButton, sortButton);
-  const filterWrapper = createFilterSidebarView();
+
   filterButton.addEventListener("click", () => {
+    const filterWrapper = createFilterSidebarView();
     filterWrapper.classList.toggle("open-filter");
     if (filterWrapper.className.includes("open-filter")) {
       filterWrapper.remove();
@@ -27,7 +28,16 @@ const createFilterView = () => {
       catalogWrapper.append(filterWrapper);
     }
   });
-
+  sortButton.addEventListener("click", () => {
+    const sortWrapper = createSortSidebarView();
+    sortWrapper.classList.toggle("open-filter");
+    if (sortWrapper.className.includes("open-filter")) {
+      sortWrapper.remove();
+    } else {
+      const catalogWrapper = <HTMLElement>document.querySelector(".catalog-wrapper");
+      catalogWrapper.append(sortWrapper);
+    }
+  });
   return filterButtonsWrapper;
 };
 
@@ -66,4 +76,41 @@ function createFilterSidebarView() {
   return filterWrapper;
 }
 
-export default createFilterView;
+function createSortSidebarView() {
+  const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper", "open-filter"] });
+  const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
+  const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
+  const priceIncreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
+  const priseIncreasingSortLabel = createElement({
+    tagName: "label",
+    classNames: ["sort__label"],
+    attributes: { for: "price-sort" },
+    textContent: "По возрастанию",
+  });
+  const priceIncreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
+  const priceDecreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
+  const priseDecreasingSortLabel = createElement({
+    tagName: "label",
+    classNames: ["sort__label"],
+    attributes: { for: "price-sort" },
+    textContent: "По возрастанию",
+  });
+  const priceDecreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
+
+  priceIncreasingSortWrapper.append(priceIncreasingSortCheckbox, priseIncreasingSortLabel);
+  priceDecreasingSortWrapper.append(priceDecreasingSortCheckbox, priseDecreasingSortLabel);
+
+  const buttonsWrapper = createElement({ tagName: "div", classNames: ["sort__buttons-wrapper"] });
+  const applyButton = createElement({ tagName: "button", classNames: ["sort__button-apply"], textContent: "Применить" });
+  const resetButton = createElement({ tagName: "button", classNames: ["sort__button-reset"], textContent: "Сбросить" });
+  buttonsWrapper.append(applyButton, resetButton);
+  applyButton.addEventListener("click", () => {
+    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox);
+    sortWrapper.remove();
+  });
+  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox));
+  sortWrapper.append(sortHeading, priceHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, buttonsWrapper);
+  return sortWrapper;
+}
+
+export default createFilterSortButtons;

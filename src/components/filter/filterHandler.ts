@@ -1,5 +1,5 @@
 import { correctFactorForPrices } from "../../api/constants";
-import { getProductsByFilter } from "../../api/api";
+import { getProductsByFilter, getProductsBySort } from "../../api/api";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
@@ -59,4 +59,33 @@ export function resetFilter(filterPriceFrom: HTMLInputElement, filterPriceTo: HT
   filterPriceFrom.value = "";
   filterPriceTo.value = "";
   Array.from(filterWrapperSize.querySelectorAll("input")).forEach((element) => (element.checked = false));
+}
+
+export function resetSort(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement) {
+  priceIncreasingSortCheckbox.checked = false;
+  priceDecreasingSortCheckbox.checked = false;
+}
+
+export function sortHandler(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement) {
+  const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
+  const minPrice = 1000 / correctFactorForPrices;
+  const maxPrice = 2500 / correctFactorForPrices;
+  let request = [];
+  if (priceIncreasingSortCheckbox.checked) request.push(`price asc`);
+  if (priceDecreasingSortCheckbox.checked) request.push(`price desc`);
+
+  getProductsBySort(request)?.then((response) => {
+    if (!catalogMain) return;
+
+    const items = response?.body.results;
+    if (items.length === 0) {
+      createSnackbar(SnackbarType.error, "Товары по заданным фильтрам отсутствуют");
+    } else {
+      catalogMain.innerHTML = "";
+      items?.forEach((item) => {
+        const card = createCard(item);
+        catalogMain.append(card);
+      });
+    }
+  });
 }

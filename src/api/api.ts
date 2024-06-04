@@ -32,6 +32,14 @@ export const getProductsByFilter = (queries: string[]) =>
     .search()
     .get({ queryArgs: { filter: queries } })
     .execute();
+
+export const getProductsBySort = (queries: string[]) =>
+  state.apiRoot
+    ?.productProjections()
+    .search()
+    .get({ queryArgs: { limit: 50, sort: queries } })
+    .execute();
+
 export const getCategories = () => state.apiRoot?.categories().get().execute();
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   state.apiRoot
