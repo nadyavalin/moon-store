@@ -78,13 +78,12 @@ function createFilterSidebarView(categoryID?: string) {
 function createSortSidebarView(categoryID?: string) {
   const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper", "open-filter"] });
   const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
-  const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
   const priceIncreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
   const priseIncreasingSortLabel = createElement({
     tagName: "label",
     classNames: ["sort__label"],
     attributes: { for: "price-sort" },
-    textContent: "По возрастанию",
+    textContent: "По возрастанию цены ₽",
   });
   const priceIncreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
   const priceDecreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
@@ -92,19 +91,18 @@ function createSortSidebarView(categoryID?: string) {
     tagName: "label",
     classNames: ["sort__label"],
     attributes: { for: "price-sort" },
-    textContent: "По убыванию",
+    textContent: "По убыванию цены ₽",
   });
   const priceDecreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
 
   priceIncreasingSortWrapper.append(priceIncreasingSortCheckbox, priseIncreasingSortLabel);
   priceDecreasingSortWrapper.append(priceDecreasingSortCheckbox, priseDecreasingSortLabel);
-  const nameHeading = createElement({ tagName: "span", classNames: ["name__heading"], textContent: "Название:" });
   const nameSortWrapper = createElement({ tagName: "div", classNames: ["sort__name-wrapper"] });
   const nameSortLabel = createElement({
     tagName: "label",
     classNames: ["sort__label"],
     attributes: { for: "name-sort" },
-    textContent: "От А до Я",
+    textContent: "По алфавиту от А до Я",
   });
   const nameSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "name-sort" } });
   nameSortWrapper.append(nameSortCheckbox, nameSortLabel);
@@ -120,7 +118,7 @@ function createSortSidebarView(categoryID?: string) {
     sortWrapper.remove();
   });
   resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox));
-  sortWrapper.append(sortHeading, priceHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, nameHeading, nameSortWrapper, buttonsWrapper);
+  sortWrapper.append(sortHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, nameSortWrapper, buttonsWrapper);
   return sortWrapper;
 }
 
