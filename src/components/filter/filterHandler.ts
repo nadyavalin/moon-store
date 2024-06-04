@@ -1,23 +1,24 @@
 import { correctFactorForPrices } from "../../api/constants";
-import { getProductsByFilter, getProductsBySort } from "../../api/api";
+import { getProducts } from "../../api/api";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
+import { QueryParam } from "@commercetools/platform-sdk";
 
-export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement) {
-  let request: string[] = [];
+const queryArgs: Record<string, QueryParam> = {};
+
+export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  const categoryID = catalogMain.getAttribute("data-id");
-  const searchInput = <HTMLInputElement>document.querySelector(".search-input");
-  if (searchInput.value) request.push(`"text.ru": ${searchInput.value}`);
-  if (categoryID) request.push(`categories.id:"${categoryID}"`);
+  // const searchInput = <HTMLInputElement>document.querySelector(".search-input");
+  // if (searchInput.value) queryArgs["filter"] = `"text.ru": ${searchInput.value}`;
+  if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
   if (inputValuePriceFrom || inputValuePriceTo) {
     const requestPrice = <string>priceFilterHandler(inputValuePriceFrom, inputValuePriceTo);
-    request.push(requestPrice);
+    queryArgs["filter"] = requestPrice;
   }
   const requestSize = sizeFilterHandler(filterWrapperSize);
-  if (requestSize) request.push(requestSize);
-  getProductsByFilter(request)?.then((response) => {
+  if (requestSize) queryArgs["filter"] = requestSize;
+  getProducts(queryArgs)?.then((response) => {
     if (!catalogMain) return;
 
     const items = response?.body.results;
@@ -66,26 +67,19 @@ export function resetSort(priceIncreasingSortCheckbox: HTMLInputElement, priceDe
   priceDecreasingSortCheckbox.checked = false;
 }
 
-export function sortHandler(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement) {
+export function sortHandler(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement, categoryID?: string) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  const minPrice = 1000 / correctFactorForPrices;
-  const maxPrice = 2500 / correctFactorForPrices;
-  let request = [];
-  if (priceIncreasingSortCheckbox.checked) request.push(`price asc`);
-  if (priceDecreasingSortCheckbox.checked) request.push(`price desc`);
-
-  getProductsBySort(request)?.then((response) => {
+  if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked) return;
+  if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
+  if (priceIncreasingSortCheckbox.checked) queryArgs["sort"] = "price asc";
+  if (priceDecreasingSortCheckbox.checked) queryArgs["sort"] = "price desc";
+  getProducts(queryArgs)?.then((response) => {
     if (!catalogMain) return;
-
     const items = response?.body.results;
-    if (items.length === 0) {
-      createSnackbar(SnackbarType.error, "Товары по заданным фильтрам отсутствуют");
-    } else {
-      catalogMain.innerHTML = "";
-      items?.forEach((item) => {
-        const card = createCard(item);
-        catalogMain.append(card);
-      });
-    }
+    catalogMain.innerHTML = "";
+    items?.forEach((item) => {
+      const card = createCard(item);
+      catalogMain.append(card);
+    });
   });
 }

@@ -30,6 +30,7 @@
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
 }
+
 .price,
 .size {
   display: flex;
@@ -38,16 +39,19 @@
   align-items: center;
   margin: 10px 0;
 }
+
 .filter-wrapper input {
   width: 80px;
   height: 30px;
   margin-top: 0;
 }
+
 .filter-wrapper label,
 .sort-wrapper label {
   padding-top: 7px;
   cursor: pointer;
 }
+
 .price__heading,
 .size__heading {
   align-self: flex-start;

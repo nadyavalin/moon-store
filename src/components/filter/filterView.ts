@@ -3,7 +3,7 @@ import { filterIcon, sortIcon } from "../svg";
 import "./filter.css";
 import { filterHandler, resetFilter, resetSort, sortHandler } from "./filterHandler";
 
-const createFilterSortButtons = () => {
+const createFilterSortButtons = (categoryID?: string) => {
   const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter-sort__buttons-wrapper"] });
   const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "30", height: "30", viewBox: "0 0 48 48" });
   const sortButton = createSvgElement(sortIcon, "sort-icon", {
@@ -19,7 +19,7 @@ const createFilterSortButtons = () => {
   filterButtonsWrapper.append(filterButton, sortButton);
 
   filterButton.addEventListener("click", () => {
-    const filterWrapper = createFilterSidebarView();
+    const filterWrapper = createFilterSidebarView(categoryID);
     filterWrapper.classList.toggle("open-filter");
     if (filterWrapper.className.includes("open-filter")) {
       filterWrapper.remove();
@@ -29,7 +29,7 @@ const createFilterSortButtons = () => {
     }
   });
   sortButton.addEventListener("click", () => {
-    const sortWrapper = createSortSidebarView();
+    const sortWrapper = createSortSidebarView(categoryID);
     sortWrapper.classList.toggle("open-filter");
     if (sortWrapper.className.includes("open-filter")) {
       sortWrapper.remove();
@@ -41,7 +41,7 @@ const createFilterSortButtons = () => {
   return filterButtonsWrapper;
 };
 
-function createFilterSidebarView() {
+function createFilterSidebarView(categoryID?: string) {
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper", "open-filter"] });
   const filterHeading = createElement({ tagName: "h2", classNames: ["filter__heading"], textContent: "Фильтры" });
   const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
@@ -68,7 +68,7 @@ function createFilterSidebarView() {
   const resetButton = createElement({ tagName: "button", classNames: ["filter__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize);
+    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize, categoryID);
     filterWrapper.remove();
   });
   resetButton.addEventListener("click", () => resetFilter(filterPriceFrom, filterPriceTo, filterWrapperSize));
@@ -76,7 +76,7 @@ function createFilterSidebarView() {
   return filterWrapper;
 }
 
-function createSortSidebarView() {
+function createSortSidebarView(categoryID?: string) {
   const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper", "open-filter"] });
   const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
   const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
@@ -93,7 +93,7 @@ function createSortSidebarView() {
     tagName: "label",
     classNames: ["sort__label"],
     attributes: { for: "price-sort" },
-    textContent: "По возрастанию",
+    textContent: "По убыванию",
   });
   const priceDecreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
 
@@ -105,7 +105,7 @@ function createSortSidebarView() {
   const resetButton = createElement({ tagName: "button", classNames: ["sort__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox);
+    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, categoryID);
     sortWrapper.remove();
   });
   resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox));
