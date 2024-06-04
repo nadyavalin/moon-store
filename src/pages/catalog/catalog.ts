@@ -35,23 +35,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   const productResponse = await getProducts(queryArgs);
 
   const catalogMain = renderCatalogContent(productResponse, catalogList);
-  const categories = renderCategories(response);
-
-  // TODO перестал работать код, нужно восстановить
-  // TODO после клика рендерятся товары (страница обновляется) и класс active сразу слетает
-  // TODO если еще раз нажать на ту же категорию, то класс навешивается и снимается
-  // categories.addEventListener("click", (event) => {
-  //   const target = event.target as HTMLElement;
-  //   const clickedCategory = target as HTMLElement;
-  //   const allCategoryItems = Array.from(categories.querySelectorAll(".menu-category")) as HTMLElement[];
-  //   allCategoryItems.forEach((item) => {
-  //     if (item !== clickedCategory) {
-  //       item.classList.remove("active");
-  //     }
-  //   });
-
-  //   clickedCategory.classList.add("active");
-  // });
+  const categories = renderCategories(response, slug);
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
@@ -87,12 +71,11 @@ function renderSearchPanel() {
   return searchPanel;
 }
 
-function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined) {
+function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> | undefined, slug: string) {
   const categoriesWrapper = createElement({ tagName: "div", classNames: ["categories-wrapper"] });
   const categories: Category[] | undefined = response?.body.results;
   const parentCategories = categories?.filter((category) => !category.parent);
   const childCategories = categories?.filter((category) => category.parent);
-
   const categoryMap: { [key: string]: CategoryData } = {};
 
   parentCategories?.forEach((parentCategory) => {
@@ -116,6 +99,13 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
       classNames: ["menu-category", "category-parent"],
       attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}` },
     });
+
+    if (slug === categoryData.parent.slug.ru) {
+      parentCategoryElement.classList.add("active");
+    } else {
+      parentCategoryElement.classList.remove("active");
+    }
+
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
     categoryWrapper.append(parentCategoryElement);
@@ -127,6 +117,13 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
         classNames: ["menu-category", "category-child"],
         attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}/${childCategory.slug.ru}` },
       });
+
+      if (slug === childCategory.slug.ru) {
+        childCategoryElement.classList.add("active");
+      } else {
+        childCategoryElement.classList.remove("active");
+      }
+
       childCategoryElement.textContent = childCategory.name.ru;
       childCategoryElement.setAttribute("data-id", `${childCategory.id}`);
       childrenContainer.append(childCategoryElement);
