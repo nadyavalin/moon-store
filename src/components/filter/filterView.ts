@@ -82,18 +82,26 @@ function createSortSidebarView(categoryID?: string) {
   const priseIncreasingSortLabel = createElement({
     tagName: "label",
     classNames: ["sort__label"],
-    attributes: { for: "price-sort" },
+    attributes: { for: "price-sort-increase" },
     textContent: "По возрастанию цены ₽",
   });
-  const priceIncreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
+  const priceIncreasingSortCheckbox = createElement({
+    tagName: "input",
+    classNames: ["sort"],
+    attributes: { type: "checkbox", id: "price-sort-increase" },
+  });
   const priceDecreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
   const priseDecreasingSortLabel = createElement({
     tagName: "label",
     classNames: ["sort__label"],
-    attributes: { for: "price-sort" },
+    attributes: { for: "price-sort-decrease" },
     textContent: "По убыванию цены ₽",
   });
-  const priceDecreasingSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "price-sort" } });
+  const priceDecreasingSortCheckbox = createElement({
+    tagName: "input",
+    classNames: ["sort"],
+    attributes: { type: "checkbox", id: "price-sort-decrease" },
+  });
 
   priceIncreasingSortWrapper.append(priceIncreasingSortCheckbox, priseIncreasingSortLabel);
   priceDecreasingSortWrapper.append(priceDecreasingSortCheckbox, priseDecreasingSortLabel);
