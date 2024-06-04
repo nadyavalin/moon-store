@@ -1,23 +1,22 @@
 import { correctFactorForPrices } from "../../api/constants";
-import { getProductsByFilter } from "../../api/api";
+import { getProducts } from "../../api/api";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
+import { QueryParam } from "@commercetools/platform-sdk";
 
-export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement) {
-  let request: string[] = [];
+const queryArgs: Record<string, QueryParam> = {};
+
+export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  const categoryID = catalogMain.getAttribute("data-id");
-  const searchInput = <HTMLInputElement>document.querySelector(".search-input");
-  if (searchInput.value) request.push(`"text.ru": ${searchInput.value}`);
-  if (categoryID) request.push(`categories.id:"${categoryID}"`);
+  if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
   if (inputValuePriceFrom || inputValuePriceTo) {
     const requestPrice = <string>priceFilterHandler(inputValuePriceFrom, inputValuePriceTo);
-    request.push(requestPrice);
+    queryArgs["filter"] = requestPrice;
   }
   const requestSize = sizeFilterHandler(filterWrapperSize);
-  if (requestSize) request.push(requestSize);
-  getProductsByFilter(request)?.then((response) => {
+  if (requestSize) queryArgs["filter"] = requestSize;
+  getProducts(queryArgs)?.then((response) => {
     if (!catalogMain) return;
 
     const items = response?.body.results;
@@ -59,4 +58,38 @@ export function resetFilter(filterPriceFrom: HTMLInputElement, filterPriceTo: HT
   filterPriceFrom.value = "";
   filterPriceTo.value = "";
   Array.from(filterWrapperSize.querySelectorAll("input")).forEach((element) => (element.checked = false));
+}
+
+export function resetSort(
+  priceIncreasingSortCheckbox: HTMLInputElement,
+  priceDecreasingSortCheckbox: HTMLInputElement,
+  nameSortCheckbox: HTMLInputElement,
+) {
+  priceIncreasingSortCheckbox.checked = false;
+  priceDecreasingSortCheckbox.checked = false;
+  nameSortCheckbox.checked = false;
+}
+
+export function sortHandler(
+  priceIncreasingSortCheckbox: HTMLInputElement,
+  priceDecreasingSortCheckbox: HTMLInputElement,
+  nameSortCheckbox: HTMLInputElement,
+  categoryID?: string,
+) {
+  const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
+
+  if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked && !nameSortCheckbox) return;
+  if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
+  if (nameSortCheckbox.checked) queryArgs["sort"] = "name.ru asc";
+  if (priceIncreasingSortCheckbox.checked) queryArgs["sort"] = "price asc";
+  if (priceDecreasingSortCheckbox.checked) queryArgs["sort"] = "price desc";
+  getProducts(queryArgs)?.then((response) => {
+    if (!catalogMain) return;
+    const items = response?.body.results;
+    catalogMain.innerHTML = "";
+    items?.forEach((item) => {
+      const card = createCard(item);
+      catalogMain.append(card);
+    });
+  });
 }

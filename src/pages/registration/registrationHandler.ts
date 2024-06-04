@@ -63,10 +63,9 @@ export function formRegistrationHandler(event: Event) {
           SnackbarType.error,
           "Пользователь c таким адресом электронной почты уже существует. Войдите в приложение или используйте другой адрес электронной почты",
         );
+        return;
       }
-      if (statusCode === 500) {
-        createSnackbar(SnackbarType.error, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
-      }
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
     });
 }
 export default formRegistrationHandler;

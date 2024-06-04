@@ -7,10 +7,10 @@ import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 
-import createFilterView from "src/components/filter/filterView";
-
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
+
+import createFilterSortButtons from "../../components/filter/filterView";
 import { Pages } from "../../types/types";
 
 export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
@@ -23,7 +23,8 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
-  const filterWrapper = createFilterView();
+
+  const filterSortButtons = createFilterSortButtons(id);
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
@@ -39,6 +40,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
+
     if (target.classList.contains("search-button")) {
       queryArgs["text.ru"] = `${input.value}`;
       const productResponse = await getProducts(queryArgs);
@@ -46,7 +48,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
     }
   });
 
-  sidePanel.append(filterWrapper, categories);
+  sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMain);
   catalog.append(searchPanel, catalogWrapper);
 
