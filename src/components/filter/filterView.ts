@@ -17,9 +17,9 @@ const createFilterSortButtons = (categoryID?: string) => {
     "stroke-linejoin": "round",
   });
   filterButtonsWrapper.append(filterButton, sortButton);
-
+  const filterWrapper = createFilterSidebarView(categoryID);
+  const sortWrapper = createSortSidebarView(categoryID);
   filterButton.addEventListener("click", () => {
-    const filterWrapper = createFilterSidebarView(categoryID);
     filterWrapper.classList.toggle("open-filter");
     if (filterWrapper.className.includes("open-filter")) {
       filterWrapper.remove();
@@ -29,7 +29,6 @@ const createFilterSortButtons = (categoryID?: string) => {
     }
   });
   sortButton.addEventListener("click", () => {
-    const sortWrapper = createSortSidebarView(categoryID);
     sortWrapper.classList.toggle("open-filter");
     if (sortWrapper.className.includes("open-filter")) {
       sortWrapper.remove();
@@ -99,18 +98,38 @@ function createSortSidebarView(categoryID?: string) {
 
   priceIncreasingSortWrapper.append(priceIncreasingSortCheckbox, priseIncreasingSortLabel);
   priceDecreasingSortWrapper.append(priceDecreasingSortCheckbox, priseDecreasingSortLabel);
-
+  const nameHeading = createElement({ tagName: "span", classNames: ["name__heading"], textContent: "Название:" });
+  const nameSortWrapper = createElement({ tagName: "div", classNames: ["sort__name-wrapper"] });
+  const nameSortLabel = createElement({
+    tagName: "label",
+    classNames: ["sort__label"],
+    attributes: { for: "name-sort" },
+    textContent: "От А до Я",
+  });
+  const nameSortCheckbox = createElement({ tagName: "input", classNames: ["sort"], attributes: { type: "checkbox", id: "name-sort" } });
+  nameSortWrapper.append(nameSortCheckbox, nameSortLabel);
+  priceIncreasingSortCheckbox.addEventListener("change", (e) => checkSortCheckbox(sortWrapper, e));
+  priceDecreasingSortCheckbox.addEventListener("change", (e) => checkSortCheckbox(sortWrapper, e));
+  nameSortCheckbox.addEventListener("change", (e) => checkSortCheckbox(sortWrapper, e));
   const buttonsWrapper = createElement({ tagName: "div", classNames: ["sort__buttons-wrapper"] });
   const applyButton = createElement({ tagName: "button", classNames: ["sort__button-apply"], textContent: "Применить" });
   const resetButton = createElement({ tagName: "button", classNames: ["sort__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, categoryID);
+    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, categoryID);
     sortWrapper.remove();
   });
-  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox));
-  sortWrapper.append(sortHeading, priceHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, buttonsWrapper);
+  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox));
+  sortWrapper.append(sortHeading, priceHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, nameHeading, nameSortWrapper, buttonsWrapper);
   return sortWrapper;
+}
+
+function checkSortCheckbox(sortWrapper: HTMLElement, e: Event) {
+  const arrCheckbox = Array.from(sortWrapper.querySelectorAll(`input`));
+  const checkboxChecked = e.target;
+  arrCheckbox.forEach((element) => {
+    if (element !== checkboxChecked) element.checked = false;
+  });
 }
 
 export default createFilterSortButtons;

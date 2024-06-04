@@ -9,8 +9,6 @@ const queryArgs: Record<string, QueryParam> = {};
 
 export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  // const searchInput = <HTMLInputElement>document.querySelector(".search-input");
-  // if (searchInput.value) queryArgs["filter"] = `"text.ru": ${searchInput.value}`;
   if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
   if (inputValuePriceFrom || inputValuePriceTo) {
     const requestPrice = <string>priceFilterHandler(inputValuePriceFrom, inputValuePriceTo);
@@ -62,15 +60,27 @@ export function resetFilter(filterPriceFrom: HTMLInputElement, filterPriceTo: HT
   Array.from(filterWrapperSize.querySelectorAll("input")).forEach((element) => (element.checked = false));
 }
 
-export function resetSort(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement) {
+export function resetSort(
+  priceIncreasingSortCheckbox: HTMLInputElement,
+  priceDecreasingSortCheckbox: HTMLInputElement,
+  nameSortCheckbox: HTMLInputElement,
+) {
   priceIncreasingSortCheckbox.checked = false;
   priceDecreasingSortCheckbox.checked = false;
+  nameSortCheckbox.checked = false;
 }
 
-export function sortHandler(priceIncreasingSortCheckbox: HTMLInputElement, priceDecreasingSortCheckbox: HTMLInputElement, categoryID?: string) {
+export function sortHandler(
+  priceIncreasingSortCheckbox: HTMLInputElement,
+  priceDecreasingSortCheckbox: HTMLInputElement,
+  nameSortCheckbox: HTMLInputElement,
+  categoryID?: string,
+) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked) return;
+
+  if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked && !nameSortCheckbox) return;
   if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
+  if (nameSortCheckbox.checked) queryArgs["sort"] = "name.ru asc";
   if (priceIncreasingSortCheckbox.checked) queryArgs["sort"] = "price asc";
   if (priceDecreasingSortCheckbox.checked) queryArgs["sort"] = "price desc";
   getProducts(queryArgs)?.then((response) => {

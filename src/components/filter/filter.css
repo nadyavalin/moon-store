@@ -53,7 +53,9 @@
 }
 
 .price__heading,
-.size__heading {
+.size__heading,
+.name__heading {
+  margin-top: 20px;
   align-self: flex-start;
 }
 
@@ -77,16 +79,8 @@ svg.sort-icon {
   fill: none;
 }
 
-@keyframes sidebarAnimation {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-.sort__price-wrapper {
+.sort__price-wrapper,
+.sort__name-wrapper {
   width: 100%;
   display: flex;
   gap: 10px;
