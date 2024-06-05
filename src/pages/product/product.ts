@@ -43,8 +43,10 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     isAutoPlay: false,
     response,
     createSlides: createSliderImages,
-    onSlideClick: () => {
-      const modal = createModalImage(response);
+    onSlideClick: (image) => {
+      const dataId = image.getAttribute("data-id");
+      const imageId = dataId !== null ? parseInt(dataId, 10) : 0;
+      const modal = createModalImage(imageId, response);
       productWrapper.append(modal);
     },
   });
@@ -68,9 +70,9 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
 }
 
 export function createSliderImages(items: ProductProjection[]) {
-  return (items[0].masterVariant.images || []).map(({ url }) => {
+  return (items[0].masterVariant.images || []).map(({ url }, id) => {
     const sliderCard = createElement({ tagName: "li", classNames: ["slide"] });
-    const image = createElement({ tagName: "img", classNames: ["slide__img"], attributes: { src: url, alt: "Фото товара" } });
+    const image = createElement({ tagName: "img", classNames: ["slide__img"], attributes: { src: url, alt: "Фото товара", "data-id": `${id}` } });
     sliderCard.append(image);
     return sliderCard;
   });

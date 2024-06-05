@@ -3,12 +3,25 @@ import { arrowLeft, arrowRight } from "../svg";
 import { createElement, createSvgElement } from "../elements";
 import { SliderProps } from "../../types/types";
 
-export function createSlider({ response, isAutoPlay = false, isDraggable = false, className, createSlides, onSlideClick }: SliderProps) {
+export function createSlider({
+  response,
+  isAutoPlay = false,
+  isDraggable = false,
+  className,
+  scrollToSlideIndex = 0,
+  createSlides,
+  onSlideClick,
+}: SliderProps) {
   const sliderWrapper = createElement({ tagName: "div", classNames: ["slider__wrapper", className] });
   const carousel = createElement({ tagName: "ul", classNames: ["slider__carousel"] });
 
   const items = response?.body.results;
   carousel.append(...createSlides(items || []));
+
+  setTimeout(() => {
+    carousel.scrollLeft = (carousel.scrollWidth / carousel.childElementCount) * scrollToSlideIndex;
+  }),
+    0;
 
   const arrowLeftElement = createSvgElement(arrowLeft, "card__arrow", { width: "24px", height: "24px", viewBox: "0 0 24 24", fill: "none" });
   const arrowRightElement = createSvgElement(arrowRight, "card__arrow", { width: "24px", height: "24px", viewBox: "0 0 24 24", fill: "none" });
@@ -56,8 +69,10 @@ export function createSlider({ response, isAutoPlay = false, isDraggable = false
       }
     }
 
-    if (target.classList.contains("slide__img") || target.closest(".slide__img")) {
-      onSlideClick?.();
+    if (target.classList.contains("slide__img")) {
+      onSlideClick?.(target as HTMLImageElement);
+    } else if (target.closest(".slide__img")) {
+      onSlideClick?.(target.closest(".slide__img") as HTMLImageElement);
     }
   });
 
