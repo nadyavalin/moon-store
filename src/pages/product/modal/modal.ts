@@ -5,7 +5,7 @@ import { cross } from "../../../components/svg";
 import { createSliderImages } from "../product";
 import { ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
 
-export function createModalImage(response?: ClientResponse<ProductProjectionPagedSearchResponse>) {
+export function createModalImage(scrollToSlideIndex?: number, response?: ClientResponse<ProductProjectionPagedSearchResponse>) {
   const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
   const modal = createElement({ tagName: "div", classNames: ["modal"] });
   const closeButton = createSvgElement(cross, "cross", { width: "22px", height: "22px", viewBox: "0 0 19 19", fill: "none" });
@@ -14,6 +14,7 @@ export function createModalImage(response?: ClientResponse<ProductProjectionPage
     className: "modal-slider",
     isAutoPlay: false,
     response,
+    scrollToSlideIndex,
     createSlides: createSliderImages,
   });
 

@@ -100,12 +100,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
       attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}` },
     });
 
-    if (slug === categoryData.parent.slug.ru) {
-      parentCategoryElement.classList.add("active");
-    } else {
-      parentCategoryElement.classList.remove("active");
-    }
-
+    parentCategoryElement.classList.toggle("active", slug === categoryData.parent.slug.ru);
     parentCategoryElement.textContent = categoryData.parent.name.ru;
     parentCategoryElement.setAttribute("data-id", `${categoryData.parent.id}`);
     categoryWrapper.append(parentCategoryElement);
@@ -118,12 +113,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
         attributes: { href: `${Pages.CATALOG}/${categoryData.parent.slug.ru}/${childCategory.slug.ru}` },
       });
 
-      if (slug === childCategory.slug.ru) {
-        childCategoryElement.classList.add("active");
-      } else {
-        childCategoryElement.classList.remove("active");
-      }
-
+      childCategoryElement.classList.toggle("active", slug === childCategory.slug.ru);
       childCategoryElement.textContent = childCategory.name.ru;
       childCategoryElement.setAttribute("data-id", `${childCategory.id}`);
       childrenContainer.append(childCategoryElement);
