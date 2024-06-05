@@ -20,7 +20,7 @@
 .address-shipping-info,
 .address-billing-info {
   background-color: var(--dark-grey);
-  padding: 0 40px 40px 40px;
+  padding: 0 30px 30px 30px;
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   display: flex;
   flex-direction: row;
@@ -38,7 +38,7 @@
 .profile-account__data span,
 .address__data span {
   display: inline-block;
-  width: 80px;
+  width: 70px;
   text-transform: uppercase;
 }
 .profile-addresses-wrapper {
@@ -56,7 +56,7 @@
   color: var(--main-light);
   pointer-events: none;
   font-style: italic;
-  width: 190px;
+  width: 160px;
 }
 .profile-wrapper.option-country option {
   color: var(--main-dark);

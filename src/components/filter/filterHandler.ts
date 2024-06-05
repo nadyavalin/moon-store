@@ -9,13 +9,15 @@ const queryArgs: Record<string, QueryParam> = {};
 
 export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-  if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
+  let arrFilter = [];
+  if (categoryID) arrFilter.push(`categories.id:"${categoryID}"`);
   if (inputValuePriceFrom || inputValuePriceTo) {
     const requestPrice = <string>priceFilterHandler(inputValuePriceFrom, inputValuePriceTo);
-    queryArgs["filter"] = requestPrice;
+    arrFilter.push(requestPrice);
   }
   const requestSize = sizeFilterHandler(filterWrapperSize);
-  if (requestSize) queryArgs["filter"] = requestSize;
+  if (requestSize) queryArgs["filter"] = arrFilter.push(requestSize);
+  queryArgs["filter"] = arrFilter;
   getProducts(queryArgs)?.then((response) => {
     if (!catalogMain) return;
 
