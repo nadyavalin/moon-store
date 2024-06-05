@@ -27,8 +27,9 @@ export interface SliderProps {
   isAutoPlay?: boolean;
   isDraggable?: boolean;
   response?: ClientResponse<ProductProjectionPagedQueryResponse>;
+  scrollToSlideIndex?: number;
   createSlides: (items: ProductProjection[]) => HTMLLIElement[];
-  onSlideClick?: () => void;
+  onSlideClick?: (image: HTMLImageElement) => void;
 }
 
 export enum Pages {
