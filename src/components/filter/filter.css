@@ -52,7 +52,8 @@
   cursor: pointer;
 }
 
-.price__heading {
+.price__heading,
+.size__heading {
   margin-top: 20px;
   align-self: flex-start;
 }
