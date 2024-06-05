@@ -1,12 +1,12 @@
 .slider__wrapper {
   position: relative;
   width: 80%;
-  scroll-behavior: smooth;
 }
 
 .slider__carousel {
   display: grid;
   grid-auto-flow: column;
+  scroll-behavior: smooth;
 }
 
 .slider__carousel::-webkit-scrollbar {
