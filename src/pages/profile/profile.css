@@ -6,9 +6,11 @@
   margin: 20px;
   max-width: 1000px;
 }
+
 .profile-wrapper h2 {
   margin: 0;
 }
+
 .addresses-shipping-wrapper,
 .addresses-billing-wrapper {
   display: flex;
@@ -16,17 +18,19 @@
   align-items: center;
   gap: 20px;
 }
+
 .profile-account-wrapper,
 .address-shipping-info,
 .address-billing-info {
   background-color: var(--dark-grey);
-  padding: 0 40px 40px 40px;
+  padding: 0 30px 30px 30px;
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 30px;
 }
+
 .profile-account__data div,
 .address__data div {
   display: flex;
@@ -38,9 +42,10 @@
 .profile-account__data span,
 .address__data span {
   display: inline-block;
-  width: 80px;
+  width: 70px;
   text-transform: uppercase;
 }
+
 .profile-addresses-wrapper {
   display: flex;
   flex-direction: row;
@@ -52,25 +57,30 @@
 .profile-wrapper label {
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
-  background-color: var(--main-dark);
+  background-color: var(--dark-grey);
   color: var(--main-light);
   pointer-events: none;
   font-style: italic;
-  width: 190px;
+  width: 160px;
 }
-.profile-wrapper.option-country option {
-  color: var(--main-dark);
+
+.profile-wrapper .option-country {
+  background-color: var(--dark-grey);
 }
+
 .profile-wrapper label {
   border-bottom: none;
 }
+
 .profile-wrapper span {
   font-size: 0.9em;
 }
+
 .profile-wrapper i {
   margin-top: 20px;
   font-size: 2em;
 }
+
 .profile__checkbox-wrapper label {
   margin-top: 30px;
   padding: 0;
@@ -86,10 +96,12 @@
   margin-top: 10px;
   width: 20px;
 }
+
 .edit-btn,
 .remove-btn {
   align-self: flex-start;
 }
+
 .add-btn {
   margin-top: 0;
 }
@@ -118,6 +130,7 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
 @media (max-width: 1023px) {
   .profile-addresses-wrapper {
     flex-direction: column;
