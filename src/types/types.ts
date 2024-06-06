@@ -1,13 +1,12 @@
+import { Category, ProductProjection } from "@commercetools/platform-sdk";
+import { ByProjectKeyRequestBuilder } from "@commercetools/platform-sdk";
+import { ClientResponse, ProductProjectionPagedQueryResponse } from "@commercetools/platform-sdk";
+
 export interface State {
   name?: string | null;
   refreshToken: string | null;
-}
-
-export interface CardData {
-  photo: string;
-  title: string;
-  price: number;
-  discount: number;
+  customerId: string | null;
+  apiRoot?: ByProjectKeyRequestBuilder | null;
 }
 
 export interface Customer {
@@ -23,6 +22,16 @@ export interface Customer {
   defaultBillingAddress?: number;
 }
 
+export interface SliderProps {
+  className: string;
+  isAutoPlay?: boolean;
+  isDraggable?: boolean;
+  response?: ClientResponse<ProductProjectionPagedQueryResponse>;
+  scrollToSlideIndex?: number;
+  createSlides: (items: ProductProjection[]) => HTMLLIElement[];
+  onSlideClick?: (image: HTMLImageElement) => void;
+}
+
 export enum Pages {
   ROOT = "",
   MAIN = "#main",
@@ -32,9 +41,20 @@ export enum Pages {
   ABOUT = "#about",
   LOGIN = "#login",
   REGISTRATION = "#registration",
+  PRODUCT = "#product",
 }
 
 export enum SnackbarType {
   error = "error",
   success = "success",
+}
+
+export type CategoryData = {
+  parent: Category;
+  children: Category[];
+};
+
+export enum AddressType {
+  shipping = "shipping",
+  billing = "billing",
 }

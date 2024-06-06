@@ -8,21 +8,21 @@ import { addValidationListenersToInput, checkValidityAllFields } from "./checkVa
 
 export const emailPattern: string = "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$";
 export const passwordPattern: string = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-const namePattern: string = "^[А-яа-я]{1,40}$";
-const surnamePattern: string = "^[А-яа-я]{1,40}$";
-const cityPattern: string = "^[А-яа-я\\-\\s]{1,40}$";
-const streetPattern: string = "^.{1,40}$";
-const indexPattern: string = "^[0-9]{6,6}$";
+export const namePattern: string = "^[А-яа-я]{1,40}$";
+export const surnamePattern: string = "^[А-яа-я]{1,40}$";
+export const cityPattern: string = "^[А-яа-я\\-\\s]{1,40}$";
+export const streetPattern: string = "^.{1,40}$";
+export const indexPattern: string = "^[0-9]{6,6}$";
 
 export const emailTitle = "Email должен быть в формате example@example.ru без пробелов. Допустимы латинские буквы, цифры, символы ._%+-";
 export const passwordTitle =
   "Пароль должен содержать не менее 8 символов и включать минимум 1 цифру, 1 заглавную и 1 строчную латинские буквы без пробелов";
-const nameTitle = "Имя должно содержать не менее 1 символа и состоять только из букв русского алфавита";
-const surnameTitle = "Фамилия должна содержать не менее 1 символа и состоять только из букв русского алфавита";
-const birthdayTitle = "Возраст должен быть не младше 13 лет";
-const cityTitle = "Название города должно содержать не менее 1 символа и состоять из букв русского алфавита";
-const streetTitle = "Название улицы должно содержать не менее 1 символа";
-const indexTitle = "Индекс должен содержать 6 цифр";
+export const nameTitle = "Имя должно содержать не менее 1 символа и состоять только из букв русского алфавита";
+export const surnameTitle = "Фамилия должна содержать не менее 1 символа и состоять только из букв русского алфавита";
+export const birthdayTitle = "Возраст должен быть не младше 13 лет";
+export const cityTitle = "Название города должно содержать не менее 1 символа и состоять из букв русского алфавита";
+export const streetTitle = "Название улицы должно содержать не менее 1 символа";
+export const indexTitle = "Индекс должен содержать 6 цифр";
 
 function createAccountWrapper(): HTMLElement {
   const accountWrapper = createElement({ tagName: "div", classNames: ["account-wrapper"] });

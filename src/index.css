@@ -18,6 +18,9 @@
   --accent-red: #f64137;
   --accent-green: #4ad300;
   --card-grey: #333333;
+  --card-hover: #484848;
+  --back-modal: rgba(30, 30, 30, 0.7);
+  --back-modal-image: rgba(252, 255, 236, 0.2);
 }
 
 body {
@@ -37,6 +40,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   flex-grow: 1;
+  margin-bottom: 50px;
 }
 
 a {
@@ -45,10 +49,21 @@ a {
   transition: color 0.5s ease;
 }
 
+button.menu-item {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 20px;
+  padding: 0;
+  text-transform: capitalize;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .menu-item,
 .login-link,
 .registration-link,
-.link-from-404 {
+.link-from-404,
+.menu-category {
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -131,6 +146,7 @@ input[type="checkbox"] {
 
 button {
   font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   height: 35px;
   padding: 10px;
   text-transform: uppercase;
@@ -219,6 +235,10 @@ button {
   .registration-link:hover::after,
   .link-from-404:hover::after {
     width: 100%;
+  }
+
+  button.menu-item:hover {
+    background-color: transparent;
   }
 
   button:hover {

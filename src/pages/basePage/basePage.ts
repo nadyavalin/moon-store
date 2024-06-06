@@ -1,6 +1,9 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
+import { createApiRoot } from "src/api/api";
+import { renderPageContent } from "src";
+import { renderProductsFromApi } from "../catalog/catalog";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -23,19 +26,30 @@ export const menuItemSingUp = createElement({
   attributes: { href: Pages.REGISTRATION },
 });
 export const menuItemLogIn = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Вход", attributes: { href: Pages.LOGIN } });
-const menuItemUserProfile = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Профиль", attributes: { href: Pages.PROFILE } });
-export const menuItemLogOut = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Выход", attributes: { href: Pages.MAIN } });
+export const menuItemUserProfile = createElement({
+  tagName: "a",
+  classNames: ["menu-item"],
+  textContent: "Профиль",
+  attributes: { href: Pages.PROFILE },
+});
+export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
 
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
-  window.location.reload();
+  greeting?.remove();
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
-  window.location.hash = Pages.MAIN;
+  localStorage.removeItem("customerId");
+  state.name = null;
+  state.refreshToken = null;
+  state.customerId = null;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
-  greeting?.remove();
+  userMenu.append(menuItemSingUp, menuItemLogIn);
   menuItemLogOut.remove();
+  menuItemUserProfile.remove();
+  createApiRoot();
+  window.location.hash = Pages.MAIN;
 });
 
 const liItemHome = createElement({ tagName: "li" });
@@ -43,7 +57,13 @@ const liItemCatalog = createElement({ tagName: "li" });
 const litItemBasket = createElement({ tagName: "li" });
 const liItemAboutUs = createElement({ tagName: "li" });
 const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
-const menuItemCatalog = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Каталог", attributes: { href: Pages.CATALOG } });
+export const menuItemCatalog = createElement({
+  tagName: "a",
+  classNames: ["menu-item"],
+  textContent: "Каталог",
+  attributes: { href: Pages.CATALOG },
+});
+
 const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
@@ -78,7 +98,7 @@ export function addUserGreetingToHeader() {
 }
 
 navMenu.append(ulItem);
-ulItem.append(liItemHome, menuItemUserProfile, liItemCatalog, litItemBasket, liItemAboutUs);
+ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
 litItemBasket.append(menuItemBasket);

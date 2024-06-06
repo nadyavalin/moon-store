@@ -1,19 +1,19 @@
 import "./index.css";
 import "./pages/basePage/basePage.css";
-import "./pages/main/main.css";
 import "./pages/404/404.css";
-import "./api/api";
 
+import { Pages } from "./types/types";
+import { createApiRoot } from "./api/api";
+import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
-import { renderMainPageContent } from "./pages/main/main";
-import { renderCatalogContent } from "./pages/catalog/catalog";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
-import renderLoginFormContent from "./pages/loginPage/loginPage";
-import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { render404PageContent } from "./pages/404/404";
-import { Pages } from "./types/types";
-import { renderProfileContent } from "./pages/profile/profile";
+import { renderProductsFromApi } from "./pages/catalog/catalog";
+import { renderProfileContent } from "./pages/profile/profileView";
+import { renderProductContent } from "./pages/product/product";
+import { renderRegistrationFormContent } from "./pages/registration/registrationView";
+import renderLoginFormContent from "./pages/loginPage/loginPage";
 
 document.body.append(header, main, footer);
 
@@ -23,33 +23,43 @@ function setActiveLink(fragmentId: string) {
     for (let i = 0; i < links.length; i += 1) {
       const link = links[i];
       const href = link.getAttribute("href");
-      if (href) {
-        const pageName = href.substring(1);
-        if (pageName === fragmentId) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
-        }
-      }
+      const pageName = href?.substring(-1);
+      link.classList.toggle("active", pageName === fragmentId);
     }
   }
 }
 
-function navigate() {
+export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) => {
   const contentDiv = document.querySelector(".main");
-  const fragmentId = window.location.hash.substring(-1);
+  try {
+    contentDiv?.append(await renderFunc());
+  } catch (error) {
+    contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+  }
+};
+
+async function renderContent(hash: string) {
+  const contentDiv = document.querySelector(".main");
+  const [route, ...args] = hash.split("/");
   if (contentDiv) {
     contentDiv.innerHTML = "";
-    switch (fragmentId) {
+    switch (route) {
       case Pages.ROOT:
       case Pages.MAIN:
-        contentDiv.append(renderMainPageContent());
+        await renderPageContent(getMainPageContent);
         break;
       case Pages.PROFILE:
-        contentDiv.innerHTML = renderProfileContent();
+        if (localStorage.getItem("refreshToken")) {
+          await renderPageContent(renderProfileContent);
+        } else {
+          window.location.href = Pages.LOGIN;
+        }
         break;
       case Pages.CATALOG:
-        contentDiv.innerHTML = renderCatalogContent();
+        await renderPageContent(() => renderProductsFromApi(args));
+        break;
+      case Pages.PRODUCT:
+        await renderPageContent(() => renderProductContent(args[0]));
         break;
       case Pages.BASKET:
         contentDiv.innerHTML = renderBasketContent();
@@ -76,10 +86,14 @@ function navigate() {
         break;
     }
   }
-  setActiveLink(fragmentId);
+  setActiveLink(route);
 }
 
-navigate();
+window.addEventListener("hashchange", () => {
+  renderContent(window.location.hash);
+});
 
-window.addEventListener("hashchange", navigate);
-document.addEventListener("DOMContentLoaded", navigate);
+document.addEventListener("DOMContentLoaded", () => {
+  createApiRoot();
+  renderContent(window.location.hash);
+});

@@ -1,7 +1,7 @@
-import createCustomer from "src/api/api";
-import { createSnackbar } from "src/components/elements";
-import { Customer, Pages, SnackbarType } from "src/types/types";
+import { createSnackbar } from "../../components/elements";
+import { Customer, Pages, SnackbarType } from "../../types/types";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
+import { createCustomer } from "../../api/api";
 
 export function formRegistrationHandler(event: Event) {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
@@ -9,7 +9,6 @@ export function formRegistrationHandler(event: Event) {
   const formData = new FormData(form);
   const checkboxSettingOneAddress = <string>formData.get("setting-one-address");
   const checkboxSettingDefaultAddressShipping = <string>formData.get("setting-default-address-shipping");
-
   const addressShipping = {
     city: <string>formData.get("city-shipping"),
     streetName: <string>formData.get("street-shipping"),
@@ -30,9 +29,11 @@ export function formRegistrationHandler(event: Event) {
   if (checkboxSettingDefaultAddressShipping) customer.defaultShippingAddress = 0;
 
   if (!checkboxSettingOneAddress) {
-    customer.billingAddresses = [0];
+    const addressBilling = addressShipping;
+    customer.addresses.push(addressBilling);
+    customer.billingAddresses = [1];
     if (checkboxSettingDefaultAddressShipping) {
-      customer.defaultBillingAddress = 0;
+      customer.defaultBillingAddress = 1;
     }
   }
   if (checkboxSettingOneAddress) {
@@ -49,7 +50,7 @@ export function formRegistrationHandler(event: Event) {
   }
 
   createCustomer(customer)
-    .then((response) => {
+    ?.then((response) => {
       if (response.statusCode === 201) {
         createSnackbar(SnackbarType.success, `Пользователь ${response.body.customer.firstName} создан`);
         authorizeUserWithToken(<string>formData.get("email"), <string>formData.get("password"));
@@ -62,10 +63,9 @@ export function formRegistrationHandler(event: Event) {
           SnackbarType.error,
           "Пользователь c таким адресом электронной почты уже существует. Войдите в приложение или используйте другой адрес электронной почты",
         );
+        return;
       }
-      if (statusCode === 500) {
-        createSnackbar(SnackbarType.error, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
-      }
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Попробуйте зарегистрироваться позже");
     });
 }
 export default formRegistrationHandler;

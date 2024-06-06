@@ -1,37 +1,72 @@
-import { changeAppAfterLogin } from "src/pages/loginPage/loginHandler";
-import { createApiBuilderFromCtpClient, MyCustomerDraft } from "@commercetools/platform-sdk";
-import { Client } from "@commercetools/sdk-client-v2";
-import { state } from "src/store/state";
+import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
+
+import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam } from "@commercetools/platform-sdk";
+
+import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
+import { Client } from "@commercetools/sdk-client-v2";
 
-let ctpClient: Client;
-if (!state.refreshToken) {
-  ctpClient = generateAnonymousSessionFlow();
-} else {
-  ctpClient = generateRefreshTokenFlow(state.refreshToken);
-  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
-  apiRoot
-    .me()
-    .get()
-    .execute()
-    .then((response) => {
-      if (response.statusCode === 200) {
-        const userName = response.body.firstName as string;
-        changeAppAfterLogin(userName);
-      }
-    });
-}
+export const createApiRoot = () => {
+  let ctpClient: Client;
+  if (!state.refreshToken) {
+    ctpClient = generateAnonymousSessionFlow();
+  } else {
+    const user = state.name as string;
+    changeAppAfterLogin(user);
+    ctpClient = generateRefreshTokenFlow(state.refreshToken);
+  }
+  state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+};
 
-const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
+  state.apiRoot
+    ?.productProjections()
+    .search()
+    .get({ queryArgs: { limit: 50, ...queryArgs } })
+    .execute();
 
-const createCustomer = (requestBody: MyCustomerDraft) =>
-  apiRoot
-    .me()
+export const getCategories = () => state.apiRoot?.categories().get().execute();
+export const createCustomer = (requestBody: MyCustomerDraft) =>
+  state.apiRoot
+    ?.me()
     .signup()
     .post({
       body: requestBody,
     })
     .execute();
 
-export default createCustomer;
+export const getUserData = () =>
+  state.apiRoot
+    ?.customers()
+    .withId({ ID: state.customerId as string })
+    .get()
+    .execute();
+
+export const updateCustomer = (version: number, actions: CustomerUpdateAction[]) =>
+  state.apiRoot
+    ?.customers()
+    .withId({
+      ID: state.customerId as string,
+    })
+    .post({
+      body: {
+        version,
+        actions,
+      },
+    })
+    .execute();
+
+export const changePassword = (id: string, version: number, currentPassword: string, newPassword: string) =>
+  state.apiRoot
+    ?.customers()
+    .password()
+    .post({
+      body: {
+        id,
+        version,
+        currentPassword,
+        newPassword,
+      },
+    })
+    .execute();

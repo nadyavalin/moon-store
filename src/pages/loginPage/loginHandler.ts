@@ -7,12 +7,12 @@ import {
   TokenStore,
 } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
-import { createSnackbar } from "src/components/elements";
-import { Pages, SnackbarType } from "src/types/types";
-import { state } from "src/store/state";
-import { setItemToLocalStorage } from "src/utils/utils";
-import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
-import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, userMenu } from "../basePage/basePage";
+import { createSnackbar } from "../../components/elements";
+import { Pages, SnackbarType } from "../../types/types";
+import { state } from "../../store/state";
+import { setItemToLocalStorage } from "../../utils/utils";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
+import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -40,23 +40,29 @@ class MyTokenCache implements TokenCache {
   }
 }
 
-const tokenCache = new MyTokenCache();
-
-export function changeAppAfterLogin(userName: string, refreshToken?: string) {
+export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
+    state.refreshToken = refreshToken;
     createSnackbar(SnackbarType.success, "Вы авторизованы");
+    window.location.hash = Pages.MAIN;
   }
-  setItemToLocalStorage("user", userName);
-  window.location.hash = Pages.MAIN;
+  if (customerId) {
+    state.customerId = customerId;
+  }
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;
   addUserGreetingToHeader();
+  menuItemLogIn.remove();
+  menuItemSingUp.remove();
+  userMenu.append(menuItemUserProfile);
   userMenu.append(menuItemLogOut);
+  menuItemLogOut.classList.remove("active");
 }
 
 export const authorizeUserWithToken = (email: string, password: string) => {
+  const tokenCache = new MyTokenCache();
   // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: authHost,
@@ -89,10 +95,10 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .build();
 
   // Create apiRoot
-  const apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
+  state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
 
-  apiRoot
-    .me()
+  state.apiRoot
+    ?.me()
     .login()
     .post({
       body: {
@@ -104,8 +110,11 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .then((response) => {
       if (response.statusCode === 200) {
         const user = response.body.customer.firstName as string;
+        setItemToLocalStorage("user", user);
+        const userID = response.body.customer.id;
+        setItemToLocalStorage("customerId", userID);
         const token = tokenCache.myCache.refreshToken as string;
-        changeAppAfterLogin(user, token);
+        changeAppAfterLogin(user, token, userID);
       }
     })
     .catch(() => {
