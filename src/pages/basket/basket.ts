@@ -12,7 +12,7 @@ export function renderBasketContent() {
   const productTotalPrice = createElement({ tagName: "p", classNames: ["product-total__price"], textContent: "3400 р." });
 
   const productAmountTextWrapper = createElement({ tagName: "div", classNames: ["product-amount__wrapper"] });
-  const procutAmountTitle = createElement({ tagName: "p", classNames: ["product-amount__title"], textContent: "Всего:" });
+  const procutAmountTitle = createElement({ tagName: "p", classNames: ["product-amount__title"], textContent: "Всего товаров:" });
   const productFullAmount = createElement({ tagName: "p", classNames: ["product-amount__full-amount"], textContent: "2 шт." });
 
   productListWrapper.append(createBusketCard());
