@@ -29,7 +29,7 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     textContent: PriceFormatter.formatCents(cardPrices?.[0].value.centAmount),
   });
   const discountWrapper = createElement({ tagName: "div", classNames: ["discount__wrapper"] });
-  const discountText = createElement({ tagName: "p", classNames: ["discount-text"], textContent: "Скидка: " });
+  const discountText = createElement({ tagName: "p", classNames: ["discount-text"], textContent: "Со скидкой: " });
   const discount = createElement({
     tagName: "p",
     classNames: ["product__discount"],

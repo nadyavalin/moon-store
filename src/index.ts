@@ -62,7 +62,7 @@ async function renderContent(hash: string) {
         await renderPageContent(() => renderProductContent(args[0]));
         break;
       case Pages.BASKET:
-        contentDiv.innerHTML = renderBasketContent();
+        contentDiv.append(renderBasketContent());
         break;
       case Pages.ABOUT:
         contentDiv.innerHTML = renderAboutUsContent();

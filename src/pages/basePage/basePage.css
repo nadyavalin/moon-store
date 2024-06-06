@@ -45,6 +45,12 @@
   gap: 70px;
 }
 
+.menu-item__basket,
+.menu-item__basket-link {
+  display: flex;
+  gap: 4px;
+}
+
 .hr-line__header,
 .hr-line__footer {
   position: relative;
