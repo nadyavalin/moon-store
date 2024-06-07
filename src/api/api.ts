@@ -1,19 +1,11 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 
-import {
-  createApiBuilderFromCtpClient,
-  MyCustomerDraft,
-  CustomerUpdateAction,
-  QueryParam,
-  MyCartUpdateAction,
-  MyCartUpdate,
-} from "@commercetools/platform-sdk";
+import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam, MyCartUpdateAction } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { Client } from "@commercetools/sdk-client-v2";
-import { getItemFromLocalStorage } from "src/utils/utils";
 
 export const createApiRoot = () => {
   let ctpClient: Client;

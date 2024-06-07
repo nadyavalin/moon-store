@@ -150,9 +150,3 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSea
   });
   return catalogList;
 }
-
-// const appendSizesModal = (response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) => {
-//   const productSizes = response?.body.results[0].variants;
-//   const modal = createModalSize();
-//   document.body.append(modal);
-// };
