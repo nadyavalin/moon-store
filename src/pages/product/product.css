@@ -51,8 +51,13 @@
   color: var(--accent-red);
 }
 
+.product__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .product__size-item {
-  margin-left: 10px;
   cursor: pointer;
 }
 
