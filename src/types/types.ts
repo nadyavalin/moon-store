@@ -8,6 +8,7 @@ export interface State {
   customerId: string | null;
   apiRoot?: ByProjectKeyRequestBuilder | null;
   cartId?: string | null;
+  anonymousId?: string | null;
 }
 
 export interface Customer {

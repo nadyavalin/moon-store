@@ -6,8 +6,10 @@ import {
   // Import middlewares
   type HttpMiddlewareOptions, // Required for sending HTTP requests
 } from "@commercetools/sdk-client-v2";
-import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../api/constants";
+import { generateRandomString, setItemToLocalStorage } from "../utils/utils";
 
+export const anonymousId = generateRandomString(12);
 function generateAnonymousSessionFlow(): Client {
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: apiHost,
@@ -20,6 +22,7 @@ function generateAnonymousSessionFlow(): Client {
     credentials: {
       clientId,
       clientSecret,
+      anonymousId,
     },
     scopes: [scopes],
     fetch,

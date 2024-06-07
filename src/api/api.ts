@@ -1,11 +1,20 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 
-import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam, MyCartUpdateAction } from "@commercetools/platform-sdk";
+import {
+  createApiBuilderFromCtpClient,
+  MyCustomerDraft,
+  CustomerUpdateAction,
+  QueryParam,
+  MyCartUpdateAction,
+  CartUpdateAction,
+} from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { Client } from "@commercetools/sdk-client-v2";
+import { setItemToLocalStorage } from "../utils/utils";
+import { anonymousId } from "./anonymousClientBuilder";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
@@ -17,6 +26,29 @@ export const createApiRoot = () => {
     ctpClient = generateRefreshTokenFlow(state.refreshToken);
   }
   state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+};
+
+export const cartHandler = async () => {
+  if (!state.cartId) {
+    const response = await createCart({ currency: "RUB", country: "RU" });
+    const cartId = response?.body.id;
+    const anonymousCartId = response?.body.anonymousId;
+    setItemToLocalStorage("cart-id", `${cartId}`);
+    setItemToLocalStorage("anonymousCartId", anonymousCartId);
+    state.cartId = cartId;
+    state.anonymousId = anonymousCartId;
+  } else {
+    if (anonymousId !== state.anonymousId) {
+      const response = await getCart();
+      const version = response?.body.version as number;
+      await updateCart(version, [
+        {
+          action: "setAnonymousId",
+          anonymousId: `${anonymousId}`,
+        },
+      ]);
+    }
+  }
 };
 
 export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
@@ -47,16 +79,27 @@ export const createCart = (requestBody: { currency: string; country: string }) =
 
 export const getCart = () =>
   state.apiRoot
-    ?.me()
-    .carts()
+    ?.carts()
     .withId({ ID: state.cartId as string })
     .get()
     .execute();
 
-export const updateCart = (version: number, actions: MyCartUpdateAction[]) =>
+// export const updateUserCart = (version: number, actions: MyCartUpdateAction[]) =>
+//   state.apiRoot
+//     ?.me()
+//     .carts()
+//     .withId({ ID: state.cartId as string })
+//     .post({
+//       body: {
+//         version,
+//         actions,
+//       },
+//     })
+//     .execute();
+
+export const updateCart = (version: number, actions: CartUpdateAction[]) =>
   state.apiRoot
-    ?.me()
-    .carts()
+    ?.carts()
     .withId({ ID: state.cartId as string })
     .post({
       body: {

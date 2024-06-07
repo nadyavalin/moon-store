@@ -3,7 +3,7 @@ import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
 
 import { Pages } from "./types/types";
-import { createApiRoot } from "./api/api";
+import { createApiRoot, cartHandler } from "./api/api";
 import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
 import { renderBasketContent } from "./pages/basket/basket";
@@ -95,5 +95,6 @@ window.addEventListener("hashchange", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   createApiRoot();
+  cartHandler();
   renderContent(window.location.hash);
 });

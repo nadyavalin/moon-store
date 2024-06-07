@@ -3,9 +3,9 @@ import "../../product/product.css";
 import { createElement, createSvgElement } from "../../../components/elements";
 import { cross } from "../../../components/svg";
 import { ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
-import { createCart, getCart, updateCart } from "src/api/api";
-import state from "../../../store/state";
-import { getItemFromLocalStorage, setItemToLocalStorage } from "src/utils/utils";
+import { getCart, updateCart } from "../../../api/api";
+import { getItemFromLocalStorage } from "src/utils/utils";
+import state from "src/store/state";
 
 export function createModalSize(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) {
   const productSizes = response?.body.results[0].variants;
@@ -42,25 +42,10 @@ export function createModalSize(response: ClientResponse<ProductProjectionPagedS
     const target = <HTMLSpanElement>event.target;
     if (target.classList.contains("product__size-item")) {
       const variantId = Number(target.getAttribute("data-id"));
-      let version;
-      if (state.cartId) {
-        const response = await getCart();
-        version = response?.body.version as number;
-      } else {
-        const response = await createCart({ currency: "RUB", country: "RU" });
-        version = response?.body.version as number;
-        const cartId = response?.body.id;
-        setItemToLocalStorage("cart-id", `${cartId}`);
-        state.cartId = cartId;
-      }
-      await updateCart(version, [
-        {
-          action: "addLineItem",
-          productId,
-          variantId,
-          quantity: 1,
-        },
-      ]);
+      const response = await getCart();
+      const version = <number>response?.body.version;
+
+      await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
     }
   });
   return modalsizeBack;
