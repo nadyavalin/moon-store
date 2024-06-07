@@ -1,9 +1,7 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
-import { createApiRoot } from "src/api/api";
-import { renderPageContent } from "src";
-import { renderProductsFromApi } from "../catalog/catalog";
+import { createApiRoot } from "../../api/api";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -56,7 +54,7 @@ menuItemLogOut.addEventListener("click", () => {
 
 const liItemHome = createElement({ tagName: "li" });
 const liItemCatalog = createElement({ tagName: "li" });
-const litItemBasket = createElement({ tagName: "li" });
+const litItemBasket = createElement({ tagName: "li", classNames: ["menu-item__basket"] });
 const liItemAboutUs = createElement({ tagName: "li" });
 const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
 export const menuItemCatalog = createElement({
@@ -66,7 +64,14 @@ export const menuItemCatalog = createElement({
   attributes: { href: Pages.CATALOG },
 });
 
-const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
+const menuItemBasket = createElement({
+  tagName: "a",
+  classNames: ["menu-item", "menu-item__basket-link"],
+  textContent: "Корзина",
+  attributes: { href: Pages.BASKET },
+});
+const menuItemBasketIcon = createElement({ tagName: "i", classNames: ["fa-solid", "fa-cart-shopping"] });
+const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"], textContent: `2` });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
 // burger
@@ -103,7 +108,8 @@ navMenu.append(ulItem);
 ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
-litItemBasket.append(menuItemBasket);
+litItemBasket.append(menuItemBasket, menuItemBasketAmount);
+menuItemBasket.append(menuItemBasketIcon);
 liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
