@@ -1,7 +1,7 @@
 import { createSnackbar } from "../../components/elements";
 import { Customer, Pages, SnackbarType } from "../../types/types";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
-import { createCustomer } from "../../api/api";
+import { createCart, createCustomer } from "../../api/api";
 
 export function formRegistrationHandler(event: Event) {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
@@ -48,7 +48,7 @@ export function formRegistrationHandler(event: Event) {
     customer.billingAddresses = [1];
     customer.addresses.push(addressBilling);
   }
-
+  createCart({ currency: "RUB" });
   createCustomer(customer)
     ?.then((response) => {
       if (response.statusCode === 201) {

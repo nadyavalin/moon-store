@@ -1,6 +1,6 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 
-import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam } from "@commercetools/platform-sdk";
+import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam, MyCartDraft } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
@@ -35,6 +35,8 @@ export const createCustomer = (requestBody: MyCustomerDraft) =>
       body: requestBody,
     })
     .execute();
+
+export const createCart = (requestBody: MyCartDraft) => state.apiRoot?.me().carts().post({ body: requestBody }).execute();
 
 export const getUserData = () =>
   state.apiRoot
