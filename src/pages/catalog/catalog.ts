@@ -12,7 +12,7 @@ import { SnackbarType } from "../../types/types";
 
 import createFilterSortButtons from "../../components/filter/filterView";
 import { Pages } from "../../types/types";
-import { createModalImage } from "../product/modal/modal";
+import { createModalSize } from "./modalSize/modalSize";
 
 export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
@@ -144,14 +144,14 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSea
       event.preventDefault();
       const productId = target.getAttribute("data-id");
       const response = await getProducts({ "filter.query": `id:"${productId}"` });
-      appendSizesModal(response);
+      // appendSizesModal(response);
     }
   });
   return catalogList;
 }
 
-const appendSizesModal = (response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) => {
-  const productSizes = response?.body.results[0].variants;
-  const modal = createModalImage();
-  document.body.append(modal);
-};
+// const appendSizesModal = (response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) => {
+//   const productSizes = response?.body.results[0].variants;
+//   const modal = createModalSize();
+//   document.body.append(modal);
+// };
