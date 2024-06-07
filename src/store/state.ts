@@ -7,7 +7,7 @@ export const state: State = {
   customerId: getItemFromLocalStorage<string>("customerId"),
   apiRoot: null,
   cartId: getItemFromLocalStorage<string>("cart-id"),
-  anonymousId: getItemFromLocalStorage<string>("anonynous-id"),
+  anonymousId: getItemFromLocalStorage<string>("anonymousId"),
 };
 
 export default state;

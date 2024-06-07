@@ -32,11 +32,11 @@ export const cartHandler = async () => {
   if (!state.cartId) {
     const response = await createCart({ currency: "RUB", country: "RU" });
     const cartId = response?.body.id;
-    const anonymousCartId = response?.body.anonymousId;
+    const anonymousId = response?.body.anonymousId;
     setItemToLocalStorage("cart-id", `${cartId}`);
-    setItemToLocalStorage("anonymousCartId", anonymousCartId);
+    setItemToLocalStorage("anonymousId", anonymousId);
     state.cartId = cartId;
-    state.anonymousId = anonymousCartId;
+    state.anonymousId = anonymousId;
   } else {
     if (anonymousId !== state.anonymousId) {
       const response = await getCart();
