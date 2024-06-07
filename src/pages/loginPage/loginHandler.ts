@@ -50,6 +50,8 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string, cus
   if (customerId) {
     state.customerId = customerId;
   }
+  localStorage.removeItem("cart-id");
+  state.cartId = null;
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;

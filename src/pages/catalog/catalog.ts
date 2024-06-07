@@ -144,7 +144,8 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSea
       event.preventDefault();
       const productId = target.getAttribute("data-id");
       const response = await getProducts({ "filter.query": `id:"${productId}"` });
-      // appendSizesModal(response);
+      const modal = createModalSize(response);
+      document.body.append(modal);
     }
   });
   return catalogList;

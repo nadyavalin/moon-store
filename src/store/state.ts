@@ -6,6 +6,7 @@ export const state: State = {
   refreshToken: getItemFromLocalStorage<string>("refreshToken"),
   customerId: getItemFromLocalStorage<string>("customerId"),
   apiRoot: null,
+  cartId: getItemFromLocalStorage<string>("cart-id"),
 };
 
 export default state;

@@ -1,11 +1,19 @@
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 
-import { createApiBuilderFromCtpClient, MyCustomerDraft, CustomerUpdateAction, QueryParam, MyCartDraft } from "@commercetools/platform-sdk";
+import {
+  createApiBuilderFromCtpClient,
+  MyCustomerDraft,
+  CustomerUpdateAction,
+  QueryParam,
+  MyCartUpdateAction,
+  MyCartUpdate,
+} from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { Client } from "@commercetools/sdk-client-v2";
+import { getItemFromLocalStorage } from "src/utils/utils";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
@@ -36,7 +44,35 @@ export const createCustomer = (requestBody: MyCustomerDraft) =>
     })
     .execute();
 
-export const createCart = (requestBody: MyCartDraft) => state.apiRoot?.me().carts().post({ body: requestBody }).execute();
+export const createCart = (requestBody: { currency: string; country: string }) =>
+  state.apiRoot
+    ?.me()
+    .carts()
+    .post({
+      body: requestBody,
+    })
+    .execute();
+
+export const getCart = () =>
+  state.apiRoot
+    ?.me()
+    .carts()
+    .withId({ ID: state.cartId as string })
+    .get()
+    .execute();
+
+export const updateCart = (version: number, actions: MyCartUpdateAction[]) =>
+  state.apiRoot
+    ?.me()
+    .carts()
+    .withId({ ID: state.cartId as string })
+    .post({
+      body: {
+        version,
+        actions,
+      },
+    })
+    .execute();
 
 export const getUserData = () =>
   state.apiRoot

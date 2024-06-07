@@ -48,7 +48,7 @@ export function formRegistrationHandler(event: Event) {
     customer.billingAddresses = [1];
     customer.addresses.push(addressBilling);
   }
-  createCart({ currency: "RUB" });
+
   createCustomer(customer)
     ?.then((response) => {
       if (response.statusCode === 201) {

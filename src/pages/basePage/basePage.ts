@@ -40,9 +40,11 @@ menuItemLogOut.addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("customerId");
+  localStorage.removeItem("cart-id");
   state.name = null;
   state.refreshToken = null;
   state.customerId = null;
+  state.cartId = null;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
