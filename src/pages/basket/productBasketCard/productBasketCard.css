@@ -43,6 +43,18 @@
   gap: 8px;
 }
 
+.product-busket__price-wrapper,
+.product-busket__discout-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-busket__price,
+.product-busket__discount {
+  font-size: 13px;
+}
+
 .amount-button {
   border: 1px solid var(--main-light);
   padding: 5px;
