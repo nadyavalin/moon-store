@@ -15,43 +15,48 @@
   box-shadow: 0 0 2px rgba(246, 244, 213, 1);
 }
 
-.product-busket__text-wrapper {
+.product-basket__text-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.product-busket__amount-sizes-wrapper {
+.product-basket__amount-sizes-wrapper {
   display: flex;
   gap: 55px;
 }
 
-.product-busket__size-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.product-busket__prices-wrapper {
-  display: flex;
-  gap: 20px;
-}
-
-.product-busket__amount-wrapper {
+.product-basket__amount-buttons-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.product-busket__price-wrapper,
-.product-busket__discout-wrapper {
+.product-basket__amount-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-basket__size-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-basket__prices-wrapper {
+  display: flex;
+  gap: 20px;
+}
+.product-basket__price-wrapper,
+.product-basket__discount-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.product-busket__price,
-.product-busket__discount {
+.product-basket__price,
+.product-basket__discount {
   font-size: 13px;
 }
 
@@ -67,19 +72,19 @@
   transition: color 0.5s ease;
 }
 
-.product-busket__delete-button-wrapper {
+.product-basket__delete-button-wrapper {
   width: 20px;
   height: 20px;
   margin-left: auto;
   cursor: pointer;
 }
 
-.product-busket__small-text {
+.product-basket__small-text {
   font-size: 12px;
   font-weight: 600;
 }
 
-.product-busket__discount {
+.product-basket__discount {
   color: var(--accent-red);
 }
 
@@ -93,31 +98,40 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .product-basket__image {
     width: 230px;
     height: 230px;
   }
 
-  .product-busket__amount-sizes-wrapper {
+  .product-basket__amount-sizes-wrapper {
     flex-direction: column;
     gap: 8px;
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 610px) {
+  .product-basket__image {
+    width: 300px;
+    height: 300px;
+  }
+
   .product-basket-item {
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
-  .product-busket__amount-sizes-wrapper {
+  .product-basket__text-wrapper {
+    gap: 20px;
+  }
+
+  .product-basket__amount-sizes-wrapper {
     flex-direction: row;
     gap: 30px;
   }
 
-  .product-busket__delete-button-wrapper {
+  .product-basket__delete-button-wrapper {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -130,7 +144,7 @@
     height: 100%;
   }
 
-  .product-busket__delete-button-wrapper {
+  .product-basket__delete-button-wrapper {
     top: auto;
     bottom: 10px;
   }
