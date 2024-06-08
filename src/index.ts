@@ -1,4 +1,5 @@
 import "./index.css";
+import "./components/loader.css";
 import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
 
@@ -14,6 +15,7 @@ import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
+import { createElement } from "./components/elements";
 
 document.body.append(header, main, footer);
 
@@ -30,11 +32,15 @@ function setActiveLink(fragmentId: string) {
 }
 
 export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) => {
+  const loader = createElement({ tagName: "div", classNames: ["loader"] });
   const contentDiv = document.querySelector(".main");
   try {
+    contentDiv?.append(loader);
     contentDiv?.append(await renderFunc());
   } catch (error) {
     contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+  } finally {
+    loader.remove();
   }
 };
 
