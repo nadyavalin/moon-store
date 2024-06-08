@@ -7,7 +7,7 @@ import {
   type HttpMiddlewareOptions, // Required for sending HTTP requests
 } from "@commercetools/sdk-client-v2";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../api/constants";
-import { generateRandomString, setItemToLocalStorage } from "../utils/utils";
+import { generateRandomString } from "../utils/utils";
 
 export const anonymousId = generateRandomString(12);
 function generateAnonymousSessionFlow(): Client {

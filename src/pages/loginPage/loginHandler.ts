@@ -40,7 +40,7 @@ class MyTokenCache implements TokenCache {
   }
 }
 
-export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string) {
+export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string, cartId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
     state.refreshToken = refreshToken;
@@ -50,8 +50,9 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string, cus
   if (customerId) {
     state.customerId = customerId;
   }
-  localStorage.removeItem("cart-id");
-  state.cartId = null;
+  if (cartId) {
+    state.cartId = cartId;
+  }
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;
@@ -106,6 +107,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       body: {
         email,
         password,
+        activeCartSignInMode: "MergeWithExistingCustomerCart",
       },
     })
     .execute()
@@ -113,10 +115,12 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       if (response.statusCode === 200) {
         const user = response.body.customer.firstName as string;
         setItemToLocalStorage("user", user);
+        const cartId = response.body.cart?.id;
+        setItemToLocalStorage("cart-id", cartId);
         const userID = response.body.customer.id;
         setItemToLocalStorage("customerId", userID);
         const token = tokenCache.myCache.refreshToken as string;
-        changeAppAfterLogin(user, token, userID);
+        changeAppAfterLogin(user, token, userID, cartId);
       }
     })
     .catch(() => {

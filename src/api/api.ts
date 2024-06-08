@@ -29,24 +29,26 @@ export const createApiRoot = () => {
 };
 
 export const cartHandler = async () => {
-  if (!state.cartId) {
-    const response = await createCart({ currency: "RUB", country: "RU" });
-    const cartId = response?.body.id;
-    const anonymousId = response?.body.anonymousId;
-    setItemToLocalStorage("cart-id", `${cartId}`);
-    setItemToLocalStorage("anonymousId", anonymousId);
-    state.cartId = cartId;
-    state.anonymousId = anonymousId;
-  } else {
-    if (anonymousId !== state.anonymousId) {
-      const response = await getCart();
-      const version = response?.body.version as number;
-      await updateCart(version, [
-        {
-          action: "setAnonymousId",
-          anonymousId: `${anonymousId}`,
-        },
-      ]);
+  if (!state.refreshToken) {
+    if (!state.cartId) {
+      const response = await createCart({ currency: "RUB", country: "RU" });
+      const cartId = response?.body.id;
+      const anonymousId = response?.body.anonymousId;
+      setItemToLocalStorage("cart-id", `${cartId}`);
+      setItemToLocalStorage("anonymousId", anonymousId);
+      state.cartId = cartId;
+      state.anonymousId = anonymousId;
+    } else {
+      if (anonymousId !== state.anonymousId) {
+        const response = await getCart();
+        const version = response?.body.version as number;
+        await updateCart(version, [
+          {
+            action: "setAnonymousId",
+            anonymousId: `${anonymousId}`,
+          },
+        ]);
+      }
     }
   }
 };
@@ -59,6 +61,7 @@ export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
     .execute();
 
 export const getCategories = () => state.apiRoot?.categories().get().execute();
+
 export const createCustomer = (requestBody: MyCustomerDraft) =>
   state.apiRoot
     ?.me()
