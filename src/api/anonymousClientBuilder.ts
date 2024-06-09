@@ -9,8 +9,9 @@ import {
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../api/constants";
 import { generateRandomString } from "../utils/utils";
 
-export const anonymousId = generateRandomString(12);
+export let anonymousId: string;
 function generateAnonymousSessionFlow(): Client {
+  anonymousId = generateRandomString(12);
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: apiHost,
     fetch,
