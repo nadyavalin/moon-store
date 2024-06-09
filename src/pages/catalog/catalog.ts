@@ -12,6 +12,7 @@ import { SnackbarType } from "../../types/types";
 
 import createFilterSortButtons from "../../components/filter/filterView";
 import { Pages } from "../../types/types";
+import { createPagination } from "./pagination/pagination";
 
 export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
@@ -22,6 +23,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
 
   const filterSortButtons = createFilterSortButtons(id);
@@ -48,8 +50,11 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
     }
   });
 
+  const pagination = await createPagination();
+
   sidePanel.append(filterSortButtons, categories);
-  catalogWrapper.append(sidePanel, catalogMain);
+  catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
+  catalogMainPaginationWrapper.append(catalogMain, pagination);
   catalog.append(searchPanel, catalogWrapper);
 
   return catalog;

@@ -8,6 +8,13 @@
   display: flex;
 }
 
+.catalog-main-pagination-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  align-items: center;
+}
+
 .catalog-main {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
