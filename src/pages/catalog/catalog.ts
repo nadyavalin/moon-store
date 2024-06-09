@@ -49,7 +49,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
     }
   });
 
-  const pagination = await createPagination();
+  const pagination = createPagination(productResponse?.body.limit);
 
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);

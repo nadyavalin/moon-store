@@ -1,9 +1,8 @@
 import "./pagination.css";
 import { createElement, createSvgElement } from "../../../components/elements";
 import { arrowLeft, arrowRight } from "../../../components/svg";
-import { getProducts } from "../../../api/api";
 
-export async function createPagination() {
+export function createPagination(totalProducts: number | undefined) {
   const paginationWrapper = createElement({ tagName: "div", classNames: ["pagination-wrapper"] });
   const paginationButtonLeft = createSvgElement(arrowLeft, "pagination__arrow", {
     width: "24px",
@@ -19,12 +18,19 @@ export async function createPagination() {
   });
   const paginationNumbersWrapper = createElement({ tagName: "div", classNames: ["pagination-numbers-wrapper"] });
 
-  // const response = await getProducts({ queryArgs: { limit: 50 } });
-  // const totalProducts = response?.total;
+  const productsPerPage = 8;
+  if (totalProducts) {
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
+    console.log(totalProducts);
+    console.log(totalPages);
 
-  const paginationNumbers = createElement({ tagName: "p", classNames: ["pagination-numbers"], textContent: "1" });
+    for (let i = 1; i <= totalPages; i++) {
+      const paginationNumber = createElement({ tagName: "p", classNames: ["pagination-numbers"], textContent: i.toString() });
+      console.log(paginationNumber);
+      paginationNumbersWrapper.append(paginationNumber);
+    }
+  }
 
-  paginationNumbersWrapper.append(paginationNumbers);
   paginationWrapper.append(paginationButtonLeft, paginationNumbersWrapper, paginationButtonRight);
   return paginationWrapper;
 }
