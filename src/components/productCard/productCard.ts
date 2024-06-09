@@ -20,7 +20,12 @@ export function createCard(item: ProductProjection) {
   const cardName = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
   const cardDescription = createElement({ tagName: "div", classNames: ["card__description"], textContent: description });
   const cardPrices = createElement({ tagName: "div", classNames: ["card__prices"] });
-  const cardButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Добавить в корзину" });
+  const cardButton = createElement({
+    tagName: "button",
+    classNames: ["card__button"],
+    textContent: "Добавить в корзину",
+    attributes: { "data-id": id },
+  });
 
   const cardImage = createElement({
     tagName: "img",
