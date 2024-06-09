@@ -25,7 +25,7 @@ export function createCard(item: ProductProjection) {
   const cardImage = createElement({
     tagName: "img",
     classNames: ["slide__img", "card__img"],
-    attributes: { src: `${images?.[0].url}`, alt: "Фото товара" },
+    attributes: { loading: "lazy", src: `${images?.[0].url}`, alt: "Фото товара" },
   });
   cardImage.setAttribute("draggable", "false");
   card.append(cardLink);
