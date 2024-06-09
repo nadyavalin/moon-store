@@ -29,27 +29,26 @@ export const createApiRoot = () => {
 };
 
 export const cartHandler = async () => {
-  if (!state.refreshToken) {
-    if (!state.cartId) {
-      const response = await createCart({ currency: "RUB", country: "RU" });
-      const cartId = response?.body.id;
-      const anonymousId = response?.body.anonymousId;
-      setItemToLocalStorage("cart-id", `${cartId}`);
-      setItemToLocalStorage("anonymousId", anonymousId);
-      state.cartId = cartId;
-      state.anonymousId = anonymousId;
-    } else {
-      if (anonymousId !== state.anonymousId) {
-        const response = await getCart();
-        const version = response?.body.version as number;
-        await updateCart(version, [
-          {
-            action: "setAnonymousId",
-            anonymousId: `${anonymousId}`,
-          },
-        ]);
-      }
-    }
+  if (state.refreshToken) {
+    return;
+  }
+  if (!state.cartId) {
+    const response = await createCart({ currency: "RUB", country: "RU" });
+    const cartId = response?.body.id;
+    const anonymousId = response?.body.anonymousId;
+    setItemToLocalStorage("cart-id", `${cartId}`);
+    setItemToLocalStorage("anonymousId", anonymousId);
+    state.cartId = cartId;
+    state.anonymousId = anonymousId;
+  } else if (anonymousId !== state.anonymousId) {
+    const response = await getCart();
+    const version = response?.body.version as number;
+    await updateCart(version, [
+      {
+        action: "setAnonymousId",
+        anonymousId: `${anonymousId}`,
+      },
+    ]);
   }
 };
 
@@ -86,19 +85,6 @@ export const getCart = () =>
     .withId({ ID: state.cartId as string })
     .get()
     .execute();
-
-// export const updateUserCart = (version: number, actions: MyCartUpdateAction[]) =>
-//   state.apiRoot
-//     ?.me()
-//     .carts()
-//     .withId({ ID: state.cartId as string })
-//     .post({
-//       body: {
-//         version,
-//         actions,
-//       },
-//     })
-//     .execute();
 
 export const updateCart = (version: number, actions: CartUpdateAction[]) =>
   state.apiRoot
