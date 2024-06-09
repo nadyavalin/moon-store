@@ -7,6 +7,8 @@ export interface State {
   refreshToken: string | null;
   customerId: string | null;
   apiRoot?: ByProjectKeyRequestBuilder | null;
+  cartId?: string | null;
+  anonymousId?: string | null;
 }
 
 export interface Customer {

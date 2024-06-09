@@ -12,6 +12,7 @@ import { SnackbarType } from "../../types/types";
 
 import createFilterSortButtons from "../../components/filter/filterView";
 import { Pages } from "../../types/types";
+import { createModalSize } from "./modalSize/modalSize";
 
 export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
@@ -137,5 +138,15 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSea
       catalogList.append(card);
     });
   }
+  catalogList.addEventListener("click", async (event) => {
+    const target = <HTMLButtonElement>event.target;
+    if (target.classList.contains("card__button")) {
+      event.preventDefault();
+      const productId = target.getAttribute("data-id");
+      const response = await getProducts({ "filter.query": `id:"${productId}"` });
+      const modal = createModalSize(response);
+      document.body.append(modal);
+    }
+  });
   return catalogList;
 }

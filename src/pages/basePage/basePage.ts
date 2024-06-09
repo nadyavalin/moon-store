@@ -1,7 +1,7 @@
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
-import { createApiRoot } from "../../api/api";
+import { cartHandler, createApiRoot } from "../../api/api";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -35,18 +35,19 @@ export const menuItemLogOut = createElement({ tagName: "button", classNames: ["m
 menuItemLogOut.addEventListener("click", () => {
   const greeting = header.querySelector(".user-greeting");
   greeting?.remove();
-  localStorage.removeItem("user");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("customerId");
+  localStorage.clear();
   state.name = null;
   state.refreshToken = null;
   state.customerId = null;
+  state.cartId = null;
+  state.anonymousId = null;
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
   menuItemLogOut.remove();
   menuItemUserProfile.remove();
   createApiRoot();
+  cartHandler();
   window.location.hash = Pages.MAIN;
 });
 
@@ -69,7 +70,7 @@ const menuItemBasket = createElement({
   attributes: { href: Pages.BASKET },
 });
 const menuItemBasketIcon = createElement({ tagName: "i", classNames: ["fa-solid", "fa-cart-shopping"] });
-const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"], textContent: `2` });
+const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"], textContent: `${0}` });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
 // burger
