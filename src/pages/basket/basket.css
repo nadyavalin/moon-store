@@ -6,6 +6,9 @@
 
 .product-list__wrapper {
   width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .product-total__wrapper {
@@ -13,6 +16,7 @@
   flex-direction: column;
   gap: 16px;
   width: 25%;
+  height: 150px;
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
   background-color: var(--dark-grey);
