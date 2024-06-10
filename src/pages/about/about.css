@@ -65,11 +65,20 @@
 }
 
 .developers-github-link {
+  color: var(--main-light);
   text-decoration: underline;
+  transition: all 0.3s ease;
 }
 
 .developers-bio {
   font-size: 13px;
+}
+
+@media (hover: hover) {
+  .developers-github-link:hover {
+    text-decoration: none;
+    color: var(--blue-hover);
+  }
 }
 
 @media screen and (max-width: 900px) {

@@ -225,10 +225,6 @@ button {
 }
 
 @media (hover: hover) {
-  a:hover {
-    color: var(--blue-hover);
-  }
-
   .menu-item:hover,
   .login-link:hover,
   .registration-link:hover,
