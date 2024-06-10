@@ -34,7 +34,6 @@ export function createPagination(totalProducts?: number, offset?: number) {
     if (target?.classList.contains("pagination-numbers")) {
       const index = target.dataset.index ? parseInt(target.dataset.index) : 1;
       offset = productsPerPage * (index - 1);
-      console.log(offset);
     }
   });
 

@@ -35,7 +35,8 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   }
   const productResponse = await getProducts(queryArgs);
 
-  const catalogMain = renderCatalogContent(productResponse, catalogList);
+  const pagination = createPagination(productResponse?.body.total, productResponse?.body.offset);
+  const catalogMain = renderCatalogContent(productResponse, catalogList, pagination, productResponse?.body.offset);
   const categories = renderCategories(response, slug);
 
   searchPanel.addEventListener("click", async (event) => {
@@ -48,8 +49,6 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
       renderCatalogContent(productResponse, catalogList);
     }
   });
-
-  const pagination = createPagination(productResponse?.body.total, productResponse?.body.offset);
 
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
@@ -130,7 +129,12 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-export function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
+export function renderCatalogContent(
+  response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
+  catalogList: HTMLUListElement,
+  pagination?: HTMLElement,
+  offset?: number,
+) {
   const items = response?.body.results;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
@@ -141,8 +145,9 @@ export function renderCatalogContent(response: ClientResponse<ProductProjectionP
       catalogList.append(card);
     });
   }
+
   catalogList.addEventListener("click", async (event) => {
-    const target = <HTMLButtonElement>event.target;
+    const target = <HTMLUListElement>event.target;
     if (target.classList.contains("card__button")) {
       event.preventDefault();
       const productId = target.getAttribute("data-id");
@@ -150,19 +155,19 @@ export function renderCatalogContent(response: ClientResponse<ProductProjectionP
       const modal = createModalSize(response);
       document.body.append(modal);
     }
+  });
 
-    // else if (target.classList.contains("pagination-numbers")) {
-    //   const index = parseInt(target.dataset.index);
-    //   const offset = (index - 1) * 8;
-
-    //   const response = await getProducts({ limit: 8, offset: offset });
-
-    //   catalogList.innerHTML = "";
-    //   response?.body.results.forEach((item) => {
-    //     const card = createCard(item);
-    //     catalogList.append(card);
-    //   });
-    // }
+  pagination?.addEventListener("click", async (event) => {
+    const target = <HTMLUListElement>event.target;
+    if (target.classList.contains("pagination-numbers")) {
+      const newOffset = (Number(target.textContent) - 1) * 8;
+      const response = await getProducts({ limit: 8, offset: newOffset });
+      catalogList.innerHTML = "";
+      response?.body.results.forEach((item) => {
+        const card = createCard(item);
+        catalogList.append(card);
+      });
+    }
   });
   return catalogList;
 }
