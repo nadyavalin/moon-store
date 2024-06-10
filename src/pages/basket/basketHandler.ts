@@ -6,7 +6,7 @@ function recalculateTotalCartPrice(response: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
   const amountItemDiv = document.querySelector(".product-amount__full-amount");
   if (amountItemDiv) amountItemDiv.textContent = `${response.lineItems.length}`;
-  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response.totalPrice.centAmount) / correctFactorForPrices}`;
+  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response.totalPrice.centAmount) / correctFactorForPrices} р.`;
 }
 
 export function increaseQuantityProduct(
@@ -31,7 +31,7 @@ export function increaseQuantityProduct(
     ])?.then((response) => {
       if (response.statusCode === 200) {
         countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices}`;
+        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
         recalculateTotalCartPrice(response.body);
       }
     });
@@ -63,7 +63,7 @@ export function decreaseQuantityProduct(
     ])?.then((response) => {
       if (response.statusCode === 200) {
         countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices}`;
+        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
         recalculateTotalCartPrice(response.body);
       }
     });
