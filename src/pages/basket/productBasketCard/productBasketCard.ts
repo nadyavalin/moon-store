@@ -97,10 +97,10 @@ export function createBasketCard(index: number, response?: Cart) {
   productBasketItem.append(productBasketImage, productBasketTextWrapper, productBasketDeleteIconWrapper);
 
   productBasketPlusAmountButton.addEventListener("click", () =>
-    increaseQuantityProduct(productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+    increaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
   );
   productBasketMinusAmountButton.addEventListener("click", () =>
-    decreaseQuantityProduct(productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+    decreaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
   );
   productBasketDeleteIcon.addEventListener("click", () => removeProduct(`${response?.lineItems[index].id}`, productBasketItem));
   return productBasketItem;

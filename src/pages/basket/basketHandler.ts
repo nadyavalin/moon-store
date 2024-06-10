@@ -9,9 +9,18 @@ function recalculateTotalCartPrice(response: Cart) {
   if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response.totalPrice.centAmount) / correctFactorForPrices}`;
 }
 
-export function increaseQuantityProduct(countDiv: HTMLElement, totalPriceDiv: HTMLElement, lineItemId: string, lineItemIndex: number) {
+export function increaseQuantityProduct(
+  btn: HTMLElement,
+  countDiv: HTMLElement,
+  totalPriceDiv: HTMLElement,
+  lineItemId: string,
+  lineItemIndex: number,
+) {
   let quantity = Number(countDiv.textContent);
-  if (quantity >= 0) quantity += 1;
+
+  quantity += 1;
+  btn.classList.remove("disabled");
+
   getCart()?.then((response) => {
     updateCart(response.body.version, [
       {
@@ -29,13 +38,21 @@ export function increaseQuantityProduct(countDiv: HTMLElement, totalPriceDiv: HT
   });
 }
 
-export function decreaseQuantityProduct(countDiv: HTMLElement, totalPriceDiv: HTMLElement, lineItemId: string, lineItemIndex: number) {
+export function decreaseQuantityProduct(
+  btn: HTMLElement,
+  countDiv: HTMLElement,
+  totalPriceDiv: HTMLElement,
+  lineItemId: string,
+  lineItemIndex: number,
+) {
   let quantity = Number(countDiv.textContent);
-  if (quantity === 0) {
-    quantity = 0;
-    return;
+  if (quantity === 1) {
+    btn.classList.add("disabled");
   }
-  if (quantity > 0) quantity -= 1;
+  if (quantity >= 2) {
+    quantity -= 1;
+  }
+
   getCart()?.then((response) => {
     updateCart(response.body.version, [
       {
