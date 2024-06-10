@@ -182,9 +182,11 @@ button {
   align-items: center;
   align-content: center;
 }
+
 .form__show-password label {
   cursor: pointer;
 }
+
 .form__password-toggle {
   width: 10%;
   position: relative;
