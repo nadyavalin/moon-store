@@ -117,30 +117,30 @@ header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHead
 document.body.append(snackbarContainer);
 
 const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
-const developerLinkFirst = createElement({
+const nadyavalinLinkGitHub = createElement({
   tagName: "a",
   textContent: "nadyavalin",
   attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
 });
-const developerLinkSecond = createElement({
+const raenlinLinkGitHub = createElement({
   tagName: "a",
   textContent: "raenlin",
   attributes: { href: "https://github.com/raenlin", target: "_blank" },
 });
-const developerLinkThird = createElement({
+const katikaLinkGitHub = createElement({
   tagName: "a",
   textContent: "ifbfirst",
   attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
 });
-const rsschoolLogo = createElement({
+const rsSchoolLogo = createElement({
   tagName: "img",
-  classNames: ["rsschool-logo"],
-  attributes: { src: "../../public/img/rsschool-logo.png", alt: "RSSchool Logo" },
+  classNames: ["rs-school-logo"],
+  attributes: { src: "../../public/img/rs-school-logo.png", alt: "RSSchool Logo" },
 });
-const rsschoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
+const rsSchoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
 const footerContentWrapper = createElement({ tagName: "div", classNames: ["footer-content__wrapper"] });
 const yearOfApp = createElement({ tagName: "div", classNames: ["year-app"], textContent: "2024" });
-developersWrapper.append(developerLinkFirst, developerLinkSecond, developerLinkThird);
-rsschoolLogoLink.append(rsschoolLogo);
-footerContentWrapper.append(developersWrapper, rsschoolLogoLink, yearOfApp);
+developersWrapper.append(nadyavalinLinkGitHub, raenlinLinkGitHub, katikaLinkGitHub);
+rsSchoolLogoLink.append(rsSchoolLogo);
+footerContentWrapper.append(developersWrapper, rsSchoolLogoLink, yearOfApp);
 footer.append(hrFooterLine, footerContentWrapper);

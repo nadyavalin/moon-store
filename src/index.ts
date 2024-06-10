@@ -65,7 +65,7 @@ async function renderContent(hash: string) {
         await renderPageContent(renderBasketContent);
         break;
       case Pages.ABOUT:
-        contentDiv.innerHTML = renderAboutUsContent();
+        contentDiv.append(renderAboutUsContent());
         break;
       case Pages.LOGIN:
         if (!localStorage.getItem("refreshToken")) {

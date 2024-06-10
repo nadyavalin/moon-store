@@ -53,11 +53,11 @@
 }
 
 @media screen and (max-width: 600px) {
-  .product-busket__text-wrapper {
+  .product-basket__text-wrapper {
     gap: 16px;
   }
 
-  .product-busket__prices-wrapper {
+  .product-basket__prices-wrapper {
     flex-direction: column;
   }
 }
