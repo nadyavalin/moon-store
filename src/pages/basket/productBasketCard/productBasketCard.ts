@@ -6,11 +6,19 @@ import { Cart } from "@commercetools/platform-sdk";
 import { correctFactorForPrices } from "../../../api/constants";
 
 export function createBasketCard(index: number, response?: Cart) {
+  const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
+  const nameItem = `${response?.lineItems[index].name.ru}`;
+  const quantityItem = `${response?.lineItems[index].quantity}`;
+  const sizeItem = `${response?.lineItems[index].variant.attributes![0].value[0].key}`;
+  const priceItem = `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices}`;
+  const priceDiscountedItem = `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices}`;
+  const priceTotalItem = `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices}`;
+
   const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket-item"] });
   const productBasketImage = createElement({
     tagName: "img",
     classNames: ["product-basket__image"],
-    attributes: { src: `${response?.lineItems[index].variant.images[0].url}` },
+    attributes: { src: imgUrlItem },
   });
   const productBasketDeleteIconWrapper = createElement({
     tagName: "div",
@@ -23,7 +31,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketName = createElement({
     tagName: "p",
     classNames: ["product-basket__name"],
-    textContent: `Название: ${response?.lineItems[index].name.ru}`,
+    textContent: `Название: ${nameItem}`,
   });
 
   const productBasketAmountSizeWrapper = createElement({ tagName: "div", classNames: ["product-basket__amount-sizes-wrapper"] });
@@ -35,7 +43,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketAmount = createElement({
     tagName: "p",
     classNames: ["product-basket__amount"],
-    textContent: `${response?.lineItems[index].quantity}`,
+    textContent: `${quantityItem}`,
   });
   const productBasketMinusAmountButton = createElement({ tagName: "i", classNames: ["fa-solid", "fa-minus", "amount-button"] });
 
@@ -44,7 +52,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketSize = createElement({
     tagName: "span",
     classNames: ["product__size-item"],
-    textContent: `${response?.lineItems[index].variant.attributes[0].value[0].key}`,
+    textContent: `${sizeItem}`,
   });
 
   const productBasketPricesWrapper = createElement({ tagName: "div", classNames: ["product-basket__prices-wrapper"] });
@@ -53,7 +61,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__price"],
-    textContent: `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices} р.`,
+    textContent: `${priceItem} р.`,
   });
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
@@ -61,7 +69,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketDiscount = createElement({
     tagName: "p",
     classNames: ["product-basket__discount"],
-    textContent: `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices} р.`,
+    textContent: `${priceDiscountedItem} р.`,
   });
 
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
@@ -73,7 +81,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketFinalPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__final-price"],
-    textContent: `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices} р.`,
+    textContent: `${priceTotalItem} р.`,
   });
 
   productBasketAmountButtonsWrapper.append(productBasketPlusAmountButton, productBasketAmount, productBasketMinusAmountButton);
@@ -88,8 +96,12 @@ export function createBasketCard(index: number, response?: Cart) {
   productBasketDeleteIconWrapper.append(productBasketDeleteIcon);
   productBasketItem.append(productBasketImage, productBasketTextWrapper, productBasketDeleteIconWrapper);
 
-  productBasketPlusAmountButton.addEventListener("click", () => increaseQuantityProduct(`${response?.lineItems[index].id}`, productBasketAmount));
-  productBasketMinusAmountButton.addEventListener("click", () => decreaseQuantityProduct(`${response?.lineItems[index].id}`, productBasketAmount));
+  productBasketPlusAmountButton.addEventListener("click", () =>
+    increaseQuantityProduct(productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+  );
+  productBasketMinusAmountButton.addEventListener("click", () =>
+    decreaseQuantityProduct(productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+  );
   productBasketDeleteIcon.addEventListener("click", () => removeProduct(`${response?.lineItems[index].id}`, productBasketItem));
   return productBasketItem;
 }
