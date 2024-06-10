@@ -1,9 +1,10 @@
 import "./productBasketCard.css";
 import "../../product/product.css";
 import { createElement } from "../../../components/elements";
+
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
-import { Cart } from "@commercetools/platform-sdk";
 import { correctFactorForPrices } from "../../../api/constants";
+import { Cart } from "@commercetools/platform-sdk";
 
 export function createBasketCard(index: number, response?: Cart) {
   const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
