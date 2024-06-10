@@ -35,6 +35,10 @@
 
 .pagination-numbers {
   font-size: 22px;
+  border: 1px solid var(--main-light);
+  padding: 5px;
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
 }
 
 @media (hover: hover) {
@@ -45,5 +49,9 @@
 
   .pagination__arrow:hover path {
     stroke: var(--dark-grey);
+  }
+
+  .pagination-numbers:hover {
+    background-color: var(--card-hover);
   }
 }

@@ -49,7 +49,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
     }
   });
 
-  const pagination = createPagination(productResponse?.body.limit);
+  const pagination = createPagination(productResponse?.body.total, productResponse?.body.offset);
 
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
@@ -130,7 +130,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
+export function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
   const items = response?.body.results;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
@@ -150,6 +150,19 @@ function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSea
       const modal = createModalSize(response);
       document.body.append(modal);
     }
+
+    // else if (target.classList.contains("pagination-numbers")) {
+    //   const index = parseInt(target.dataset.index);
+    //   const offset = (index - 1) * 8;
+
+    //   const response = await getProducts({ limit: 8, offset: offset });
+
+    //   catalogList.innerHTML = "";
+    //   response?.body.results.forEach((item) => {
+    //     const card = createCard(item);
+    //     catalogList.append(card);
+    //   });
+    // }
   });
   return catalogList;
 }
