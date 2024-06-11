@@ -58,6 +58,11 @@
   gap: 8px;
 }
 
+.product__size-item {
+  cursor: pointer;
+  background-color: transparent;
+}
+
 .product-slider {
   max-width: 340px;
 }
@@ -144,4 +149,13 @@
   .product-slider .card__arrow:last-child {
     top: 340px;
   }
+}
+
+.product__size-item.inactive {
+  cursor: not-allowed;
+}
+
+.product__size-item.active {
+  background-color: var(--accent-blue);
+  color: var(--main-light);
 }

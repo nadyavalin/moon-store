@@ -3,6 +3,8 @@ import { createElement } from "../elements";
 import { ProductProjection } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../../utils/utils";
 import { Pages } from "../../types/types";
+import { getCart, getProducts } from "../../api/api";
+import { createModalSize } from "../../pages/catalog/modalSize/modalSize";
 
 export function createCard(item: ProductProjection) {
   const name = item.name.ru;
@@ -25,6 +27,15 @@ export function createCard(item: ProductProjection) {
     classNames: ["card__button"],
     textContent: "Добавить в корзину",
     attributes: { "data-id": id },
+  });
+
+  cardButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const productId = cardButton.getAttribute("data-id");
+    const response = await getProducts({ "filter.query": `id:"${productId}"` });
+    const cartResponse = await getCart();
+    const modal = createModalSize(response, cartResponse);
+    document.body.append(modal);
   });
 
   const cardImage = createElement({
