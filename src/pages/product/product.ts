@@ -149,8 +149,12 @@ const addProductToCart = (
     const version = <number>cartResponse?.body.version;
     const activeSize = <HTMLButtonElement>size.querySelector(".active");
     const variantId = Number(activeSize?.getAttribute("data-id"));
-    await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
-    createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+    try {
+      await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+      createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+    } catch {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
+    }
     activeSize.disabled = true;
     buyButton.remove();
     pricesWrapper.append(deleteButton);
@@ -170,7 +174,12 @@ const deleteProductFromCart = (
     const item = itemsInCart?.find((product) => product?.productSlug?.ru === slug);
     const lineItemId = <string>item?.id;
     const version = <number>cartResponse?.body.version;
-    await updateCart(version, [{ action: "removeLineItem", lineItemId: `${lineItemId}`, quantity: 1 }]);
+    try {
+      await updateCart(version, [{ action: "removeLineItem", lineItemId: `${lineItemId}`, quantity: 1 }]);
+      createSnackbar(SnackbarType.success, "Товар удален!");
+    } catch {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
+    }
     deleteButton.remove();
     pricesWrapper.append(buyButton);
     size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
@@ -178,6 +187,5 @@ const deleteProductFromCart = (
       item.classList.remove("inactive");
       item.classList.remove("active");
     });
-    createSnackbar(SnackbarType.success, "Товар удален!");
   });
 };

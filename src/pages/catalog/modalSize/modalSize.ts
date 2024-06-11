@@ -1,9 +1,10 @@
 import "./modalSize.css";
 import "../../product/product.css";
-import { createElement, createSvgElement } from "../../../components/elements";
+import { createElement, createSnackbar, createSvgElement } from "../../../components/elements";
 import { cross } from "../../../components/svg";
 import { ClientResponse, ProductProjectionPagedSearchResponse, Cart } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "../../../api/api";
+import { SnackbarType } from "src/types/types";
 
 export function createModalSize(
   response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
@@ -38,8 +39,6 @@ export function createModalSize(
         if (Number(sizeItem.getAttribute("data-id")) === item.variant.id) {
           sizeItem.classList.add("active");
           sizeItem.disabled = true;
-          // buyButton.remove();
-          // pricesWrapper.append(deleteButton);
         } else {
           sizeItem.disabled = true;
           sizeItem.classList.add("inactive");
@@ -62,7 +61,12 @@ export function createModalSize(
       const variantId = Number(target.getAttribute("data-id"));
       const response = await getCart();
       const version = <number>response?.body.version;
-      await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+      try {
+        await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+        createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+      } catch {
+        createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
+      }
     }
   });
   return modalsizeBack;
