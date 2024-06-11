@@ -45,6 +45,7 @@ export const cartHandler = async () => {
   } else if (anonymousId !== state.anonymousId) {
     const response = await getCart();
     const version = response?.body.version as number;
+
     await updateCart(version, [
       {
         action: "setAnonymousId",

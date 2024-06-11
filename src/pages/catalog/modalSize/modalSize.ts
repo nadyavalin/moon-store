@@ -45,8 +45,8 @@ export function createModalSize(response: ClientResponse<ProductProjectionPagedS
       const variantId = Number(target.getAttribute("data-id"));
       const response = await getCart();
       const version = <number>response?.body.version;
-      showQuantityItemsInHeader();
       await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+      showQuantityItemsInHeader(response?.body);
     }
   });
   return modalsizeBack;
