@@ -2,11 +2,18 @@ import { Cart } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "src/api/api";
 import { correctFactorForPrices } from "src/api/constants";
 
-function recalculateTotalCartPrice(response: Cart) {
+function recalculateTotalCartPrice(response?: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
   const amountItemDiv = document.querySelector(".product-amount__full-amount");
-  if (amountItemDiv) amountItemDiv.textContent = `${response.lineItems.length}`;
-  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response.totalPrice.centAmount) / correctFactorForPrices} р.`;
+  if (amountItemDiv) amountItemDiv.textContent = `${response?.lineItems.length}`;
+  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response?.totalPrice.centAmount) / correctFactorForPrices} р.`;
+}
+
+export function showQuantityItemsInHeader() {
+  const quantityItems = document.querySelector(".menu-item__basket-amount");
+  getCart()?.then((response) => {
+    if (quantityItems) quantityItems.textContent = `${response.body.lineItems.length}`;
+  });
 }
 
 export function increaseQuantityProduct(
@@ -17,10 +24,8 @@ export function increaseQuantityProduct(
   lineItemIndex: number,
 ) {
   let quantity = Number(countDiv.textContent);
-
   quantity += 1;
   btn.classList.remove("disabled");
-
   getCart()?.then((response) => {
     updateCart(response.body.version, [
       {
@@ -81,6 +86,7 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
       if (response.statusCode === 200) {
         productItemDiv.remove();
         recalculateTotalCartPrice(response.body);
+        showQuantityItemsInHeader();
       }
     });
   });

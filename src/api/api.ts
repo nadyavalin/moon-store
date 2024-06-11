@@ -7,6 +7,7 @@ import {
   QueryParam,
   MyCartUpdateAction,
   CartUpdateAction,
+  Cart,
 } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
@@ -15,6 +16,7 @@ import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { Client } from "@commercetools/sdk-client-v2";
 import { setItemToLocalStorage } from "../utils/utils";
 import { anonymousId } from "./anonymousClientBuilder";
+import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
 
 export const createApiRoot = () => {
   let ctpClient: Client;

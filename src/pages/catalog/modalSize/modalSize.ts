@@ -6,6 +6,7 @@ import { ClientResponse, ProductProjectionPagedSearchResponse } from "@commercet
 import { getCart, updateCart } from "../../../api/api";
 import { getItemFromLocalStorage } from "src/utils/utils";
 import state from "src/store/state";
+import { showQuantityItemsInHeader } from "src/pages/basket/basketHandler";
 
 export function createModalSize(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined) {
   const productSizes = response?.body.results[0].variants;
@@ -44,7 +45,7 @@ export function createModalSize(response: ClientResponse<ProductProjectionPagedS
       const variantId = Number(target.getAttribute("data-id"));
       const response = await getCart();
       const version = <number>response?.body.version;
-
+      showQuantityItemsInHeader();
       await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
     }
   });

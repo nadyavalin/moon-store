@@ -14,6 +14,7 @@ import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
+import { showQuantityItemsInHeader } from "./pages/basket/basketHandler";
 
 document.body.append(header, main, footer);
 

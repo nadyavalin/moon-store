@@ -6,9 +6,11 @@ import { correctFactorForPrices } from "src/api/constants";
 
 export async function renderBasketContent() {
   const response = await getCart();
-  const amountCartDiv = document.querySelector(".menu-item__basket-amount");
-  if (amountCartDiv) amountCartDiv.textContent = `${response?.body.lineItems.length}`;
+
+  // const amountCartDiv = document.querySelector(".menu-item__basket-amount");
+  // if (amountCartDiv) amountCartDiv.textContent = `${response?.body.lineItems.length}`;
   const basketWrapper = createElement({ tagName: "div", classNames: ["basket__wrapper"] });
+  if (response?.body.lineItems.length === 0) basketWrapper.textContent = "В корзине нет товаров";
   const productListWrapper = createElement({ tagName: "ul", classNames: ["product-list__wrapper"] });
   const productTotalWrapper = createElement({ tagName: "div", classNames: ["product-total__wrapper"] });
 
