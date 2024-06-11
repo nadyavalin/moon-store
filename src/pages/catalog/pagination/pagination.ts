@@ -17,32 +17,43 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
     viewBox: "0 0 24 24",
     fill: "none",
   });
-  const paginationNumbersWrapper = createElement({ tagName: "ul", classNames: ["pagination__numbers"] });
+  const paginationNumbersWrapper = createElement({ tagName: "ul", classNames: ["pagination__items"] });
 
   if (totalProducts) {
     const totalPages = Math.ceil(totalProducts / productsPerPage);
 
     for (let i = 1; i <= totalPages; i++) {
-      const paginationNumber = createElement({ tagName: "li", classNames: ["pagination__number"], textContent: i.toString() });
+      const paginationNumber = createElement({ tagName: "li", classNames: ["pagination__item"], textContent: i.toString() });
       paginationNumber.dataset.index = i.toString();
       if (i === 1) {
-        paginationNumber.classList.add("active");
+        paginationNumber.classList.add("pagination__item_active");
       }
       paginationNumbersWrapper.append(paginationNumber);
     }
   }
 
-  paginationNumbersWrapper.addEventListener("click", async (event) => {
-    const target = <HTMLUListElement>event.target;
-    if (target.classList.contains("pagination__number")) {
+  const paginationState = {
+    currentPage: 1,
+  };
+
+  paginationWrapper.addEventListener("click", async (event) => {
+    const target = <HTMLDivElement>event.target;
+    const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
+
+    if (target.classList.contains("pagination__item")) {
       const pageNumber = Number(target.dataset.index);
+      paginationState.currentPage = pageNumber;
       onPageClick(pageNumber);
 
-      const activeButton = paginationNumbersWrapper.querySelector(".pagination-numbers.active");
-      if (activeButton) {
-        activeButton.classList.remove("active");
-      }
-      target.classList.add("active");
+      paginationItems.forEach((element) => {
+        if (Number(element.dataset.index) === paginationState.currentPage) {
+          element.classList.add("pagination__item_active");
+        } else {
+          element.classList.remove("pagination__item_active");
+        }
+      });
+    } else if (target.classList.contains("pagination__arrow")) {
+      // TODO
     }
   });
 

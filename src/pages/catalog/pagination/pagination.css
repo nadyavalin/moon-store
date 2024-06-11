@@ -27,13 +27,13 @@
   opacity: 0.2;
 }
 
-.pagination__numbers {
+.pagination__items {
   display: flex;
   gap: 10px;
   cursor: pointer;
 }
 
-.pagination__number {
+.pagination__item {
   font-size: 22px;
   border: 1px solid var(--main-light);
   padding: 5px;
@@ -41,7 +41,7 @@
   transition: background-color 0.5s ease;
 }
 
-.pagination__number.active {
+.pagination__item.pagination__item_active {
   color: var(--main-black);
   background-color: var(--main-light);
   pointer-events: none;
@@ -57,7 +57,7 @@
     stroke: var(--dark-grey);
   }
 
-  .pagination__number:hover {
+  .pagination__item:hover {
     background-color: var(--card-hover);
   }
 }

@@ -16,8 +16,8 @@ import { productsPerPage } from "./pagination/constants";
 
 export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
-  const response = await getCategories();
-  const results = response?.body.results;
+  const categoriesResponse = await getCategories();
+  const results = categoriesResponse?.body.results;
   const category = results?.find((category) => category.slug.ru === slug);
   const id = category?.id;
 
@@ -35,7 +35,8 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     queryArgs["filter.query"] = `categories.id:"${id}"`;
   }
 
-  const categories = renderCategories(response, slug);
+  const totalProducts = await renderCatalogContent(catalogList, queryArgs);
+  const categories = renderCategories(categoriesResponse, slug);
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
@@ -58,8 +59,8 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     }
   });
 
-  const pagination = createPagination(response?.body.total, (pageNumber) =>
-    renderCatalogContent(catalogList, { offset: (pageNumber - 1) * productsPerPage }),
+  const pagination = createPagination(totalProducts, (pageNumber) =>
+    renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
   );
 
   sidePanel.append(filterSortButtons, categories);
