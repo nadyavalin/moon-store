@@ -4,16 +4,16 @@ import { correctFactorForPrices } from "src/api/constants";
 import { createSnackbar } from "src/components/elements";
 import { SnackbarType } from "src/types/types";
 
-function recalculateTotalCartPrice(response?: Cart) {
+function recalculateTotalDataCart(response?: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
-  const amountItemDiv = document.querySelector(".product-amount__full-amount");
-  if (amountItemDiv) amountItemDiv.textContent = `${response?.lineItems.length}`;
+  const totalQuantityDiv = document.querySelector(".product-amount__full-amount");
+  if (totalQuantityDiv) totalQuantityDiv.textContent = `${response?.lineItems.reduce((total, item) => total + Number(item.quantity), 0)}`;
   if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response?.totalPrice.centAmount) / correctFactorForPrices} р.`;
 }
 
 export function showQuantityItemsInHeader(response?: Cart) {
   const quantityItems = document.querySelector(".menu-item__basket-amount");
-  if (quantityItems) quantityItems.textContent = `${response?.lineItems.length}`;
+  if (quantityItems) quantityItems.textContent = `${response?.lineItems.reduce((total, item) => total + Number(item.quantity), 0)}`;
 }
 
 export function increaseQuantityProduct(
@@ -38,13 +38,14 @@ export function increaseQuantityProduct(
         if (response.statusCode === 200) {
           countDiv.textContent = `${quantity}`;
           totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
-          recalculateTotalCartPrice(response.body);
+          recalculateTotalDataCart(response.body);
+          showQuantityItemsInHeader(response.body);
         }
       })
       .catch(() => createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже"));
   });
 }
-function updateCartHandler() {}
+
 export function decreaseQuantityProduct(
   btn: HTMLElement,
   countDiv: HTMLElement,
@@ -72,7 +73,8 @@ export function decreaseQuantityProduct(
         if (response.statusCode === 200) {
           countDiv.textContent = `${quantity}`;
           totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
-          recalculateTotalCartPrice(response.body);
+          recalculateTotalDataCart(response.body);
+          showQuantityItemsInHeader(response.body);
         }
       })
       .catch(() => createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже"));
@@ -90,7 +92,7 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
       ?.then((response) => {
         if (response.statusCode === 200) {
           productItemDiv.remove();
-          recalculateTotalCartPrice(response.body);
+          recalculateTotalDataCart(response.body);
           showQuantityItemsInHeader(response.body);
         }
       })

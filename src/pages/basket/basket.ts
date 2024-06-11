@@ -7,6 +7,8 @@ import { showQuantityItemsInHeader } from "./basketHandler";
 
 export async function renderBasketContent() {
   const response = await getCart();
+  const totalQuantity = response?.body.lineItems.reduce((total, item) => total + Number(item.quantity), 0);
+  const totalPrice = Number(response?.body.totalPrice.centAmount) / correctFactorForPrices;
   showQuantityItemsInHeader(response?.body);
   const basketWrapper = createElement({ tagName: "div", classNames: ["basket__wrapper"] });
   if (response?.body.lineItems.length === 0) basketWrapper.textContent = "В корзине нет товаров";
@@ -18,7 +20,7 @@ export async function renderBasketContent() {
   const productTotalPrice = createElement({
     tagName: "p",
     classNames: ["product-total__price"],
-    textContent: `${Number(response?.body.totalPrice.centAmount) / correctFactorForPrices} p.`,
+    textContent: ` ${totalPrice} p.`,
   });
 
   const productAmountTextWrapper = createElement({ tagName: "div", classNames: ["product-amount__wrapper"] });
@@ -26,7 +28,7 @@ export async function renderBasketContent() {
   const productFullAmount = createElement({
     tagName: "p",
     classNames: ["product-amount__full-amount"],
-    textContent: `${response?.body.lineItems.length}`,
+    textContent: `${totalQuantity}`,
   });
 
   response?.body.lineItems.forEach((item, index) => {
