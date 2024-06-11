@@ -13,7 +13,6 @@ import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
 import createFilterSortButtons from "../../components/filter/filterView";
 
-
 export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
   const categoriesResponse = await getCategories();
