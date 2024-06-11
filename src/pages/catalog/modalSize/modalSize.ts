@@ -5,6 +5,7 @@ import { cross } from "../../../components/svg";
 import { ClientResponse, ProductProjectionPagedSearchResponse, Cart } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "../../../api/api";
 import { SnackbarType } from "src/types/types";
+import { showQuantityItemsInHeader } from "../../../pages/basket/basketHandler";
 
 export function createModalSize(
   response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
@@ -62,8 +63,9 @@ export function createModalSize(
       const response = await getCart();
       const version = <number>response?.body.version;
       try {
-        await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+        const updateResponse = await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
         createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+        showQuantityItemsInHeader(updateResponse?.body);
       } catch {
         createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
       }
