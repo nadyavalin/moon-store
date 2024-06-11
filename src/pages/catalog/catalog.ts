@@ -2,7 +2,7 @@ import "./catalog.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
+import { ClientResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
@@ -12,8 +12,9 @@ import { Pages } from "../../types/types";
 import { createModalSize } from "./modalSize/modalSize";
 import { createPagination } from "./pagination/pagination";
 import createFilterSortButtons from "../../components/filter/filterView";
+import { productsPerPage } from "./pagination/constants";
 
-export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
+export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
   const response = await getCategories();
   const results = response?.body.results;
@@ -33,10 +34,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   if (id) {
     queryArgs["filter.query"] = `categories.id:"${id}"`;
   }
-  const productResponse = await getProducts(queryArgs);
 
-  const pagination = createPagination(productResponse?.body.total, productResponse?.body.offset);
-  const catalogMain = renderCatalogContent(productResponse, catalogList, pagination);
   const categories = renderCategories(response, slug);
 
   searchPanel.addEventListener("click", async (event) => {
@@ -45,14 +43,28 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
 
     if (target.classList.contains("search-button")) {
       queryArgs["text.ru"] = `${input.value}`;
-      const productResponse = await getProducts(queryArgs);
-      renderCatalogContent(productResponse, catalogList);
+      renderCatalogContent(catalogList, queryArgs);
     }
   });
 
+  catalogList.addEventListener("click", async (event) => {
+    const target = <HTMLUListElement>event.target;
+    if (target.classList.contains("card__button")) {
+      event.preventDefault();
+      const productId = target.getAttribute("data-id");
+      const response = await getProducts({ "filter.query": `id:"${productId}"` });
+      const modal = createModalSize(response);
+      document.body.append(modal);
+    }
+  });
+
+  const pagination = createPagination(response?.body.total, (pageNumber) =>
+    renderCatalogContent(catalogList, { offset: (pageNumber - 1) * productsPerPage }),
+  );
+
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
-  catalogMainPaginationWrapper.append(catalogMain, pagination);
+  catalogMainPaginationWrapper.append(catalogList, pagination);
   catalog.append(searchPanel, catalogWrapper);
 
   return catalog;
@@ -129,12 +141,10 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-export function renderCatalogContent(
-  response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
-  catalogList: HTMLUListElement,
-  pagination?: HTMLElement,
-) {
-  const items = response?.body.results;
+export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
+  const productResponse = await getProducts(queryArgs);
+  const items = productResponse?.body.results;
+  const productsTotal = productResponse?.body.total;
   if (items?.length === 0) {
     createSnackbar(SnackbarType.error, "Товары отсутствуют");
   } else {
@@ -144,29 +154,5 @@ export function renderCatalogContent(
       catalogList.append(card);
     });
   }
-
-  catalogList.addEventListener("click", async (event) => {
-    const target = <HTMLUListElement>event.target;
-    if (target.classList.contains("card__button")) {
-      event.preventDefault();
-      const productId = target.getAttribute("data-id");
-      const response = await getProducts({ "filter.query": `id:"${productId}"` });
-      const modal = createModalSize(response);
-      document.body.append(modal);
-    }
-  });
-
-  pagination?.addEventListener("click", async (event) => {
-    const target = <HTMLUListElement>event.target;
-    if (target.classList.contains("pagination-numbers")) {
-      const newOffset = (Number(target.textContent) - 1) * 8;
-      const response = await getProducts({ limit: 8, offset: newOffset });
-      catalogList.innerHTML = "";
-      response?.body.results.forEach((item) => {
-        const card = createCard(item);
-        catalogList.append(card);
-      });
-    }
-  });
-  return catalogList;
+  return productsTotal;
 }

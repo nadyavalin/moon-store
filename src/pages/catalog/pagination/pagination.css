@@ -1,4 +1,4 @@
-.pagination-wrapper {
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,13 +27,13 @@
   opacity: 0.2;
 }
 
-.pagination-numbers-wrapper {
+.pagination__numbers {
   display: flex;
   gap: 10px;
   cursor: pointer;
 }
 
-.pagination-numbers {
+.pagination__number {
   font-size: 22px;
   border: 1px solid var(--main-light);
   padding: 5px;
@@ -41,9 +41,10 @@
   transition: background-color 0.5s ease;
 }
 
-.pagination-numbers.active {
+.pagination__number.active {
   color: var(--main-black);
   background-color: var(--main-light);
+  pointer-events: none;
 }
 
 @media (hover: hover) {
@@ -56,7 +57,7 @@
     stroke: var(--dark-grey);
   }
 
-  .pagination-numbers:hover {
+  .pagination__number:hover {
     background-color: var(--card-hover);
   }
 }

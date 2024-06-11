@@ -10,7 +10,7 @@ import { header, main, footer } from "./pages/basePage/basePage";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
 import { render404PageContent } from "./pages/404/404";
-import { renderProductsFromApi } from "./pages/catalog/catalog";
+import { getCatalogPage } from "./pages/catalog/catalog";
 import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
@@ -62,7 +62,7 @@ async function renderContent(hash: string) {
         }
         break;
       case Pages.CATALOG:
-        await renderPageContent(() => renderProductsFromApi(args));
+        await renderPageContent(() => getCatalogPage(args));
         break;
       case Pages.PRODUCT:
         await renderPageContent(() => renderProductContent(args[0]));
