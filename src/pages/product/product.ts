@@ -1,13 +1,17 @@
 import "./product.css";
 import { PriceFormatter } from "../../utils/utils";
-import { createElement } from "../../components/elements";
-import { getProducts } from "../../api/api";
+import { createElement, createSnackbar } from "../../components/elements";
+import { getCart, getProducts, updateCart } from "../../api/api";
 import { createModalImage } from "./modal/modal";
 import { createSlider } from "../../components/slider/slider";
-import { ProductProjection } from "@commercetools/platform-sdk";
+import { ProductProjection, ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
+import { SnackbarType } from "src/types/types";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const response = await getProducts({ "filter.query": `slug.ru: "${slug}"` });
+  const cartResponse = await getCart();
+  const itemsInCart = cartResponse?.body.lineItems;
+
   const productWrapper = createElement({ tagName: "div", classNames: ["product__wrapper"] });
   const cardName = response?.body.results[0].name.ru;
   const cardDescription = response?.body.results[0].description?.ru;
@@ -36,7 +40,9 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     textContent: PriceFormatter.formatCents(cardPrices?.[0].discounted?.value.centAmount),
   });
 
-  const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button"], textContent: "Добавить в корзину" });
+  const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button", "inactive"], textContent: "Добавить в корзину" });
+  buyButton.disabled = true;
+  const deleteButton = createElement({ tagName: "button", classNames: ["product__delete-button"], textContent: "Удалить из корзины" });
 
   const productSlider = createSlider({
     className: "product-slider",
@@ -54,7 +60,13 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   productSizes?.forEach((variant) => {
     if (variant.attributes) {
       const sizeVariant = variant.attributes[0].value[0].key;
-      const sizeItem = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `${sizeVariant}` });
+      const sizeId = variant.id;
+      const sizeItem = createElement({
+        tagName: "button",
+        classNames: ["product__size-item"],
+        textContent: `${sizeVariant}`,
+        attributes: { "data-id": `${sizeId}` },
+      });
       size.append(sizeItem);
     }
   });
@@ -65,6 +77,26 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
   textWrapper.append(name, description, size, pricesWrapper);
   productTextButtonWrapper.append(textWrapper);
   productWrapper.append(productSlider, productTextButtonWrapper);
+
+  itemsInCart?.forEach((item) => {
+    if (response?.body.results[0].slug.ru === item?.productSlug?.ru) {
+      size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((sizeItem) => {
+        if (Number(sizeItem.getAttribute("data-id")) === item.variant.id) {
+          sizeItem.classList.add("active");
+          sizeItem.disabled = true;
+          buyButton.remove();
+          pricesWrapper.append(deleteButton);
+        } else {
+          sizeItem.disabled = true;
+          sizeItem.classList.add("inactive");
+        }
+      });
+    }
+  });
+
+  sizeButtonsHandler(size, buyButton);
+  addProductToCart(size, response, buyButton, pricesWrapper, deleteButton);
+  deleteProductFromCart(slug, deleteButton, pricesWrapper, buyButton, size);
 
   return productWrapper;
 }
@@ -77,3 +109,83 @@ export function createSliderImages(items: ProductProjection[]) {
     return sliderCard;
   });
 }
+
+const sizeButtonsHandler = (size: HTMLDivElement, buyButton: HTMLButtonElement) => {
+  size.addEventListener("click", (event) => {
+    const target = <HTMLButtonElement>event.target;
+    if (target.classList.contains("product__size-item") && !target.classList.contains("active")) {
+      size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
+        item.classList.remove("active");
+        item.disabled = true;
+        item.classList.add("inactive");
+      });
+      target.classList.remove("inactive");
+      target.classList.add("active");
+      target.disabled = false;
+      buyButton.disabled = false;
+      buyButton.classList.remove("inactive");
+    } else if (target.classList.contains("product__size-item") && target.classList.contains("active")) {
+      size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
+        item.classList.remove("inactive");
+        item.disabled = false;
+      });
+      target.classList.remove("active");
+      buyButton.disabled = true;
+      buyButton.classList.add("inactive");
+    }
+  });
+};
+
+const addProductToCart = (
+  size: HTMLDivElement,
+  response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
+  buyButton: HTMLButtonElement,
+  pricesWrapper: HTMLDivElement,
+  deleteButton: HTMLButtonElement,
+) => {
+  const productId = response?.body.results[0].id;
+  buyButton.addEventListener("click", async () => {
+    const cartResponse = await getCart();
+    const version = <number>cartResponse?.body.version;
+    const activeSize = <HTMLButtonElement>size.querySelector(".active");
+    const variantId = Number(activeSize?.getAttribute("data-id"));
+    try {
+      await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+      createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+    } catch {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
+    }
+    activeSize.disabled = true;
+    buyButton.remove();
+    pricesWrapper.append(deleteButton);
+  });
+};
+
+const deleteProductFromCart = (
+  slug: string,
+  deleteButton: HTMLButtonElement,
+  pricesWrapper: HTMLDivElement,
+  buyButton: HTMLButtonElement,
+  size: HTMLDivElement,
+) => {
+  deleteButton.addEventListener("click", async () => {
+    const cartResponse = await getCart();
+    const itemsInCart = cartResponse?.body.lineItems;
+    const item = itemsInCart?.find((product) => product?.productSlug?.ru === slug);
+    const lineItemId = <string>item?.id;
+    const version = <number>cartResponse?.body.version;
+    try {
+      await updateCart(version, [{ action: "removeLineItem", lineItemId: `${lineItemId}`, quantity: 1 }]);
+      createSnackbar(SnackbarType.success, "Товар удален!");
+    } catch {
+      createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
+    }
+    deleteButton.remove();
+    pricesWrapper.append(buyButton);
+    size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
+      item.disabled = false;
+      item.classList.remove("inactive");
+      item.classList.remove("active");
+    });
+  });
+};
