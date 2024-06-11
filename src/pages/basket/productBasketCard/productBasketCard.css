@@ -32,6 +32,23 @@
   gap: 8px;
 }
 
+.product-basket__amount-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-basket__size-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-basket__prices-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
 .product-basket__price-wrapper,
 .product-basket__discount-wrapper {
   display: flex;
@@ -90,7 +107,7 @@
 
   .product-basket__amount-sizes-wrapper {
     flex-direction: column;
-    gap: 8px;
+    gap: 25px;
   }
 }
 
