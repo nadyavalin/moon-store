@@ -53,7 +53,10 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
 
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
-  catalogMainPaginationWrapper.append(catalogList, pagination);
+  if (pagination) {
+    catalogMainPaginationWrapper.append(catalogList, pagination);
+  }
+
   catalog.append(searchPanel, catalogWrapper);
 
   return catalog;

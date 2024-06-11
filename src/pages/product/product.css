@@ -103,7 +103,8 @@
     width: 170px;
   }
 
-  .product__buy-button {
+  .product__buy-button,
+  .product__delete-button {
     width: 100%;
   }
 }
@@ -123,7 +124,8 @@
     justify-content: space-between;
   }
 
-  .product__buy-button {
+  .product__buy-button,
+  .product__delete-button {
     font-size: 12px;
   }
 }
