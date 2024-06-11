@@ -36,7 +36,7 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   const productResponse = await getProducts(queryArgs);
 
   const pagination = createPagination(productResponse?.body.total, productResponse?.body.offset);
-  const catalogMain = renderCatalogContent(productResponse, catalogList, pagination, productResponse?.body.offset);
+  const catalogMain = renderCatalogContent(productResponse, catalogList, pagination);
   const categories = renderCategories(response, slug);
 
   searchPanel.addEventListener("click", async (event) => {
@@ -133,7 +133,6 @@ export function renderCatalogContent(
   response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
   catalogList: HTMLUListElement,
   pagination?: HTMLElement,
-  offset?: number,
 ) {
   const items = response?.body.results;
   if (items?.length === 0) {

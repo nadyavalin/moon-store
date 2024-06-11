@@ -41,6 +41,11 @@
   transition: background-color 0.5s ease;
 }
 
+.pagination-numbers.active {
+  color: var(--main-black);
+  background-color: var(--main-light);
+}
+
 @media (hover: hover) {
   .pagination__arrow:hover {
     background-color: var(--main-light);
