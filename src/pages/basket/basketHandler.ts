@@ -33,16 +33,14 @@ export function increaseQuantityProduct(
         lineItemId,
         quantity,
       },
-    ])
-      ?.then((response) => {
-        if (response.statusCode === 200) {
-          countDiv.textContent = `${quantity}`;
-          totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
-          recalculateTotalDataCart(response.body);
-          showQuantityItemsInHeader(response.body);
-        }
-      })
-      .catch(() => createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже"));
+    ])?.then((response) => {
+      if (response.statusCode === 200) {
+        countDiv.textContent = `${quantity}`;
+        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
+        recalculateTotalDataCart(response.body);
+        showQuantityItemsInHeader(response.body);
+      }
+    });
   });
 }
 
@@ -68,16 +66,14 @@ export function decreaseQuantityProduct(
         lineItemId,
         quantity,
       },
-    ])
-      ?.then((response) => {
-        if (response.statusCode === 200) {
-          countDiv.textContent = `${quantity}`;
-          totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
-          recalculateTotalDataCart(response.body);
-          showQuantityItemsInHeader(response.body);
-        }
-      })
-      .catch(() => createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже"));
+    ])?.then((response) => {
+      if (response.statusCode === 200) {
+        countDiv.textContent = `${quantity}`;
+        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
+        recalculateTotalDataCart(response.body);
+        showQuantityItemsInHeader(response.body);
+      }
+    });
   });
 }
 
@@ -88,14 +84,12 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
         action: "removeLineItem",
         lineItemId,
       },
-    ])
-      ?.then((response) => {
-        if (response.statusCode === 200) {
-          productItemDiv.remove();
-          recalculateTotalDataCart(response.body);
-          showQuantityItemsInHeader(response.body);
-        }
-      })
-      .catch(() => createSnackbar(SnackbarType.error, "Что-то пошло не так...Попробуйте позже"));
+    ])?.then((response) => {
+      if (response.statusCode === 200) {
+        productItemDiv.remove();
+        recalculateTotalDataCart(response.body);
+        showQuantityItemsInHeader(response.body);
+      }
+    });
   });
 }
