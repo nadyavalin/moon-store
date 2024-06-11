@@ -32,6 +32,8 @@ export const createApiRoot = () => {
 
 export const cartHandler = async () => {
   if (state.refreshToken) {
+    const response = await getCart();
+    showQuantityItemsInHeader(response?.body);
     return;
   }
   if (!state.cartId) {
@@ -40,18 +42,19 @@ export const cartHandler = async () => {
     const anonymousId = response?.body.anonymousId;
     setItemToLocalStorage("cart-id", `${cartId}`);
     setItemToLocalStorage("anonymousId", anonymousId);
+    showQuantityItemsInHeader(response?.body);
     state.cartId = cartId;
     state.anonymousId = anonymousId;
   } else if (anonymousId !== state.anonymousId) {
     const response = await getCart();
     const version = response?.body.version as number;
-
     await updateCart(version, [
       {
         action: "setAnonymousId",
         anonymousId: `${anonymousId}`,
       },
     ]);
+    showQuantityItemsInHeader(response?.body);
   }
 };
 
