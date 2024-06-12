@@ -1,7 +1,7 @@
 import "./catalog.css";
 import "../../components/loader.css";
 import { createElement } from "../../components/elements";
-import { getProducts, getCategories } from "../../api/api";
+import { getProducts, getCategories, getCart } from "../../api/api";
 import { CategoryData } from "../../types/types";
 import { ClientResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
@@ -135,6 +135,7 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
 }
 
 export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
+  const cartResponse = await getCart();
   const loader = createElement({ tagName: "div", classNames: ["loader"] });
   try {
     catalogList.innerHTML = "";
@@ -148,7 +149,7 @@ export async function renderCatalogContent(catalogList: HTMLUListElement, queryA
     } else {
       catalogList.innerHTML = "";
       items?.forEach((item) => {
-        const card = createCard(item);
+        const card = createCard(item, cartResponse);
         catalogList.append(card);
       });
     }

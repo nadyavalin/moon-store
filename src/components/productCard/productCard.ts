@@ -1,18 +1,19 @@
 import "./productCard.css";
 import { createElement } from "../elements";
-import { ProductProjection } from "@commercetools/platform-sdk";
+import { ProductProjection, Cart, ClientResponse } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../../utils/utils";
 import { Pages } from "../../types/types";
 import { getCart, getProducts } from "../../api/api";
 import { createModalSize } from "../../pages/catalog/modalSize/modalSize";
 
-export function createCard(item: ProductProjection) {
+export function createCard(item: ProductProjection, cartResponse: ClientResponse<Cart> | undefined) {
   const name = item.name.ru;
   const images = item.masterVariant.images;
   const description = item.description?.ru;
   const prices = item.masterVariant.prices;
   const link = item.slug.ru;
   const id = item.id;
+  const itemsInCart = cartResponse?.body.lineItems;
 
   const card = createElement({ tagName: "li", classNames: ["slide", "card"] });
   card.setAttribute("data-id", `${id}`);
@@ -29,12 +30,18 @@ export function createCard(item: ProductProjection) {
     attributes: { "data-id": id },
   });
 
+  itemsInCart?.forEach((item) => {
+    if (id === item?.productId) {
+      cardButton.classList.add("card__button_disabled");
+    }
+  });
+
   cardButton.addEventListener("click", async (event) => {
     event.preventDefault();
     const productId = cardButton.getAttribute("data-id");
     const response = await getProducts({ "filter.query": `id:"${productId}"` });
     const cartResponse = await getCart();
-    const modal = createModalSize(response, cartResponse);
+    const modal = createModalSize(response, cartResponse, cardButton);
     document.body.append(modal);
   });
 
