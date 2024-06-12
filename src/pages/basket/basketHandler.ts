@@ -1,8 +1,6 @@
-import { Cart } from "@commercetools/platform-sdk";
-import { getCart, updateCart } from "src/api/api";
-import { correctFactorForPrices } from "src/api/constants";
-import { createSnackbar } from "src/components/elements";
-import { SnackbarType } from "src/types/types";
+import { Cart, CartUpdateAction } from "@commercetools/platform-sdk";
+import { getCart, updateCart } from "../../api/api";
+import { correctFactorForPrices } from "../../api/constants";
 
 function recalculateTotalDataCart(response?: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
@@ -87,6 +85,33 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
     ])?.then((response) => {
       if (response.statusCode === 200) {
         productItemDiv.remove();
+        recalculateTotalDataCart(response.body);
+        showQuantityItemsInHeader(response.body);
+      }
+    });
+  });
+}
+
+export function deletionConfirmation() {}
+
+export function resetCart() {
+  getCart()?.then((response) => {
+    response.body.lineItems.forEach((item, index) => {
+      const itemDiv = <HTMLElement>document.querySelectorAll(".product-list__wrapper")[index];
+      removeProduct(item.id, itemDiv);
+    });
+  });
+
+  getCart()?.then((response) => {
+    let actions: CartUpdateAction[] = [];
+    response.body.lineItems.forEach((item) => {
+      actions.push({ action: "removeLineItem", lineItemId: item.id });
+    });
+
+    updateCart(response.body.version, actions)?.then((response) => {
+      if (response.statusCode === 200) {
+        const arr = document.querySelectorAll(".product-list__wrapper");
+        arr.forEach((item) => item.remove());
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
       }
