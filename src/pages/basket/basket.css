@@ -16,12 +16,12 @@
   flex-direction: column;
   gap: 16px;
   width: 25%;
-  height: 150px;
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
   background-color: var(--dark-grey);
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   color: var(--main-light);
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 1120px) {

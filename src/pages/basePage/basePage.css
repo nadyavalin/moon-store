@@ -147,7 +147,7 @@ li {
   width: 80px;
   background-color: var(--main-light);
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .year-app {
