@@ -1,25 +1,29 @@
 import "./catalog.css";
+import "../../components/loader.css";
 import { createElement } from "../../components/elements";
-import { getProducts, getCategories } from "../../api/api";
+import { getProducts, getCategories, getCart } from "../../api/api";
 import { CategoryData } from "../../types/types";
-import { ClientResponse, ProductProjectionPagedSearchResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
+import { ClientResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
 import { cross } from "../../components/svg";
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
-import createFilterSortButtons from "../../components/filter/filterView";
 import { Pages } from "../../types/types";
+import { createPagination } from "./pagination/pagination";
+import { productsPerPage } from "./pagination/constants";
+import createFilterSortButtons from "../../components/filter/filterView";
 
-export async function renderProductsFromApi(args: string[]): Promise<HTMLElement> {
+export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
-  const response = await getCategories();
-  const results = response?.body.results;
+  const categoriesResponse = await getCategories();
+  const results = categoriesResponse?.body.results;
   const category = results?.find((category) => category.slug.ru === slug);
   const id = category?.id;
 
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
+  const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
 
   const filterSortButtons = createFilterSortButtons(id);
@@ -30,10 +34,9 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
   if (id) {
     queryArgs["filter.query"] = `categories.id:"${id}"`;
   }
-  const productResponse = await getProducts(queryArgs);
 
-  const catalogMain = renderCatalogContent(productResponse, catalogList);
-  const categories = renderCategories(response, slug);
+  const totalProducts = await renderCatalogContent(catalogList, queryArgs);
+  const categories = renderCategories(categoriesResponse, slug);
 
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
@@ -41,13 +44,20 @@ export async function renderProductsFromApi(args: string[]): Promise<HTMLElement
 
     if (target.classList.contains("search-button")) {
       queryArgs["text.ru"] = `${input.value}`;
-      const productResponse = await getProducts(queryArgs);
-      renderCatalogContent(productResponse, catalogList);
+      renderCatalogContent(catalogList, queryArgs);
     }
   });
 
+  const pagination = createPagination(totalProducts, (pageNumber) =>
+    renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
+  );
+
   sidePanel.append(filterSortButtons, categories);
-  catalogWrapper.append(sidePanel, catalogMain);
+  catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
+  if (pagination) {
+    catalogMainPaginationWrapper.append(catalogList, pagination);
+  }
+
   catalog.append(searchPanel, catalogWrapper);
 
   return catalog;
@@ -124,16 +134,30 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-function renderCatalogContent(response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined, catalogList: HTMLUListElement) {
-  const items = response?.body.results;
-  if (items?.length === 0) {
-    createSnackbar(SnackbarType.error, "Товары отсутствуют");
-  } else {
+export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
+  const cartResponse = await getCart();
+  const loader = createElement({ tagName: "div", classNames: ["loader"] });
+  try {
     catalogList.innerHTML = "";
-    items?.forEach((item) => {
-      const card = createCard(item);
-      catalogList.append(card);
-    });
+    catalogList.append(loader);
+    const productResponse = await getProducts(queryArgs);
+    const items = productResponse?.body.results;
+    const productsTotal = productResponse?.body.total;
+    if (items?.length === 0) {
+      catalogList.append("Товары отсутствуют!");
+      createSnackbar(SnackbarType.error, "Товары отсутствуют");
+    } else {
+      catalogList.innerHTML = "";
+      items?.forEach((item) => {
+        const card = createCard(item, cartResponse);
+        catalogList.append(card);
+      });
+    }
+    return productsTotal;
+  } catch (error) {
+    catalogList.append("Ошибка! Контент невозможно отобразить.");
+    createSnackbar(SnackbarType.error, "Контент невозможно отобразить");
+  } finally {
+    loader.remove();
   }
-  return catalogList;
 }
