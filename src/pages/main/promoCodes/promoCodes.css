@@ -7,6 +7,7 @@
   display: flex;
   gap: 5px;
   border-bottom: 1px solid var(--main-light);
+  background-color: var(--back-promo-code);
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   color: var(--main-light);
   border-radius: 8px;
