@@ -14,14 +14,33 @@
 .product-total__wrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 25px;
   width: 25%;
+  height: 140px;
   padding: 10px;
   border-bottom: 1px solid var(--main-light);
   background-color: var(--dark-grey);
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   color: var(--main-light);
   border-radius: 8px;
+}
+
+.product-total__text-wrapper,
+.product-amount__wrapper {
+  display: flex;
+  gap: 5px;
+}
+
+.basket__reset-btn {
+  max-width: 300px;
+}
+
+.modal-cart {
+  width: 350px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 1120px) {

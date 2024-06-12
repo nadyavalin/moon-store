@@ -1,8 +1,8 @@
-import { Cart } from "@commercetools/platform-sdk";
-import { getCart, updateCart } from "src/api/api";
-import { correctFactorForPrices } from "src/api/constants";
-import { createSnackbar } from "src/components/elements";
-import { SnackbarType } from "src/types/types";
+import { Cart, CartUpdateAction } from "@commercetools/platform-sdk";
+import { getCart, updateCart } from "../../api/api";
+import { correctFactorForPrices } from "../../api/constants";
+import { createElement, createSvgElement } from "src/components/elements";
+import { cross } from "src/components/svg";
 
 function recalculateTotalDataCart(response?: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
@@ -87,6 +87,42 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
     ])?.then((response) => {
       if (response.statusCode === 200) {
         productItemDiv.remove();
+        recalculateTotalDataCart(response.body);
+        showQuantityItemsInHeader(response.body);
+      }
+    });
+  });
+}
+
+export function createModalConfirm() {
+  const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
+  const modalCart = createElement({ tagName: "div", classNames: ["modal", "modal-cart"] });
+  const closeButton = createSvgElement(cross, "cross", { width: "22px", height: "22px", viewBox: "0 0 19 19", fill: "none" });
+  const modalText = createElement({ tagName: "div", classNames: ["modal-text"], textContent: "Вы уверены, что хотите очистить корзину?" });
+  const confirmButton = createElement({ tagName: "button", classNames: ["modal-confirm-btn"], textContent: "Подтвердить" });
+  modalCart.append(modalText, confirmButton, closeButton);
+  modalBack.append(modalCart);
+  closeButton.addEventListener("click", () => {
+    modalBack.remove();
+  });
+  confirmButton.addEventListener("click", () => {
+    resetCart();
+    modalBack.remove();
+  });
+  return modalBack;
+}
+
+export function resetCart() {
+  getCart()?.then((response) => {
+    let actions: CartUpdateAction[] = [];
+    response.body.lineItems.forEach((item) => {
+      actions.push({ action: "removeLineItem", lineItemId: item.id });
+    });
+
+    updateCart(response.body.version, actions)?.then((response) => {
+      if (response.statusCode === 200) {
+        const arr = document.querySelectorAll(".product-basket-item");
+        arr.forEach((item) => item.remove());
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
       }
