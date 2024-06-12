@@ -66,3 +66,13 @@
     background-color: var(--card-hover);
   }
 }
+
+@media (max-width: 450px) {
+  .pagination__items {
+    gap: 5px;
+  }
+
+  .pagination__item {
+    font-size: 12px;
+  }
+}

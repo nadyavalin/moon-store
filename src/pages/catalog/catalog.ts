@@ -1,4 +1,5 @@
 import "./catalog.css";
+import "../../components/loader.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories } from "../../api/api";
 import { CategoryData } from "../../types/types";
@@ -134,17 +135,28 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
 }
 
 export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
-  const productResponse = await getProducts(queryArgs);
-  const items = productResponse?.body.results;
-  const productsTotal = productResponse?.body.total;
-  if (items?.length === 0) {
-    createSnackbar(SnackbarType.error, "Товары отсутствуют");
-  } else {
+  const loader = createElement({ tagName: "div", classNames: ["loader"] });
+  try {
     catalogList.innerHTML = "";
-    items?.forEach((item) => {
-      const card = createCard(item);
-      catalogList.append(card);
-    });
+    catalogList.append(loader);
+    const productResponse = await getProducts(queryArgs);
+    const items = productResponse?.body.results;
+    const productsTotal = productResponse?.body.total;
+    if (items?.length === 0) {
+      catalogList.append("Товары отсутствуют!");
+      createSnackbar(SnackbarType.error, "Товары отсутствуют");
+    } else {
+      catalogList.innerHTML = "";
+      items?.forEach((item) => {
+        const card = createCard(item);
+        catalogList.append(card);
+      });
+    }
+    return productsTotal;
+  } catch (error) {
+    catalogList.append("Ошибка! Контент невозможно отобразить.");
+    createSnackbar(SnackbarType.error, "Контент невозможно отобразить");
+  } finally {
+    loader.remove();
   }
-  return productsTotal;
 }

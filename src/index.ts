@@ -3,7 +3,7 @@ import "./components/loader.css";
 import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
 
-import { Pages } from "./types/types";
+import { Pages, SnackbarType } from "./types/types";
 import { cartHandler, createApiRoot } from "./api/api";
 import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
@@ -14,7 +14,7 @@ import { getCatalogPage } from "./pages/catalog/catalog";
 import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
-import { createElement } from "./components/elements";
+import { createElement, createSnackbar } from "./components/elements";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
 
 document.body.append(header, main, footer);
@@ -39,6 +39,7 @@ export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) 
     contentDiv?.append(await renderFunc());
   } catch (error) {
     contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+    createSnackbar(SnackbarType.error, "Контент невозможно отобразить");
   } finally {
     loader.remove();
   }

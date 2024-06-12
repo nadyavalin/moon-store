@@ -48,11 +48,7 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
     onPageClick(pageNumber);
     paginationState.currentPage = pageNumber;
     paginationItems.forEach((element) => {
-      if (Number(element.dataset.index) === pageNumber) {
-        element.classList.add("pagination__item_active");
-      } else {
-        element.classList.remove("pagination__item_active");
-      }
+      element.classList.toggle("pagination__item_active", Number(element.dataset.index) === pageNumber);
     });
 
     paginationButtonLeft.classList.toggle("pagination__arrow_disabled", pageNumber === 1);
@@ -64,8 +60,7 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
     if (target.classList.contains("pagination__item")) {
       updatePagination(Number(target.dataset.index));
     } else if (target.classList.contains("pagination__arrow")) {
-      const direction = target.dataset.direction;
-      updatePagination(direction === "left" ? paginationState.currentPage - 1 : paginationState.currentPage + 1);
+      updatePagination(paginationState.currentPage - (target.dataset.direction === "left" ? 1 : -1));
     }
   });
 
