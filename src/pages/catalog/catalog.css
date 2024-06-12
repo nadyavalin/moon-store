@@ -33,12 +33,10 @@
 }
 
 .categories-wrapper {
-  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 20px;
-  flex-shrink: 0;
 }
 
 .subcategories-wrapper {
@@ -76,6 +74,14 @@
 
 .category-child::before {
   content: "\27A0";
+}
+
+.catalog-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  flex-shrink: 0;
 }
 
 .catalog-side__wrapper {
@@ -165,8 +171,12 @@
     -webkit-line-clamp: 3;
   }
 
-  .categories-wrapper {
-    padding: 5px;
+  .category-wrapper {
+    flex-direction: column;
+  }
+
+  .catalog-side {
+    padding: 10px;
   }
 
   .catalog-main {
@@ -181,10 +191,6 @@
 @media (max-width: 450px) {
   .catalog {
     gap: 10px;
-  }
-
-  .category-wrapper {
-    flex-direction: column;
   }
 
   .card__name,

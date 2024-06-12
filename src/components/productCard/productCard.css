@@ -72,6 +72,11 @@
   box-shadow: 2px 2px 30px var(--main-black);
 }
 
+.card__button_disabled {
+  background-color: var(--blue-disabled);
+  pointer-events: none;
+}
+
 @media (hover: hover) {
   .card:hover {
     background-color: var(--card-hover);
