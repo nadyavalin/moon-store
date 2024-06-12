@@ -1,0 +1,33 @@
+.modal-sizes {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  max-width: 310px;
+  max-height: 310px;
+  background-color: var(--back-modal-image);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.modal-sizes__content {
+  width: 290px;
+  height: 290px;
+  color: var(--text-dark);
+  background-color: var(--light-grey);
+  display: flex;
+  justify-content: center;
+}
+
+.modal-sizes .product__size-item {
+  color: var(--text-dark);
+  border: 1px solid var(--text-dark);
+}
+
+@media (hover: hover) {
+  .modal-sizes .product__size-item:hover {
+    color: var(--main-light);
+    background-color: var(--blue-hover);
+  }
+}
