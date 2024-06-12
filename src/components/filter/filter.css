@@ -20,8 +20,6 @@
   flex-direction: row;
   justify-content: end;
   gap: 10px;
-  margin-right: 20px;
-  margin-bottom: 20px;
 }
 
 .filter__heading,

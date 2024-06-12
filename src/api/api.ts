@@ -62,7 +62,7 @@ export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
   state.apiRoot
     ?.productProjections()
     .search()
-    .get({ queryArgs: { limit: 50, ...queryArgs } })
+    .get({ queryArgs: { limit: 8, offset: 0, ...queryArgs } })
     .execute();
 
 export const getCategories = () => state.apiRoot?.categories().get().execute();

@@ -1,20 +1,21 @@
 import "./index.css";
+import "./components/loader.css";
 import "./pages/basePage/basePage.css";
 import "./pages/404/404.css";
 
-import { Pages } from "./types/types";
+import { Pages, SnackbarType } from "./types/types";
 import { cartHandler, createApiRoot } from "./api/api";
 import { getMainPageContent } from "./pages/main/main";
 import { header, main, footer } from "./pages/basePage/basePage";
 import { renderBasketContent } from "./pages/basket/basket";
 import { renderAboutUsContent } from "./pages/about/about";
 import { render404PageContent } from "./pages/404/404";
-import { renderProductsFromApi } from "./pages/catalog/catalog";
+import { getCatalogPage } from "./pages/catalog/catalog";
 import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
+import { createElement, createSnackbar } from "./components/elements";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
-import { showQuantityItemsInHeader } from "./pages/basket/basketHandler";
 
 document.body.append(header, main, footer);
 
@@ -31,11 +32,16 @@ function setActiveLink(fragmentId: string) {
 }
 
 export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) => {
+  const loader = createElement({ tagName: "div", classNames: ["loader"] });
   const contentDiv = document.querySelector(".main");
   try {
+    contentDiv?.append(loader);
     contentDiv?.append(await renderFunc());
   } catch (error) {
     contentDiv?.append("Ошибка! Контент невозможно отобразить.");
+    createSnackbar(SnackbarType.error, "Контент невозможно отобразить");
+  } finally {
+    loader.remove();
   }
 };
 
@@ -57,7 +63,7 @@ async function renderContent(hash: string) {
         }
         break;
       case Pages.CATALOG:
-        await renderPageContent(() => renderProductsFromApi(args));
+        await renderPageContent(() => getCatalogPage(args));
         break;
       case Pages.PRODUCT:
         await renderPageContent(() => renderProductContent(args[0]));

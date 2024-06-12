@@ -10,6 +10,7 @@ import { showQuantityItemsInHeader } from "../../../pages/basket/basketHandler";
 export function createModalSize(
   response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
   cartResponse: ClientResponse<Cart> | undefined,
+  cardButton: HTMLButtonElement,
 ) {
   const productSizes = response?.body.results[0].variants;
   const productId = response?.body.results[0].id;
@@ -65,6 +66,7 @@ export function createModalSize(
       try {
         const updateResponse = await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
         createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+        cardButton.classList.add("card__button_disabled");
         showQuantityItemsInHeader(updateResponse?.body);
       } catch {
         createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");

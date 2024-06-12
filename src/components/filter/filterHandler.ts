@@ -1,5 +1,5 @@
 import { correctFactorForPrices } from "../../api/constants";
-import { getProducts } from "../../api/api";
+import { getCart, getProducts } from "../../api/api";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
@@ -7,7 +7,8 @@ import { QueryParam } from "@commercetools/platform-sdk";
 
 const queryArgs: Record<string, QueryParam> = {};
 
-export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
+export async function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
+  const cartResponse = await getCart();
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
   let arrFilter = [];
   if (categoryID) arrFilter.push(`categories.id:"${categoryID}"`);
@@ -27,7 +28,7 @@ export function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: st
     } else {
       catalogMain.innerHTML = "";
       items?.forEach((item) => {
-        const card = createCard(item);
+        const card = createCard(item, cartResponse);
         catalogMain.append(card);
       });
     }
@@ -72,14 +73,14 @@ export function resetSort(
   nameSortCheckbox.checked = false;
 }
 
-export function sortHandler(
+export async function sortHandler(
   priceIncreasingSortCheckbox: HTMLInputElement,
   priceDecreasingSortCheckbox: HTMLInputElement,
   nameSortCheckbox: HTMLInputElement,
   categoryID?: string,
 ) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
-
+  const cartResponse = await getCart();
   if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked && !nameSortCheckbox) return;
   if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;
   if (nameSortCheckbox.checked) queryArgs["sort"] = "name.ru asc";
@@ -90,7 +91,7 @@ export function sortHandler(
     const items = response?.body.results;
     catalogMain.innerHTML = "";
     items?.forEach((item) => {
-      const card = createCard(item);
+      const card = createCard(item, cartResponse);
       catalogMain.append(card);
     });
   });
