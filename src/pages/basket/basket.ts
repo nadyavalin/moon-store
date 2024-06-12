@@ -3,7 +3,7 @@ import { createElement } from "../../components/elements";
 import { createBasketCard } from "./productBasketCard/productBasketCard";
 import { getCart } from "../../api/api";
 import { correctFactorForPrices } from "../../api/constants";
-import { deletionConfirmation, resetCart, showQuantityItemsInHeader } from "./basketHandler";
+import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
 
 export async function renderBasketContent() {
   const response = await getCart();
@@ -31,7 +31,10 @@ export async function renderBasketContent() {
     textContent: `${totalQuantity}`,
   });
   const resetCartButton = createElement({ tagName: "button", classNames: ["basket__reset-btn"], textContent: "Очистить корзину" });
-  resetCartButton.addEventListener("click", resetCart);
+  resetCartButton.addEventListener("click", () => {
+    basketWrapper.append(createModalConfirm());
+  });
+
   response?.body.lineItems.forEach((item, index) => {
     productListWrapper.append(createBasketCard(index, response?.body));
   });

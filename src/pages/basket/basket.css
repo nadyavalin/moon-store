@@ -26,6 +26,14 @@
 .basket__reset-btn {
   max-width: 300px;
 }
+.modal-cart {
+  width: 350px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 @media screen and (max-width: 1120px) {
   .basket__wrapper {
     width: 100%;
