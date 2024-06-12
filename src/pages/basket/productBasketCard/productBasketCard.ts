@@ -15,7 +15,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const priceDiscountedItem = `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices}`;
   const priceTotalItem = `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices}`;
 
-  const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket-item"] });
+  const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket__item"] });
   const productBasketImage = createElement({
     tagName: "img",
     classNames: ["product-basket__image"],

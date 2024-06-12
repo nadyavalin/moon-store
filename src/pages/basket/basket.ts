@@ -35,6 +35,19 @@ export async function renderBasketContent() {
     basketWrapper.append(createModalConfirm());
   });
 
+  // ввод промо кода
+  const promoCodeWrapper = createElement({ tagName: "div", classNames: ["promo-code__basket-wrapper"] });
+  const promoCodeTitle = createElement({ tagName: "p", classNames: ["promo-code__title"], textContent: "Введите промокод:" });
+  const promoCodeInput = createElement({
+    tagName: "input",
+    classNames: ["promo-code__input"],
+    textContent: ` Введите промокод`,
+  });
+  const promoCodeButton = createElement({ tagName: "button", classNames: ["promo-code__button-apply"], textContent: "Применить" });
+
+  promoCodeWrapper.append(promoCodeTitle, promoCodeInput, promoCodeButton);
+  // ввод промо кода
+
   response?.body.lineItems.forEach((item, index) => {
     productListWrapper.append(createBasketCard(index, response?.body));
   });
@@ -42,7 +55,7 @@ export async function renderBasketContent() {
   productTotalWrapper.append(productTotalTextWrapper, productAmountTextWrapper, resetCartButton);
   productAmountTextWrapper.append(productAmountTitle, productFullAmount);
   productTotalTextWrapper.append(productTotalTitle, productTotalPrice);
-  basketWrapper.append(productListWrapper, productTotalWrapper);
+  basketWrapper.append(productListWrapper, promoCodeWrapper, productTotalWrapper);
   return basketWrapper;
 }
 

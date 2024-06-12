@@ -23,13 +23,13 @@ export function createPromoCodesBlock() {
   const promoCodePairTShirtImage = createElement({
     tagName: "img",
     classNames: ["promo-code__image"],
-    attributes: { src: "../../../../public/img/first-purchase.jpg", alt: "Ваш персональный промокод на первую покупку" },
+    attributes: { src: "../../../../public/img/first-purchase.jpg", alt: "Ваш промокод на первую покупку" },
   });
   const promoCodePairTShirtTextWrapper = createElement({ tagName: "div", classNames: ["promo-code__text-wrapper"] });
   const promoCodePairTShirtText = createElement({
     tagName: "p",
     classNames: ["promo-code__text"],
-    textContent: "Промокод на покупку парных футболок",
+    textContent: "Ваш промокод на покупку парных футболок",
   });
   const promoCodePairTShirtPercent = createElement({ tagName: "p", classNames: ["promo-code__percent"], textContent: "5%" });
   const promoCodePairTShirt = createElement({ tagName: "p", classNames: ["promo-code"], textContent: `pt2` });
