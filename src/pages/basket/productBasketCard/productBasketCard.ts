@@ -2,12 +2,24 @@ import "./productBasketCard.css";
 import "../../product/product.css";
 import { createElement } from "../../../components/elements";
 
-export function createBasketCard() {
+import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
+import { correctFactorForPrices } from "../../../api/constants";
+import { Cart } from "@commercetools/platform-sdk";
+
+export function createBasketCard(index: number, response?: Cart) {
+  const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
+  const nameItem = `${response?.lineItems[index].name.ru}`;
+  const quantityItem = `${response?.lineItems[index].quantity}`;
+  const sizeItem = `${response?.lineItems[index].variant.attributes![0].value[0].key}`;
+  const priceItem = `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices}`;
+  const priceDiscountedItem = `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices}`;
+  const priceTotalItem = `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices}`;
+
   const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket-item"] });
   const productBasketImage = createElement({
     tagName: "img",
     classNames: ["product-basket__image"],
-    attributes: { src: "../../../../public/img/img-1.png" },
+    attributes: { src: imgUrlItem },
   });
   const productBasketDeleteIconWrapper = createElement({
     tagName: "div",
@@ -17,7 +29,11 @@ export function createBasketCard() {
 
   const productBasketDeleteIcon = createElement({ tagName: "i", classNames: ["fa-solid", "fa-trash", "trash-button"] });
   const productBasketTextWrapper = createElement({ tagName: "div", classNames: ["product-basket__text-wrapper"] });
-  const productBasketName = createElement({ tagName: "p", classNames: ["product-basket__name"], textContent: `Название: Футболки "Лёд и пламя"` });
+  const productBasketName = createElement({
+    tagName: "p",
+    classNames: ["product-basket__name"],
+    textContent: `Название: ${nameItem}`,
+  });
 
   const productBasketAmountSizeWrapper = createElement({ tagName: "div", classNames: ["product-basket__amount-sizes-wrapper"] });
   const productBasketAmountWrapper = createElement({ tagName: "div", classNames: ["product-basket__amount-wrapper"] });
@@ -25,21 +41,37 @@ export function createBasketCard() {
   const productBasketAmountButtonsWrapper = createElement({ tagName: "div", classNames: ["product-basket__amount-buttons-wrapper"] });
 
   const productBasketPlusAmountButton = createElement({ tagName: "i", classNames: ["fa-solid", "fa-plus", "amount-button"] });
-  const productBasketAmount = createElement({ tagName: "p", classNames: ["product-basket__amount"], textContent: `2` });
+  const productBasketAmount = createElement({
+    tagName: "p",
+    classNames: ["product-basket__amount"],
+    textContent: `${quantityItem}`,
+  });
   const productBasketMinusAmountButton = createElement({ tagName: "i", classNames: ["fa-solid", "fa-minus", "amount-button"] });
 
   const productBasketSizeWrapper = createElement({ tagName: "div", classNames: ["product-basket__size-wrapper"] });
   const productBasketSizeText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Размер: " });
-  const productBasketSize = createElement({ tagName: "span", classNames: ["product__size-item"], textContent: `XL` });
+  const productBasketSize = createElement({
+    tagName: "span",
+    classNames: ["product__size-item"],
+    textContent: `${sizeItem}`,
+  });
 
   const productBasketPricesWrapper = createElement({ tagName: "div", classNames: ["product-basket__prices-wrapper"] });
   const productBasketPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__price-wrapper"] });
   const productBasketPriceText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Цена за единицу: " });
-  const productBasketPrice = createElement({ tagName: "p", classNames: ["product-basket__price"], textContent: `2000 р.` });
+  const productBasketPrice = createElement({
+    tagName: "p",
+    classNames: ["product-basket__price"],
+    textContent: `${priceItem} р.`,
+  });
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
   const productBasketDiscountText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Со скидкой: " });
-  const productBasketDiscount = createElement({ tagName: "p", classNames: ["product-basket__discount"], textContent: `1700 р.` });
+  const productBasketDiscount = createElement({
+    tagName: "p",
+    classNames: ["product-basket__discount"],
+    textContent: `${priceDiscountedItem} р.`,
+  });
 
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
   const productBasketFinalPriceText = createElement({
@@ -47,7 +79,11 @@ export function createBasketCard() {
     classNames: ["product-basket__small-text"],
     textContent: `Общая стоимость: `,
   });
-  const productBasketFinalPrice = createElement({ tagName: "p", classNames: ["product-basket__final-price"], textContent: `3400 р.` });
+  const productBasketFinalPrice = createElement({
+    tagName: "p",
+    classNames: ["product-basket__final-price"],
+    textContent: `${priceTotalItem} р.`,
+  });
 
   productBasketAmountButtonsWrapper.append(productBasketPlusAmountButton, productBasketAmount, productBasketMinusAmountButton);
   productBasketPricesWrapper.append(productBasketPriceWrapper, productBasketDiscountWrapper, productBasketFinalPriceWrapper);
@@ -60,5 +96,13 @@ export function createBasketCard() {
   productBasketTextWrapper.append(productBasketName, productBasketAmountSizeWrapper, productBasketPricesWrapper);
   productBasketDeleteIconWrapper.append(productBasketDeleteIcon);
   productBasketItem.append(productBasketImage, productBasketTextWrapper, productBasketDeleteIconWrapper);
+
+  productBasketPlusAmountButton.addEventListener("click", () =>
+    increaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+  );
+  productBasketMinusAmountButton.addEventListener("click", () =>
+    decreaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+  );
+  productBasketDeleteIcon.addEventListener("click", () => removeProduct(`${response?.lineItems[index].id}`, productBasketItem));
   return productBasketItem;
 }

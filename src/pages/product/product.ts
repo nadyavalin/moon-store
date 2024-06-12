@@ -6,6 +6,7 @@ import { createModalImage } from "./modal/modal";
 import { createSlider } from "../../components/slider/slider";
 import { ProductProjection, ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
 import { SnackbarType } from "src/types/types";
+import { showQuantityItemsInHeader } from "../basket/basketHandler";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {
   const response = await getProducts({ "filter.query": `slug.ru: "${slug}"` });
@@ -150,8 +151,9 @@ const addProductToCart = (
     const activeSize = <HTMLButtonElement>size.querySelector(".active");
     const variantId = Number(activeSize?.getAttribute("data-id"));
     try {
-      await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
+      const updateResponse = await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
       createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
+      showQuantityItemsInHeader(updateResponse?.body);
     } catch {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
     }
@@ -175,8 +177,9 @@ const deleteProductFromCart = (
     const lineItemId = <string>item?.id;
     const version = <number>cartResponse?.body.version;
     try {
-      await updateCart(version, [{ action: "removeLineItem", lineItemId: `${lineItemId}`, quantity: 1 }]);
+      const updateResponse = await updateCart(version, [{ action: "removeLineItem", lineItemId: `${lineItemId}`, quantity: 1 }]);
       createSnackbar(SnackbarType.success, "Товар удален!");
+      showQuantityItemsInHeader(updateResponse?.body);
     } catch {
       createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
     }

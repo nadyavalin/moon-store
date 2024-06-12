@@ -7,6 +7,7 @@ import {
   QueryParam,
   MyCartUpdateAction,
   CartUpdateAction,
+  Cart,
 } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
@@ -15,6 +16,7 @@ import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { Client } from "@commercetools/sdk-client-v2";
 import { setItemToLocalStorage } from "../utils/utils";
 import { anonymousId } from "./anonymousClientBuilder";
+import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
@@ -30,6 +32,8 @@ export const createApiRoot = () => {
 
 export const cartHandler = async () => {
   if (state.refreshToken) {
+    const response = await getCart();
+    showQuantityItemsInHeader(response?.body);
     return;
   }
   if (!state.cartId) {
@@ -38,6 +42,7 @@ export const cartHandler = async () => {
     const anonymousId = response?.body.anonymousId;
     setItemToLocalStorage("cart-id", `${cartId}`);
     setItemToLocalStorage("anonymousId", anonymousId);
+    showQuantityItemsInHeader(response?.body);
     state.cartId = cartId;
     state.anonymousId = anonymousId;
   } else if (anonymousId !== state.anonymousId) {
@@ -49,6 +54,7 @@ export const cartHandler = async () => {
         anonymousId: `${anonymousId}`,
       },
     ]);
+    showQuantityItemsInHeader(response?.body);
   }
 };
 

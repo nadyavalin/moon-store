@@ -14,8 +14,8 @@ import { getCatalogPage } from "./pages/catalog/catalog";
 import { renderProfileContent } from "./pages/profile/profileView";
 import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
-import renderLoginFormContent from "./pages/loginPage/loginPage";
 import { createElement } from "./components/elements";
+import renderLoginFormContent from "./pages/loginPage/loginPage";
 
 document.body.append(header, main, footer);
 
@@ -68,7 +68,7 @@ async function renderContent(hash: string) {
         await renderPageContent(() => renderProductContent(args[0]));
         break;
       case Pages.BASKET:
-        contentDiv.append(renderBasketContent());
+        await renderPageContent(renderBasketContent);
         break;
       case Pages.ABOUT:
         contentDiv.append(renderAboutUsContent());

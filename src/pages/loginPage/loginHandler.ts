@@ -13,6 +13,8 @@ import { state } from "../../store/state";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
+import { getCart } from "src/api/api";
+import { showQuantityItemsInHeader } from "../basket/basketHandler";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -40,7 +42,7 @@ class MyTokenCache implements TokenCache {
   }
 }
 
-export function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string, cartId?: string) {
+export async function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string, cartId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
     state.refreshToken = refreshToken;
@@ -53,6 +55,8 @@ export function changeAppAfterLogin(userName: string, refreshToken?: string, cus
   if (cartId) {
     state.cartId = cartId;
   }
+  const response = await getCart();
+  showQuantityItemsInHeader(response?.body);
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;
