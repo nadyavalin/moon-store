@@ -36,6 +36,9 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
       paginationNumber.classList.add("pagination__item_active");
       paginationButtonLeft.classList.add("pagination__arrow_disabled");
     }
+    if (totalPages === 1) {
+      paginationButtonRight.classList.add("pagination__arrow_disabled");
+    }
     paginationNumbersWrapper.append(paginationNumber);
   }
 
@@ -50,7 +53,6 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
     paginationItems.forEach((element) => {
       element.classList.toggle("pagination__item_active", Number(element.dataset.index) === pageNumber);
     });
-
     paginationButtonLeft.classList.toggle("pagination__arrow_disabled", pageNumber === 1);
     paginationButtonRight.classList.toggle("pagination__arrow_disabled", pageNumber === totalPages);
   }

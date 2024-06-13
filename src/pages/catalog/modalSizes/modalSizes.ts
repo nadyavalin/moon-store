@@ -1,11 +1,11 @@
-import "./modalSize.css";
-import "../../product/product.css";
+import "./modalSizes.css";
+import "../../product/modal/modal.css";
 import { createElement, createSnackbar, createSvgElement } from "../../../components/elements";
 import { cross } from "../../../components/svg";
 import { ClientResponse, ProductProjectionPagedSearchResponse, Cart } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "../../../api/api";
-import { SnackbarType } from "src/types/types";
-import { showQuantityItemsInHeader } from "../../../pages/basket/basketHandler";
+import { SnackbarType } from "../../../types/types";
+import { showQuantityItemsInHeader } from "../../basket/basketHandler";
 
 export function createModalSize(
   response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
@@ -16,8 +16,9 @@ export function createModalSize(
   const productId = response?.body.results[0].id;
   const itemsInCart = cartResponse?.body.lineItems;
 
-  const modalsizeBack = createElement({ tagName: "div", classNames: ["modal-back"] });
-  const modalSize = createElement({ tagName: "div", classNames: ["modal"] });
+  const modalSizesBack = createElement({ tagName: "div", classNames: ["modal-back"] });
+  const modalSizes = createElement({ tagName: "div", classNames: ["modal-sizes"] });
+  const modalSizesContent = createElement({ tagName: "div", classNames: ["modal-sizes__content"] });
   const closeButton = createSvgElement(cross, "cross", { width: "22px", height: "22px", viewBox: "0 0 19 19", fill: "none" });
   const size = createElement({ tagName: "div", classNames: ["product__size"], innerHTML: "<b>Размеры:</b> " });
 
@@ -49,15 +50,16 @@ export function createModalSize(
     }
   });
 
-  modalSize.append(size, closeButton);
-  modalsizeBack.append(modalSize);
+  modalSizesContent.append(size, closeButton);
+  modalSizes.append(modalSizesContent);
+  modalSizesBack.append(modalSizes);
 
   closeButton.addEventListener("click", () => {
-    modalsizeBack.remove();
+    modalSizesBack.remove();
   });
 
-  modalsizeBack.addEventListener("click", async (event) => {
-    modalsizeBack.remove();
+  modalSizesBack.addEventListener("click", async (event) => {
+    modalSizesBack.remove();
     const target = <HTMLButtonElement>event.target;
     if (target.classList.contains("product__size-item")) {
       const variantId = Number(target.getAttribute("data-id"));
@@ -67,11 +69,12 @@ export function createModalSize(
         const updateResponse = await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
         createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
         cardButton.classList.add("card__button_disabled");
+        cardButton.textContent = "В корзине";
         showQuantityItemsInHeader(updateResponse?.body);
       } catch {
         createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
       }
     }
   });
-  return modalsizeBack;
+  return modalSizesBack;
 }

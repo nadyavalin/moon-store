@@ -4,7 +4,7 @@ import { getCart, getProducts } from "../../api/api";
 import { createSlider } from "../../components/slider/slider";
 
 export async function getMainPageContent() {
-  const response = await getProducts();
+  const response = await getProducts({ limit: 20 });
   const cartResponse = await getCart();
   const slider = createSlider({
     className: "main-slider",
