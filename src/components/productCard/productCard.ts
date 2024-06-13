@@ -33,6 +33,7 @@ export function createCard(item: ProductProjection, cartResponse: ClientResponse
   itemsInCart?.forEach((item) => {
     if (id === item?.productId) {
       cardButton.classList.add("card__button_disabled");
+      cardButton.textContent = "В корзине";
     }
   });
 
