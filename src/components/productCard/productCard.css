@@ -51,7 +51,7 @@
   justify-content: space-between;
 }
 
-.card__price {
+.card__price-discount {
   text-decoration: line-through;
 }
 

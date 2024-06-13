@@ -111,3 +111,7 @@
     width: 200px;
   }
 }
+
+.product-basket__price-line {
+  text-decoration: line-through;
+}

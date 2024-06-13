@@ -32,7 +32,7 @@ export const menuItemUserProfile = createElement({
 });
 export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
 
-menuItemLogOut.addEventListener("click", () => {
+menuItemLogOut.addEventListener("click", async () => {
   const greeting = header.querySelector(".user-greeting");
   greeting?.remove();
   localStorage.clear();
@@ -47,7 +47,7 @@ menuItemLogOut.addEventListener("click", () => {
   menuItemLogOut.remove();
   menuItemUserProfile.remove();
   createApiRoot();
-  cartHandler();
+  await cartHandler();
   window.location.hash = Pages.MAIN;
 });
 

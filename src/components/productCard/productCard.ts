@@ -66,7 +66,11 @@ export function createCard(item: ProductProjection, cartResponse: ClientResponse
     textContent: PriceFormatter.formatCents(prices?.[0].discounted?.value.centAmount),
   });
 
-  cardPrices.append(price, discount);
+  if (prices?.[0].discounted?.value.centAmount) {
+    cardPrices.append(price, discount);
+    price.classList.add("card__price-discount");
+  }
+  cardPrices.append(price);
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
   cardLink.append(cardTextWrapper, cardBottom);

@@ -12,10 +12,10 @@ export function createBasketCard(index: number, response?: Cart) {
   const quantityItem = `${response?.lineItems[index].quantity}`;
   const sizeItem = `${response?.lineItems[index].variant.attributes![0].value[0].key}`;
   const priceItem = `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices}`;
-  const priceDiscountedItem = `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices}`;
-  const priceTotalItem = `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices}`;
+  const discountPrice = Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices;
+  const id = response?.lineItems[index].productType.id;
 
-  const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket__item"] });
+  const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket__item"], attributes: { "data-id": `${id}` } });
   const productBasketImage = createElement({
     tagName: "img",
     classNames: ["product-basket__image"],
@@ -67,10 +67,10 @@ export function createBasketCard(index: number, response?: Cart) {
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
   const productBasketDiscountText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Со скидкой: " });
-  const productBasketDiscount = createElement({
+  const productBasketDiscountValue = createElement({
     tagName: "p",
-    classNames: ["product-basket__discount"],
-    textContent: `${priceDiscountedItem} р.`,
+    classNames: ["product-basket__discount-value"],
+    textContent: `${discountPrice} р.`,
   });
 
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
@@ -82,8 +82,12 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketFinalPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__final-price"],
-    textContent: `${priceTotalItem} р.`,
   });
+
+  if (response?.lineItems[index].price.discounted) {
+    productBasketFinalPrice.textContent = `${Number(discountPrice) * Number(quantityItem)} р.`;
+  }
+  productBasketFinalPrice.textContent = `${Number(priceItem) * Number(quantityItem)} р.`;
 
   productBasketAmountButtonsWrapper.append(productBasketPlusAmountButton, productBasketAmount, productBasketMinusAmountButton);
   productBasketPricesWrapper.append(productBasketPriceWrapper, productBasketDiscountWrapper, productBasketFinalPriceWrapper);
@@ -91,7 +95,12 @@ export function createBasketCard(index: number, response?: Cart) {
   productBasketSizeWrapper.append(productBasketSizeText, productBasketSize);
   productBasketPriceWrapper.append(productBasketPriceText, productBasketPrice);
   productBasketFinalPriceWrapper.append(productBasketFinalPriceText, productBasketFinalPrice);
-  productBasketDiscountWrapper.append(productBasketDiscountText, productBasketDiscount);
+
+  if (response?.lineItems[index].price.discounted) {
+    productBasketDiscountWrapper.append(productBasketDiscountText, productBasketDiscountValue);
+  }
+  productBasketDiscountWrapper.append(productBasketDiscountText);
+
   productBasketAmountSizeWrapper.append(productBasketAmountWrapper, productBasketSizeWrapper);
   productBasketTextWrapper.append(productBasketName, productBasketAmountSizeWrapper, productBasketPricesWrapper);
   productBasketDeleteIconWrapper.append(productBasketDeleteIcon);
