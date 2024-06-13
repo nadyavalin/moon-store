@@ -69,6 +69,7 @@ export function createModalSize(
         const updateResponse = await updateCart(version, [{ action: "addLineItem", productId: `${productId}`, variantId, quantity: 1 }]);
         createSnackbar(SnackbarType.success, "Товар добавлен в корзину!");
         cardButton.classList.add("card__button_disabled");
+        cardButton.textContent = "В корзине";
         showQuantityItemsInHeader(updateResponse?.body);
       } catch {
         createSnackbar(SnackbarType.error, "Что-то пошло не так... Повторите попытку позднее");
