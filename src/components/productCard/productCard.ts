@@ -4,7 +4,7 @@ import { ProductProjection, Cart, ClientResponse } from "@commercetools/platform
 import { PriceFormatter } from "../../utils/utils";
 import { Pages } from "../../types/types";
 import { getCart, getProducts } from "../../api/api";
-import { createModalSize } from "../../pages/catalog/modalSize/modalSize";
+import { createModalSize } from "../../pages/catalog/modalSizes/modalSizes";
 
 export function createCard(item: ProductProjection, cartResponse: ClientResponse<Cart> | undefined) {
   const name = item.name.ru;
@@ -33,12 +33,16 @@ export function createCard(item: ProductProjection, cartResponse: ClientResponse
   itemsInCart?.forEach((item) => {
     if (id === item?.productId) {
       cardButton.classList.add("card__button_disabled");
-      // cardBottom.textContent = "Товар в корзине";
+      cardButton.textContent = "В корзине";
     }
   });
 
   cardButton.addEventListener("click", async (event) => {
     event.preventDefault();
+    event.stopPropagation();
+    if (cardButton.classList.contains("card__button_disabled")) {
+      return;
+    }
     const productId = cardButton.getAttribute("data-id");
     const response = await getProducts({ "filter.query": `id:"${productId}"` });
     const cartResponse = await getCart();
