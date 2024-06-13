@@ -65,6 +65,7 @@ button.menu-item {
 .login-link,
 .registration-link,
 .link-from-404,
+.cart-link,
 .menu-category {
   position: relative;
   text-decoration: none;
@@ -76,7 +77,8 @@ button.menu-item {
 .menu-item::after,
 .login-link::after,
 .registration-link::after,
-.link-from-404::after {
+.link-from-404::after,
+.cart-link::after {
   position: absolute;
   content: "";
   left: 50%;
@@ -230,14 +232,16 @@ button {
   .menu-item:hover,
   .login-link:hover,
   .registration-link:hover,
-  .link-from-404:hover {
+  .link-from-404:hover,
+  .cart-link:hover {
     color: var(--blue-hover);
   }
 
   .menu-item:hover::after,
   .login-link:hover::after,
   .registration-link:hover::after,
-  .link-from-404:hover::after {
+  .link-from-404:hover::after,
+  .cart-link:hover::after {
     width: 100%;
   }
 
