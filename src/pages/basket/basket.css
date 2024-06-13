@@ -43,11 +43,32 @@
   width: 200px;
 }
 
-.modal-cart {
+.basket__reset-btn {
+  max-width: 300px;
+}
+
+.modal-cart__content {
+  max-width: 350px;
   height: 100px;
   display: flex;
+  background-color: var(--main-light);
+  color: var(--text-dark);
   flex-direction: column;
   justify-content: space-between;
+  gap: 20px;
+  padding: 15px;
+}
+
+.cart-empty-message {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0 auto;
+  margin-top: 30px;
+  align-items: center;
+}
+.cart-empty-message i {
+  font-size: 3em;
 }
 
 .promo-code__input {

@@ -5,8 +5,8 @@ import { createSlider } from "../../components/slider/slider";
 import { createPromoCodesBlock } from "./promoCodes/promoCodes";
 import { createElement } from "src/components/elements";
 
-async function getSlider() {
-  const response = await getProducts();
+export async function getMainPageContent() {
+  const response = await getProducts({ limit: 20 });
   const cartResponse = await getCart();
   const slider = createSlider({
     className: "main-slider",
@@ -14,12 +14,5 @@ async function getSlider() {
     response,
     createSlides: (items) => items.map((item) => createCard(item, cartResponse)),
   });
-
   return slider;
-}
-
-export async function getMainPageContent() {
-  const mainContentWrapper = createElement({ tagName: "div", classNames: ["main-content__wrapper"] });
-  mainContentWrapper.append(createPromoCodesBlock(), await getSlider());
-  return mainContentWrapper;
 }

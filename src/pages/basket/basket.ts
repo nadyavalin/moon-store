@@ -4,23 +4,27 @@ import { createBasketCard } from "./productBasketCard/productBasketCard";
 import { getCart, getCartDiscount, getDiscount } from "../../api/api";
 import { correctFactorForPrices } from "../../api/constants";
 import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
+import { PriceFormatter } from "../../utils/utils";
+import { Pages } from "../../types/types";
 
 export async function renderBasketContent() {
   const response = await getCart();
   const totalQuantity = response?.body.lineItems.reduce((total, item) => total + Number(item.quantity), 0);
-  const totalPrice = Number(response?.body.totalPrice.centAmount) / correctFactorForPrices;
+  const totalPrice = PriceFormatter.formatCents(response?.body.totalPrice.centAmount);
   showQuantityItemsInHeader(response?.body);
   const basketWrapper = createElement({ tagName: "div", classNames: ["basket__wrapper"] });
-  if (response?.body.lineItems.length === 0) basketWrapper.textContent = "В корзине нет товаров";
+  if (response?.body.lineItems.length === 0) {
+    createEmptyCart(basketWrapper);
+    return basketWrapper;
+  }
   const productListWrapper = createElement({ tagName: "ul", classNames: ["product-list__wrapper"] });
   const productTotalWrapper = createElement({ tagName: "div", classNames: ["product-total__wrapper"] });
-
   const productTotalTextWrapper = createElement({ tagName: "div", classNames: ["product-total__text-wrapper"] });
   const productTotalTitle = createElement({ tagName: "p", classNames: ["product-total__title"], textContent: "Итого:" });
   const productTotalPrice = createElement({
     tagName: "p",
     classNames: ["product-total__price"],
-    textContent: ` ${totalPrice} p.`,
+    textContent: ` ${totalPrice}`,
   });
 
   const productAmountTextWrapper = createElement({ tagName: "div", classNames: ["product-amount__wrapper"] });
@@ -60,6 +64,29 @@ export async function renderBasketContent() {
   addDiscountPromo(promoCodeButton, promoCodeInput, productListWrapper, productTotalPrice);
 
   return basketWrapper;
+}
+
+export function createEmptyCart(basketWrapper: HTMLElement) {
+  const emptyCartMessage = createElement({
+    tagName: "div",
+    classNames: ["cart-empty-message"],
+  });
+  const textEmptyCart = createElement({
+    tagName: "div",
+    classNames: ["cart-empty-text"],
+    textContent: "В вашей корзине еще нет товаров...",
+  });
+  const linkToCatalog = createElement({
+    tagName: "a",
+    classNames: ["cart-link"],
+    innerHTML: `Вы можете выбрать товары в каталоге  <i class="fa-solid fa-cart-plus"></i>`,
+    attributes: {
+      href: `${Pages.CATALOG}`,
+    },
+  });
+  emptyCartMessage.append(textEmptyCart, linkToCatalog);
+  basketWrapper.innerHTML = "";
+  basketWrapper.appendChild(emptyCartMessage);
 }
 
 export default renderBasketContent;

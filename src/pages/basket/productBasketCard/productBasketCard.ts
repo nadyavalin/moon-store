@@ -1,19 +1,20 @@
 import "./productBasketCard.css";
 import "../../product/product.css";
 import { createElement } from "../../../components/elements";
-
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
-import { correctFactorForPrices } from "../../../api/constants";
 import { Cart } from "@commercetools/platform-sdk";
+import { PriceFormatter } from "../../../utils/utils";
 
 export function createBasketCard(index: number, response?: Cart) {
   const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
-  const nameItem = `${response?.lineItems[index].name.ru}`;
-  const quantityItem = `${response?.lineItems[index].quantity}`;
-  const sizeItem = `${response?.lineItems[index].variant.attributes![0].value[0].key}`;
-  const priceItem = `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices}`;
-  const discountPrice = Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices;
   const id = response?.lineItems[index].productType.id;
+  const nameItem = response?.lineItems[index].name.ru;
+  const quantityItem = response?.lineItems[index].quantity;
+  const sizeItem = response?.lineItems[index].variant.attributes![0].value[0].key;
+  const priceItem = PriceFormatter.formatCents(response?.lineItems[index].price.value.centAmount);
+  const priceDiscountedItem = response?.lineItems[index].price.discounted?.value.centAmount
+    ? PriceFormatter.formatCents(response?.lineItems[index].price.discounted?.value.centAmount)
+    : priceItem;
 
   const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket__item"], attributes: { "data-id": `${id}` } });
   const productBasketImage = createElement({
@@ -62,15 +63,15 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__price"],
-    textContent: `${priceItem} р.`,
+    textContent: `${priceItem}`,
   });
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
   const productBasketDiscountText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Со скидкой: " });
   const productBasketDiscountValue = createElement({
     tagName: "p",
-    classNames: ["product-basket__discount-value"],
-    textContent: `${discountPrice} р.`,
+    classNames: ["product-basket__discount"],
+    textContent: `${priceDiscountedItem}`,
   });
 
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
@@ -85,7 +86,7 @@ export function createBasketCard(index: number, response?: Cart) {
   });
 
   if (response?.lineItems[index].price.discounted) {
-    productBasketFinalPrice.textContent = `${Number(discountPrice) * Number(quantityItem)} р.`;
+    productBasketFinalPrice.textContent = `${Number(priceDiscountedItem) * Number(quantityItem)} р.`;
   }
   productBasketFinalPrice.textContent = `${Number(priceItem) * Number(quantityItem)} р.`;
 

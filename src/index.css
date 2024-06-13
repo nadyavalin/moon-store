@@ -21,7 +21,7 @@
   --accent-green: #4ad300;
   --card-grey: #333333;
   --card-hover: #484848;
-  --back-modal: rgba(30, 30, 30, 0.7);
+  --back-modal: rgba(30, 30, 30, 0.8);
   --back-modal-image: rgba(252, 255, 236, 0.2);
   --back-promo-code: #020413;
 }
@@ -66,6 +66,7 @@ button.menu-item {
 .login-link,
 .registration-link,
 .link-from-404,
+.cart-link,
 .menu-category {
   position: relative;
   text-decoration: none;
@@ -77,7 +78,8 @@ button.menu-item {
 .menu-item::after,
 .login-link::after,
 .registration-link::after,
-.link-from-404::after {
+.link-from-404::after,
+.cart-link::after {
   position: absolute;
   content: "";
   left: 50%;
@@ -231,14 +233,16 @@ button {
   .menu-item:hover,
   .login-link:hover,
   .registration-link:hover,
-  .link-from-404:hover {
+  .link-from-404:hover,
+  .cart-link:hover {
     color: var(--blue-hover);
   }
 
   .menu-item:hover::after,
   .login-link:hover::after,
   .registration-link:hover::after,
-  .link-from-404:hover::after {
+  .link-from-404:hover::after,
+  .cart-link:hover::after {
     width: 100%;
   }
 
