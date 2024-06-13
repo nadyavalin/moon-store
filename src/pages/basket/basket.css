@@ -26,12 +26,16 @@
 .basket__reset-btn {
   max-width: 300px;
 }
-.modal-cart {
-  width: 350px;
+.modal.modal-cart {
+  max-width: 350px;
   height: 100px;
   display: flex;
+  background-color: var(--main-light);
+  color: var(--text-dark);
   flex-direction: column;
   justify-content: space-between;
+  gap: 20px;
+  padding: 15px;
 }
 .cart-empty-message {
   display: flex;
