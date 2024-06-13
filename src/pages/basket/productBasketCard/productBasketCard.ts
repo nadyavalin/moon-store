@@ -3,7 +3,7 @@ import "../../product/product.css";
 import { createElement } from "../../../components/elements";
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
 import { Cart } from "@commercetools/platform-sdk";
-import { PriceFormatter } from "src/utils/utils";
+import { PriceFormatter } from "../../../utils/utils";
 
 export function createBasketCard(index: number, response?: Cart) {
   const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
