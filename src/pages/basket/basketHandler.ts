@@ -1,10 +1,9 @@
 import { Cart, CartUpdateAction } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "../../api/api";
-import { correctFactorForPrices } from "../../api/constants";
-import { createElement, createSnackbar, createSvgElement } from "src/components/elements";
-import { cross } from "src/components/svg";
-import { PriceFormatter } from "src/utils/utils";
-import { SnackbarType } from "src/types/types";
+import { createElement, createSnackbar, createSvgElement } from "../../components/elements";
+import { cross } from "../../components/svg";
+import { PriceFormatter } from "../../utils/utils";
+import { SnackbarType } from "../../types/types";
 import { createEmptyCart } from "./basket";
 
 function recalculateTotalDataCart(response?: Cart) {
@@ -104,11 +103,13 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
 
 export function createModalConfirm() {
   const modalBack = createElement({ tagName: "div", classNames: ["modal-back"] });
-  const modalCart = createElement({ tagName: "div", classNames: ["modal", "modal-cart"] });
+  const modalCart = createElement({ tagName: "div", classNames: ["modal"] });
+  const modalCartContent = createElement({ tagName: "div", classNames: ["modal-cart__content"] });
   const closeButton = createSvgElement(cross, "cross", { width: "22px", height: "22px", viewBox: "0 0 19 19", fill: "none" });
   const modalText = createElement({ tagName: "div", classNames: ["modal-text"], textContent: "Вы уверены, что хотите очистить корзину?" });
   const confirmButton = createElement({ tagName: "button", classNames: ["modal-confirm-btn"], textContent: "Подтвердить" });
-  modalCart.append(modalText, confirmButton, closeButton);
+  modalCart.append(modalCartContent);
+  modalCartContent.append(modalText, confirmButton, closeButton);
   modalBack.append(modalCart);
   closeButton.addEventListener("click", () => {
     modalBack.remove();
