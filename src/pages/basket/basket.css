@@ -33,6 +33,16 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.cart-empty-message {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+.cart-empty-message i {
+  font-size: 3em;
+}
 
 @media screen and (max-width: 1120px) {
   .basket__wrapper {

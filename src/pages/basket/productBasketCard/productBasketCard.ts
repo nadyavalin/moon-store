@@ -1,19 +1,20 @@
 import "./productBasketCard.css";
 import "../../product/product.css";
 import { createElement } from "../../../components/elements";
-
 import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
-import { correctFactorForPrices } from "../../../api/constants";
 import { Cart } from "@commercetools/platform-sdk";
+import { PriceFormatter } from "src/utils/utils";
 
 export function createBasketCard(index: number, response?: Cart) {
   const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
-  const nameItem = `${response?.lineItems[index].name.ru}`;
-  const quantityItem = `${response?.lineItems[index].quantity}`;
-  const sizeItem = `${response?.lineItems[index].variant.attributes![0].value[0].key}`;
-  const priceItem = `${Number(response?.lineItems[index].price.value.centAmount) / correctFactorForPrices}`;
-  const priceDiscountedItem = `${Number(response?.lineItems[index].price.discounted?.value.centAmount) / correctFactorForPrices}`;
-  const priceTotalItem = `${Number(response?.lineItems[index].totalPrice.centAmount) / correctFactorForPrices}`;
+  const nameItem = response?.lineItems[index].name.ru;
+  const quantityItem = response?.lineItems[index].quantity;
+  const sizeItem = response?.lineItems[index].variant.attributes![0].value[0].key;
+  const priceItem = PriceFormatter.formatCents(response?.lineItems[index].price.value.centAmount);
+  const priceDiscountedItem = response?.lineItems[index].price.discounted?.value.centAmount
+    ? PriceFormatter.formatCents(response?.lineItems[index].price.discounted?.value.centAmount)
+    : priceItem;
+  const priceTotalItem = PriceFormatter.formatCents(response?.lineItems[index].totalPrice.centAmount);
 
   const productBasketItem = createElement({ tagName: "li", classNames: ["product-basket-item"] });
   const productBasketImage = createElement({
@@ -62,7 +63,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__price"],
-    textContent: `${priceItem} р.`,
+    textContent: `${priceItem}`,
   });
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
@@ -70,7 +71,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketDiscount = createElement({
     tagName: "p",
     classNames: ["product-basket__discount"],
-    textContent: `${priceDiscountedItem} р.`,
+    textContent: `${priceDiscountedItem}`,
   });
 
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
@@ -82,7 +83,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketFinalPrice = createElement({
     tagName: "p",
     classNames: ["product-basket__final-price"],
-    textContent: `${priceTotalItem} р.`,
+    textContent: `${priceTotalItem}`,
   });
 
   productBasketAmountButtonsWrapper.append(productBasketPlusAmountButton, productBasketAmount, productBasketMinusAmountButton);

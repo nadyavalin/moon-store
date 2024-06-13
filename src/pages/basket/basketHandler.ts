@@ -1,14 +1,17 @@
 import { Cart, CartUpdateAction } from "@commercetools/platform-sdk";
 import { getCart, updateCart } from "../../api/api";
 import { correctFactorForPrices } from "../../api/constants";
-import { createElement, createSvgElement } from "src/components/elements";
+import { createElement, createSnackbar, createSvgElement } from "src/components/elements";
 import { cross } from "src/components/svg";
+import { PriceFormatter } from "src/utils/utils";
+import { SnackbarType } from "src/types/types";
+import { createEmptyCart } from "./basket";
 
 function recalculateTotalDataCart(response?: Cart) {
   const totalPriceCartDiv = document.querySelector(".product-total__price");
   const totalQuantityDiv = document.querySelector(".product-amount__full-amount");
   if (totalQuantityDiv) totalQuantityDiv.textContent = `${response?.lineItems.reduce((total, item) => total + Number(item.quantity), 0)}`;
-  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${Number(response?.totalPrice.centAmount) / correctFactorForPrices} р.`;
+  if (totalPriceCartDiv) totalPriceCartDiv.textContent = `${PriceFormatter.formatCents(response?.totalPrice.centAmount)}`;
 }
 
 export function showQuantityItemsInHeader(response?: Cart) {
@@ -36,7 +39,7 @@ export function increaseQuantityProduct(
     ])?.then((response) => {
       if (response.statusCode === 200) {
         countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
+        totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[+lineItemIndex].totalPrice.centAmount)}`;
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
       }
@@ -69,7 +72,7 @@ export function decreaseQuantityProduct(
     ])?.then((response) => {
       if (response.statusCode === 200) {
         countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${Number(response.body.lineItems[+lineItemIndex].totalPrice.centAmount) / correctFactorForPrices} р.`;
+        totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[+lineItemIndex].totalPrice.centAmount)}`;
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
       }
@@ -86,9 +89,14 @@ export function removeProduct(lineItemId: string, productItemDiv: HTMLElement) {
       },
     ])?.then((response) => {
       if (response.statusCode === 200) {
+        createSnackbar(SnackbarType.success, "Товар удален");
         productItemDiv.remove();
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
+        if (!response.body.lineItems.length) {
+          createEmptyCart(document.querySelector(".basket__wrapper") as HTMLElement);
+          document.querySelector(".product-total__wrapper")?.remove();
+        }
       }
     });
   });
@@ -125,6 +133,9 @@ export function resetCart() {
         arr.forEach((item) => item.remove());
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
+        createSnackbar(SnackbarType.success, "Товары удалены из корзины");
+        createEmptyCart(document.querySelector(".basket__wrapper") as HTMLElement);
+        document.querySelector(".product-total__wrapper")?.remove();
       }
     });
   });
