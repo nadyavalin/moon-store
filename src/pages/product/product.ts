@@ -191,6 +191,8 @@ const deleteProductFromCart = (
     }
     deleteButton.remove();
     pricesWrapper.append(buyButton);
+    buyButton.classList.add("inactive");
+    buyButton.disabled = true;
     size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
       item.disabled = false;
       item.classList.remove("inactive");

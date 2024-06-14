@@ -1,4 +1,4 @@
-import { getDiscounts } from "src/api/api";
+import { getDiscounts } from "../../../api/api";
 import { createElement } from "../../../components/elements";
 import "./promoCodes.css";
 

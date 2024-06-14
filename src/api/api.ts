@@ -140,12 +140,6 @@ export const changePassword = (id: string, version: number, currentPassword: str
     })
     .execute();
 
-// export const getDiscount = (id: string) =>
-//   state.apiRoot
-//     ?.discountCodes()
-//     .get({ queryArgs: { where: `code = "${id}"` } })
-//     .execute();
-
 export const getDiscounts = () => state.apiRoot?.discountCodes().get().execute();
 
 export const addDiscountAction = (version: number, actions: CartAddDiscountCodeAction[]) =>

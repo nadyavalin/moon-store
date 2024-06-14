@@ -136,3 +136,8 @@
 .product-basket__price-line {
   text-decoration: line-through;
 }
+
+.promo-code__button-apply.inactive {
+  background-color: var(--blue-disabled);
+  pointer-events: none;
+}
