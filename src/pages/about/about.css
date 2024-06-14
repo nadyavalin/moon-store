@@ -1,5 +1,6 @@
 .about-us-wrapper {
   background-image: url("../../../public/img/about-us-fon.jpg");
+  background-attachment: fixed;
   background-size: cover;
   display: flex;
   flex-direction: column;

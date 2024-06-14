@@ -48,8 +48,13 @@
   margin-top: 30px;
   align-items: center;
 }
+
 .cart-empty-message i {
   font-size: 3em;
+}
+
+.poor-moon-image {
+  width: 250px;
 }
 
 @media screen and (max-width: 1120px) {

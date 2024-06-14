@@ -57,7 +57,7 @@ export function createEmptyCart(basketWrapper: HTMLElement) {
   const textEmptyCart = createElement({
     tagName: "div",
     classNames: ["cart-empty-text"],
-    textContent: "В вашей корзине еще нет товаров...",
+    textContent: "В вашей корзине еще нет товаров... Она грустит :(",
   });
   const linkToCatalog = createElement({
     tagName: "a",
@@ -67,7 +67,12 @@ export function createEmptyCart(basketWrapper: HTMLElement) {
       href: `${Pages.CATALOG}`,
     },
   });
-  emptyCartMessage.append(textEmptyCart, linkToCatalog);
+  const poorMoonImage = createElement({
+    tagName: "img",
+    classNames: ["poor-moon-image"],
+    attributes: { src: "../../public/img/poor-moon.jpg", alt: "Фото грустящей луны" },
+  });
+  emptyCartMessage.append(textEmptyCart, linkToCatalog, poorMoonImage);
   basketWrapper.innerHTML = "";
   basketWrapper.appendChild(emptyCartMessage);
 }
