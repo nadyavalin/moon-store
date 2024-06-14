@@ -1,7 +1,7 @@
 import "./basket.css";
 import { createElement } from "../../components/elements";
 import { createBasketCard } from "./productBasketCard/productBasketCard";
-import { getCart, getCartDiscount, getDiscount } from "../../api/api";
+import { addDiscountAction, getCart } from "../../api/api";
 import { correctFactorForPrices } from "../../api/constants";
 import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
 import { PriceFormatter } from "../../utils/utils";
@@ -61,7 +61,7 @@ export async function renderBasketContent() {
   productTotalTextWrapper.append(productTotalTitle, productTotalPrice);
   basketWrapper.append(productListWrapper, promoCodeWrapper, productTotalWrapper);
 
-  addDiscountPromo(promoCodeButton, promoCodeInput, productListWrapper, productTotalPrice);
+  addDiscountPromo(promoCodeButton, promoCodeInput, productListWrapper);
 
   return basketWrapper;
 }
@@ -91,50 +91,15 @@ export function createEmptyCart(basketWrapper: HTMLElement) {
 
 export default renderBasketContent;
 
-const addDiscountPromo = (
-  promoCodeButton: HTMLButtonElement,
-  promoCodeInput: HTMLInputElement,
-  productListWrapper: HTMLUListElement,
-  productTotalPrice: HTMLDivElement,
-) => {
+const addDiscountPromo = (promoCodeButton: HTMLButtonElement, promoCodeInput: HTMLInputElement, productListWrapper: HTMLUListElement) => {
   promoCodeButton.addEventListener("click", async () => {
-    if (productListWrapper.querySelectorAll(".product-basket__discount")) {
-      productListWrapper.querySelectorAll(".product-basket__discount").forEach((item) => item.remove());
-    }
-    const id = promoCodeInput.value;
-    const response = await getDiscount(id);
-    const cartId = <string>response?.body.results[0].cartDiscounts[0].id;
-    const cartDiscountResponse = await getCartDiscount(cartId);
-    const discountValue = cartDiscountResponse?.body.value;
-    const type = discountValue?.type;
-    let permyriad: number | undefined;
-    if (type === "relative") {
-      permyriad = discountValue?.permyriad;
-    }
-    const references = cartDiscountResponse?.body.references;
-    const productTypeId = references?.find((item) => item.typeId === "product-type");
-
-    productListWrapper.querySelectorAll(".product-basket__item").forEach((product) => {
-      if (product.getAttribute("data-id") === productTypeId?.id) {
-        if (permyriad) {
-          const productBasketDiscount = createElement({
-            tagName: "p",
-            classNames: ["product-basket__discount"],
-          });
-          const price = parseInt(product.querySelector(".product-basket__price")?.textContent as string);
-          productBasketDiscount.textContent = `${String(price - ((permyriad / correctFactorForPrices) * price) / 100)} р.`;
-          product.querySelector(".product-basket__discount-wrapper")?.append(productBasketDiscount);
-          const finalPrice = product.querySelector(".product-basket__final-price");
-          const quantity = product.querySelector(".product-basket__amount")?.textContent;
-          if (finalPrice) {
-            finalPrice.textContent = `${parseInt(productBasketDiscount.textContent) * Number(quantity)} р.`;
-          }
-          product.querySelector(".product-basket__price")?.classList.add("product-basket__price-line");
-        }
-      }
+    productListWrapper.querySelectorAll(".product-basket__item")?.forEach((item) => item.remove());
+    const cart = await getCart();
+    const version = <number>cart?.body.version;
+    await addDiscountAction(version, [{ action: "addDiscountCode", code: `${promoCodeInput.value}` }]);
+    const response = await getCart();
+    response?.body.lineItems.forEach((item, index) => {
+      productListWrapper.append(createBasketCard(index, response?.body));
     });
-    const arrayOfPrices = Array.from(productListWrapper.querySelectorAll(".product-basket__discount")).map((item) => parseInt(item.textContent!));
-    const totalPriceAfterDIscount = arrayOfPrices.reduce((prev, cur) => prev + cur);
-    productTotalPrice.textContent = `${totalPriceAfterDIscount} р.`;
   });
 };

@@ -1,43 +1,31 @@
+import { getDiscounts } from "src/api/api";
 import { createElement } from "../../../components/elements";
 import "./promoCodes.css";
 
-export function createPromoCodesBlock() {
+export async function createPromoCodesBlock() {
+  const response = await getDiscounts();
+  console.log(response);
+  const quantity = response?.body.results;
   const promoCodesWrapper = createElement({ tagName: "div", classNames: ["promo-codes__wrapper"] });
-  const promoCodeForFirstPurchaseWrapper = createElement({ tagName: "div", classNames: ["promo-code__wrapper"] });
-  const promoCodeForPairTShirtsWrapper = createElement({ tagName: "div", classNames: ["promo-code__wrapper"] });
 
-  const promoCodeFirstPurchaseImage = createElement({
-    tagName: "img",
-    classNames: ["promo-code__image"],
-    attributes: { src: "../../../../public/img/first-purchase.jpg", alt: "Ваш персональный промокод на первую покупку" },
-  });
-  const promoCodeFirstPurchaseTextWrapper = createElement({ tagName: "div", classNames: ["promo-code__text-wrapper"] });
-  const promoCodeFirstPurchaseText = createElement({
-    tagName: "p",
-    classNames: ["promo-code__text"],
-    textContent: "Ваш промо код на первую покупку",
-  });
-  const promoCodeFirstPurchasePercent = createElement({ tagName: "p", classNames: ["promo-code__percent"], textContent: "5%" });
-  const promoCodeFirstPurchase = createElement({ tagName: "p", classNames: ["promo-code"], textContent: `fp1` });
+  quantity?.forEach((item) => {
+    const promoCodeForPurchaseWrapper = createElement({ tagName: "div", classNames: ["promo-code__wrapper"] });
+    const promoCodePurchaseTextWrapper = createElement({ tagName: "div", classNames: ["promo-code__text-wrapper"] });
+    const promoCodePurchaseText = createElement({
+      tagName: "p",
+      classNames: ["promo-code__text"],
+      textContent: `${item.description?.ru}`,
+    });
+    const promoCodePurchase = createElement({ tagName: "p", classNames: ["promo-code"], textContent: `${item.code}` });
+    const promoCodeImage = createElement({
+      tagName: "img",
+      classNames: ["promo-code__image"],
+      attributes: { src: "../../../../public/img/first-purchase.jpg", alt: `${item.description?.ru}` },
+    });
 
-  const promoCodePairTShirtImage = createElement({
-    tagName: "img",
-    classNames: ["promo-code__image"],
-    attributes: { src: "../../../../public/img/first-purchase.jpg", alt: "Ваш промокод на первую покупку" },
+    promoCodePurchaseTextWrapper.append(promoCodePurchaseText, promoCodePurchase);
+    promoCodeForPurchaseWrapper.append(promoCodePurchaseTextWrapper, promoCodeImage);
+    promoCodesWrapper.append(promoCodeForPurchaseWrapper);
   });
-  const promoCodePairTShirtTextWrapper = createElement({ tagName: "div", classNames: ["promo-code__text-wrapper"] });
-  const promoCodePairTShirtText = createElement({
-    tagName: "p",
-    classNames: ["promo-code__text"],
-    textContent: "Ваш промокод на покупку парных футболок",
-  });
-  const promoCodePairTShirtPercent = createElement({ tagName: "p", classNames: ["promo-code__percent"], textContent: "5%" });
-  const promoCodePairTShirt = createElement({ tagName: "p", classNames: ["promo-code"], textContent: `pt2` });
-
-  promoCodeFirstPurchaseTextWrapper.append(promoCodeFirstPurchaseText, promoCodeFirstPurchasePercent, promoCodeFirstPurchase);
-  promoCodeForFirstPurchaseWrapper.append(promoCodeFirstPurchaseTextWrapper, promoCodeFirstPurchaseImage);
-  promoCodeForPairTShirtsWrapper.append(promoCodePairTShirtTextWrapper, promoCodePairTShirtImage);
-  promoCodePairTShirtTextWrapper.append(promoCodePairTShirtText, promoCodePairTShirtPercent, promoCodePairTShirt);
-  promoCodesWrapper.append(promoCodeForFirstPurchaseWrapper, promoCodeForPairTShirtsWrapper);
   return promoCodesWrapper;
 }

@@ -7,11 +7,12 @@ import { PriceFormatter } from "../../../utils/utils";
 
 export function createBasketCard(index: number, response?: Cart) {
   const imgUrlItem = `${response?.lineItems[index].variant.images![0].url}`;
-  const id = response?.lineItems[index].productType.id;
+  const id = response?.lineItems[index].id;
   const nameItem = response?.lineItems[index].name.ru;
   const quantityItem = response?.lineItems[index].quantity;
   const sizeItem = response?.lineItems[index].variant.attributes![0].value[0].key;
   const priceItem = PriceFormatter.formatCents(response?.lineItems[index].price.value.centAmount);
+
   const priceDiscountedItem = response?.lineItems[index].price.discounted?.value.centAmount
     ? PriceFormatter.formatCents(response?.lineItems[index].price.discounted?.value.centAmount)
     : priceItem;
@@ -67,13 +68,11 @@ export function createBasketCard(index: number, response?: Cart) {
   });
 
   const productBasketDiscountWrapper = createElement({ tagName: "div", classNames: ["product-basket__discount-wrapper"] });
-  const productBasketDiscountText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Со скидкой: " });
+  const productBasketDiscountText = createElement({ tagName: "p", classNames: ["product-basket__small-text"] });
   const productBasketDiscountValue = createElement({
     tagName: "p",
     classNames: ["product-basket__discount"],
-    textContent: `${priceDiscountedItem}`,
   });
-
   const productBasketFinalPriceWrapper = createElement({ tagName: "div", classNames: ["product-basket__final-price-wrapper"] });
   const productBasketFinalPriceText = createElement({
     tagName: "p",
@@ -85,10 +84,16 @@ export function createBasketCard(index: number, response?: Cart) {
     classNames: ["product-basket__final-price"],
   });
 
-  if (response?.lineItems[index].price.discounted) {
-    productBasketFinalPrice.textContent = `${Number(priceDiscountedItem) * Number(quantityItem)} р.`;
+  if (response?.lineItems[index].discountedPricePerQuantity.length !== 0) {
+    const discount = PriceFormatter.formatCents(response?.lineItems[index].discountedPricePerQuantity[0].discountedPrice.value.centAmount);
+    productBasketDiscountValue.textContent = `${discount}`;
+    productBasketFinalPrice.textContent = `${discount}`;
+    productBasketDiscountText.textContent = "Со скидкой: ";
+  } else {
+    productBasketDiscountValue.textContent = `${priceDiscountedItem}`;
+    productBasketFinalPrice.textContent = `${priceDiscountedItem}`;
+    productBasketDiscountText.textContent = "Скидки нет";
   }
-  productBasketFinalPrice.textContent = `${Number(priceItem) * Number(quantityItem)} р.`;
 
   productBasketAmountButtonsWrapper.append(productBasketPlusAmountButton, productBasketAmount, productBasketMinusAmountButton);
   productBasketPricesWrapper.append(productBasketPriceWrapper, productBasketDiscountWrapper, productBasketFinalPriceWrapper);
@@ -97,10 +102,7 @@ export function createBasketCard(index: number, response?: Cart) {
   productBasketPriceWrapper.append(productBasketPriceText, productBasketPrice);
   productBasketFinalPriceWrapper.append(productBasketFinalPriceText, productBasketFinalPrice);
 
-  if (response?.lineItems[index].price.discounted) {
-    productBasketDiscountWrapper.append(productBasketDiscountText, productBasketDiscountValue);
-  }
-  productBasketDiscountWrapper.append(productBasketDiscountText);
+  productBasketDiscountWrapper.append(productBasketDiscountText, productBasketDiscountValue);
 
   productBasketAmountSizeWrapper.append(productBasketAmountWrapper, productBasketSizeWrapper);
   productBasketTextWrapper.append(productBasketName, productBasketAmountSizeWrapper, productBasketPricesWrapper);

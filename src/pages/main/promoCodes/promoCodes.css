@@ -22,6 +22,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   width: 248px;
