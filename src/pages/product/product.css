@@ -40,10 +40,6 @@
   font-weight: 600;
 }
 
-.product__price {
-  text-decoration: line-through;
-}
-
 .discount-text {
   color: var(--accent-red);
 }
@@ -160,4 +156,9 @@
 .product__size-item.active {
   background-color: var(--accent-blue);
   color: var(--main-light);
+}
+
+.product__buy-button.inactive {
+  background-color: var(--blue-disabled);
+  pointer-events: none;
 }

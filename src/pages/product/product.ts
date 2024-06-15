@@ -34,12 +34,18 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     textContent: PriceFormatter.formatCents(cardPrices?.[0].value.centAmount),
   });
   const discountWrapper = createElement({ tagName: "div", classNames: ["discount__wrapper"] });
-  const discountText = createElement({ tagName: "p", classNames: ["discount-text"], textContent: "Со скидкой: " });
+  const discountText = createElement({ tagName: "p", classNames: ["discount-text"] });
   const discount = createElement({
     tagName: "p",
     classNames: ["product__discount"],
-    textContent: PriceFormatter.formatCents(cardPrices?.[0].discounted?.value.centAmount),
   });
+
+  if (cardPrices?.[0].discounted?.value.centAmount) {
+    discountText.textContent = "Со скидкой: ";
+    discount.textContent = PriceFormatter.formatCents(cardPrices?.[0].discounted?.value.centAmount);
+  } else {
+    discountText.textContent = "Скидки нет";
+  }
 
   const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button", "inactive"], textContent: "Добавить в корзину" });
   buyButton.disabled = true;
@@ -185,6 +191,8 @@ const deleteProductFromCart = (
     }
     deleteButton.remove();
     pricesWrapper.append(buyButton);
+    buyButton.classList.add("inactive");
+    buyButton.disabled = true;
     size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((item) => {
       item.disabled = false;
       item.classList.remove("inactive");

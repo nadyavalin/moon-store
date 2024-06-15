@@ -1,10 +1,11 @@
 import "./basket.css";
-import { createElement } from "../../components/elements";
+import { createElement, createSnackbar } from "../../components/elements";
 import { createBasketCard } from "./productBasketCard/productBasketCard";
-import { getCart } from "../../api/api";
+import { addDiscountAction, getCart } from "../../api/api";
+import { correctFactorForPrices } from "../../api/constants";
 import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
 import { PriceFormatter } from "../../utils/utils";
-import { Pages } from "../../types/types";
+import { Pages, SnackbarType } from "../../types/types";
 
 export async function renderBasketContent() {
   const response = await getCart();
@@ -38,6 +39,23 @@ export async function renderBasketContent() {
     basketWrapper.append(createModalConfirm());
   });
 
+  // ввод промо кода
+  const promoCodeWrapper = createElement({ tagName: "div", classNames: ["promo-code__basket-wrapper"] });
+  const promoCodeTitle = createElement({ tagName: "p", classNames: ["promo-code__title"], textContent: "Введите промокод:" });
+  const promoCodeInput = createElement({
+    tagName: "input",
+    classNames: ["promo-code__input"],
+    attributes: { placeholder: "Промокод" },
+  });
+
+  const promoCodeButton = createElement({ tagName: "button", classNames: ["promo-code__button-apply", "inactive"], textContent: "Применить" });
+  promoCodeWrapper.append(promoCodeTitle, promoCodeInput, promoCodeButton);
+  promoCodeInput.addEventListener("input", () => {
+    promoCodeButton.classList.remove("inactive");
+  });
+
+  // ввод промо кода
+
   response?.body.lineItems.forEach((item, index) => {
     productListWrapper.append(createBasketCard(index, response?.body));
   });
@@ -45,7 +63,10 @@ export async function renderBasketContent() {
   productTotalWrapper.append(productTotalTextWrapper, productAmountTextWrapper, resetCartButton);
   productAmountTextWrapper.append(productAmountTitle, productFullAmount);
   productTotalTextWrapper.append(productTotalTitle, productTotalPrice);
-  basketWrapper.append(productListWrapper, productTotalWrapper);
+  basketWrapper.append(productListWrapper, promoCodeWrapper, productTotalWrapper);
+
+  addDiscountPromo(promoCodeButton, promoCodeInput, productListWrapper, productTotalPrice);
+
   return basketWrapper;
 }
 
@@ -73,3 +94,29 @@ export function createEmptyCart(basketWrapper: HTMLElement) {
 }
 
 export default renderBasketContent;
+
+const addDiscountPromo = (
+  promoCodeButton: HTMLButtonElement,
+  promoCodeInput: HTMLInputElement,
+  productListWrapper: HTMLUListElement,
+  productTotalPrice: HTMLDivElement,
+) => {
+  promoCodeButton.addEventListener("click", async () => {
+    productListWrapper.querySelectorAll(".product-basket__item")?.forEach((item) => item.remove());
+    const cart = await getCart();
+    const version = <number>cart?.body.version;
+    try {
+      await addDiscountAction(version, [{ action: "addDiscountCode", code: `${promoCodeInput.value}` }]);
+      createSnackbar(SnackbarType.success, "Промокод активирован!");
+    } catch {
+      createSnackbar(SnackbarType.error, "Вы ввели неверный промокод");
+    }
+    promoCodeInput.value = "";
+    promoCodeButton.classList.add("inactive");
+    const response = await getCart();
+    productTotalPrice.textContent = `${PriceFormatter.formatCents(response?.body.totalPrice.centAmount)}`;
+    response?.body.lineItems.forEach((item, index) => {
+      productListWrapper.append(createBasketCard(index, response?.body));
+    });
+  });
+};

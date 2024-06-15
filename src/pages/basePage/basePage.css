@@ -143,11 +143,15 @@ li {
   align-items: flex-start;
 }
 
+.developers__wrapper a {
+  color: var(--main-light);
+}
+
 .rs-school-logo {
   width: 80px;
   background-color: var(--main-light);
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .year-app {
@@ -156,6 +160,10 @@ li {
 
 @media (hover: hover) {
   .user-greeting__link:hover {
+    color: var(--blue-hover);
+  }
+
+  .developers__wrapper a:hover {
     color: var(--blue-hover);
   }
 }
