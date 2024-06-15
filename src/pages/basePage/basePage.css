@@ -135,7 +135,7 @@ li {
   text-align: center;
 }
 
-.developers__wrapper {
+.footer__developers-wrapper {
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -143,7 +143,7 @@ li {
   align-items: flex-start;
 }
 
-.developers__wrapper a {
+.footer__developers-wrapper a {
   color: var(--main-light);
 }
 
@@ -163,7 +163,7 @@ li {
     color: var(--blue-hover);
   }
 
-  .developers__wrapper a:hover {
+  .footer__developers-wrapper a:hover {
     color: var(--blue-hover);
   }
 }

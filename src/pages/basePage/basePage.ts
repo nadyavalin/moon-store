@@ -116,7 +116,7 @@ logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
 document.body.append(snackbarContainer);
 
-const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
+const developersWrapper = createElement({ tagName: "div", classNames: ["footer__developers-wrapper"] });
 const nadyavalinLinkGitHub = createElement({
   tagName: "a",
   textContent: "nadyavalin",

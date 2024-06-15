@@ -27,7 +27,9 @@
 }
 
 body {
-  background-color: var(--main-black);
+  background-image: url("../public/img/about-us-fon.jpg");
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--main-light);
   font-family: Arial, Helvetica, sans-serif;
   min-height: 95vh;
