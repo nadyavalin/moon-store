@@ -90,6 +90,10 @@
   }
 }
 
+.modal-cart__content {
+  height: 120px;
+}
+
 @media screen and (max-width: 950px) {
   .basket__wrapper {
     flex-direction: column;
