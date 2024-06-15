@@ -48,11 +48,13 @@
   background-color: var(--dark-grey);
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   color: var(--main-light);
+  border-radius: 8px;
 }
 
 .developers-image {
   width: 250px;
   box-shadow: 0 0 2px rgba(246, 244, 213, 1);
+  border-radius: 8px;
 }
 
 .developers-name {

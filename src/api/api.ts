@@ -8,6 +8,7 @@ import {
   MyCartUpdateAction,
   CartUpdateAction,
   Cart,
+  CartAddDiscountCodeAction,
 } from "@commercetools/platform-sdk";
 
 import { state } from "../store/state";
@@ -135,6 +136,21 @@ export const changePassword = (id: string, version: number, currentPassword: str
         version,
         currentPassword,
         newPassword,
+      },
+    })
+    .execute();
+
+export const getDiscounts = () => state.apiRoot?.discountCodes().get().execute();
+
+export const addDiscountAction = (version: number, actions: CartAddDiscountCodeAction[]) =>
+  state.apiRoot
+    ?.me()
+    .carts()
+    .withId({ ID: state.cartId as string })
+    .post({
+      body: {
+        version,
+        actions,
       },
     })
     .execute();
