@@ -6,7 +6,7 @@
 }
 
 .title__text {
-  color: var(--accent-green);
+  color: var(--blue-light-loader);
 }
 
 .quote__wrapper {
@@ -47,7 +47,7 @@
 }
 
 .intro__wrapper summary {
-  color: var(--blue-light-loader);
+  color: var(--accent-light-blue);
   cursor: pointer;
   transition: color 0.5s ease;
 }
@@ -93,7 +93,7 @@
 .developers-position {
   font-size: 22px;
   font-weight: 600;
-  color: var(--accent-green);
+  color: var(--accent-light-blue);
 }
 
 .developers-github-link {
