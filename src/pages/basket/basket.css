@@ -67,12 +67,17 @@
   margin-top: 30px;
   align-items: center;
 }
+
 .cart-empty-message i {
   font-size: 3em;
 }
 
 .promo-code__input {
   margin-top: 0;
+}
+
+.poor-moon-image {
+  width: 250px;
 }
 
 @media screen and (max-width: 1120px) {
@@ -83,6 +88,10 @@
   .product-list__wrapper {
     width: 70%;
   }
+}
+
+.modal-cart__content {
+  height: 120px;
 }
 
 @media screen and (max-width: 950px) {

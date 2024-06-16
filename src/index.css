@@ -18,7 +18,7 @@
   --blue-loader: #337ab7;
   --blue-light-loader: #bfe2ff;
   --accent-red: #f64137;
-  --accent-green: #4ad300;
+  --accent-light-blue: #bfe2ff;
   --card-grey: #333333;
   --card-hover: #484848;
   --back-modal: rgba(30, 30, 30, 0.8);
@@ -27,7 +27,9 @@
 }
 
 body {
-  background-color: var(--main-black);
+  background-image: url("../public/img/about-us-fon.jpg");
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--main-light);
   font-family: Arial, Helvetica, sans-serif;
   min-height: 95vh;

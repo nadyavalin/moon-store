@@ -1,43 +1,73 @@
-.about-us-wrapper {
+.about-us__wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
 
+.title__text {
+  color: var(--blue-light-loader);
+}
+
+.quote__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.5s ease;
+}
+
+.about-us__text,
+.developers-bio {
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+}
+
+.about-us__text {
+  text-indent: 40px;
+  padding-bottom: 30px;
+  text-align: left;
+}
+
 .about-us__rs-school-logo {
   width: 150px;
 }
 
-.intro-wrapper {
-  width: 100%;
-  display: flex;
-  gap: 30px;
-}
-
-.intro-first-wrapper,
-.intro-second-wrapper {
+.intro__wrapper {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  width: 50%;
-  font-size: 15px;
+  width: 70%;
+  font-size: 30px;
+  text-align: center;
 }
 
-.intro-paragraph {
-  text-indent: 40px;
+.intro__wrapper[open] {
+  animation-name: fadeInDown;
+  animation-duration: 1s;
 }
 
-.developers-wrapper {
+.intro__wrapper summary {
+  color: var(--accent-light-blue);
+  cursor: pointer;
+  transition: color 0.5s ease;
+}
+
+.intro__wrapper summary:hover {
+  color: var(--blue-hover);
+  text-decoration: dashed;
+}
+
+.developers__wrapper {
   display: flex;
+  flex-direction: row;
   gap: 20px;
 }
 
-.nadyavalin-wrapper,
-.raenlin-wrapper,
-.katika-wrapper {
+.nadyavalin__wrapper,
+.raenlin__wrapper,
+.katika__wrapper {
   width: 35%;
-  padding: 10px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,17 +93,13 @@
 .developers-position {
   font-size: 22px;
   font-weight: 600;
-  color: var(--accent-green);
+  color: var(--accent-light-blue);
 }
 
 .developers-github-link {
   color: var(--main-light);
   text-decoration: underline;
   transition: all 0.3s ease;
-}
-
-.developers-bio {
-  font-size: 13px;
 }
 
 @media (hover: hover) {
@@ -84,25 +110,41 @@
 }
 
 @media screen and (max-width: 900px) {
-  .developers-wrapper {
+  .intro__wrapper {
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .developers__wrapper {
     flex-direction: column;
   }
 
-  .nadyavalin-wrapper,
-  .raenlin-wrapper,
-  .katika-wrapper {
+  .nadyavalin__wrapper,
+  .raenlin__wrapper,
+  .katika__wrapper {
     width: 100%;
   }
 }
 
-@media screen and (max-width: 600px) {
-  .intro-wrapper {
-    align-items: center;
-    flex-direction: column;
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-1em);
   }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .intro-first-wrapper,
-  .intro-second-wrapper {
-    width: 100%;
+@keyframes fadeOutUp {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  0% {
+    opacity: 0;
+    transform: translateY(-1em);
   }
 }

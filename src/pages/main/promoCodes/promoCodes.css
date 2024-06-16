@@ -5,12 +5,14 @@
 
 .promo-code__wrapper {
   display: flex;
+  justify-content: space-between;
   gap: 5px;
   border-bottom: 1px solid var(--main-light);
   background-color: var(--back-promo-code);
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   color: var(--main-light);
   border-radius: 8px;
+  width: 537px;
 }
 
 .promo-code__image {
@@ -28,11 +30,11 @@
   width: 248px;
 }
 
-.promo-code__percent {
-  font-size: 30px;
-  font-weight: 600;
+.promo-code__text {
+  font-size: 23px;
+  font-weight: 500;
   padding: 5px;
-  color: var(--accent-red);
+  color: var(--accent-light-blue);
 }
 
 .promo-code {

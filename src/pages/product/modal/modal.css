@@ -59,8 +59,8 @@
 
 @media (max-width: 1000px) {
   .modal {
-    width: 500px;
-    height: 500px;
+    max-width: 500px;
+    max-height: 500px;
   }
 
   .modal-slider {
@@ -75,8 +75,8 @@
 
 @media (max-width: 770px) {
   .modal {
-    width: 450px;
-    height: 450px;
+    max-width: 450px;
+    max-height: 450px;
   }
 
   .modal-slider {
@@ -91,8 +91,8 @@
 
 @media (max-width: 550px) {
   .modal {
-    width: 325px;
-    height: 325px;
+    max-width: 325px;
+    max-height: 325px;
   }
 
   .modal-slider {

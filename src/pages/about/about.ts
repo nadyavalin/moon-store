@@ -10,18 +10,27 @@ export function renderAboutUsContent() {
   });
   const aboutUsSchoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
 
-  const aboutUsWrapper = createElement({ tagName: "div", classNames: ["about-us-wrapper"] });
-  const introductionWrapper = createElement({ tagName: "div", classNames: ["intro-wrapper"] });
-  const introductionFirstWrapper = createElement({ tagName: "div", classNames: ["intro-first-wrapper"] });
-  const introductionSecondWrapper = createElement({ tagName: "div", classNames: ["intro-second-wrapper"] });
-  const introduction1Paragraph = createElement({ tagName: "p", classNames: ["intro-paragraph"], textContent: introduction1p });
-  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["intro-paragraph"], textContent: introduction2p });
-  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["intro-paragraph"], textContent: introduction3p });
-  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["intro-paragraph"], textContent: introduction4p });
-  const developersWrapper = createElement({ tagName: "div", classNames: ["developers-wrapper"] });
-  const nadyavalinWrapper = createElement({ tagName: "div", classNames: ["nadyavalin-wrapper"] });
-  const raenlinWrapper = createElement({ tagName: "div", classNames: ["raenlin-wrapper"] });
-  const katikaWrapper = createElement({ tagName: "div", classNames: ["katika-wrapper"] });
+  const aboutUsWrapper = createElement({ tagName: "div", classNames: ["about-us__wrapper"] });
+  const quoteWrapper = createElement({ tagName: "div", classNames: ["quote__wrapper"] });
+  const title = createElement({ tagName: "h1", classNames: ["title__text"], textContent: "Developers, thinkers, dreamers..." });
+  const quote = createElement({ tagName: "h4", classNames: ["title-quote__text"], textContent: "Народная программерская мудрость:" });
+  const quoteText = createElement({
+    tagName: "q",
+    classNames: ["quote__text"],
+    textContent: "Если долго смотреть на код, то код начинает смотреть на тебя...",
+  });
+
+  const introductionWrapper = createElement({ tagName: "details", classNames: ["intro__wrapper"] });
+  const summaryText = createElement({ tagName: "summary", textContent: "Наша команда - это..." });
+  const introduction1Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction1p });
+  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction2p });
+  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction3p });
+  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction4p });
+
+  const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
+  const nadyavalinWrapper = createElement({ tagName: "div", classNames: ["nadyavalin__wrapper"] });
+  const raenlinWrapper = createElement({ tagName: "div", classNames: ["raenlin__wrapper"] });
+  const katikaWrapper = createElement({ tagName: "div", classNames: ["katika__wrapper"] });
 
   const nadyavalinPhoto = createElement({
     tagName: "img",
@@ -93,16 +102,14 @@ export function renderAboutUsContent() {
     classNames: ["developers-bio"],
     textContent: katikaBioText,
   });
-
+  quoteWrapper.append(quote, quoteText);
   aboutUsSchoolLogoLink.append(aboutUsSchoolLogo);
   nadyavalinWrapper.append(nadyavalinPhoto, nadyavalinName, nadyavalinPosition, nadyavalinGitHub, nadyavalinBio);
   raenlinWrapper.append(raenlinPhoto, raenlinName, raenlinPosition, raenlinGitHub, raenlinBio);
   katikaWrapper.append(katikaPhoto, katikaName, katikaPosition, katikaGitHub, katikaBio);
   developersWrapper.append(nadyavalinWrapper, raenlinWrapper, katikaWrapper);
-  introductionFirstWrapper.append(introduction1Paragraph, introduction2Paragraph);
-  introductionSecondWrapper.append(introduction3Paragraph, introduction4Paragraph);
-  introductionWrapper.append(introductionFirstWrapper, introductionSecondWrapper);
-  aboutUsWrapper.append(introductionWrapper, aboutUsSchoolLogoLink, developersWrapper);
+  introductionWrapper.append(summaryText, introduction1Paragraph, introduction2Paragraph, introduction3Paragraph, introduction4Paragraph);
+  aboutUsWrapper.append(title, quoteWrapper, introductionWrapper, aboutUsSchoolLogoLink, developersWrapper);
   return aboutUsWrapper;
 }
 
