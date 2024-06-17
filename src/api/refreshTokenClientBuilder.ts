@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import { ClientBuilder, type HttpMiddlewareOptions, type RefreshAuthMiddlewareOptions } from "@commercetools/sdk-client-v2";
-import { projectKey, clientId, clientSecret, authHost, apiHost } from "src/api/constants";
+import { projectKey, clientId, clientSecret, authHost, apiHost } from "../api/constants";
 
 function generateRefreshTokenFlow(refreshToken: string) {
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
