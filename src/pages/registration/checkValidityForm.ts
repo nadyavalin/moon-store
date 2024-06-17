@@ -13,7 +13,8 @@ export function ageValidator(inputTag: HTMLInputElement): boolean {
 }
 
 export function spacesValidator(inputTag: HTMLInputElement): boolean {
-  return !/^[ \s]+|[ \s]+$/.test(inputTag.value);
+  const regular = /^[ \s]+|[ \s]+$/;
+  return !regular.test(inputTag.value);
 }
 
 export function checkValidityAllFields() {

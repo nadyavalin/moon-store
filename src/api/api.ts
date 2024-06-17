@@ -1,23 +1,20 @@
-import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
-
 import {
   createApiBuilderFromCtpClient,
   MyCustomerDraft,
   CustomerUpdateAction,
   QueryParam,
-  MyCartUpdateAction,
   CartUpdateAction,
-  Cart,
   CartAddDiscountCodeAction,
 } from "@commercetools/platform-sdk";
 
-import { state } from "../store/state";
 import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
+import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 import { Client } from "@commercetools/sdk-client-v2";
 import { setItemToLocalStorage } from "../utils/utils";
 import { anonymousId } from "./anonymousClientBuilder";
 import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
+import { state } from "../store/state";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
