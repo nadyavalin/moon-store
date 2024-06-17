@@ -31,7 +31,7 @@
 }
 
 .promo-code__text {
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 500;
   padding: 5px;
   color: var(--accent-light-blue);
@@ -40,11 +40,45 @@
 .promo-code {
   width: 100%;
   padding: 5px;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
   background-color: var(--card-grey);
   border-bottom: 1px solid var(--main-light);
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(246, 244, 213, 1);
   text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
+  .promo-code__wrapper {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .promo-codes__wrapper {
+    flex-direction: column;
+  }
+
+  .promo-code__wrapper {
+    width: 360px;
+  }
+
+  .promo-code__text {
+    font-size: 18px;
+  }
+
+  .promo-code {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .promo-code__image {
+    height: 100px;
+  }
+
+  .promo-code__wrapper {
+    width: 330px;
+  }
 }
