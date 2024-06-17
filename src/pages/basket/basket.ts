@@ -2,7 +2,7 @@ import "./basket.css";
 import { createElement, createSnackbar } from "../../components/elements";
 import { createBasketCard } from "./productBasketCard/productBasketCard";
 import { addDiscountAction, getCart } from "../../api/api";
-import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
+import { createModalConfirm } from "./basketHandler";
 import { PriceFormatter } from "../../utils/utils";
 import { Pages, SnackbarType } from "../../types/types";
 

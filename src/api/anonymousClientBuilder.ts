@@ -1,11 +1,6 @@
 import { AnonymousAuthMiddlewareOptions, Client } from "@commercetools/sdk-client-v2";
 import fetch from "node-fetch";
-import {
-  ClientBuilder,
-
-  // Import middlewares
-  type HttpMiddlewareOptions, // Required for sending HTTP requests
-} from "@commercetools/sdk-client-v2";
+import { ClientBuilder, type HttpMiddlewareOptions } from "@commercetools/sdk-client-v2";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../api/constants";
 import { generateRandomString } from "../utils/utils";
 

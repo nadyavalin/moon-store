@@ -1,11 +1,5 @@
 import fetch from "node-fetch";
-import {
-  ClientBuilder,
-  type PasswordAuthMiddlewareOptions, // Required for password flow
-  type HttpMiddlewareOptions,
-  TokenCache,
-  TokenStore,
-} from "@commercetools/sdk-client-v2";
+import { ClientBuilder, type PasswordAuthMiddlewareOptions, type HttpMiddlewareOptions, TokenCache, TokenStore } from "@commercetools/sdk-client-v2";
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "../../components/elements";
 import { Pages, SnackbarType } from "../../types/types";
@@ -13,8 +7,6 @@ import { state } from "../../store/state";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
-import { getCart } from "src/api/api";
-import { showQuantityItemsInHeader } from "../basket/basketHandler";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -29,15 +21,13 @@ export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwo
 };
 
 class MyTokenCache implements TokenCache {
-  myCache: TokenStore = { token: "", expirationTime: 0 }; // начальные значения для кэша
+  myCache: TokenStore = { token: "", expirationTime: 0 };
 
   set(newCache: TokenStore) {
-    // устанавливаем новый кэш
     this.myCache = newCache;
   }
 
   get(): TokenStore {
-    // возвращаем текущий кэш
     return this.myCache;
   }
 }
@@ -68,7 +58,6 @@ export async function changeAppAfterLogin(userName: string, refreshToken?: strin
 
 export const authorizeUserWithToken = (email: string, password: string) => {
   const tokenCache = new MyTokenCache();
-  // Configure password flow
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: authHost,
     projectKey,
@@ -85,21 +74,18 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     tokenCache,
   };
 
-  // Configure httpMiddlewareOptions
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: apiHost,
     fetch,
   };
 
-  // ClientBuilder
   const ctpClient = new ClientBuilder()
     .withProjectKey(projectKey)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withPasswordFlow(passwordAuthMiddlewareOptions)
-    .withLoggerMiddleware() // Include middleware for logging
+    .withLoggerMiddleware()
     .build();
 
-  // Create apiRoot
   state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
 
   state.apiRoot

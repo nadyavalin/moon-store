@@ -21,14 +21,13 @@ document.body.append(header, main, footer);
 
 function setActiveLink(fragmentId: string) {
   const links = document.querySelectorAll(".menu-item");
-  if (links) {
-    for (let i = 0; i < links.length; i += 1) {
-      const link = links[i];
-      const href = link.getAttribute("href");
-      const pageName = href?.substring(-1);
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (href) {
+      const pageName = href.substring(1);
       link.classList.toggle("active", pageName === fragmentId);
     }
-  }
+  });
 }
 
 export const renderPageContent = async (renderFunc: () => Promise<HTMLElement>) => {

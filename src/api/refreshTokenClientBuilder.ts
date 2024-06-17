@@ -1,11 +1,5 @@
 import fetch from "node-fetch";
-import {
-  ClientBuilder,
-
-  // Import middlewares
-  type HttpMiddlewareOptions, // Required for sending HTTP requests
-  type RefreshAuthMiddlewareOptions,
-} from "@commercetools/sdk-client-v2";
+import { ClientBuilder, type HttpMiddlewareOptions, type RefreshAuthMiddlewareOptions } from "@commercetools/sdk-client-v2";
 import { projectKey, clientId, clientSecret, authHost, apiHost } from "src/api/constants";
 
 function generateRefreshTokenFlow(refreshToken: string) {
@@ -29,7 +23,7 @@ function generateRefreshTokenFlow(refreshToken: string) {
     .withProjectKey(projectKey)
     .withRefreshTokenFlow(options)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware() // Include middleware for logging
+    .withLoggerMiddleware()
     .build();
 
   return ctpClient;
