@@ -7,6 +7,8 @@ import { state } from "../../store/state";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
+import { getCart } from "src/api/api";
+import { showQuantityItemsInHeader } from "../basket/basketHandler";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -99,8 +101,10 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       },
     })
     .execute()
-    .then((response) => {
+    .then(async (response) => {
       if (response.statusCode === 200) {
+        const cartResponse = await getCart();
+        showQuantityItemsInHeader(cartResponse?.body);
         const user = response.body.customer.firstName as string;
         setItemToLocalStorage("user", user);
         const cartId = response.body.cart?.id;
