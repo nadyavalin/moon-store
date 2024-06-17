@@ -2,7 +2,6 @@ import "./basket.css";
 import { createElement, createSnackbar } from "../../components/elements";
 import { createBasketCard } from "./productBasketCard/productBasketCard";
 import { addDiscountAction, getCart } from "../../api/api";
-import { correctFactorForPrices } from "../../api/constants";
 import { createModalConfirm, showQuantityItemsInHeader } from "./basketHandler";
 import { PriceFormatter } from "../../utils/utils";
 import { Pages, SnackbarType } from "../../types/types";
@@ -11,7 +10,6 @@ export async function renderBasketContent() {
   const response = await getCart();
   const totalQuantity = response?.body.lineItems.reduce((total, item) => total + Number(item.quantity), 0);
   const totalPrice = PriceFormatter.formatCents(response?.body.totalPrice.centAmount);
-  showQuantityItemsInHeader(response?.body);
   const basketWrapper = createElement({ tagName: "div", classNames: ["basket__wrapper"] });
   if (response?.body.lineItems.length === 0) {
     createEmptyCart(basketWrapper);
@@ -88,12 +86,8 @@ export function createEmptyCart(basketWrapper: HTMLElement) {
       href: `${Pages.CATALOG}`,
     },
   });
-  const poorMoonImage = createElement({
-    tagName: "img",
-    classNames: ["poor-moon-image"],
-    attributes: { src: "../../public/img/poor-moon.jpg", alt: "Фото грустящей луны" },
-  });
-  emptyCartMessage.append(textEmptyCart, linkToCatalog, poorMoonImage);
+
+  emptyCartMessage.append(textEmptyCart, linkToCatalog);
   basketWrapper.innerHTML = "";
   basketWrapper.appendChild(emptyCartMessage);
 }
