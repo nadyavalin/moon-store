@@ -55,8 +55,6 @@ export async function changeAppAfterLogin(userName: string, refreshToken?: strin
   if (cartId) {
     state.cartId = cartId;
   }
-  const response = await getCart();
-  showQuantityItemsInHeader(response?.body);
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
   state.name = userName;

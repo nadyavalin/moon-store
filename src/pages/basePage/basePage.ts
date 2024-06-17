@@ -70,7 +70,7 @@ const menuItemBasket = createElement({
   attributes: { href: Pages.BASKET },
 });
 const menuItemBasketIcon = createElement({ tagName: "i", classNames: ["fa-solid", "fa-cart-shopping"] });
-const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"], textContent: `${0}` });
+const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"] });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
 // burger

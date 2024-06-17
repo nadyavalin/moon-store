@@ -12,7 +12,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const quantityItem = response?.lineItems[index].quantity;
   const sizeItem = response?.lineItems[index].variant.attributes![0].value[0].key;
   const priceItem = PriceFormatter.formatCents(response?.lineItems[index].price.value.centAmount);
-
+  const priceTotalItem = PriceFormatter.formatCents(response?.lineItems[index].totalPrice.centAmount);
   const priceDiscountedItem = response?.lineItems[index].price.discounted?.value.centAmount
     ? PriceFormatter.formatCents(response?.lineItems[index].price.discounted?.value.centAmount)
     : priceItem;
@@ -54,7 +54,7 @@ export function createBasketCard(index: number, response?: Cart) {
   const productBasketSizeText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Размер: " });
   const productBasketSize = createElement({
     tagName: "span",
-    classNames: ["product__size-item"],
+    classNames: ["product-basket__size-item"],
     textContent: `${sizeItem}`,
   });
 
@@ -87,11 +87,11 @@ export function createBasketCard(index: number, response?: Cart) {
   if (response?.lineItems[index].discountedPricePerQuantity.length !== 0) {
     const discount = PriceFormatter.formatCents(response?.lineItems[index].discountedPricePerQuantity[0].discountedPrice.value.centAmount);
     productBasketDiscountValue.textContent = `${discount}`;
-    productBasketFinalPrice.textContent = `${discount}`;
+    productBasketFinalPrice.textContent = `${priceTotalItem}`;
     productBasketDiscountText.textContent = "Со скидкой: ";
   } else {
     productBasketDiscountValue.textContent = `${priceDiscountedItem}`;
-    productBasketFinalPrice.textContent = `${priceDiscountedItem}`;
+    productBasketFinalPrice.textContent = `${priceTotalItem}`;
     productBasketDiscountText.textContent = "Скидки нет";
   }
 
