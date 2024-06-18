@@ -103,8 +103,7 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .execute()
     .then(async (response) => {
       if (response.statusCode === 200) {
-        const cartResponse = await getCart();
-        showQuantityItemsInHeader(cartResponse?.body);
+        showQuantityItemsInHeader(response.body.cart);
         const user = response.body.customer.firstName as string;
         setItemToLocalStorage("user", user);
         const cartId = response.body.cart?.id;
