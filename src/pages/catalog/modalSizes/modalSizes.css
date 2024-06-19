@@ -8,7 +8,7 @@
   background-color: var(--back-modal-image);
   padding: 10px;
   border-radius: 10px;
-  z-index: var(--modal-sizes-layer);
+  z-index: var(--modal-layer);
 }
 
 .modal-sizes__content {

@@ -81,7 +81,7 @@ li {
   width: 30px;
   height: 18px;
   cursor: pointer;
-  z-index: var(--burger-menu-layer);
+  z-index: var(--nav-menu-layer) + 1;
 }
 
 .burger-menu span {

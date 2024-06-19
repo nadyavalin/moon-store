@@ -25,16 +25,11 @@
   --back-modal: rgba(30, 30, 30, 0.8);
   --back-modal-image: rgba(252, 255, 236, 0.2);
   --back-promo-code: #020413;
-  --logo-layer: 0;
-  --h1-layer: 1;
-  --hr-line-layer: 2;
-  --nav-menu-layer: 3;
-  --burger-menu-layer: 4;
-  --filter-layer: 5;
-  --modal-back: 6;
-  --modal-sizes-layer: 7;
-  --modal-layer: 8;
-  --notifications-layer: 9;
+  --nav-menu-layer: 1;
+  --filter-layer: 2;
+  --modal-back: 3;
+  --modal-layer: 4;
+  --notifications-layer: 5;
 }
 
 body {
@@ -57,7 +52,7 @@ body {
   justify-content: flex-start;
   gap: 20px;
   flex-grow: 1;
-  margin-bottom: 50px;
+  margin: 10px 0;
 }
 
 a {
