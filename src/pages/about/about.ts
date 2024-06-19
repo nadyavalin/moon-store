@@ -1,6 +1,6 @@
 import "./about.css";
 import { createElement } from "../../components/elements";
-import { introduction1p, introduction2p, introduction3p, introduction4p, katikaBioText, nadyavalinBioText, raenlinBioText } from "./text";
+import { introduction, katika, nadyavalin, raenlin } from "./info";
 
 export function renderAboutUsContent() {
   const aboutUsSchoolLogo = createElement({
@@ -22,10 +22,10 @@ export function renderAboutUsContent() {
 
   const introductionWrapper = createElement({ tagName: "details", classNames: ["intro__wrapper"] });
   const summaryText = createElement({ tagName: "summary", textContent: "Наша команда - это..." });
-  const introduction1Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction1p });
-  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction2p });
-  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction3p });
-  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction4p });
+  const introduction1Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction });
+  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: raenlin.introText });
+  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: nadyavalin.introText });
+  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: katika.introText });
 
   const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
   const nadyavalinWrapper = createElement({ tagName: "div", classNames: ["nadyavalin__wrapper"] });
@@ -35,72 +35,72 @@ export function renderAboutUsContent() {
   const nadyavalinPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/nadyavalin.jpg" },
+    attributes: { src: nadyavalin.imageSrc },
   });
   const raenlinPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/raenlin.jpg" },
+    attributes: { src: raenlin.imageSrc },
   });
   const katikaPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/ifbfirst.jpg" },
+    attributes: { src: katika.imageSrc },
   });
 
-  const nadyavalinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Надежда Ткачук" });
-  const raenlinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Дарья Пчелинцева" });
-  const katikaName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Екатерина Машко" });
+  const nadyavalinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: nadyavalin.name });
+  const raenlinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: raenlin.name });
+  const katikaName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: katika.name });
 
   const nadyavalinPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: "Front-end developer",
+    textContent: nadyavalin.position,
   });
   const raenlinPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: "Front-end developer",
+    textContent: raenlin.position,
   });
   const katikaPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: "Front-end developer",
+    textContent: katika.position,
   });
 
   const nadyavalinGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: nadyavalin",
-    attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
+    attributes: { href: nadyavalin.githubLink, target: "_blank" },
   });
   const raenlinGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: raenlin",
-    attributes: { href: "https://github.com/raenlin", target: "_blank" },
+    attributes: { href: raenlin.githubLink, target: "_blank" },
   });
   const katikaGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: ifbfirst",
-    attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
+    attributes: { href: katika.githubLink, target: "_blank" },
   });
 
   const nadyavalinBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: nadyavalinBioText,
+    textContent: nadyavalin.bioText,
   });
   const raenlinBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: raenlinBioText,
+    textContent: raenlin.bioText,
   });
   const katikaBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: katikaBioText,
+    textContent: katika.bioText,
   });
   quoteWrapper.append(quote, quoteText);
   aboutUsSchoolLogoLink.append(aboutUsSchoolLogo);
