@@ -26,9 +26,8 @@
   --back-modal-image: rgba(252, 255, 236, 0.2);
   --back-promo-code: #020413;
   --nav-menu-layer: 1;
-  --burger-menu: 2;
-  --modal-layer: 3;
-  --notifications-layer: 4;
+  --modal-layer: 2;
+  --notifications-layer: 3;
 }
 
 body {

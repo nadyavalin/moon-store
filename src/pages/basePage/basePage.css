@@ -79,7 +79,7 @@ li {
   width: 30px;
   height: 18px;
   cursor: pointer;
-  z-index: var(--burger-menu);
+  z-index: calc(var(--nav-menu-layer) + 1);
 }
 
 .burger-menu span {
@@ -87,7 +87,7 @@ li {
   width: 80%;
   transform: scale(1);
   background-color: var(--main-light);
-  z-index: var(--burger-menu);
+  z-index: calc(var(--nav-menu-layer) + 1);
 }
 
 .burger-menu::before,
