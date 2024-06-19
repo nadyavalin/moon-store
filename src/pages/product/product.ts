@@ -47,8 +47,12 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
     discountText.textContent = "Скидки нет";
   }
 
-  const buyButton = createElement({ tagName: "button", classNames: ["product__buy-button", "inactive"], textContent: "Добавить в корзину" });
-  buyButton.disabled = true;
+  const buyButton = createElement({
+    tagName: "button",
+    classNames: ["product__buy-button", "inactive"],
+    textContent: "Добавить в корзину",
+    attributes: { disabled: "true" },
+  });
   const deleteButton = createElement({ tagName: "button", classNames: ["product__delete-button"], textContent: "Удалить из корзины" });
 
   const productSlider = createSlider({
@@ -90,13 +94,12 @@ export async function renderProductContent(slug: string): Promise<HTMLElement> {
       size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((sizeItem) => {
         if (Number(sizeItem.getAttribute("data-id")) === item.variant.id) {
           sizeItem.classList.add("active");
-          sizeItem.disabled = true;
           buyButton.remove();
           pricesWrapper.append(deleteButton);
         } else {
-          sizeItem.disabled = true;
           sizeItem.classList.add("inactive");
         }
+        sizeItem.disabled = true;
       });
     }
   });
