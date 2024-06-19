@@ -41,11 +41,10 @@ export function createModalSize(
       size.querySelectorAll<HTMLButtonElement>(".product__size-item").forEach((sizeItem) => {
         if (Number(sizeItem.getAttribute("data-id")) === item.variant.id) {
           sizeItem.classList.add("active");
-          sizeItem.disabled = true;
         } else {
-          sizeItem.disabled = true;
           sizeItem.classList.add("inactive");
         }
+        sizeItem.disabled = true;
       });
     }
   });
