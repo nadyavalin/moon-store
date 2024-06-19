@@ -201,7 +201,9 @@ function createAddressView(addressType: AddressType, parent: HTMLElement, isDefa
     attributes: { for: `setting-default-address-${addressType}` },
     textContent: "Адрес по умолчанию",
   });
-  if (isDefaultAddress) checkboxSettingDefaultAddress.setAttribute("checked", "true");
+  if (isDefaultAddress) {
+    checkboxSettingDefaultAddress.setAttribute("checked", "true");
+  }
   addValidationListenersToInputProfile({
     input: city,
     nextElem: streetDiv,
