@@ -18,16 +18,21 @@ export function showQuantityItemsInHeader(response?: Cart) {
   if (quantityItems) quantityItems.textContent = `${response?.lineItems.reduce((total, item) => total + Number(item.quantity), 0)}`;
 }
 
-export function increaseQuantityProduct(
-  btn: HTMLElement,
-  countDiv: HTMLElement,
-  totalPriceDiv: HTMLElement,
-  lineItemId: string,
-  lineItemIndex: number,
-) {
-  let quantity = Number(countDiv.textContent);
-  quantity += 1;
-  btn.classList.remove("disabled");
+export function changeQuantityProduct({
+  btn,
+  countDiv,
+  quantity,
+  totalPriceDiv,
+  lineItemId,
+  lineItemIndex,
+}: {
+  btn: HTMLElement;
+  countDiv: HTMLElement;
+  quantity: number;
+  totalPriceDiv: HTMLElement;
+  lineItemId: string;
+  lineItemIndex: number;
+}) {
   getCart()?.then((response) => {
     updateCart(response.body.version, [
       {
@@ -37,41 +42,13 @@ export function increaseQuantityProduct(
       },
     ])?.then((response) => {
       if (response.statusCode === 200) {
+        if (quantity === 1) {
+          btn.classList.add("disabled");
+        } else {
+          btn.classList.remove("disabled");
+        }
         countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[+lineItemIndex].totalPrice.centAmount)}`;
-        recalculateTotalDataCart(response.body);
-        showQuantityItemsInHeader(response.body);
-      }
-    });
-  });
-}
-
-export function decreaseQuantityProduct(
-  btn: HTMLElement,
-  countDiv: HTMLElement,
-  totalPriceDiv: HTMLElement,
-  lineItemId: string,
-  lineItemIndex: number,
-) {
-  let quantity = Number(countDiv.textContent);
-  if (quantity === 1) {
-    btn.classList.add("disabled");
-  }
-  if (quantity >= 2) {
-    quantity -= 1;
-  }
-
-  getCart()?.then((response) => {
-    updateCart(response.body.version, [
-      {
-        action: "changeLineItemQuantity",
-        lineItemId,
-        quantity,
-      },
-    ])?.then((response) => {
-      if (response.statusCode === 200) {
-        countDiv.textContent = `${quantity}`;
-        totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[+lineItemIndex].totalPrice.centAmount)}`;
+        totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[lineItemIndex].totalPrice.centAmount)}`;
         recalculateTotalDataCart(response.body);
         showQuantityItemsInHeader(response.body);
       }

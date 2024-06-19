@@ -5,8 +5,6 @@ import { SnackbarType } from "../../types/types";
 import createCard from "../productCard/productCard";
 import { QueryParam } from "@commercetools/platform-sdk";
 
-const queryArgs: Record<string, QueryParam> = {};
-
 export async function filterHandler(inputValuePriceFrom: string, inputValuePriceTo: string, filterWrapperSize: HTMLElement, categoryID?: string) {
   const cartResponse = await getCart();
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
@@ -17,6 +15,7 @@ export async function filterHandler(inputValuePriceFrom: string, inputValuePrice
     arrFilter.push(requestPrice);
   }
   const requestSize = sizeFilterHandler(filterWrapperSize);
+  const queryArgs: Record<string, QueryParam> = {};
   if (requestSize) queryArgs["filter"] = arrFilter.push(requestSize);
   queryArgs["filter"] = arrFilter;
   getProducts(queryArgs)?.then((response) => {
@@ -80,6 +79,7 @@ export async function sortHandler(
   categoryID?: string,
 ) {
   const catalogMain = <HTMLElement>document.querySelector(".catalog-main");
+  const queryArgs: Record<string, QueryParam> = {};
   const cartResponse = await getCart();
   if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked && !nameSortCheckbox) return;
   if (categoryID) queryArgs["filter"] = `categories.id:"${categoryID}"`;

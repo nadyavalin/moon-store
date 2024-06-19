@@ -1,7 +1,7 @@
 import "./productBasketCard.css";
 import "../../product/product.css";
 import { createElement } from "../../../components/elements";
-import { decreaseQuantityProduct, increaseQuantityProduct, removeProduct } from "../basketHandler";
+import { changeQuantityProduct, removeProduct } from "../basketHandler";
 import { Cart } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../../../utils/utils";
 
@@ -49,7 +49,9 @@ export function createBasketCard(index: number, response?: Cart) {
     textContent: `${quantityItem}`,
   });
   const productBasketMinusAmountButton = createElement({ tagName: "i", classNames: ["fa-solid", "fa-minus", "amount-button"] });
-
+  if (quantityItem === 1) {
+    productBasketMinusAmountButton.classList.add("disabled");
+  }
   const productBasketSizeWrapper = createElement({ tagName: "div", classNames: ["product-basket__size-wrapper"] });
   const productBasketSizeText = createElement({ tagName: "p", classNames: ["product-basket__small-text"], textContent: "Размер: " });
   const productBasketSize = createElement({
@@ -110,10 +112,24 @@ export function createBasketCard(index: number, response?: Cart) {
   productBasketItem.append(productBasketImage, productBasketTextWrapper, productBasketDeleteIconWrapper);
 
   productBasketPlusAmountButton.addEventListener("click", () =>
-    increaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+    changeQuantityProduct({
+      btn: productBasketMinusAmountButton,
+      countDiv: productBasketAmount,
+      quantity: Number(productBasketAmount.textContent) + 1,
+      totalPriceDiv: productBasketFinalPrice,
+      lineItemId: `${response?.lineItems[index].id}`,
+      lineItemIndex: index,
+    }),
   );
   productBasketMinusAmountButton.addEventListener("click", () =>
-    decreaseQuantityProduct(productBasketMinusAmountButton, productBasketAmount, productBasketFinalPrice, `${response?.lineItems[index].id}`, index),
+    changeQuantityProduct({
+      btn: productBasketMinusAmountButton,
+      countDiv: productBasketAmount,
+      quantity: Number(productBasketAmount.textContent) - 1,
+      totalPriceDiv: productBasketFinalPrice,
+      lineItemId: `${response?.lineItems[index].id}`,
+      lineItemIndex: index,
+    }),
   );
   productBasketDeleteIcon.addEventListener("click", () => removeProduct(`${response?.lineItems[index].id}`, productBasketItem));
   return productBasketItem;

@@ -25,6 +25,7 @@ const createFilterSortButtons = (categoryID?: string) => {
     } else {
       const catalogWrapper = <HTMLElement>document.querySelector(".catalog-wrapper");
       catalogWrapper.append(filterWrapper);
+      sortWrapper.remove();
     }
     filterWrapper.classList.toggle("open-filter");
   });
@@ -34,6 +35,7 @@ const createFilterSortButtons = (categoryID?: string) => {
     } else {
       const catalogWrapper = <HTMLElement>document.querySelector(".catalog-wrapper");
       catalogWrapper.append(sortWrapper);
+      filterWrapper.remove();
     }
     sortWrapper.classList.toggle("open-filter");
   });
