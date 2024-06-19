@@ -65,7 +65,9 @@ function updateCustomerHandlerAddress({
             addressDataDiv.id = `${addressIdNew}`;
             addressIDForDefault = checkbox.checked ? addressIdNew : undefined;
           }
-          if (!isNewAddress) addressIDForDefault = checkbox.checked ? addressDataDiv.id : undefined;
+          if (!isNewAddress) {
+            addressIDForDefault = checkbox.checked ? addressDataDiv.id : undefined;
+          }
           const actions: CustomerUpdateAction[] = [
             {
               action: addressType === AddressType.shipping ? "setDefaultShippingAddress" : "setDefaultBillingAddress",
