@@ -23,10 +23,8 @@ function setActiveLink(fragmentId: string) {
   const links = document.querySelectorAll(".menu-item");
   links.forEach((link) => {
     const href = link.getAttribute("href");
-    if (href) {
-      const pageName = href.substring(1);
-      link.classList.toggle("active", pageName === fragmentId);
-    }
+    const pageName = href?.substring(1);
+    link.classList.toggle("active", pageName === fragmentId);
   });
 }
 

@@ -48,8 +48,9 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     }
   });
 
-  const pagination = createPagination(totalProducts, (pageNumber) =>
-    renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
+  const pagination = createPagination(
+    (pageNumber) => renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
+    totalProducts,
   );
 
   sidePanel.append(filterSortButtons, categories);

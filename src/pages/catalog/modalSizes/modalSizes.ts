@@ -8,9 +8,9 @@ import { SnackbarType } from "../../../types/types";
 import { showQuantityItemsInHeader } from "../../basket/basketHandler";
 
 export function createModalSize(
-  response: ClientResponse<ProductProjectionPagedSearchResponse> | undefined,
-  cartResponse: ClientResponse<Cart> | undefined,
   cardButton: HTMLButtonElement,
+  response?: ClientResponse<ProductProjectionPagedSearchResponse>,
+  cartResponse?: ClientResponse<Cart>,
 ) {
   const productSizes = response?.body.results[0].variants;
   const productId = response?.body.results[0].id;

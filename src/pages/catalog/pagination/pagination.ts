@@ -3,7 +3,7 @@ import { createElement, createSvgElement } from "../../../components/elements";
 import { arrowLeft, arrowRight } from "../../../components/svg";
 import { productsPerPage } from "./constants";
 
-export function createPagination(totalProducts: number | undefined, onPageClick: (pageNumber: number) => void) {
+export function createPagination(onPageClick: (pageNumber: number) => void, totalProducts?: number) {
   if (!totalProducts) {
     return null;
   }

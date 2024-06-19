@@ -12,7 +12,7 @@
   width: 320px;
   padding: 20px;
   background-color: var(--dark-grey);
-  z-index: 50;
+  z-index: var(--filter-layer);
 }
 
 .filter-sort__buttons-wrapper {
