@@ -1,6 +1,6 @@
 import "./about.css";
 import { createElement } from "../../components/elements";
-import { introduction, katika, nadyavalin, raenlin } from "./info";
+import { introduction, developer } from "./info";
 
 export function renderAboutUsContent() {
   const aboutUsSchoolLogo = createElement({
@@ -23,9 +23,9 @@ export function renderAboutUsContent() {
   const introductionWrapper = createElement({ tagName: "details", classNames: ["intro__wrapper"] });
   const summaryText = createElement({ tagName: "summary", textContent: "Наша команда - это..." });
   const introduction1Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction });
-  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: raenlin.introText });
-  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: nadyavalin.introText });
-  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: katika.introText });
+  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: developer[1].introText });
+  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: developer[0].introText });
+  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: developer[2].introText });
 
   const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
   const nadyavalinWrapper = createElement({ tagName: "div", classNames: ["nadyavalin__wrapper"] });
@@ -35,72 +35,72 @@ export function renderAboutUsContent() {
   const nadyavalinPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: nadyavalin.imageSrc },
+    attributes: { src: developer[0].imageSrc },
   });
   const raenlinPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: raenlin.imageSrc },
+    attributes: { src: developer[1].imageSrc },
   });
   const katikaPhoto = createElement({
     tagName: "img",
     classNames: ["developers-image"],
-    attributes: { src: katika.imageSrc },
+    attributes: { src: developer[2].imageSrc },
   });
 
-  const nadyavalinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: nadyavalin.name });
-  const raenlinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: raenlin.name });
-  const katikaName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: katika.name });
+  const nadyavalinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: developer[0].name });
+  const raenlinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: developer[1].name });
+  const katikaName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: developer[2].name });
 
   const nadyavalinPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: nadyavalin.position,
+    textContent: developer[0].position,
   });
   const raenlinPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: raenlin.position,
+    textContent: developer[1].position,
   });
   const katikaPosition = createElement({
     tagName: "p",
     classNames: ["developers-position"],
-    textContent: katika.position,
+    textContent: developer[2].position,
   });
 
   const nadyavalinGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: nadyavalin",
-    attributes: { href: nadyavalin.githubLink, target: "_blank" },
+    attributes: { href: developer[0].githubLink, target: "_blank" },
   });
   const raenlinGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: raenlin",
-    attributes: { href: raenlin.githubLink, target: "_blank" },
+    attributes: { href: developer[1].githubLink, target: "_blank" },
   });
   const katikaGitHub = createElement({
     tagName: "a",
     classNames: ["developers-github-link"],
     textContent: "GitHub: ifbfirst",
-    attributes: { href: katika.githubLink, target: "_blank" },
+    attributes: { href: developer[2].githubLink, target: "_blank" },
   });
 
   const nadyavalinBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: nadyavalin.bioText,
+    textContent: developer[0].bioText,
   });
   const raenlinBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: raenlin.bioText,
+    textContent: developer[1].bioText,
   });
   const katikaBio = createElement({
     tagName: "p",
     classNames: ["developers-bio"],
-    textContent: katika.bioText,
+    textContent: developer[2].bioText,
   });
   quoteWrapper.append(quote, quoteText);
   aboutUsSchoolLogoLink.append(aboutUsSchoolLogo);

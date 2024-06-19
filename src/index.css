@@ -26,10 +26,9 @@
   --back-modal-image: rgba(252, 255, 236, 0.2);
   --back-promo-code: #020413;
   --nav-menu-layer: 1;
-  --filter-layer: 2;
-  --modal-back: 3;
-  --modal-layer: 4;
-  --notifications-layer: 5;
+  --burger-menu: 2;
+  --modal-layer: 3;
+  --notifications-layer: 4;
 }
 
 body {
@@ -109,7 +108,6 @@ h1 {
   position: relative;
   color: var(--main-light);
   text-align: center;
-  z-index: var(--h1-layer);
 }
 
 h5 {

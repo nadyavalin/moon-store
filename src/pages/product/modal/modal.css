@@ -5,7 +5,6 @@
   position: fixed;
   inset: 0;
   background-color: var(--back-modal);
-  z-index: var(--modal-back);
 }
 
 .modal {
