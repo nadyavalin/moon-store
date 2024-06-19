@@ -42,11 +42,7 @@ export function changeQuantityProduct({
       },
     ])?.then((response) => {
       if (response.statusCode === 200) {
-        if (quantity === 1) {
-          btn.classList.add("disabled");
-        } else {
-          btn.classList.remove("disabled");
-        }
+        btn.classList.toggle("disabled", quantity === 1);
         countDiv.textContent = `${quantity}`;
         totalPriceDiv.textContent = `${PriceFormatter.formatCents(response.body.lineItems[lineItemIndex].totalPrice.centAmount)}`;
         recalculateTotalDataCart(response.body);
