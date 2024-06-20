@@ -77,6 +77,12 @@ svg.sort-icon {
   fill: none;
 }
 
+/* svg.sort-icon:hover,
+svg.filter-icon:hover,
+svg.reset-icon:hover {
+  fill: var(--blue-hover);
+  transition: all 1;
+} */
 .sort__price-wrapper,
 .sort__name-wrapper {
   width: 100%;
