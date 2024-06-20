@@ -24,14 +24,12 @@ export async function filterHandler(
 }
 
 export function rerenderPagination(catalogList: HTMLUListElement, totalProducts?: number) {
-  const pagination = <HTMLElement>createPagination(totalProducts, () => renderCatalogContent(catalogList));
   const paginationWrapper = document.querySelector(".pagination");
+  if (paginationWrapper) paginationWrapper.remove();
+  if (!totalProducts) return;
+  const pagination = <HTMLElement>createPagination(totalProducts, () => renderCatalogContent(catalogList));
   const paginationCatalogMainWrapper = document.querySelector(".catalog-main-pagination-wrapper");
-
-  if (paginationWrapper && paginationCatalogMainWrapper) {
-    paginationWrapper.remove();
-    paginationCatalogMainWrapper.append(pagination);
-  }
+  if (paginationCatalogMainWrapper) paginationCatalogMainWrapper.append(pagination);
 }
 
 function priceFilterHandler(inputValuePriceFrom: string, inputValuePriceTo: string) {
@@ -95,4 +93,16 @@ export async function sortHandler(
   if (priceDecreasingSortCheckbox.checked) catalogQueryArgs.sort = "price desc";
 
   renderCatalogContent(catalogList);
+}
+
+export async function resetFilterSortSearch(catalogList: HTMLUListElement) {
+  catalogQueryArgs.filter = null;
+  catalogQueryArgs.pageNumber = 1;
+  catalogQueryArgs.sort = null;
+  catalogQueryArgs.searchText = null;
+  catalogQueryArgs.category = null;
+  const totalProducts = await renderCatalogContent(catalogList);
+  rerenderPagination(catalogList, totalProducts);
+  document.querySelector(".sort-wrapper")?.remove();
+  document.querySelector(".filter-wrapper")?.remove();
 }

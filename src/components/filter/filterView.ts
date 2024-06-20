@@ -1,9 +1,9 @@
 import { createElement, createSvgElement } from "../elements";
-import { filterIcon, sortIcon } from "../svg";
+import { filterIcon, resetIcon, sortIcon } from "../svg";
 import "./filter.css";
-import { filterHandler, resetFilter, resetSort, sortHandler } from "./filterHandler";
+import { filterHandler, resetFilter, resetFilterSortSearch, resetSort, sortHandler } from "./filterHandler";
 
-const createFilterSortButtons = (catalogList: HTMLUListElement) => {
+const createFilterSortResetButtons = (catalogList: HTMLUListElement) => {
   const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter-sort__buttons-wrapper"] });
   const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "0", height: "30", viewBox: "0 0 48 48" });
   const sortButton = createSvgElement(sortIcon, "sort-icon", {
@@ -16,7 +16,10 @@ const createFilterSortButtons = (catalogList: HTMLUListElement) => {
     "stroke-linecap": "round",
     "stroke-linejoin": "round",
   });
-  filterButtonsWrapper.append(filterButton, sortButton);
+  const resetButton = createSvgElement(resetIcon, "reset-icon", {
+    viewBox: "0 0 384 512",
+  });
+  filterButtonsWrapper.append(filterButton, sortButton, resetButton);
   const filterWrapper = createFilterSidebarView(catalogList);
   const sortWrapper = createSortSidebarView(catalogList);
   filterButton.addEventListener("click", () => {
@@ -39,6 +42,8 @@ const createFilterSortButtons = (catalogList: HTMLUListElement) => {
     }
     sortWrapper.classList.toggle("open-filter");
   });
+  resetButton.addEventListener("click", () => resetFilterSortSearch(catalogList));
+
   return filterButtonsWrapper;
 };
 
@@ -142,4 +147,4 @@ function checkSortCheckbox(sortWrapper: HTMLElement, e: Event) {
   });
 }
 
-export default createFilterSortButtons;
+export default createFilterSortResetButtons;

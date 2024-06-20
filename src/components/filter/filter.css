@@ -65,7 +65,8 @@
 }
 
 svg.sort-icon,
-svg.filter-icon {
+svg.filter-icon,
+svg.reset-icon {
   width: 30px;
   height: 30px;
   fill: var(--main-light);

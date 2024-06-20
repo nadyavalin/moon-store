@@ -12,8 +12,8 @@ import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
-import createFilterSortButtons from "../../components/filter/filterView";
 import { rerenderPagination } from "src/components/filter/filterHandler";
+import createFilterSortResetButtons from "src/components/filter/filterView";
 
 export const catalogQueryArgs: CatalogQueryArgs = {
   searchText: null,
@@ -35,7 +35,7 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
 
-  const filterSortButtons = createFilterSortButtons(catalogList);
+  const filterSortResetButtons = createFilterSortResetButtons(catalogList);
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
@@ -51,7 +51,6 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
 
   let totalProducts = await renderCatalogContent(catalogList);
   const categories = renderCategories(categoriesResponse, slug);
-
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
@@ -65,7 +64,7 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
 
   const pagination = createPagination(totalProducts, () => renderCatalogContent(catalogList));
 
-  sidePanel.append(filterSortButtons, categories);
+  sidePanel.append(filterSortResetButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
   if (pagination) {
     catalogMainPaginationWrapper.append(catalogList, pagination);
