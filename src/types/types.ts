@@ -70,3 +70,11 @@ export enum AddressType {
   shipping = "shipping",
   billing = "billing",
 }
+
+export interface CatalogQueryArgs {
+  searchText: string | null;
+  category: string | null;
+  pageNumber: number;
+  filter: string[] | null;
+  sort: string | null;
+}

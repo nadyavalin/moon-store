@@ -2,7 +2,7 @@ import "./catalog.css";
 import "../../components/loader.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories, getCart } from "../../api/api";
-import { CategoryData } from "../../types/types";
+import { CatalogQueryArgs, CategoryData } from "../../types/types";
 import { ClientResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
@@ -12,7 +12,16 @@ import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
-import createFilterSortButtons from "../../components/filter/filterView";
+import { rerenderPagination } from "src/components/filter/filterHandler";
+import createFilterSortResetButtons from "src/components/filter/filterView";
+
+export const catalogQueryArgs: CatalogQueryArgs = {
+  searchText: null,
+  pageNumber: 1,
+  category: null,
+  filter: null,
+  sort: null,
+};
 
 export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
@@ -26,41 +35,42 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
 
-  const filterSortButtons = createFilterSortButtons(id);
+  const filterSortResetButtons = createFilterSortResetButtons(catalogList);
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
-  const queryArgs: Record<string, QueryParam> = {};
+  catalogQueryArgs.filter = null;
+  catalogQueryArgs.pageNumber = 1;
+  catalogQueryArgs.sort = null;
+  catalogQueryArgs.searchText = null;
+  catalogQueryArgs.category = null;
+
   if (id) {
-    queryArgs["filter.query"] = `categories.id:"${id}"`;
+    catalogQueryArgs.category = `categories.id:"${id}"`;
   }
 
-  const totalProducts = await renderCatalogContent(catalogList, queryArgs);
+  let totalProducts = await renderCatalogContent(catalogList);
   const categories = renderCategories(categoriesResponse, slug);
-
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
     const target = <HTMLElement>event.target;
 
     if (target.classList.contains("search-button")) {
-      queryArgs["text.ru"] = `${input.value}`;
-      renderCatalogContent(catalogList, queryArgs);
+      catalogQueryArgs.searchText = `${input.value}`;
+      totalProducts = await renderCatalogContent(catalogList);
+      rerenderPagination(catalogList, totalProducts);
     }
   });
 
-  const pagination = createPagination(
-    (pageNumber) => renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
-    totalProducts,
-  );
+  const pagination = createPagination(() => renderCatalogContent(catalogList), totalProducts);
 
-  sidePanel.append(filterSortButtons, categories);
+  sidePanel.append(filterSortResetButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
   if (pagination) {
     catalogMainPaginationWrapper.append(catalogList, pagination);
   }
 
   catalog.append(searchPanel, catalogWrapper);
-
   return catalog;
 }
 
@@ -135,12 +145,20 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
+export async function renderCatalogContent(catalogList: HTMLUListElement) {
   const cartResponse = await getCart();
   const loader = createElement({ tagName: "div", classNames: ["loader"] });
   try {
     catalogList.innerHTML = "";
     catalogList.append(loader);
+    const queryArgs: Record<string, QueryParam> = {
+      "filter.query": catalogQueryArgs.category as string,
+      sort: catalogQueryArgs.sort as string,
+      filter: catalogQueryArgs.filter as string[],
+      "text.ru": catalogQueryArgs.searchText as string,
+      offset: (catalogQueryArgs.pageNumber - 1) * productsPerPage,
+    };
+
     const productResponse = await getProducts(queryArgs);
     const items = productResponse?.body.results;
     const productsTotal = productResponse?.body.total;
