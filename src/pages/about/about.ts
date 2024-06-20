@@ -23,15 +23,17 @@ export function renderAboutUsContent() {
   const introductionWrapper = createElement({ tagName: "details", classNames: ["intro__wrapper"] });
   const summaryText = createElement({ tagName: "summary", textContent: "Наша команда - это..." });
   const introductionParagraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction });
+  introductionWrapper.append(summaryText, introductionParagraph);
+
   developers.map((dev) => {
     const introText = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: dev.introText });
-    introductionWrapper.append(summaryText, introductionParagraph, introText);
+    introductionWrapper.append(introText);
+    return introductionWrapper;
   });
 
   const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
-  developers.map((dev) => {
+  const developerElements = developers.map((dev) => {
     const devWrapper = createElement({ tagName: "div", classNames: ["developer__wrapper"] });
-
     const developerImage = createElement({
       tagName: "img",
       classNames: ["developers-image"],
@@ -56,12 +58,12 @@ export function renderAboutUsContent() {
     });
 
     devWrapper.append(developerImage, developerName, developerPosition, githubLink, developerBio);
-    developersWrapper.append(devWrapper);
+    return devWrapper;
   });
 
+  developersWrapper.append(...developerElements);
   quoteWrapper.append(quote, quoteText);
   aboutUsSchoolLogoLink.append(aboutUsSchoolLogo);
-
   aboutUsWrapper.append(title, quoteWrapper, introductionWrapper, aboutUsSchoolLogoLink, developersWrapper);
   return aboutUsWrapper;
 }
