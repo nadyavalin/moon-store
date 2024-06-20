@@ -1,8 +1,7 @@
 import { correctFactorForPrices } from "../../api/constants";
 import { createSnackbar } from "../elements";
 import { SnackbarType } from "../../types/types";
-import { renderCatalogContent } from "src/pages/catalog/catalog";
-import { catalogQueryArgs } from "src/store/state";
+import { catalogQueryArgs, renderCatalogContent } from "../../pages/catalog/catalog";
 
 export async function filterHandler(
   inputValuePriceFrom: string,

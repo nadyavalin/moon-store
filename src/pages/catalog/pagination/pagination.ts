@@ -2,7 +2,7 @@ import "./pagination.css";
 import { createElement, createSvgElement } from "../../../components/elements";
 import { arrowLeft, arrowRight } from "../../../components/svg";
 import { productsPerPage } from "./constants";
-import { catalogQueryArgs } from "src/store/state";
+import { catalogQueryArgs } from "../catalog";
 
 export function createPagination(totalProducts: number | undefined, onPageClick: (pageNumber: number) => void) {
   if (!totalProducts) {

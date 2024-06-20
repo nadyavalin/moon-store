@@ -2,7 +2,7 @@ import "./catalog.css";
 import "../../components/loader.css";
 import { createElement } from "../../components/elements";
 import { getProducts, getCategories, getCart } from "../../api/api";
-import { CategoryData } from "../../types/types";
+import { CatalogQueryArgs, CategoryData } from "../../types/types";
 import { ClientResponse, Category, CategoryPagedQueryResponse, QueryParam } from "@commercetools/platform-sdk";
 import { createCard } from "../../components/productCard/productCard";
 import { createSvgElement } from "../../components/elements";
@@ -13,9 +13,17 @@ import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
 import createFilterSortButtons from "../../components/filter/filterView";
-import { catalogQueryArgs } from "src/store/state";
+
+export const catalogQueryArgs: CatalogQueryArgs = {
+  searchText: null,
+  pageNumber: 1,
+  category: null,
+  filter: null,
+  sort: null,
+};
 
 export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
+  catalogQueryArgs.category = null;
   const slug = args[args.length - 1];
   const categoriesResponse = await getCategories();
   const results = categoriesResponse?.body.results;
@@ -34,6 +42,10 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   if (id) {
     catalogQueryArgs.category = `categories.id:"${id}"`;
   }
+  catalogQueryArgs.filter = null;
+  catalogQueryArgs.pageNumber = 1;
+  catalogQueryArgs.sort = null;
+
   const totalProducts = await renderCatalogContent(catalogList);
   const categories = renderCategories(categoriesResponse, slug);
 
