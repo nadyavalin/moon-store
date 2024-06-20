@@ -4,7 +4,6 @@ import "./promoCodes.css";
 
 export async function createPromoCodesBlock() {
   const response = await getDiscounts();
-  console.log(response);
   const quantity = response?.body.results;
   const promoCodesWrapper = createElement({ tagName: "div", classNames: ["promo-codes__wrapper"] });
 

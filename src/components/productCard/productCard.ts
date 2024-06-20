@@ -6,7 +6,7 @@ import { Pages } from "../../types/types";
 import { getCart, getProducts } from "../../api/api";
 import { createModalSize } from "../../pages/catalog/modalSizes/modalSizes";
 
-export function createCard(item: ProductProjection, cartResponse: ClientResponse<Cart> | undefined) {
+export function createCard(item: ProductProjection, cartResponse?: ClientResponse<Cart>) {
   const name = item.name.ru;
   const images = item.masterVariant.images;
   const description = item.description?.ru;
@@ -46,7 +46,7 @@ export function createCard(item: ProductProjection, cartResponse: ClientResponse
     const productId = cardButton.getAttribute("data-id");
     const response = await getProducts({ "filter.query": `id:"${productId}"` });
     const cartResponse = await getCart();
-    const modal = createModalSize(response, cartResponse, cardButton);
+    const modal = createModalSize(cardButton, response, cartResponse);
     document.body.append(modal);
   });
 
