@@ -48,7 +48,7 @@ export function renderAboutUsContent() {
     const githubLink = createElement({
       tagName: "a",
       classNames: ["developers-github-link"],
-      textContent: "GitHub: nadyavalin",
+      textContent: `GitHub: ${dev.githubName}`,
       attributes: { href: dev.githubLink, target: "_blank" },
     });
     const developerBio = createElement({
