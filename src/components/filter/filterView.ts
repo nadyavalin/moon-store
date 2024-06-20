@@ -3,9 +3,9 @@ import { filterIcon, sortIcon } from "../svg";
 import "./filter.css";
 import { filterHandler, resetFilter, resetSort, sortHandler } from "./filterHandler";
 
-const createFilterSortButtons = (categoryID?: string) => {
+const createFilterSortButtons = (catalogList: HTMLUListElement) => {
   const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter-sort__buttons-wrapper"] });
-  const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "30", height: "30", viewBox: "0 0 48 48" });
+  const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "0", height: "30", viewBox: "0 0 48 48" });
   const sortButton = createSvgElement(sortIcon, "sort-icon", {
     width: "30",
     height: "30",
@@ -17,8 +17,8 @@ const createFilterSortButtons = (categoryID?: string) => {
     "stroke-linejoin": "round",
   });
   filterButtonsWrapper.append(filterButton, sortButton);
-  const filterWrapper = createFilterSidebarView(categoryID);
-  const sortWrapper = createSortSidebarView(categoryID);
+  const filterWrapper = createFilterSidebarView(catalogList);
+  const sortWrapper = createSortSidebarView(catalogList);
   filterButton.addEventListener("click", () => {
     if (filterWrapper.className.includes("open-filter")) {
       filterWrapper.remove();
@@ -42,7 +42,7 @@ const createFilterSortButtons = (categoryID?: string) => {
   return filterButtonsWrapper;
 };
 
-function createFilterSidebarView(categoryID?: string) {
+function createFilterSidebarView(catalogList: HTMLUListElement, categoryID?: string) {
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
   const filterHeading = createElement({ tagName: "h2", classNames: ["filter__heading"], textContent: "Фильтры" });
   const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
@@ -69,16 +69,16 @@ function createFilterSidebarView(categoryID?: string) {
   const resetButton = createElement({ tagName: "button", classNames: ["filter__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize, categoryID);
+    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize, catalogList);
     filterWrapper.remove();
     filterWrapper.classList.remove("open-filter");
   });
-  resetButton.addEventListener("click", () => resetFilter(filterPriceFrom, filterPriceTo, filterWrapperSize));
+  resetButton.addEventListener("click", () => resetFilter(filterPriceFrom, filterPriceTo, filterWrapperSize, catalogList));
   filterWrapper.append(filterHeading, priceHeading, filterWrapperPrice, priceSize, filterWrapperSize, buttonsWrapper);
   return filterWrapper;
 }
 
-function createSortSidebarView(categoryID?: string) {
+function createSortSidebarView(catalogList: HTMLUListElement, categoryID?: string) {
   const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper"] });
   const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
   const priceIncreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
@@ -125,11 +125,11 @@ function createSortSidebarView(categoryID?: string) {
   const resetButton = createElement({ tagName: "button", classNames: ["sort__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, categoryID);
+    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogList);
     sortWrapper.classList.remove("open-filter");
     sortWrapper.remove();
   });
-  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox));
+  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogList));
   sortWrapper.append(sortHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, nameSortWrapper, buttonsWrapper);
   return sortWrapper;
 }

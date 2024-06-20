@@ -13,6 +13,7 @@ import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
 import createFilterSortButtons from "../../components/filter/filterView";
+import { catalogQueryArgs } from "src/store/state";
 
 export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const slug = args[args.length - 1];
@@ -26,16 +27,14 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
 
-  const filterSortButtons = createFilterSortButtons(id);
+  const filterSortButtons = createFilterSortButtons(catalogList);
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
-  const queryArgs: Record<string, QueryParam> = {};
   if (id) {
-    queryArgs["filter.query"] = `categories.id:"${id}"`;
+    catalogQueryArgs.category = `categories.id:"${id}"`;
   }
-
-  const totalProducts = await renderCatalogContent(catalogList, queryArgs);
+  const totalProducts = await renderCatalogContent(catalogList);
   const categories = renderCategories(categoriesResponse, slug);
 
   searchPanel.addEventListener("click", async (event) => {
@@ -43,14 +42,12 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     const target = <HTMLElement>event.target;
 
     if (target.classList.contains("search-button")) {
-      queryArgs["text.ru"] = `${input.value}`;
-      renderCatalogContent(catalogList, queryArgs);
+      catalogQueryArgs.searchText = `${input.value}`;
+      renderCatalogContent(catalogList);
     }
   });
 
-  const pagination = createPagination(totalProducts, (pageNumber) =>
-    renderCatalogContent(catalogList, { ...queryArgs, offset: (pageNumber - 1) * productsPerPage }),
-  );
+  const pagination = createPagination(totalProducts, () => renderCatalogContent(catalogList));
 
   sidePanel.append(filterSortButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
@@ -59,7 +56,6 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   }
 
   catalog.append(searchPanel, catalogWrapper);
-
   return catalog;
 }
 
@@ -134,13 +130,19 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-export async function renderCatalogContent(catalogList: HTMLUListElement, queryArgs: Record<string, QueryParam>) {
+export async function renderCatalogContent(catalogList: HTMLUListElement) {
   const cartResponse = await getCart();
   const loader = createElement({ tagName: "div", classNames: ["loader"] });
   try {
     catalogList.innerHTML = "";
     catalogList.append(loader);
-    const productResponse = await getProducts(queryArgs);
+    const queryArgs: Record<string, QueryParam> = {};
+    queryArgs["filter.query"] = catalogQueryArgs.category as string;
+    queryArgs["sort"] = catalogQueryArgs.sort as string;
+    queryArgs["filter"] = catalogQueryArgs.filter as string[];
+    queryArgs["text.ru"] = catalogQueryArgs.searchText as string;
+
+    const productResponse = await getProducts({ ...queryArgs, offset: (Number(catalogQueryArgs.pageNumber) - 1) * productsPerPage });
     const items = productResponse?.body.results;
     const productsTotal = productResponse?.body.total;
     if (items?.length === 0) {
