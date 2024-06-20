@@ -62,7 +62,7 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     }
   });
 
-  const pagination = createPagination(totalProducts, () => renderCatalogContent(catalogList));
+  const pagination = createPagination(() => renderCatalogContent(catalogList), totalProducts);
 
   sidePanel.append(filterSortResetButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);

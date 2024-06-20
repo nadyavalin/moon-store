@@ -34,6 +34,16 @@ export interface SliderProps {
   onSlideClick?: (image: HTMLImageElement) => void;
 }
 
+export interface Developer {
+  introText: string;
+  bioText: string;
+  githubLink: string;
+  githubName: string;
+  imageSrc: string;
+  name: string;
+  position: string;
+}
+
 export enum Pages {
   ROOT = "",
   MAIN = "#main",

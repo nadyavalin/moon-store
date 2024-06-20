@@ -62,9 +62,7 @@
   gap: 20px;
 }
 
-.nadyavalin__wrapper,
-.raenlin__wrapper,
-.katika__wrapper {
+.developer__wrapper {
   width: 35%;
   padding: 15px;
   display: flex;

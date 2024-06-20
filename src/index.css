@@ -25,6 +25,9 @@
   --back-modal: rgba(30, 30, 30, 0.8);
   --back-modal-image: rgba(252, 255, 236, 0.2);
   --back-promo-code: #020413;
+  --nav-menu-layer: 1;
+  --modal-layer: 2;
+  --notifications-layer: 3;
 }
 
 body {
@@ -47,7 +50,7 @@ body {
   justify-content: flex-start;
   gap: 20px;
   flex-grow: 1;
-  margin-bottom: 50px;
+  margin: 10px 0;
 }
 
 a {
@@ -104,7 +107,6 @@ h1 {
   position: relative;
   color: var(--main-light);
   text-align: center;
-  z-index: 1;
 }
 
 h5 {
@@ -210,7 +212,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 5;
+  z-index: var(--notifications-layer);
 }
 
 .snackbar {

@@ -1,7 +1,10 @@
+import "./basePage.css";
+import "../../index.css";
 import { Pages } from "../../types/types";
 import { state } from "../../store/state";
 import { createElement } from "../../components/elements";
 import { cartHandler, createApiRoot } from "../../api/api";
+import { developers } from "../about/info";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -73,7 +76,6 @@ const menuItemBasketIcon = createElement({ tagName: "i", classNames: ["fa-solid"
 const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"] });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
-// burger
 const burgerMenuWrapper = createElement({ tagName: "div", classNames: ["burger-menu__wrapper"] });
 const burgerMenu = createElement({ tagName: "div", classNames: ["burger-menu"] });
 const burgerLine = createElement({ tagName: "span" });
@@ -117,21 +119,16 @@ header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHead
 document.body.append(snackbarContainer);
 
 const developersWrapper = createElement({ tagName: "div", classNames: ["footer__developers-wrapper"] });
-const nadyavalinLinkGitHub = createElement({
-  tagName: "a",
-  textContent: "nadyavalin",
-  attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
+
+const developersGithubLinks = developers.map((dev) => {
+  const githubLink = createElement({
+    tagName: "a",
+    textContent: dev.githubName,
+    attributes: { href: dev.githubLink, target: "_blank" },
+  });
+  return githubLink;
 });
-const raenlinLinkGitHub = createElement({
-  tagName: "a",
-  textContent: "raenlin",
-  attributes: { href: "https://github.com/raenlin", target: "_blank" },
-});
-const katikaLinkGitHub = createElement({
-  tagName: "a",
-  textContent: "ifbfirst",
-  attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
-});
+
 const rsSchoolLogo = createElement({
   tagName: "img",
   classNames: ["rs-school-logo"],
@@ -140,7 +137,7 @@ const rsSchoolLogo = createElement({
 const rsSchoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
 const footerContentWrapper = createElement({ tagName: "div", classNames: ["footer-content__wrapper"] });
 const yearOfApp = createElement({ tagName: "div", classNames: ["year-app"], textContent: "2024" });
-developersWrapper.append(nadyavalinLinkGitHub, raenlinLinkGitHub, katikaLinkGitHub);
+developersWrapper.append(...developersGithubLinks);
 rsSchoolLogoLink.append(rsSchoolLogo);
 footerContentWrapper.append(developersWrapper, rsSchoolLogoLink, yearOfApp);
 footer.append(hrFooterLine, footerContentWrapper);

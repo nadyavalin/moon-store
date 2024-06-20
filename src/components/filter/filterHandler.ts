@@ -1,6 +1,6 @@
 import { correctFactorForPrices } from "../../api/constants";
 import { createSnackbar } from "../elements";
-import { SnackbarType } from "../../types/types";
+import { Pages, SnackbarType } from "../../types/types";
 import { catalogQueryArgs, renderCatalogContent } from "../../pages/catalog/catalog";
 import { createPagination } from "src/pages/catalog/pagination/pagination";
 
@@ -27,7 +27,7 @@ export function rerenderPagination(catalogList: HTMLUListElement, totalProducts?
   const paginationWrapper = document.querySelector(".pagination");
   if (paginationWrapper) paginationWrapper.remove();
   if (!totalProducts) return;
-  const pagination = <HTMLElement>createPagination(totalProducts, () => renderCatalogContent(catalogList));
+  const pagination = <HTMLElement>createPagination(() => renderCatalogContent(catalogList), totalProducts);
   const paginationCatalogMainWrapper = document.querySelector(".catalog-main-pagination-wrapper");
   if (paginationCatalogMainWrapper) paginationCatalogMainWrapper.append(pagination);
 }
@@ -105,4 +105,5 @@ export async function resetFilterSortSearch(catalogList: HTMLUListElement) {
   rerenderPagination(catalogList, totalProducts);
   document.querySelector(".sort-wrapper")?.remove();
   document.querySelector(".filter-wrapper")?.remove();
+  window.location.hash = Pages.CATALOG;
 }

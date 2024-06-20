@@ -4,7 +4,7 @@ import { arrowLeft, arrowRight } from "../../../components/svg";
 import { productsPerPage } from "./constants";
 import { catalogQueryArgs } from "../catalog";
 
-export function createPagination(totalProducts: number | undefined, onPageClick: (pageNumber: number) => void) {
+export function createPagination(onPageClick: (pageNumber: number) => void, totalProducts?: number) {
   if (!totalProducts) {
     return null;
   }

@@ -1,6 +1,6 @@
 import "./about.css";
 import { createElement } from "../../components/elements";
-import { introduction1p, introduction2p, introduction3p, introduction4p, katikaBioText, nadyavalinBioText, raenlinBioText } from "./text";
+import { introduction, developers } from "./info";
 
 export function renderAboutUsContent() {
   const aboutUsSchoolLogo = createElement({
@@ -22,93 +22,48 @@ export function renderAboutUsContent() {
 
   const introductionWrapper = createElement({ tagName: "details", classNames: ["intro__wrapper"] });
   const summaryText = createElement({ tagName: "summary", textContent: "Наша команда - это..." });
-  const introduction1Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction1p });
-  const introduction2Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction2p });
-  const introduction3Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction3p });
-  const introduction4Paragraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction4p });
+  const introductionParagraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction });
+  introductionWrapper.append(summaryText, introductionParagraph);
+
+  const introductionElements = developers.map((dev) => {
+    const introText = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: dev.introText });
+    return introText;
+  });
+  introductionWrapper.append(...introductionElements);
 
   const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
-  const nadyavalinWrapper = createElement({ tagName: "div", classNames: ["nadyavalin__wrapper"] });
-  const raenlinWrapper = createElement({ tagName: "div", classNames: ["raenlin__wrapper"] });
-  const katikaWrapper = createElement({ tagName: "div", classNames: ["katika__wrapper"] });
+  const developerElements = developers.map((dev) => {
+    const devWrapper = createElement({ tagName: "div", classNames: ["developer__wrapper"] });
+    const developerImage = createElement({
+      tagName: "img",
+      classNames: ["developers-image"],
+      attributes: { src: dev.imageSrc },
+    });
+    const developerName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: dev.name });
+    const developerPosition = createElement({
+      tagName: "p",
+      classNames: ["developers-position"],
+      textContent: dev.position,
+    });
+    const githubLink = createElement({
+      tagName: "a",
+      classNames: ["developers-github-link"],
+      textContent: `GitHub: ${dev.githubName}`,
+      attributes: { href: dev.githubLink, target: "_blank" },
+    });
+    const developerBio = createElement({
+      tagName: "p",
+      classNames: ["developers-bio"],
+      textContent: dev.bioText,
+    });
 
-  const nadyavalinPhoto = createElement({
-    tagName: "img",
-    classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/nadyavalin.jpg" },
-  });
-  const raenlinPhoto = createElement({
-    tagName: "img",
-    classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/raenlin.jpg" },
-  });
-  const katikaPhoto = createElement({
-    tagName: "img",
-    classNames: ["developers-image"],
-    attributes: { src: "../../public/developers-img/ifbfirst.jpg" },
-  });
-
-  const nadyavalinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Надежда Ткачук" });
-  const raenlinName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Дарья Пчелинцева" });
-  const katikaName = createElement({ tagName: "p", classNames: ["developers-name"], textContent: "Екатерина Машко" });
-
-  const nadyavalinPosition = createElement({
-    tagName: "p",
-    classNames: ["developers-position"],
-    textContent: "Front-end developer",
-  });
-  const raenlinPosition = createElement({
-    tagName: "p",
-    classNames: ["developers-position"],
-    textContent: "Front-end developer",
-  });
-  const katikaPosition = createElement({
-    tagName: "p",
-    classNames: ["developers-position"],
-    textContent: "Front-end developer",
+    devWrapper.append(developerImage, developerName, developerPosition, githubLink, developerBio);
+    return devWrapper;
   });
 
-  const nadyavalinGitHub = createElement({
-    tagName: "a",
-    classNames: ["developers-github-link"],
-    textContent: "GitHub: nadyavalin",
-    attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
-  });
-  const raenlinGitHub = createElement({
-    tagName: "a",
-    classNames: ["developers-github-link"],
-    textContent: "GitHub: raenlin",
-    attributes: { href: "https://github.com/raenlin", target: "_blank" },
-  });
-  const katikaGitHub = createElement({
-    tagName: "a",
-    classNames: ["developers-github-link"],
-    textContent: "GitHub: ifbfirst",
-    attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
-  });
-
-  const nadyavalinBio = createElement({
-    tagName: "p",
-    classNames: ["developers-bio"],
-    textContent: nadyavalinBioText,
-  });
-  const raenlinBio = createElement({
-    tagName: "p",
-    classNames: ["developers-bio"],
-    textContent: raenlinBioText,
-  });
-  const katikaBio = createElement({
-    tagName: "p",
-    classNames: ["developers-bio"],
-    textContent: katikaBioText,
-  });
+  developersWrapper.append(...developerElements);
   quoteWrapper.append(quote, quoteText);
   aboutUsSchoolLogoLink.append(aboutUsSchoolLogo);
-  nadyavalinWrapper.append(nadyavalinPhoto, nadyavalinName, nadyavalinPosition, nadyavalinGitHub, nadyavalinBio);
-  raenlinWrapper.append(raenlinPhoto, raenlinName, raenlinPosition, raenlinGitHub, raenlinBio);
-  katikaWrapper.append(katikaPhoto, katikaName, katikaPosition, katikaGitHub, katikaBio);
-  developersWrapper.append(nadyavalinWrapper, raenlinWrapper, katikaWrapper);
-  introductionWrapper.append(summaryText, introduction1Paragraph, introduction2Paragraph, introduction3Paragraph, introduction4Paragraph);
   aboutUsWrapper.append(title, quoteWrapper, introductionWrapper, aboutUsSchoolLogoLink, developersWrapper);
   return aboutUsWrapper;
 }
