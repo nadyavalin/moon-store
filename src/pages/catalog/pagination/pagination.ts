@@ -49,8 +49,8 @@ export function createPagination(totalProducts: number | undefined, onPageClick:
 
   function updatePagination() {
     const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
-    onPageClick(catalogQueryArgs.pageNumber as number);
-    paginationState.currentPage = catalogQueryArgs.pageNumber as number;
+    onPageClick(catalogQueryArgs.pageNumber);
+    paginationState.currentPage = catalogQueryArgs.pageNumber;
     paginationItems.forEach((element) => {
       element.classList.toggle("pagination__item_active", Number(element.dataset.index) === catalogQueryArgs.pageNumber);
     });

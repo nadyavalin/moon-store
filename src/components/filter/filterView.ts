@@ -42,7 +42,7 @@ const createFilterSortButtons = (catalogList: HTMLUListElement) => {
   return filterButtonsWrapper;
 };
 
-function createFilterSidebarView(catalogList: HTMLUListElement, categoryID?: string) {
+function createFilterSidebarView(catalogList: HTMLUListElement) {
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
   const filterHeading = createElement({ tagName: "h2", classNames: ["filter__heading"], textContent: "Фильтры" });
   const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
@@ -78,7 +78,7 @@ function createFilterSidebarView(catalogList: HTMLUListElement, categoryID?: str
   return filterWrapper;
 }
 
-function createSortSidebarView(catalogList: HTMLUListElement, categoryID?: string) {
+function createSortSidebarView(catalogList: HTMLUListElement) {
   const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper"] });
   const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
   const priceIncreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });

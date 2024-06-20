@@ -64,7 +64,7 @@ export enum AddressType {
 export interface CatalogQueryArgs {
   searchText: string | null;
   category: string | null;
-  pageNumber: number | null;
+  pageNumber: number;
   filter: string[] | null;
   sort: string | null;
 }
