@@ -25,11 +25,11 @@ export function renderAboutUsContent() {
   const introductionParagraph = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: introduction });
   introductionWrapper.append(summaryText, introductionParagraph);
 
-  developers.map((dev) => {
+  const introductionElement = developers.map((dev) => {
     const introText = createElement({ tagName: "p", classNames: ["about-us__text"], textContent: dev.introText });
-    introductionWrapper.append(introText);
-    return introductionWrapper;
+    return introText;
   });
+  introductionWrapper.append(...introductionElement);
 
   const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
   const developerElements = developers.map((dev) => {
