@@ -117,6 +117,10 @@
     flex-direction: column;
   }
 
+  .developer__wrapper {
+    width: 100%;
+  }
+
   .nadyavalin__wrapper,
   .raenlin__wrapper,
   .katika__wrapper {
