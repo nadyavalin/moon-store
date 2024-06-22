@@ -16,6 +16,7 @@ import { renderProductContent } from "./pages/product/product";
 import { renderRegistrationFormContent } from "./pages/registration/registrationView";
 import { createElement, createSnackbar } from "./components/elements";
 import renderLoginFormContent from "./pages/loginPage/loginPage";
+import { appStore } from "./store/store";
 
 document.body.append(header, main, footer);
 
@@ -52,7 +53,7 @@ async function renderContent(hash: string) {
         await renderPageContent(getMainPageContent);
         break;
       case Pages.PROFILE:
-        if (localStorage.getItem("refreshToken")) {
+        if (appStore.state.refreshToken !== null) {
           await renderPageContent(renderProfileContent);
         } else {
           window.location.href = Pages.LOGIN;
@@ -71,14 +72,14 @@ async function renderContent(hash: string) {
         contentDiv.append(renderAboutUsContent());
         break;
       case Pages.LOGIN:
-        if (!localStorage.getItem("refreshToken")) {
+        if (appStore.state.refreshToken === null) {
           contentDiv.append(renderLoginFormContent());
         } else {
           window.location.href = Pages.MAIN;
         }
         break;
       case Pages.REGISTRATION:
-        if (!localStorage.getItem("refreshToken")) {
+        if (appStore.state.refreshToken === null) {
           contentDiv.append(renderRegistrationFormContent());
         } else {
           window.location.href = Pages.MAIN;
