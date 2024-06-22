@@ -1,7 +1,7 @@
 import "./basePage.css";
 import "../../index.css";
 import { Pages } from "../../types/types";
-import { state } from "../../store/state";
+import { appStore } from "../../store/store";
 import { createElement } from "../../components/elements";
 import { cartHandler, createApiRoot } from "../../api/api";
 import { developers } from "../about/info";
@@ -39,11 +39,11 @@ menuItemLogOut.addEventListener("click", async () => {
   const greeting = header.querySelector(".user-greeting");
   greeting?.remove();
   localStorage.clear();
-  state.name = null;
-  state.refreshToken = null;
-  state.customerId = null;
-  state.cartId = null;
-  state.anonymousId = null;
+  appStore.setState({ name: null });
+  appStore.setState({ refreshToken: null });
+  appStore.setState({ customerId: null });
+  appStore.setState({ cartId: null });
+  appStore.setState({ anonymousId: null });
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
@@ -97,7 +97,7 @@ export function addUserGreetingToHeader() {
   const profileLink = createElement({
     tagName: "a",
     classNames: ["user-greeting__link"],
-    textContent: `${state.name}`,
+    textContent: `${appStore.state.name}`,
     attributes: { href: Pages.PROFILE },
   });
   greeting.appendChild(profileLink);

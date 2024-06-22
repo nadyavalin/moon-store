@@ -3,12 +3,11 @@ import { ClientBuilder, type PasswordAuthMiddlewareOptions, type HttpMiddlewareO
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "../../components/elements";
 import { Pages, SnackbarType } from "../../types/types";
-import { state } from "../../store/state";
 import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
-import { getCart } from "src/api/api";
 import { showQuantityItemsInHeader } from "../basket/basketHandler";
+import { appStore } from "../../store/store";
 
 export const showHidePasswordHandler = (togglePassword: HTMLInputElement, passwordInput: HTMLInputElement) => {
   const toggle = togglePassword;
@@ -37,19 +36,19 @@ class MyTokenCache implements TokenCache {
 export async function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string, cartId?: string) {
   if (refreshToken) {
     setItemToLocalStorage("refreshToken", refreshToken);
-    state.refreshToken = refreshToken;
+    appStore.setState({ refreshToken: refreshToken });
     createSnackbar(SnackbarType.success, "Вы авторизованы");
     window.location.hash = Pages.MAIN;
   }
   if (customerId) {
-    state.customerId = customerId;
+    appStore.setState({ customerId: customerId });
   }
   if (cartId) {
-    state.cartId = cartId;
+    appStore.setState({ cartId: cartId });
   }
   menuItemLogIn.href = Pages.MAIN;
   menuItemSingUp.href = Pages.MAIN;
-  state.name = userName;
+  appStore.setState({ name: userName });
   addUserGreetingToHeader();
   menuItemLogIn.remove();
   menuItemSingUp.remove();
@@ -88,9 +87,9 @@ export const authorizeUserWithToken = (email: string, password: string) => {
     .withLoggerMiddleware()
     .build();
 
-  state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
+  appStore.setState({ apiRoot: createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey }) });
 
-  state.apiRoot
+  appStore.state.apiRoot
     ?.me()
     .login()
     .post({

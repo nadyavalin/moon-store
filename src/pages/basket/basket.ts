@@ -37,7 +37,6 @@ export async function renderBasketContent() {
     basketWrapper.append(createModalConfirm());
   });
 
-  // ввод промо кода
   const promoCodeWrapper = createElement({ tagName: "div", classNames: ["promo-code__basket-wrapper"] });
   const promoCodeTitle = createElement({ tagName: "p", classNames: ["promo-code__title"], textContent: "Введите промокод:" });
   const promoCodeInput = createElement({
@@ -51,8 +50,6 @@ export async function renderBasketContent() {
   promoCodeInput.addEventListener("input", () => {
     promoCodeButton.classList.remove("inactive");
   });
-
-  // ввод промо кода
 
   response?.body.lineItems.forEach((item, index) => {
     productListWrapper.append(createBasketCard(index, response?.body));

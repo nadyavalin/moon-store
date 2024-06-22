@@ -1,7 +1,7 @@
 import { createElement } from "src/components/elements";
 import "./registration.css";
 import "../../index.css";
-import { Pages } from "src/types/types";
+import { Pages } from "../../types/types";
 import { formRegistrationHandler } from "./registrationHandler";
 import { showHidePasswordHandler } from "../loginPage/loginHandler";
 import { addValidationListenersToInput, checkValidityAllFields } from "./checkValidityForm";

@@ -1,7 +1,7 @@
 import { createSnackbar } from "../../components/elements";
 import { Customer, Pages, SnackbarType } from "../../types/types";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
-import { createCart, createCustomer } from "../../api/api";
+import { createCustomer } from "../../api/api";
 
 export function formRegistrationHandler(event: Event) {
   const form = <HTMLFormElement>document.querySelector(".registration-form");
