@@ -3,7 +3,6 @@ import { ClientBuilder, type PasswordAuthMiddlewareOptions, type HttpMiddlewareO
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { createSnackbar } from "../../components/elements";
 import { Pages, SnackbarType } from "../../types/types";
-import { setItemToLocalStorage } from "../../utils/utils";
 import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../../api/constants";
 import { addUserGreetingToHeader, menuItemLogIn, menuItemLogOut, menuItemSingUp, menuItemUserProfile, userMenu } from "../basePage/basePage";
 import { showQuantityItemsInHeader } from "../basket/basketHandler";
@@ -35,7 +34,6 @@ class MyTokenCache implements TokenCache {
 
 export async function changeAppAfterLogin(userName: string, refreshToken?: string, customerId?: string, cartId?: string) {
   if (refreshToken) {
-    setItemToLocalStorage("refreshToken", refreshToken);
     appStore.setState({ refreshToken: refreshToken });
     createSnackbar(SnackbarType.success, "Вы авторизованы");
     window.location.hash = Pages.MAIN;
@@ -104,11 +102,8 @@ export const authorizeUserWithToken = (email: string, password: string) => {
       if (response.statusCode === 200) {
         showQuantityItemsInHeader(response.body.cart);
         const user = response.body.customer.firstName as string;
-        setItemToLocalStorage("user", user);
         const cartId = response.body.cart?.id;
-        setItemToLocalStorage("cart-id", cartId);
         const userID = response.body.customer.id;
-        setItemToLocalStorage("customerId", userID);
         const token = tokenCache.myCache.refreshToken as string;
         changeAppAfterLogin(user, token, userID, cartId);
       }

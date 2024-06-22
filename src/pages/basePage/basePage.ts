@@ -38,12 +38,7 @@ export const menuItemLogOut = createElement({ tagName: "button", classNames: ["m
 menuItemLogOut.addEventListener("click", async () => {
   const greeting = header.querySelector(".user-greeting");
   greeting?.remove();
-  localStorage.clear();
-  appStore.setState({ name: null });
-  appStore.setState({ refreshToken: null });
-  appStore.setState({ customerId: null });
-  appStore.setState({ cartId: null });
-  appStore.setState({ anonymousId: null });
+  appStore.setState({ name: null, refreshToken: null, customerId: null, cartId: null, anonymousId: null });
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);

@@ -11,7 +11,6 @@ import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 import { Client } from "@commercetools/sdk-client-v2";
-import { setItemToLocalStorage } from "../utils/utils";
 import { anonymousId } from "./anonymousClientBuilder";
 import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
 import { appStore } from "../store/store";
@@ -38,11 +37,8 @@ export const cartHandler = async () => {
     const response = await createCart({ currency: "RUB", country: "RU" });
     const cartId = response?.body.id;
     const anonymousId = response?.body.anonymousId;
-    setItemToLocalStorage("cart-id", `${cartId}`);
-    setItemToLocalStorage("anonymousId", anonymousId);
     showQuantityItemsInHeader(response?.body);
-    appStore.setState({ cartId: cartId });
-    appStore.setState({ anonymousId: anonymousId });
+    appStore.setState({ cartId: cartId, anonymousId: anonymousId });
   } else if (anonymousId !== appStore.state.anonymousId) {
     const response = await getCart();
     const version = response?.body.version as number;
