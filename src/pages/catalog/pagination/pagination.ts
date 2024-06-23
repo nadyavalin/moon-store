@@ -4,7 +4,7 @@ import { arrowLeft, arrowRight } from "../../../components/svg";
 import { productsPerPage } from "./constants";
 import { catalogQueryArgs } from "../catalog";
 
-export function createPagination(onPageClick: (pageNumber: number) => void, totalProducts?: number) {
+export function createPagination(onPageClick: () => void, totalProducts?: number) {
   if (!totalProducts) {
     return null;
   }
@@ -33,6 +33,7 @@ export function createPagination(onPageClick: (pageNumber: number) => void, tota
   for (let i = 1; i <= totalPages; i++) {
     const paginationNumber = createElement({ tagName: "li", classNames: ["pagination__item"], textContent: i.toString() });
     paginationNumber.dataset.index = i.toString();
+
     if (i === 1) {
       paginationNumber.classList.add("pagination__item_active");
       paginationButtonLeft.classList.add("pagination__arrow_disabled");
@@ -43,14 +44,9 @@ export function createPagination(onPageClick: (pageNumber: number) => void, tota
     paginationNumbersWrapper.append(paginationNumber);
   }
 
-  const paginationState = {
-    currentPage: 1,
-  };
-
   function updatePagination() {
     const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
-    onPageClick(catalogQueryArgs.pageNumber);
-    paginationState.currentPage = catalogQueryArgs.pageNumber;
+    onPageClick();
     paginationItems.forEach((element) => {
       element.classList.toggle("pagination__item_active", Number(element.dataset.index) === catalogQueryArgs.pageNumber);
     });
@@ -64,7 +60,7 @@ export function createPagination(onPageClick: (pageNumber: number) => void, tota
       catalogQueryArgs.pageNumber = Number(target.dataset.index);
       updatePagination();
     } else if (target.classList.contains("pagination__arrow")) {
-      catalogQueryArgs.pageNumber = paginationState.currentPage - (target.dataset.direction === "left" ? 1 : -1);
+      catalogQueryArgs.pageNumber = catalogQueryArgs.pageNumber - (target.dataset.direction === "left" ? 1 : -1);
       updatePagination();
     }
   });

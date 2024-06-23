@@ -12,7 +12,6 @@ import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
-import { rerenderPagination } from "../../components/filter/filterHandler";
 import createFilterSortResetButtons from "../../components/filter/filterView";
 
 export const catalogQueryArgs: CatalogQueryArgs = {
@@ -33,9 +32,7 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
   const catalog = createElement({ tagName: "section", classNames: ["catalog"] });
   const catalogWrapper = createElement({ tagName: "div", classNames: ["catalog-wrapper"] });
   const catalogMainPaginationWrapper = createElement({ tagName: "div", classNames: ["catalog-main-pagination-wrapper"] });
-  const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
-
-  const filterSortResetButtons = createFilterSortResetButtons(catalogList);
+  const filterSortResetButtons = createFilterSortResetButtons(catalogMainPaginationWrapper);
   const sidePanel = createElement({ tagName: "div", classNames: ["catalog-side"] });
   const searchPanel = renderSearchPanel();
 
@@ -49,7 +46,7 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
     catalogQueryArgs.category = `categories.id:"${id}"`;
   }
 
-  let totalProducts = await renderCatalogContent(catalogList);
+  renderCatalogContent(catalogMainPaginationWrapper);
   const categories = renderCategories(categoriesResponse, slug);
   searchPanel.addEventListener("click", async (event) => {
     const input = <HTMLInputElement>searchPanel.querySelector(".search-input");
@@ -57,18 +54,12 @@ export async function getCatalogPage(args: string[]): Promise<HTMLElement> {
 
     if (target.classList.contains("search-button")) {
       catalogQueryArgs.searchText = `${input.value}`;
-      totalProducts = await renderCatalogContent(catalogList);
-      rerenderPagination(catalogList, totalProducts);
+      renderCatalogContent(catalogMainPaginationWrapper);
     }
   });
 
-  const pagination = createPagination(() => renderCatalogContent(catalogList), totalProducts);
-
   sidePanel.append(filterSortResetButtons, categories);
   catalogWrapper.append(sidePanel, catalogMainPaginationWrapper);
-  if (pagination) {
-    catalogMainPaginationWrapper.append(catalogList, pagination);
-  }
 
   catalog.append(searchPanel, catalogWrapper);
   return catalog;
@@ -145,9 +136,10 @@ function renderCategories(response: ClientResponse<CategoryPagedQueryResponse> |
   return categoriesWrapper;
 }
 
-export async function renderCatalogContent(catalogList: HTMLUListElement) {
+export async function renderCatalogContent(catalogMainPaginationWrapper: HTMLElement) {
   const cartResponse = await getCart();
   const loader = createElement({ tagName: "div", classNames: ["loader"] });
+  const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   try {
     catalogList.innerHTML = "";
     catalogList.append(loader);
@@ -166,11 +158,13 @@ export async function renderCatalogContent(catalogList: HTMLUListElement) {
       catalogList.append("Товары отсутствуют!");
       createSnackbar(SnackbarType.error, "Товары отсутствуют");
     } else {
-      catalogList.innerHTML = "";
+      catalogMainPaginationWrapper.innerHTML = "";
       items?.forEach((item) => {
         const card = createCard(item, cartResponse);
         catalogList.append(card);
       });
+      const pagination = <HTMLElement>createPagination(() => renderCatalogContent(catalogMainPaginationWrapper), productsTotal);
+      catalogMainPaginationWrapper.append(catalogList, pagination);
     }
     return productsTotal;
   } catch (error) {
