@@ -175,6 +175,10 @@
     flex-direction: column;
   }
 
+  .categories-wrapper {
+    align-items: flex-start;
+  }
+
   .catalog-side {
     padding: 10px;
   }
@@ -203,10 +207,6 @@
 
   .category-child {
     font-size: 12px;
-  }
-
-  .categories-wrapper {
-    align-items: flex-start;
   }
 
   .search-panel__inner {

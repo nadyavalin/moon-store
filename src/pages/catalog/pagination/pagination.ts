@@ -44,24 +44,24 @@ export function createPagination(onPageClick: () => void, totalProducts?: number
     paginationNumbersWrapper.append(paginationNumber);
   }
 
-  function updatePagination() {
-    const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
-    onPageClick();
-    paginationItems.forEach((element) => {
-      element.classList.toggle("pagination__item_active", Number(element.dataset.index) === catalogQueryArgs.pageNumber);
-    });
-    paginationButtonLeft.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === 1);
-    paginationButtonRight.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === totalPages);
-  }
+  // function updatePagination() {
+  //   const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
+  //   onPageClick();
+  //   paginationItems.forEach((element) => {
+  //     element.classList.toggle("pagination__item_active", Number(element.dataset.index) === catalogQueryArgs.pageNumber);
+  //   });
+  //   paginationButtonLeft.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === 1);
+  //   paginationButtonRight.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === totalPages);
+  // }
 
   paginationWrapper.addEventListener("click", async (event) => {
     const target = <HTMLDivElement>event.target;
     if (target.classList.contains("pagination__item")) {
       catalogQueryArgs.pageNumber = Number(target.dataset.index);
-      updatePagination();
+      onPageClick();
     } else if (target.classList.contains("pagination__arrow")) {
       catalogQueryArgs.pageNumber = catalogQueryArgs.pageNumber - (target.dataset.direction === "left" ? 1 : -1);
-      updatePagination();
+      onPageClick();
     }
   });
 
