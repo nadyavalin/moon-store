@@ -141,8 +141,8 @@ export async function renderCatalogContent(catalogMainPaginationWrapper: HTMLEle
   const loader = createElement({ tagName: "div", classNames: ["loader"] });
   const catalogList = createElement({ tagName: "ul", classNames: ["catalog-main"] });
   try {
-    catalogList.innerHTML = "";
-    catalogList.append(loader);
+    catalogMainPaginationWrapper.innerHTML = "";
+    catalogMainPaginationWrapper.append(loader);
     const queryArgs: Record<string, QueryParam> = {
       "filter.query": catalogQueryArgs.category as string,
       sort: catalogQueryArgs.sort as string,
@@ -155,7 +155,7 @@ export async function renderCatalogContent(catalogMainPaginationWrapper: HTMLEle
     const items = productResponse?.body.results;
     const productsTotal = productResponse?.body.total;
     if (items?.length === 0) {
-      catalogList.append("Товары отсутствуют!");
+      catalogMainPaginationWrapper.append("Товары отсутствуют!");
       createSnackbar(SnackbarType.error, "Товары отсутствуют");
     } else {
       catalogMainPaginationWrapper.innerHTML = "";
@@ -168,7 +168,7 @@ export async function renderCatalogContent(catalogMainPaginationWrapper: HTMLEle
     }
     return productsTotal;
   } catch (error) {
-    catalogList.append("Ошибка! Контент невозможно отобразить.");
+    catalogMainPaginationWrapper.append("Ошибка! Контент невозможно отобразить.");
     createSnackbar(SnackbarType.error, "Контент невозможно отобразить");
   } finally {
     loader.remove();
