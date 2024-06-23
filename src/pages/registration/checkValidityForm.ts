@@ -1,4 +1,4 @@
-import { createElement } from "src/components/elements";
+import { createElement } from "../../components/elements";
 
 export function patternValidator(inputTag: HTMLInputElement): boolean {
   const patternReg = new RegExp(inputTag.pattern);

@@ -11,39 +11,35 @@ import generateAnonymousSessionFlow from "./anonymousClientBuilder";
 import generateRefreshTokenFlow from "./refreshTokenClientBuilder";
 import { changeAppAfterLogin } from "../pages/loginPage/loginHandler";
 import { Client } from "@commercetools/sdk-client-v2";
-import { setItemToLocalStorage } from "../utils/utils";
 import { anonymousId } from "./anonymousClientBuilder";
 import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
-import { state } from "../store/state";
+import { appStore } from "../store/store";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
-  if (!state.refreshToken) {
+  if (!appStore.state.refreshToken) {
     ctpClient = generateAnonymousSessionFlow();
   } else {
-    const user = state.name as string;
+    const user = appStore.state.name as string;
     changeAppAfterLogin(user);
-    ctpClient = generateRefreshTokenFlow(state.refreshToken);
+    ctpClient = generateRefreshTokenFlow(appStore.state.refreshToken);
   }
-  state.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" });
+  appStore.setState({ apiRoot: createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" }) });
 };
 
 export const cartHandler = async () => {
-  if (state.refreshToken) {
+  if (appStore.state.refreshToken) {
     const response = await getCart();
     showQuantityItemsInHeader(response?.body);
     return;
   }
-  if (!state.cartId) {
+  if (!appStore.state.cartId) {
     const response = await createCart({ currency: "RUB", country: "RU" });
     const cartId = response?.body.id;
     const anonymousId = response?.body.anonymousId;
-    setItemToLocalStorage("cart-id", `${cartId}`);
-    setItemToLocalStorage("anonymousId", anonymousId);
     showQuantityItemsInHeader(response?.body);
-    state.cartId = cartId;
-    state.anonymousId = anonymousId;
-  } else if (anonymousId !== state.anonymousId) {
+    appStore.setState({ cartId: cartId, anonymousId: anonymousId });
+  } else if (anonymousId !== appStore.state.anonymousId) {
     const response = await getCart();
     const version = response?.body.version as number;
     await updateCart(version, [
@@ -57,16 +53,16 @@ export const cartHandler = async () => {
 };
 
 export const getProducts = (queryArgs?: Record<string, QueryParam>) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.productProjections()
     .search()
     .get({ queryArgs: { limit: 8, offset: 0, ...queryArgs } })
     .execute();
 
-export const getCategories = () => state.apiRoot?.categories().get().execute();
+export const getCategories = () => appStore.state.apiRoot?.categories().get().execute();
 
 export const createCustomer = (requestBody: MyCustomerDraft) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.me()
     .signup()
     .post({
@@ -75,7 +71,7 @@ export const createCustomer = (requestBody: MyCustomerDraft) =>
     .execute();
 
 export const createCart = (requestBody: { currency: string; country: string }) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.me()
     .carts()
     .post({
@@ -84,16 +80,16 @@ export const createCart = (requestBody: { currency: string; country: string }) =
     .execute();
 
 export const getCart = () =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.carts()
-    .withId({ ID: state.cartId as string })
+    .withId({ ID: appStore.state.cartId as string })
     .get()
     .execute();
 
 export const updateCart = (version: number, actions: CartUpdateAction[]) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.carts()
-    .withId({ ID: state.cartId as string })
+    .withId({ ID: appStore.state.cartId as string })
     .post({
       body: {
         version,
@@ -103,17 +99,17 @@ export const updateCart = (version: number, actions: CartUpdateAction[]) =>
     .execute();
 
 export const getUserData = () =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.customers()
-    .withId({ ID: state.customerId as string })
+    .withId({ ID: appStore.state.customerId as string })
     .get()
     .execute();
 
 export const updateCustomer = (version: number, actions: CustomerUpdateAction[]) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.customers()
     .withId({
-      ID: state.customerId as string,
+      ID: appStore.state.customerId as string,
     })
     .post({
       body: {
@@ -124,7 +120,7 @@ export const updateCustomer = (version: number, actions: CustomerUpdateAction[])
     .execute();
 
 export const changePassword = (id: string, version: number, currentPassword: string, newPassword: string) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.customers()
     .password()
     .post({
@@ -137,13 +133,13 @@ export const changePassword = (id: string, version: number, currentPassword: str
     })
     .execute();
 
-export const getDiscounts = () => state.apiRoot?.discountCodes().get().execute();
+export const getDiscounts = () => appStore.state.apiRoot?.discountCodes().get().execute();
 
 export const addDiscountAction = (version: number, actions: CartAddDiscountCodeAction[]) =>
-  state.apiRoot
+  appStore.state.apiRoot
     ?.me()
     .carts()
-    .withId({ ID: state.cartId as string })
+    .withId({ ID: appStore.state.cartId as string })
     .post({
       body: {
         version,

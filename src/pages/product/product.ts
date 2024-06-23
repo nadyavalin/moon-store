@@ -5,7 +5,7 @@ import { getCart, getProducts, updateCart } from "../../api/api";
 import { createModalImage } from "./modal/modal";
 import { createSlider } from "../../components/slider/slider";
 import { ProductProjection, ClientResponse, ProductProjectionPagedSearchResponse } from "@commercetools/platform-sdk";
-import { SnackbarType } from "src/types/types";
+import { SnackbarType } from "../../types/types";
 import { showQuantityItemsInHeader } from "../basket/basketHandler";
 
 export async function renderProductContent(slug: string): Promise<HTMLElement> {

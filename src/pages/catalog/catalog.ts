@@ -12,8 +12,8 @@ import { SnackbarType } from "../../types/types";
 import { Pages } from "../../types/types";
 import { createPagination } from "./pagination/pagination";
 import { productsPerPage } from "./pagination/constants";
-import { rerenderPagination } from "src/components/filter/filterHandler";
-import createFilterSortResetButtons from "src/components/filter/filterView";
+import { rerenderPagination } from "../../components/filter/filterHandler";
+import createFilterSortResetButtons from "../../components/filter/filterView";
 
 export const catalogQueryArgs: CatalogQueryArgs = {
   searchText: null,
