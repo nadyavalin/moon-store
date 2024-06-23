@@ -3,7 +3,7 @@ import { filterIcon, resetIcon, sortIcon } from "../svg";
 import "./filter.css";
 import { filterHandler, resetFilter, resetFilterSortSearch, resetSort, sortHandler } from "./filterHandler";
 
-const createFilterSortResetButtons = (catalogList: HTMLUListElement) => {
+const createFilterSortResetButtons = (catalogMainPaginationWrapper: HTMLElement) => {
   const filterButtonsWrapper = createElement({ tagName: "div", classNames: ["filter-sort__buttons-wrapper"] });
   const filterButton = createSvgElement(filterIcon, "filter-icon", { width: "0", height: "30", viewBox: "0 0 48 48" });
   const sortButton = createSvgElement(sortIcon, "sort-icon", {
@@ -20,8 +20,8 @@ const createFilterSortResetButtons = (catalogList: HTMLUListElement) => {
     viewBox: "0 0 384 512",
   });
   filterButtonsWrapper.append(filterButton, sortButton, resetButton);
-  const filterWrapper = createFilterSidebarView(catalogList);
-  const sortWrapper = createSortSidebarView(catalogList);
+  const filterWrapper = createFilterSidebarView(catalogMainPaginationWrapper);
+  const sortWrapper = createSortSidebarView(catalogMainPaginationWrapper);
   filterButton.addEventListener("click", () => {
     if (filterWrapper.className.includes("open-filter")) {
       filterWrapper.remove();
@@ -42,12 +42,12 @@ const createFilterSortResetButtons = (catalogList: HTMLUListElement) => {
     }
     sortWrapper.classList.toggle("open-filter");
   });
-  resetButton.addEventListener("click", () => resetFilterSortSearch(catalogList));
+  resetButton.addEventListener("click", () => resetFilterSortSearch(catalogMainPaginationWrapper));
 
   return filterButtonsWrapper;
 };
 
-function createFilterSidebarView(catalogList: HTMLUListElement) {
+function createFilterSidebarView(catalogMainPaginationWrapper: HTMLElement) {
   const filterWrapper = createElement({ tagName: "div", classNames: ["filter-wrapper"] });
   const filterHeading = createElement({ tagName: "h2", classNames: ["filter__heading"], textContent: "Фильтры" });
   const priceHeading = createElement({ tagName: "span", classNames: ["price__heading"], textContent: "Цена ₽:" });
@@ -74,16 +74,16 @@ function createFilterSidebarView(catalogList: HTMLUListElement) {
   const resetButton = createElement({ tagName: "button", classNames: ["filter__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize, catalogList);
+    filterHandler(filterPriceFrom.value, filterPriceTo.value, filterWrapperSize, catalogMainPaginationWrapper);
     filterWrapper.remove();
     filterWrapper.classList.remove("open-filter");
   });
-  resetButton.addEventListener("click", () => resetFilter(filterPriceFrom, filterPriceTo, filterWrapperSize, catalogList));
+  resetButton.addEventListener("click", () => resetFilter(filterPriceFrom, filterPriceTo, filterWrapperSize, catalogMainPaginationWrapper));
   filterWrapper.append(filterHeading, priceHeading, filterWrapperPrice, priceSize, filterWrapperSize, buttonsWrapper);
   return filterWrapper;
 }
 
-function createSortSidebarView(catalogList: HTMLUListElement) {
+function createSortSidebarView(catalogMainPaginationWrapper: HTMLElement) {
   const sortWrapper = createElement({ tagName: "div", classNames: ["sort-wrapper"] });
   const sortHeading = createElement({ tagName: "h2", classNames: ["sort__heading"], textContent: "Сортировка" });
   const priceIncreasingSortWrapper = createElement({ tagName: "div", classNames: ["sort__price-wrapper"] });
@@ -130,11 +130,13 @@ function createSortSidebarView(catalogList: HTMLUListElement) {
   const resetButton = createElement({ tagName: "button", classNames: ["sort__button-reset"], textContent: "Сбросить" });
   buttonsWrapper.append(applyButton, resetButton);
   applyButton.addEventListener("click", () => {
-    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogList);
+    sortHandler(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogMainPaginationWrapper);
     sortWrapper.classList.remove("open-filter");
     sortWrapper.remove();
   });
-  resetButton.addEventListener("click", () => resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogList));
+  resetButton.addEventListener("click", () =>
+    resetSort(priceIncreasingSortCheckbox, priceDecreasingSortCheckbox, nameSortCheckbox, catalogMainPaginationWrapper),
+  );
   sortWrapper.append(sortHeading, priceIncreasingSortWrapper, priceDecreasingSortWrapper, nameSortWrapper, buttonsWrapper);
   return sortWrapper;
 }

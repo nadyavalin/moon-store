@@ -4,7 +4,7 @@ import { arrowLeft, arrowRight } from "../../../components/svg";
 import { productsPerPage } from "./constants";
 import { catalogQueryArgs } from "../catalog";
 
-export function createPagination(onPageClick: (pageNumber: number) => void, totalProducts?: number) {
+export function createPagination(onPageClick: () => void, totalProducts?: number) {
   if (!totalProducts) {
     return null;
   }
@@ -33,39 +33,23 @@ export function createPagination(onPageClick: (pageNumber: number) => void, tota
   for (let i = 1; i <= totalPages; i++) {
     const paginationNumber = createElement({ tagName: "li", classNames: ["pagination__item"], textContent: i.toString() });
     paginationNumber.dataset.index = i.toString();
-    if (i === 1) {
+    if (i === catalogQueryArgs.pageNumber) {
       paginationNumber.classList.add("pagination__item_active");
-      paginationButtonLeft.classList.add("pagination__arrow_disabled");
-    }
-    if (totalPages === 1) {
-      paginationButtonRight.classList.add("pagination__arrow_disabled");
     }
     paginationNumbersWrapper.append(paginationNumber);
   }
 
-  const paginationState = {
-    currentPage: 1,
-  };
-
-  function updatePagination() {
-    const paginationItems = paginationNumbersWrapper.querySelectorAll(".pagination__item") as NodeListOf<HTMLLIElement>;
-    onPageClick(catalogQueryArgs.pageNumber);
-    paginationState.currentPage = catalogQueryArgs.pageNumber;
-    paginationItems.forEach((element) => {
-      element.classList.toggle("pagination__item_active", Number(element.dataset.index) === catalogQueryArgs.pageNumber);
-    });
-    paginationButtonLeft.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === 1);
-    paginationButtonRight.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === totalPages);
-  }
+  paginationButtonLeft.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === 1);
+  paginationButtonRight.classList.toggle("pagination__arrow_disabled", catalogQueryArgs.pageNumber === totalPages);
 
   paginationWrapper.addEventListener("click", async (event) => {
     const target = <HTMLDivElement>event.target;
     if (target.classList.contains("pagination__item")) {
       catalogQueryArgs.pageNumber = Number(target.dataset.index);
-      updatePagination();
+      onPageClick();
     } else if (target.classList.contains("pagination__arrow")) {
-      catalogQueryArgs.pageNumber = paginationState.currentPage - (target.dataset.direction === "left" ? 1 : -1);
-      updatePagination();
+      catalogQueryArgs.pageNumber = catalogQueryArgs.pageNumber - (target.dataset.direction === "left" ? 1 : -1);
+      onPageClick();
     }
   });
 

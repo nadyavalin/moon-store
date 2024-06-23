@@ -2,13 +2,12 @@ import { correctFactorForPrices } from "../../api/constants";
 import { createSnackbar } from "../elements";
 import { Pages, SnackbarType } from "../../types/types";
 import { catalogQueryArgs, renderCatalogContent } from "../../pages/catalog/catalog";
-import { createPagination } from "src/pages/catalog/pagination/pagination";
 
 export async function filterHandler(
   inputValuePriceFrom: string,
   inputValuePriceTo: string,
   filterWrapperSize: HTMLElement,
-  catalogList: HTMLUListElement,
+  catalogMainPaginationWrapper: HTMLElement,
 ) {
   let arrFilter = [];
   if (inputValuePriceFrom || inputValuePriceTo) {
@@ -19,17 +18,7 @@ export async function filterHandler(
   if (requestSize) arrFilter.push(requestSize);
   catalogQueryArgs.filter = arrFilter;
   catalogQueryArgs.pageNumber = 1;
-  const totalProducts = await renderCatalogContent(catalogList);
-  rerenderPagination(catalogList, totalProducts);
-}
-
-export function rerenderPagination(catalogList: HTMLUListElement, totalProducts?: number) {
-  const paginationWrapper = document.querySelector(".pagination");
-  if (paginationWrapper) paginationWrapper.remove();
-  if (!totalProducts) return;
-  const pagination = <HTMLElement>createPagination(() => renderCatalogContent(catalogList), totalProducts);
-  const paginationCatalogMainWrapper = document.querySelector(".catalog-main-pagination-wrapper");
-  if (paginationCatalogMainWrapper) paginationCatalogMainWrapper.append(pagination);
+  renderCatalogContent(catalogMainPaginationWrapper);
 }
 
 function priceFilterHandler(inputValuePriceFrom: string, inputValuePriceTo: string) {
@@ -56,21 +45,21 @@ export function resetFilter(
   filterPriceFrom: HTMLInputElement,
   filterPriceTo: HTMLInputElement,
   filterWrapperSize: HTMLElement,
-  catalogList: HTMLUListElement,
+  catalogMainPaginationWrapper: HTMLElement,
 ) {
   filterPriceFrom.value = "";
   filterPriceTo.value = "";
   Array.from(filterWrapperSize.querySelectorAll("input")).forEach((element) => (element.checked = false));
   catalogQueryArgs.filter = null;
   document.querySelector(".filter-wrapper")?.remove();
-  renderCatalogContent(catalogList);
+  renderCatalogContent(catalogMainPaginationWrapper);
 }
 
 export function resetSort(
   priceIncreasingSortCheckbox: HTMLInputElement,
   priceDecreasingSortCheckbox: HTMLInputElement,
   nameSortCheckbox: HTMLInputElement,
-  catalogList: HTMLUListElement,
+  catalogMainPaginationWrapper: HTMLElement,
 ) {
   priceIncreasingSortCheckbox.checked = false;
   priceDecreasingSortCheckbox.checked = false;
@@ -78,31 +67,29 @@ export function resetSort(
   catalogQueryArgs.sort = null;
   document.querySelector(".sort-wrapper")?.remove();
   catalogQueryArgs.pageNumber = 1;
-  renderCatalogContent(catalogList);
+  renderCatalogContent(catalogMainPaginationWrapper);
 }
 
 export async function sortHandler(
   priceIncreasingSortCheckbox: HTMLInputElement,
   priceDecreasingSortCheckbox: HTMLInputElement,
   nameSortCheckbox: HTMLInputElement,
-  catalogList: HTMLUListElement,
+  catalogMainPaginationWrapper: HTMLElement,
 ) {
   if (!priceIncreasingSortCheckbox.checked && !priceDecreasingSortCheckbox.checked && !nameSortCheckbox) return;
   if (nameSortCheckbox.checked) catalogQueryArgs.sort = "name.ru asc";
   if (priceIncreasingSortCheckbox.checked) catalogQueryArgs.sort = "price asc";
   if (priceDecreasingSortCheckbox.checked) catalogQueryArgs.sort = "price desc";
-
-  renderCatalogContent(catalogList);
+  renderCatalogContent(catalogMainPaginationWrapper);
 }
 
-export async function resetFilterSortSearch(catalogList: HTMLUListElement) {
+export async function resetFilterSortSearch(catalogMainPaginationWrapper: HTMLElement) {
   catalogQueryArgs.filter = null;
   catalogQueryArgs.pageNumber = 1;
   catalogQueryArgs.sort = null;
   catalogQueryArgs.searchText = null;
   catalogQueryArgs.category = null;
-  const totalProducts = await renderCatalogContent(catalogList);
-  rerenderPagination(catalogList, totalProducts);
+  renderCatalogContent(catalogMainPaginationWrapper);
   document.querySelector(".sort-wrapper")?.remove();
   document.querySelector(".filter-wrapper")?.remove();
   window.location.hash = Pages.CATALOG;
