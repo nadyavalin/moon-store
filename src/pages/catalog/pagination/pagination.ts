@@ -34,7 +34,7 @@ export function createPagination(onPageClick: () => void, totalProducts?: number
     const paginationNumber = createElement({ tagName: "li", classNames: ["pagination__item"], textContent: i.toString() });
     paginationNumber.dataset.index = i.toString();
     if (i === catalogQueryArgs.pageNumber) {
-      paginationNumber.classList.toggle("pagination__item_active", Number(paginationNumber.dataset.index) === catalogQueryArgs.pageNumber);
+      paginationNumber.classList.add("pagination__item_active");
     }
     paginationNumbersWrapper.append(paginationNumber);
   }

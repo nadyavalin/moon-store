@@ -158,13 +158,12 @@ export async function renderCatalogContent(catalogMainPaginationWrapper: HTMLEle
       catalogMainPaginationWrapper.append("Товары отсутствуют!");
       createSnackbar(SnackbarType.error, "Товары отсутствуют");
     } else {
-      catalogMainPaginationWrapper.innerHTML = "";
       items?.forEach((item) => {
         const card = createCard(item, cartResponse);
         catalogList.append(card);
       });
-      const pagination = <HTMLElement>createPagination(() => renderCatalogContent(catalogMainPaginationWrapper), productsTotal);
-      catalogMainPaginationWrapper.append(catalogList, pagination);
+      const pagination = createPagination(() => renderCatalogContent(catalogMainPaginationWrapper), productsTotal);
+      if (pagination) catalogMainPaginationWrapper.append(catalogList, pagination);
     }
     return productsTotal;
   } catch (error) {
