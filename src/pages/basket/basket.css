@@ -1,0 +1,148 @@
+.basket__wrapper {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.product-list__wrapper {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-total__wrapper,
+.promo-code__basket-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  height: 140px;
+  padding: 10px;
+  border-bottom: 1px solid var(--main-light);
+  background-color: var(--dark-grey);
+  box-shadow: 0 0 5px rgba(246, 244, 213, 1);
+  color: var(--main-light);
+  border-radius: 8px;
+}
+
+.promo-code__basket-wrapper {
+  gap: 15px;
+}
+
+.product-total__text-wrapper,
+.product-amount__wrapper {
+  display: flex;
+  gap: 5px;
+}
+
+.basket__reset-btn,
+.promo-code__input,
+.promo-code__button-apply {
+  height: 35px;
+  width: 200px;
+}
+
+.basket__reset-btn {
+  max-width: 300px;
+}
+
+.modal-cart__content {
+  max-width: 350px;
+  height: 100px;
+  display: flex;
+  background-color: var(--main-light);
+  color: var(--text-dark);
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px;
+}
+
+.cart-empty-message {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0 auto;
+  margin-top: 30px;
+  align-items: center;
+}
+
+.cart-empty-message i {
+  font-size: 3em;
+}
+
+.promo-code__input {
+  margin-top: 0;
+}
+
+@media screen and (max-width: 1120px) {
+  .basket__wrapper {
+    width: 100%;
+  }
+
+  .product-list__wrapper {
+    width: 70%;
+  }
+}
+
+.modal-cart__content {
+  height: 120px;
+}
+
+@media screen and (max-width: 950px) {
+  .basket__wrapper {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .product-list__wrapper {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .promo-code__basket-wrapper,
+  .product-total__wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .promo-code__basket-wrapper,
+  .product-total__wrapper {
+    align-items: center;
+    height: 60px;
+  }
+
+  .promo-code__input {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .product-basket__text-wrapper {
+    gap: 16px;
+  }
+
+  .product-basket__prices-wrapper {
+    flex-direction: column;
+  }
+
+  .promo-code__basket-wrapper,
+  .product-total__wrapper {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .promo-code__input {
+    width: 200px;
+  }
+}
+
+.product-basket__price-line {
+  text-decoration: line-through;
+}
+
+.promo-code__button-apply.inactive {
+  background-color: var(--blue-disabled);
+  pointer-events: none;
+}

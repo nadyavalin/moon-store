@@ -1,4 +1,4 @@
-import { createElement } from "src/components/elements";
+import { createElement } from "../../components/elements";
 
 export function patternValidator(inputTag: HTMLInputElement): boolean {
   const patternReg = new RegExp(inputTag.pattern);
@@ -13,7 +13,8 @@ export function ageValidator(inputTag: HTMLInputElement): boolean {
 }
 
 export function spacesValidator(inputTag: HTMLInputElement): boolean {
-  return !/^[ \s]+|[ \s]+$/.test(inputTag.value);
+  const regular = /^[ \s]+|[ \s]+$/;
+  return !regular.test(inputTag.value);
 }
 
 export function checkValidityAllFields() {

@@ -12,7 +12,7 @@
   width: 320px;
   padding: 20px;
   background-color: var(--dark-grey);
-  z-index: 50;
+  z-index: var(--modal-layer);
 }
 
 .filter-sort__buttons-wrapper {
@@ -20,8 +20,6 @@
   flex-direction: row;
   justify-content: end;
   gap: 10px;
-  margin-right: 20px;
-  margin-bottom: 20px;
 }
 
 .filter__heading,
@@ -67,7 +65,8 @@
 }
 
 svg.sort-icon,
-svg.filter-icon {
+svg.filter-icon,
+svg.reset-icon {
   width: 30px;
   height: 30px;
   fill: var(--main-light);
@@ -78,6 +77,12 @@ svg.sort-icon {
   fill: none;
 }
 
+/* svg.sort-icon:hover,
+svg.filter-icon:hover,
+svg.reset-icon:hover {
+  fill: var(--blue-hover);
+  transition: all 1;
+} */
 .sort__price-wrapper,
 .sort__name-wrapper {
   width: 100%;

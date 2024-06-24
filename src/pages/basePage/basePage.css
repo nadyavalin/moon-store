@@ -12,7 +12,6 @@
   left: 0;
   top: 0;
   height: 180px;
-  z-index: 0;
 }
 
 .user-greeting {
@@ -45,12 +44,17 @@
   gap: 70px;
 }
 
+.menu-item__basket,
+.menu-item__basket-link {
+  display: flex;
+  gap: 4px;
+}
+
 .hr-line__header,
 .hr-line__footer {
   position: relative;
   width: 100%;
   border-bottom: 1px solid var(--main-light);
-  z-index: 1;
   margin-bottom: 10px;
 }
 
@@ -70,12 +74,12 @@ li {
 .burger-menu {
   display: none;
   position: relative;
-  z-index: 50;
   align-items: center;
   justify-content: flex-end;
   width: 30px;
   height: 18px;
   cursor: pointer;
+  z-index: calc(var(--nav-menu-layer) + 1);
 }
 
 .burger-menu span {
@@ -83,6 +87,7 @@ li {
   width: 80%;
   transform: scale(1);
   background-color: var(--main-light);
+  z-index: calc(var(--nav-menu-layer) + 1);
 }
 
 .burger-menu::before,
@@ -129,7 +134,7 @@ li {
   text-align: center;
 }
 
-.developers__wrapper {
+.footer__developers-wrapper {
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -137,11 +142,15 @@ li {
   align-items: flex-start;
 }
 
-.rsschool-logo {
+.footer__developers-wrapper a {
+  color: var(--main-light);
+}
+
+.rs-school-logo {
   width: 80px;
   background-color: var(--main-light);
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .year-app {
@@ -153,12 +162,8 @@ li {
     color: var(--blue-hover);
   }
 
-  .developers__wrapper a:hover {
+  .footer__developers-wrapper a:hover {
     color: var(--blue-hover);
-  }
-
-  .developers__wrapper a:hover::afterr {
-    width: 100%;
   }
 }
 
@@ -178,11 +183,11 @@ li {
     flex-direction: column;
     position: fixed;
     inset: 0;
-    z-index: 40;
     overflow-y: auto;
     padding: 50px 40px;
     background-color: var(--main-black);
     animation: burgerAnimation 0.4s;
+    z-index: var(--nav-menu-layer);
   }
 
   .nav.open {

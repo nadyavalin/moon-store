@@ -2,7 +2,6 @@ import { Customer, CustomerUpdateAction } from "@commercetools/platform-sdk";
 import { changePassword, getUserData, updateCustomer } from "../../api/api";
 import { createSnackbar } from "../../components/elements";
 import { SnackbarType } from "../../types/types";
-import { setItemToLocalStorage } from "../../utils/utils";
 import { authorizeUserWithToken } from "../loginPage/loginHandler";
 
 export function changeStateBtnInput(element: HTMLElement, btn?: HTMLElement) {
@@ -27,7 +26,6 @@ export function editName(input: HTMLInputElement, btn: HTMLElement): void {
     callback: function changeGreeting() {
       const nameInGreeting = document.querySelector(".user-greeting__link");
       if (nameInGreeting) nameInGreeting.textContent = input.value;
-      setItemToLocalStorage("user", input.value);
     },
   });
 }

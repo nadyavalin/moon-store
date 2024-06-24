@@ -1,9 +1,10 @@
+import "./basePage.css";
+import "../../index.css";
 import { Pages } from "../../types/types";
-import { state } from "../../store/state";
+import { appStore } from "../../store/store";
 import { createElement } from "../../components/elements";
-import { createApiRoot } from "src/api/api";
-import { renderPageContent } from "src";
-import { renderProductsFromApi } from "../catalog/catalog";
+import { cartHandler, createApiRoot } from "../../api/api";
+import { developers } from "../about/info";
 
 export const header = createElement({ tagName: "header", classNames: ["header"] });
 export const main = createElement({ tagName: "main", classNames: ["main"] });
@@ -34,27 +35,23 @@ export const menuItemUserProfile = createElement({
 });
 export const menuItemLogOut = createElement({ tagName: "button", classNames: ["menu-item"], textContent: "Выход" });
 
-menuItemLogOut.addEventListener("click", () => {
+menuItemLogOut.addEventListener("click", async () => {
   const greeting = header.querySelector(".user-greeting");
   greeting?.remove();
-  localStorage.removeItem("user");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("customerId");
-  state.name = null;
-  state.refreshToken = null;
-  state.customerId = null;
+  appStore.setState({ name: null, refreshToken: null, customerId: null, cartId: null, anonymousId: null });
   menuItemLogIn.href = Pages.LOGIN;
   menuItemSingUp.href = Pages.REGISTRATION;
   userMenu.append(menuItemSingUp, menuItemLogIn);
   menuItemLogOut.remove();
   menuItemUserProfile.remove();
   createApiRoot();
+  await cartHandler();
   window.location.hash = Pages.MAIN;
 });
 
 const liItemHome = createElement({ tagName: "li" });
 const liItemCatalog = createElement({ tagName: "li" });
-const litItemBasket = createElement({ tagName: "li" });
+const litItemBasket = createElement({ tagName: "li", classNames: ["menu-item__basket"] });
 const liItemAboutUs = createElement({ tagName: "li" });
 const menuItemMain = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Главная", attributes: { href: Pages.MAIN } });
 export const menuItemCatalog = createElement({
@@ -64,10 +61,16 @@ export const menuItemCatalog = createElement({
   attributes: { href: Pages.CATALOG },
 });
 
-const menuItemBasket = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "Корзина", attributes: { href: Pages.BASKET } });
+const menuItemBasket = createElement({
+  tagName: "a",
+  classNames: ["menu-item", "menu-item__basket-link"],
+  textContent: "Корзина",
+  attributes: { href: Pages.BASKET },
+});
+const menuItemBasketIcon = createElement({ tagName: "i", classNames: ["fa-solid", "fa-cart-shopping"] });
+const menuItemBasketAmount = createElement({ tagName: "p", classNames: ["menu-item__basket-amount"] });
 const menuItemAboutUs = createElement({ tagName: "a", classNames: ["menu-item"], textContent: "О нас", attributes: { href: Pages.ABOUT } });
 
-// burger
 const burgerMenuWrapper = createElement({ tagName: "div", classNames: ["burger-menu__wrapper"] });
 const burgerMenu = createElement({ tagName: "div", classNames: ["burger-menu"] });
 const burgerLine = createElement({ tagName: "span" });
@@ -89,7 +92,7 @@ export function addUserGreetingToHeader() {
   const profileLink = createElement({
     tagName: "a",
     classNames: ["user-greeting__link"],
-    textContent: `${state.name}`,
+    textContent: `${appStore.state.name}`,
     attributes: { href: Pages.PROFILE },
   });
   greeting.appendChild(profileLink);
@@ -101,7 +104,8 @@ navMenu.append(ulItem);
 ulItem.append(liItemHome, liItemCatalog, litItemBasket, liItemAboutUs);
 liItemHome.append(menuItemMain);
 liItemCatalog.append(menuItemCatalog);
-litItemBasket.append(menuItemBasket);
+litItemBasket.append(menuItemBasket, menuItemBasketAmount);
+menuItemBasket.append(menuItemBasketIcon);
 liItemAboutUs.append(menuItemAboutUs);
 userMenu.append(menuItemSingUp, menuItemLogIn);
 logoLink.append(logo);
@@ -109,31 +113,26 @@ logoLinkH1.append(h1);
 header.append(logoLink, burgerMenuWrapper, userMenu, logoLinkH1, navMenu, hrHeaderLine);
 document.body.append(snackbarContainer);
 
-const developersWrapper = createElement({ tagName: "div", classNames: ["developers__wrapper"] });
-const developerLinkFirst = createElement({
-  tagName: "a",
-  textContent: "nadyavalin",
-  attributes: { href: "https://github.com/nadyavalin", target: "_blank" },
+const developersWrapper = createElement({ tagName: "div", classNames: ["footer__developers-wrapper"] });
+
+const developersGithubLinks = developers.map((dev) => {
+  const githubLink = createElement({
+    tagName: "a",
+    textContent: dev.githubName,
+    attributes: { href: dev.githubLink, target: "_blank" },
+  });
+  return githubLink;
 });
-const developerLinkSecond = createElement({
-  tagName: "a",
-  textContent: "raenlin",
-  attributes: { href: "https://github.com/raenlin", target: "_blank" },
-});
-const developerLinkThird = createElement({
-  tagName: "a",
-  textContent: "ifbfirst",
-  attributes: { href: "https://github.com/ifbfirst", target: "_blank" },
-});
-const rsschoolLogo = createElement({
+
+const rsSchoolLogo = createElement({
   tagName: "img",
-  classNames: ["rsschool-logo"],
-  attributes: { src: "../../public/img/rsschool-logo.png", alt: "RSSchool Logo" },
+  classNames: ["rs-school-logo"],
+  attributes: { src: "../../public/img/rs-school-logo.png", alt: "RSSchool Logo" },
 });
-const rsschoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
+const rsSchoolLogoLink = createElement({ tagName: "a", attributes: { href: "https://rs.school/courses", target: "_blank" } });
 const footerContentWrapper = createElement({ tagName: "div", classNames: ["footer-content__wrapper"] });
 const yearOfApp = createElement({ tagName: "div", classNames: ["year-app"], textContent: "2024" });
-developersWrapper.append(developerLinkFirst, developerLinkSecond, developerLinkThird);
-rsschoolLogoLink.append(rsschoolLogo);
-footerContentWrapper.append(developersWrapper, rsschoolLogoLink, yearOfApp);
+developersWrapper.append(...developersGithubLinks);
+rsSchoolLogoLink.append(rsSchoolLogo);
+footerContentWrapper.append(developersWrapper, rsSchoolLogoLink, yearOfApp);
 footer.append(hrFooterLine, footerContentWrapper);

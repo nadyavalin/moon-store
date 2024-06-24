@@ -5,7 +5,6 @@
   position: fixed;
   inset: 0;
   background-color: var(--back-modal);
-  z-index: 9999;
 }
 
 .modal {
@@ -13,12 +12,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10000;
   max-width: 600px;
   max-height: 600px;
   background-color: var(--back-modal-image);
   padding: 10px;
   border-radius: 10px;
+  z-index: var(--modal-layer);
 }
 
 .cross {
@@ -59,8 +58,8 @@
 
 @media (max-width: 1000px) {
   .modal {
-    width: 500px;
-    height: 500px;
+    max-width: 500px;
+    max-height: 500px;
   }
 
   .modal-slider {
@@ -75,8 +74,8 @@
 
 @media (max-width: 770px) {
   .modal {
-    width: 450px;
-    height: 450px;
+    max-width: 450px;
+    max-height: 450px;
   }
 
   .modal-slider {
@@ -91,8 +90,8 @@
 
 @media (max-width: 550px) {
   .modal {
-    width: 325px;
-    height: 325px;
+    max-width: 325px;
+    max-height: 325px;
   }
 
   .modal-slider {

@@ -32,7 +32,7 @@ export function createSlider({
 
   function moveSlider(direction = "right") {
     const carouselScrollLeftMax = carousel.scrollWidth - carousel.clientWidth;
-    const cardImg = carousel.querySelector(".slide__img") as HTMLElement;
+    const cardImg = <HTMLElement>carousel.querySelector(".slide__img");
     if (cardImg) {
       const firstCardWidth = cardImg.offsetWidth;
       if (direction === "left") {

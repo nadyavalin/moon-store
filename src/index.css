@@ -15,16 +15,25 @@
   --accent-purple: #fa66ff;
   --blue-hover: #1a6eff;
   --blue-disabled: #6079a5;
+  --blue-loader: #337ab7;
+  --blue-light-loader: #bfe2ff;
   --accent-red: #f64137;
+  --accent-light-blue: #bfe2ff;
   --accent-green: #4ad300;
   --card-grey: #333333;
   --card-hover: #484848;
-  --back-modal: rgba(30, 30, 30, 0.7);
+  --back-modal: rgba(30, 30, 30, 0.8);
   --back-modal-image: rgba(252, 255, 236, 0.2);
+  --back-promo-code: #020413;
+  --nav-menu-layer: 1;
+  --modal-layer: 2;
+  --notifications-layer: 3;
 }
 
 body {
-  background-color: var(--main-black);
+  background-image: url("../public/img/about-us-fon.jpg");
+  background-attachment: fixed;
+  background-size: cover;
   color: var(--main-light);
   font-family: Arial, Helvetica, sans-serif;
   min-height: 95vh;
@@ -39,8 +48,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  gap: 20px;
   flex-grow: 1;
-  margin-bottom: 50px;
+  margin: 10px 0;
 }
 
 a {
@@ -63,6 +73,7 @@ button.menu-item {
 .login-link,
 .registration-link,
 .link-from-404,
+.cart-link,
 .menu-category {
   position: relative;
   text-decoration: none;
@@ -74,7 +85,8 @@ button.menu-item {
 .menu-item::after,
 .login-link::after,
 .registration-link::after,
-.link-from-404::after {
+.link-from-404::after,
+.cart-link::after {
   position: absolute;
   content: "";
   left: 50%;
@@ -95,7 +107,6 @@ h1 {
   position: relative;
   color: var(--main-light);
   text-align: center;
-  z-index: 1;
 }
 
 h5 {
@@ -182,9 +193,11 @@ button {
   align-items: center;
   align-content: center;
 }
+
 .form__show-password label {
   cursor: pointer;
 }
+
 .form__password-toggle {
   width: 10%;
   position: relative;
@@ -199,7 +212,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 100;
+  z-index: var(--notifications-layer);
 }
 
 .snackbar {
@@ -226,14 +239,16 @@ button {
   .menu-item:hover,
   .login-link:hover,
   .registration-link:hover,
-  .link-from-404:hover {
+  .link-from-404:hover,
+  .cart-link:hover {
     color: var(--blue-hover);
   }
 
   .menu-item:hover::after,
   .login-link:hover::after,
   .registration-link:hover::after,
-  .link-from-404:hover::after {
+  .link-from-404:hover::after,
+  .cart-link:hover::after {
     width: 100%;
   }
 

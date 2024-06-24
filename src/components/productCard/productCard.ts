@@ -1,16 +1,19 @@
 import "./productCard.css";
 import { createElement } from "../elements";
-import { ProductProjection } from "@commercetools/platform-sdk";
+import { ProductProjection, Cart, ClientResponse } from "@commercetools/platform-sdk";
 import { PriceFormatter } from "../../utils/utils";
 import { Pages } from "../../types/types";
+import { getCart, getProducts } from "../../api/api";
+import { createModalSize } from "../../pages/catalog/modalSizes/modalSizes";
 
-export function createCard(item: ProductProjection) {
+export function createCard(item: ProductProjection, cartResponse?: ClientResponse<Cart>) {
   const name = item.name.ru;
   const images = item.masterVariant.images;
   const description = item.description?.ru;
   const prices = item.masterVariant.prices;
   const link = item.slug.ru;
   const id = item.id;
+  const itemsInCart = cartResponse?.body.lineItems;
 
   const card = createElement({ tagName: "li", classNames: ["slide", "card"] });
   card.setAttribute("data-id", `${id}`);
@@ -20,12 +23,37 @@ export function createCard(item: ProductProjection) {
   const cardName = createElement({ tagName: "h3", classNames: ["card__name"], textContent: name });
   const cardDescription = createElement({ tagName: "div", classNames: ["card__description"], textContent: description });
   const cardPrices = createElement({ tagName: "div", classNames: ["card__prices"] });
-  const cardButton = createElement({ tagName: "button", classNames: ["card__button"], textContent: "Добавить в корзину" });
+  const cardButton = createElement({
+    tagName: "button",
+    classNames: ["card__button"],
+    textContent: "Добавить в корзину",
+    attributes: { "data-id": id },
+  });
+
+  itemsInCart?.forEach((item) => {
+    if (id === item?.productId) {
+      cardButton.classList.add("card__button_disabled");
+      cardButton.textContent = "В корзине";
+    }
+  });
+
+  cardButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (cardButton.classList.contains("card__button_disabled")) {
+      return;
+    }
+    const productId = cardButton.getAttribute("data-id");
+    const response = await getProducts({ "filter.query": `id:"${productId}"` });
+    const cartResponse = await getCart();
+    const modal = createModalSize(cardButton, response, cartResponse);
+    document.body.append(modal);
+  });
 
   const cardImage = createElement({
     tagName: "img",
     classNames: ["slide__img", "card__img"],
-    attributes: { src: `${images?.[0].url}`, alt: "Фото товара" },
+    attributes: { loading: "lazy", src: `${images?.[0].url}`, alt: "Фото товара" },
   });
   cardImage.setAttribute("draggable", "false");
   card.append(cardLink);
@@ -42,7 +70,11 @@ export function createCard(item: ProductProjection) {
     textContent: PriceFormatter.formatCents(prices?.[0].discounted?.value.centAmount),
   });
 
-  cardPrices.append(price, discount);
+  if (prices?.[0].discounted?.value.centAmount) {
+    cardPrices.append(price, discount);
+    price.classList.add("card__price-discount");
+  }
+  cardPrices.append(price);
   cardTextWrapper.append(cardName, cardDescription);
   cardBottom.append(cardPrices, cardButton);
   cardLink.append(cardTextWrapper, cardBottom);

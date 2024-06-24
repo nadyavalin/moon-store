@@ -7,6 +7,8 @@ export interface State {
   refreshToken: string | null;
   customerId: string | null;
   apiRoot?: ByProjectKeyRequestBuilder | null;
+  cartId?: string | null;
+  anonymousId?: string | null;
 }
 
 export interface Customer {
@@ -30,6 +32,16 @@ export interface SliderProps {
   scrollToSlideIndex?: number;
   createSlides: (items: ProductProjection[]) => HTMLLIElement[];
   onSlideClick?: (image: HTMLImageElement) => void;
+}
+
+export interface Developer {
+  introText: string;
+  bioText: string;
+  githubLink: string;
+  githubName: string;
+  imageSrc: string;
+  name: string;
+  position: string;
 }
 
 export enum Pages {
@@ -57,4 +69,12 @@ export type CategoryData = {
 export enum AddressType {
   shipping = "shipping",
   billing = "billing",
+}
+
+export interface CatalogQueryArgs {
+  searchText: string | null;
+  category: string | null;
+  pageNumber: number;
+  filter: string[] | null;
+  sort: string | null;
 }

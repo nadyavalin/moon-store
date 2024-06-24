@@ -1,14 +1,12 @@
 import { AnonymousAuthMiddlewareOptions, Client } from "@commercetools/sdk-client-v2";
 import fetch from "node-fetch";
-import {
-  ClientBuilder,
+import { ClientBuilder, type HttpMiddlewareOptions } from "@commercetools/sdk-client-v2";
+import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "../api/constants";
+import { generateRandomString } from "../utils/utils";
 
-  // Import middlewares
-  type HttpMiddlewareOptions, // Required for sending HTTP requests
-} from "@commercetools/sdk-client-v2";
-import { projectKey, clientId, clientSecret, authHost, apiHost, scopes } from "src/api/constants";
-
+export let anonymousId: string;
 function generateAnonymousSessionFlow(): Client {
+  anonymousId = generateRandomString(12);
   const httpMiddlewareOptions: HttpMiddlewareOptions = {
     host: apiHost,
     fetch,
@@ -20,6 +18,7 @@ function generateAnonymousSessionFlow(): Client {
     credentials: {
       clientId,
       clientSecret,
+      anonymousId,
     },
     scopes: [scopes],
     fetch,

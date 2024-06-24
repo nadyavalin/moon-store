@@ -1,0 +1,151 @@
+.about-us__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.title__text {
+  color: var(--blue-light-loader);
+}
+
+.quote__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.5s ease;
+}
+
+.about-us__text,
+.developers-bio {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.about-us__text {
+  text-indent: 40px;
+  padding-bottom: 30px;
+  text-align: left;
+}
+
+.about-us__rs-school-logo {
+  width: 150px;
+}
+
+.intro__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  font-size: 30px;
+  text-align: center;
+}
+
+.intro__wrapper[open] {
+  animation-name: fadeInDown;
+  animation-duration: 1s;
+}
+
+.intro__wrapper summary {
+  color: var(--accent-light-blue);
+  cursor: pointer;
+  transition: color 0.5s ease;
+}
+
+.intro__wrapper summary:hover {
+  color: var(--blue-hover);
+  text-decoration: dashed;
+}
+
+.developers__wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.developer__wrapper {
+  width: 35%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--dark-grey);
+  box-shadow: 0 0 5px rgba(246, 244, 213, 1);
+  color: var(--main-light);
+  border-radius: 8px;
+}
+
+.developers-image {
+  width: 250px;
+  box-shadow: 0 0 2px rgba(246, 244, 213, 1);
+  border-radius: 8px;
+}
+
+.developers-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent-light-blue);
+}
+
+.developers-position {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--main-light);
+}
+
+.developers-github-link {
+  color: var(--main-light);
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+@media (hover: hover) {
+  .developers-github-link:hover {
+    text-decoration: none;
+    color: var(--blue-hover);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .intro__wrapper {
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .developers__wrapper {
+    flex-direction: column;
+  }
+
+  .developer__wrapper {
+    width: 100%;
+  }
+
+  .nadyavalin__wrapper,
+  .raenlin__wrapper,
+  .katika__wrapper {
+    width: 100%;
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-1em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutUp {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  0% {
+    opacity: 0;
+    transform: translateY(-1em);
+  }
+}
