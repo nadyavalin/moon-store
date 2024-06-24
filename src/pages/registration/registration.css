@@ -1,0 +1,39 @@
+.registration-form {
+  padding: 20px 0;
+}
+
+.registration-form__label {
+  font-size: 1em;
+  margin-top: 20px;
+  color: var(--main-light);
+}
+
+.registration-form__addresses-wrapper {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.registration-form__address-wrapper {
+  border-top: 1px solid var(--main-light);
+}
+
+.registration-form__login-link-wrapper {
+  margin-top: 20px;
+}
+
+.registration-form__checkbox-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.registration-form button {
+  margin-top: 20px;
+}
+
+.registration-form__label {
+  cursor: pointer;
+}

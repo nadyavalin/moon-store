@@ -1,0 +1,277 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --main-black: #000000;
+  --main-light: #f6f4d5;
+  --dark-grey: #1c1c1c;
+  --light-grey: #fbfaf3;
+  --text-dark: #292929;
+  --text-light: #ffffff;
+  --accent-blue: #004cd0;
+  --accent-purple: #fa66ff;
+  --blue-hover: #1a6eff;
+  --blue-disabled: #6079a5;
+  --blue-loader: #337ab7;
+  --blue-light-loader: #bfe2ff;
+  --accent-red: #f64137;
+  --accent-light-blue: #bfe2ff;
+  --accent-green: #4ad300;
+  --card-grey: #333333;
+  --card-hover: #484848;
+  --back-modal: rgba(30, 30, 30, 0.8);
+  --back-modal-image: rgba(252, 255, 236, 0.2);
+  --back-promo-code: #020413;
+  --nav-menu-layer: 1;
+  --modal-layer: 2;
+  --notifications-layer: 3;
+}
+
+body {
+  background-image: url("../public/img/about-us-fon.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--main-light);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 95vh;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  flex-grow: 1;
+  margin: 10px 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.5s ease;
+}
+
+button.menu-item {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 20px;
+  padding: 0;
+  text-transform: capitalize;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.menu-item,
+.login-link,
+.registration-link,
+.link-from-404,
+.cart-link,
+.menu-category {
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+  transition: color 0.5s ease;
+}
+
+.menu-item::after,
+.login-link::after,
+.registration-link::after,
+.link-from-404::after,
+.cart-link::after {
+  position: absolute;
+  content: "";
+  left: 50%;
+  bottom: -3px;
+  display: block;
+  width: 0;
+  height: 0.5px;
+  background-color: var(--blue-hover);
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.active {
+  color: var(--blue-hover);
+}
+
+h1 {
+  position: relative;
+  color: var(--main-light);
+  text-align: center;
+}
+
+h5 {
+  margin-top: 10px;
+}
+
+.registration-form__heading,
+.login-form__heading {
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--main-light);
+}
+
+.registration-form,
+.login-form {
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+input,
+select,
+select option {
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  padding: 10px 5%;
+  background-color: var(--main-light);
+}
+
+.valid {
+  border: none;
+  box-shadow: inset 0px 0px 10px var(--accent-blue);
+}
+
+.invalid {
+  box-shadow: inset 0px 0px 10px var(--accent-red);
+}
+
+input[type="checkbox"] {
+  box-shadow: none;
+  cursor: pointer;
+  max-width: 20px;
+  height: 15px;
+}
+
+button {
+  font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  height: 35px;
+  padding: 10px;
+  text-transform: uppercase;
+  border: none;
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.submit-button {
+  width: 50%;
+  margin: auto;
+}
+
+.disabled {
+  background-color: var(--blue-disabled);
+  color: var(--text-dark);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.error-message {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: var(--main-light);
+}
+
+.form__show-password {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  align-content: center;
+}
+
+.form__show-password label {
+  cursor: pointer;
+}
+
+.form__password-toggle {
+  width: 10%;
+  position: relative;
+  margin-right: 5px;
+}
+
+.snackbar-container {
+  max-width: 30%;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: var(--notifications-layer);
+}
+
+.snackbar {
+  background-color: var(--main-light);
+  color: var(--main-black);
+  padding: 10px;
+  animation: snackbarAnimation 4s;
+  border-radius: 5px;
+}
+
+.snackbar_error {
+  color: var(--accent-red);
+}
+
+.snackbar_success {
+  color: var(--accent-green);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (hover: hover) {
+  .menu-item:hover,
+  .login-link:hover,
+  .registration-link:hover,
+  .link-from-404:hover,
+  .cart-link:hover {
+    color: var(--blue-hover);
+  }
+
+  .menu-item:hover::after,
+  .login-link:hover::after,
+  .registration-link:hover::after,
+  .link-from-404:hover::after,
+  .cart-link:hover::after {
+    width: 100%;
+  }
+
+  button.menu-item:hover {
+    background-color: transparent;
+  }
+
+  button:hover {
+    background-color: var(--blue-hover);
+  }
+}
+
+@keyframes snackbarAnimation {
+  0% {
+    transform: translateX(150%);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}

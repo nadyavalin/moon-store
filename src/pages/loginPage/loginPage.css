@@ -1,0 +1,8 @@
+.login-form__inner {
+  padding: 20px 10px;
+  width: 380px;
+}
+
+.login-form__show-password {
+  padding-bottom: 20px;
+}
