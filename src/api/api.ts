@@ -14,6 +14,7 @@ import { Client } from "@commercetools/sdk-client-v2";
 import { anonymousId } from "./anonymousClientBuilder";
 import { showQuantityItemsInHeader } from "../pages/basket/basketHandler";
 import { appStore } from "../store/store";
+import { projectKey } from "./constants";
 
 export const createApiRoot = () => {
   let ctpClient: Client;
@@ -24,7 +25,7 @@ export const createApiRoot = () => {
     changeAppAfterLogin(user);
     ctpClient = generateRefreshTokenFlow(appStore.state.refreshToken);
   }
-  appStore.setState({ apiRoot: createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: "steps-moon-store" }) });
+  appStore.setState({ apiRoot: createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey: projectKey }) });
 };
 
 export const cartHandler = async () => {
