@@ -1,0 +1,78 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.pagination__arrow {
+  height: 40px;
+  width: 40px;
+  border: 2px var(--main-light) solid;
+  border-radius: 50%;
+  padding: 6px;
+  transition: background-color 1s ease;
+  cursor: pointer;
+  box-shadow: 0 3px 30px rgba(246, 244, 213, 1);
+}
+
+.pagination__arrow path {
+  stroke: var(--main-light);
+  stroke-width: 2;
+  transition: stroke 1s ease;
+}
+
+.pagination__arrow.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.pagination__items {
+  display: flex;
+  gap: 10px;
+}
+
+.pagination__item {
+  font-size: 22px;
+  border: 1px solid var(--main-light);
+  padding: 5px;
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.pagination__item_active {
+  color: var(--main-light);
+  background-color: var(--accent-blue);
+  pointer-events: none;
+}
+
+.pagination__arrow_disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+@media (hover: hover) {
+  .pagination__arrow:hover {
+    background-color: var(--main-light);
+    opacity: 80%;
+  }
+
+  .pagination__arrow:hover path {
+    stroke: var(--dark-grey);
+  }
+
+  .pagination__item:hover {
+    background-color: var(--card-hover);
+  }
+}
+
+@media (max-width: 450px) {
+  .pagination__items {
+    gap: 5px;
+  }
+
+  .pagination__item {
+    font-size: 12px;
+  }
+}

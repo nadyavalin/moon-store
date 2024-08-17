@@ -1,0 +1,64 @@
+.error-404-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-404 {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-404-text {
+  text-align: center;
+}
+
+.error-404 img {
+  height: 300px;
+}
+
+.error-404 p {
+  font-size: 200px;
+}
+.link-from-404 {
+  color: var(--main-light);
+}
+
+@media (hover: hover) {
+  .link-from-404:hover {
+    color: var(--blue-hover);
+  }
+}
+
+@media (max-width: 768px) {
+  .error-404 p {
+    font-size: 150px;
+  }
+
+  .error-404 img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 512px) {
+  .error-404 p {
+    font-size: 150px;
+  }
+
+  .error-404 img {
+    height: 160px;
+  }
+}
+
+@media (max-width: 460px) {
+  .error-404 p {
+    font-size: 80px;
+  }
+
+  .error-404 img {
+    height: 140px;
+  }
+}

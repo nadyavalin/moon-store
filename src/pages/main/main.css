@@ -1,0 +1,33 @@
+.main-content__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.main-slider {
+  max-width: 1100px;
+}
+
+.main-slider .slider__carousel {
+  grid-auto-columns: calc((100% / 3 - 12px));
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: 0;
+}
+
+@media screen and (max-width: 900px) {
+  .main-slider .slider__carousel {
+    grid-auto-columns: calc((100% / 2 - 9px));
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .main-slider .slider__carousel {
+    grid-auto-columns: 100%;
+  }
+}
